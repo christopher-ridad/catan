@@ -1,7 +1,7 @@
 # Week 5 (04/27/2026–05/03/2026)
 **Planning and Progress Tracking**:
 1. [not started] []: Document Game Setup Phase user story, acceptance criteria, and use cases
-2. [not started] []: Document class/method design for Game Setup Phase in docs/design/
+2. [done] [Isabella]: Document class/method design for Game Setup Phase in docs/design/
 3. [not started] []: Implement ResourceType enum and Hex class with BVA and TDD
 4. [not started] []: Implement Board class with standard tile distribution
 5. [not started] []: Implement Player class
