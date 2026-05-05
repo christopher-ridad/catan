@@ -1,3 +1,20 @@
+# Week 5 (04/27/2026–05/03/2026)
+**Planning and Progress Tracking**:
+1. [not started] []: Document Game Setup Phase user story, acceptance criteria, and use cases
+2. [not started] []: Document class/method design for Game Setup Phase in docs/design/
+3. [not started] []: Implement ResourceType enum and Hex class with BVA and TDD
+4. [not started] []: Implement Board class with standard tile distribution
+5. [not started] []: Implement Player class
+6. [not started] []: Implement Game class with player count validation
+7. [not started] []: Implement Initial Placement Phase logic
+
+
+# Week 4 (04/20/2026–04/26/2026)
+**Planning and Progress Tracking**:
+1. [done] [Isabella]: Create game setup issues
+2. [done] [Isabella]: Merge CI PR, fill in game rules doc
+
+
 # Week 3 (04/13/2026-04/19/2026)
 **Planning and Progress Tracking**:
 1. [done] Isabella: Project setup (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/1)
