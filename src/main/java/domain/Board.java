@@ -28,7 +28,7 @@ public class Board {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public int getHexCount(ResourceType resourceType) {
+    public int getHexCount(TerrainType terrainType) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

@@ -2,11 +2,11 @@ package domain;
 
 public class Hex {
 
-    public Hex(ResourceType resourceType, int numberToken) {
+    public Hex(TerrainType terrainType, int numberToken) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public ResourceType getResourceType() {
+    public TerrainType getTerrainType() {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
