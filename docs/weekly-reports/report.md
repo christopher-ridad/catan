@@ -1,7 +1,7 @@
 # Week 5 (04/27/2026–05/03/2026)
 **Planning and Progress Tracking**:
-1. [not started] []: Document Game Setup Phase user story, acceptance criteria, and use cases
-2. [done] [Isabella]: Document class/method design for Game Setup Phase in docs/design/
+1. [waiting to be merged] [Ariel]: Document Game Setup Phase user story, acceptance criteria, and use cases (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/14)
+2. [done] [Isabella]: Document class/method design for Game Setup Phase in docs/design/ (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/13)
 3. [not started] []: Implement ResourceType enum and Hex class with BVA and TDD
 4. [not started] []: Implement Board class with standard tile distribution
 5. [not started] []: Implement Player class
