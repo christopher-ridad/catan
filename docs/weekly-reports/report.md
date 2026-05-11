@@ -1,3 +1,7 @@
+# Week 6 (05/04/2026–05/10/2026)
+**Planning and Progress Tracking**:
+1. [in progress] [Ananya]: Implement Player class
+
 # Week 5 (04/27/2026–05/03/2026)
 **Planning and Progress Tracking**:
 1. [waiting to be merged] [Ariel]: Document Game Setup Phase user story, acceptance criteria, and use cases (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/14)
