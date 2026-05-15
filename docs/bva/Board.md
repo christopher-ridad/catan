@@ -85,3 +85,17 @@
 - **TC18: Constructor_With4Ore_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: 19 hexes, 4 ORE instead of 3
   - Expected output: `IllegalArgumentException`
+
+### BRICK count boundaries
+
+- **TC19: Constructor_With2Brick_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 2 BRICK instead of 3
+  - Expected output: `IllegalArgumentException`
+
+- **TC20: Constructor_With3Brick_NoExceptionThrown** ( not implemented )
+  - State of the system: 19 hexes, exactly 3 BRICK
+  - Expected output: no exception thrown
+
+- **TC21: Constructor_With4Brick_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 4 BRICK instead of 3
+  - Expected output: `IllegalArgumentException`
