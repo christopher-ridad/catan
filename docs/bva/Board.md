@@ -150,3 +150,52 @@
 - **TC32: GetEdge_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: valid board, id = 72
   - Expected output: `IllegalArgumentException`
+
+## Method under test: `getHexCount(ResourceType)`
+- **TC33: GetHexCount_ForDesert_ReturnsOne** ( not implemented )
+  - State of the system: valid board
+  - Expected output: `1`
+
+- **TC34: GetHexCount_ForGrain_ReturnsFour** ( not implemented )
+  - State of the system: valid board
+  - Expected output: `4`
+
+- **TC35: GetHexCount_ForWool_ReturnsFour** ( not implemented )
+  - State of the system: valid board
+  - Expected output: `4`
+
+- **TC36: GetHexCount_ForLumber_ReturnsFour** ( not implemented )
+  - State of the system: valid board
+  - Expected output: `4`
+
+- **TC37: GetHexCount_ForOre_ReturnsThree** ( not implemented )
+  - State of the system: valid board
+  - Expected output: `3`
+
+- **TC38: GetHexCount_ForBrick_ReturnsThree** ( not implemented )
+  - State of the system: valid board
+  - Expected output: `3`
+
+## Method under test: `satisfiesDistanceRule(Vertex)`
+- **TC39: SatisfiesDistanceRule_WhenAllNeighborsEmpty_ReturnsTrue** ( not implemented )
+  - State of the system: valid board, target vertex has no occupied neighbors
+  - Expected output: `true`
+
+- **TC40: SatisfiesDistanceRule_WhenOneNeighborOccupied_ReturnsFalse** ( not implemented )
+  - State of the system: valid board, one adjacent vertex is occupied
+  - Expected output: `false`
+
+## Method under test: `isConnectedToPlayer(Vertex, Player)`
+- **TC41: IsConnectedToPlayer_WhenNoAdjacentRoads_ReturnsFalse** ( not implemented )
+  - State of the system: valid board, no edges adjacent to vertex have roads
+  - Expected output: `false`
+
+- **TC42: IsConnectedToPlayer_WhenAdjacentRoadOwnedByPlayer_ReturnsTrue** ( not implemented )
+  - State of the system: valid board, one adjacent edge has a road owned by the player
+  - Expected output: `true`
+
+- **TC43: IsConnectedToPlayer_WhenAdjacentRoadOwnedByDifferentPlayer_ReturnsFalse** ( not implemented )
+  - State of the system: valid board, adjacent edge has road owned by another player
+  - Expected output: `false`
+
+
