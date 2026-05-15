@@ -57,3 +57,17 @@
 - **TC12: Constructor_With5Wool_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: 19 hexes, 5 WOOL instead of 4
   - Expected output: `IllegalArgumentException`
+
+### LUMBER count boundaries
+
+- **TC13: Constructor_With3Lumber_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 3 LUMBER instead of 4
+  - Expected output: `IllegalArgumentException`
+
+- **TC14: Constructor_With4Lumber_NoExceptionThrown** ( not implemented )
+  - State of the system: 19 hexes, exactly 4 LUMBER
+  - Expected output: no exception thrown
+
+- **TC15: Constructor_With5Lumber_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 5 LUMBER instead of 4
+  - Expected output: `IllegalArgumentException`
