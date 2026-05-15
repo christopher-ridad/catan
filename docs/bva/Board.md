@@ -71,3 +71,17 @@
 - **TC15: Constructor_With5Lumber_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: 19 hexes, 5 LUMBER instead of 4
   - Expected output: `IllegalArgumentException`
+
+### ORE count boundaries
+
+- **TC16: Constructor_With2Ore_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 2 ORE instead of 3
+  - Expected output: `IllegalArgumentException`
+
+- **TC17: Constructor_With3Ore_NoExceptionThrown** ( not implemented )
+  - State of the system: 19 hexes, exactly 3 ORE
+  - Expected output: no exception thrown
+
+- **TC18: Constructor_With4Ore_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 4 ORE instead of 3
+  - Expected output: `IllegalArgumentException`
