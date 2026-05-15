@@ -117,3 +117,36 @@
   - State of the system: Board constructed successfully
   - Expected output: list of size `72`
 
+## Method under test: `getVertex(int id)`
+- **TC25: GetVertex_WithNegativeId_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: valid board, id = -1
+  - Expected output: `IllegalArgumentException`
+
+- **TC26: GetVertex_WithLowerBoundaryId_ReturnsVertex** ( not implemented )
+  - State of the system: valid board, id = 0
+  - Expected output: Vertex with id `0`
+
+- **TC27: GetVertex_WithUpperBoundaryId_ReturnsVertex** ( not implemented )
+  - State of the system: valid board, id = 53
+  - Expected output: Vertex with id `53`
+
+- **TC28: GetVertex_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: valid board, id = 54
+  - Expected output: `IllegalArgumentException`
+
+## Method under test: `getEdge(int id)`
+- **TC29: GetEdge_WithNegativeId_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: valid board, id = -1
+  - Expected output: `IllegalArgumentException`
+
+- **TC30: GetEdge_WithLowerBoundaryId_ReturnsEdge** ( not implemented )
+  - State of the system: valid board, id = 0
+  - Expected output: Edge with id `0`
+
+- **TC31: GetEdge_WithUpperBoundaryId_ReturnsEdge** ( not implemented )
+  - State of the system: valid board, id = 71
+  - Expected output: Edge with id `71`
+
+- **TC32: GetEdge_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: valid board, id = 72
+  - Expected output: `IllegalArgumentException`
