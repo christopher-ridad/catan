@@ -99,3 +99,21 @@
 - **TC21: Constructor_With4Brick_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: 19 hexes, 4 BRICK instead of 3
   - Expected output: `IllegalArgumentException`
+
+## Method under test: `getHexes()`
+- **TC22: GetHexes_OnValidBoard_Returns19Hexes** ( not implemented )
+  - State of the system: Board constructed successfully
+  - Expected output: list of size `19`
+
+## Method under test: `getVertices()`
+
+- **TC23: GetVertices_OnValidBoard_Returns54Vertices** ( not implemented )
+  - State of the system: Board constructed successfully
+  - Expected output: list of size `54`
+
+## Method under test: `getEdges()`
+
+- **TC24: GetEdges_OnValidBoard_Returns72Edges** ( not implemented )
+  - State of the system: Board constructed successfully
+  - Expected output: list of size `72`
+
