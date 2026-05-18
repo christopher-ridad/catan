@@ -20,6 +20,19 @@
     - State of the system: constructor is passed string name and null color
     - Expected output: `IllegalArgumentException`
 
-- **TC5: Constructor_WithCorrectName_NoExceptionThrown** ( not implemented )
-    - State of the system: constructor is passed string name and PlayerColor color
+- **TC5: Constructor_WithNameLengthGreaterThanMax_ThrowsIllegalArgumentException** ( not implemented )
+    - State of the system: constructor is passed string name with length 51 characters and PlayerColor color
+    - Expected output: `IllegalArgumentException`
+  
+- **TC6: Constructor_WithNameLengthEqualToMax_NoExceptionThrown** ( not implemented )
+    - State of the system: constructor is passed string name with length 50 characters and PlayerColor color
     - Expected output: no exception thrown
+
+- **TC7: Constructor_WithNameLengthLessThanMax_NoExceptionThrown** ( not implemented )
+    - State of the system: constructor is passed string name with length 49 characters and PlayerColor color
+    - Expected output: no exception thrown
+
+- **TC8: Constructor_WithCorrectName_NoExceptionThrown** ( not implemented )
+    - State of the system: constructor is passed string name of correct length and non-null PlayerColor color
+    - Expected output: no exception thrown
+
