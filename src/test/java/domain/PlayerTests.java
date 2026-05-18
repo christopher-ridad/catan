@@ -231,4 +231,20 @@ public class PlayerTests {
         playerOne.addResources(ResourceType.ORE, 1);
         assertEquals(1, playerOne.getTotalResourceCount());
     }
+
+    @Test
+    public void getTotalResourceCount_MaxPossibleValue() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.BLUE;
+        Map<ResourceType, Integer> maxResourcesMap = new HashMap<>(Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, Integer.MAX_VALUE - 1,
+                ResourceType.ORE, 1,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+
+        Player playerOne = new Player(playerOneName, playerOneColor, maxResourcesMap);
+        assertEquals(Integer.MAX_VALUE, playerOne.getTotalResourceCount());
+    }
 }

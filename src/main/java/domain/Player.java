@@ -33,9 +33,9 @@ public class Player {
         ));
     }
 
+    // package private constructor for testing
     Player(String name, PlayerColor color, Map<ResourceType, Integer> customResources) {
-        this.name = name;
-        this.color = color;
+        this(name, color);
         this.resources = new HashMap<>(customResources);
     }
 
