@@ -42,3 +42,8 @@
     - State of the system: Player constructed successfully
     - Expected output: player name string
 
+## Method under test: `getColor()`
+
+- **TC10: getColor_OnValidPlayer_ReturnsPlayerColor** ( not implemented )
+    - State of the system: Player constructed successfully
+    - Expected output: valid PlayerColor object
