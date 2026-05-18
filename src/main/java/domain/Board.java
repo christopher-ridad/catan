@@ -24,6 +24,10 @@ public class Board {
         if (forestCount != 4) {
             throw new IllegalArgumentException("Board must have exactly 4 FOREST hexes");
         }
+        long mountainsCount = hexes.stream().filter(h -> h.getTerrainType() == TerrainType.MOUNTAINS).count();
+        if (mountainsCount != 3) {
+            throw new IllegalArgumentException("Board must have exactly 3 MOUNTAINS hexes");
+        }
     }
 
     public List<Hex> getHexes() {
