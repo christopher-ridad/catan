@@ -5,7 +5,9 @@ import java.util.List;
 public class Board {
 
     public Board(List<Hex> hexes) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (hexes.size() != 19) {
+            throw new IllegalArgumentException("Board must have exactly 19 hexes");
+        }
     }
 
     public List<Hex> getHexes() {

@@ -4,16 +4,16 @@
 
 ### Hex count boundaries
 
-- **TC1: Constructor_With18Hexes_ThrowsIllegalArgumentException** ( not implemented )
-    - State of the system: list of 18 hexes with otherwise valid resource distribution
+- **TC1: Constructor_With18Hexes_ThrowsIllegalArgumentException** ( implemented )
+    - State of the system: list of 18 hexes with otherwise valid terrain distribution
     - Expected output: `IllegalArgumentException`
 
 - **TC2: Constructor_With19Hexes_NoExceptionThrown** ( not implemented )
-    - State of the system: list of exactly 19 hexes with valid resource distribution
+    - State of the system: list of exactly 19 hexes with valid terrain distribution
     - Expected output: no exception thrown
 
 - **TC3: Constructor_With20Hexes_ThrowsIllegalArgumentException** ( not implemented )
-    - State of the system: list of 20 hexes with otherwise valid resource distribution
+    - State of the system: list of 20 hexes with otherwise valid terrain distribution
     - Expected output: `IllegalArgumentException`
 
 ### DESERT count boundaries
@@ -30,74 +30,74 @@
   - State of the system: 19 hexes, 2 DESERT
   - Expected output: `IllegalArgumentException`
 
-### GRAIN count boundaries
+### FIELD count boundaries
 
-- **TC7: Constructor_With3Grain_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 3 GRAIN instead of 4
+- **TC7: Constructor_With3Field_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 3 FIELD instead of 4
   - Expected output: `IllegalArgumentException`
 
-- **TC8: Constructor_With4Grain_NoExceptionThrown** ( not implemented )
-  - State of the system: 19 hexes, exactly 4 GRAIN
+- **TC8: Constructor_With4Field_NoExceptionThrown** ( not implemented )
+  - State of the system: 19 hexes, exactly 4 FIELD
   - Expected output: no exception thrown
 
-- **TC9: Constructor_With5Grain_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 5 GRAIN instead of 4
+- **TC9: Constructor_With5Field_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 5 FIELD instead of 4
   - Expected output: `IllegalArgumentException`
 
-### WOOL count boundaries
+### PASTURE count boundaries
 
-- **TC10: Constructor_With3Wool_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 3 WOOL instead of 4
+- **TC10: Constructor_With3Pasture_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 3 PASTURE instead of 4
   - Expected output: `IllegalArgumentException`
 
-- **TC11: Constructor_With4Wool_NoExceptionThrown** ( not implemented )
-  - State of the system: 19 hexes, exactly 4 WOOL
+- **TC11: Constructor_With4Pasture_NoExceptionThrown** ( not implemented )
+  - State of the system: 19 hexes, exactly 4 PASTURE
   - Expected output: no exception thrown
 
-- **TC12: Constructor_With5Wool_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 5 WOOL instead of 4
+- **TC12: Constructor_With5Pasture_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 5 PASTURE instead of 4
   - Expected output: `IllegalArgumentException`
 
-### LUMBER count boundaries
+### FOREST count boundaries
 
-- **TC13: Constructor_With3Lumber_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 3 LUMBER instead of 4
+- **TC13: Constructor_With3Forest_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 3 FOREST instead of 4
   - Expected output: `IllegalArgumentException`
 
-- **TC14: Constructor_With4Lumber_NoExceptionThrown** ( not implemented )
-  - State of the system: 19 hexes, exactly 4 LUMBER
+- **TC14: Constructor_With4Forest_NoExceptionThrown** ( not implemented )
+  - State of the system: 19 hexes, exactly 4 FOREST
   - Expected output: no exception thrown
 
-- **TC15: Constructor_With5Lumber_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 5 LUMBER instead of 4
+- **TC15: Constructor_With5Forest_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 5 FOREST instead of 4
   - Expected output: `IllegalArgumentException`
 
-### ORE count boundaries
+### MOUNTAINS count boundaries
 
-- **TC16: Constructor_With2Ore_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 2 ORE instead of 3
+- **TC16: Constructor_With2Mountains_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 2 MOUNTAINS instead of 3
   - Expected output: `IllegalArgumentException`
 
-- **TC17: Constructor_With3Ore_NoExceptionThrown** ( not implemented )
-  - State of the system: 19 hexes, exactly 3 ORE
+- **TC17: Constructor_With3Mountains_NoExceptionThrown** ( not implemented )
+  - State of the system: 19 hexes, exactly 3 MOUNTAINS
   - Expected output: no exception thrown
 
-- **TC18: Constructor_With4Ore_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 4 ORE instead of 3
+- **TC18: Constructor_With4Mountains_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 4 MOUNTAINS instead of 3
   - Expected output: `IllegalArgumentException`
 
-### BRICK count boundaries
+### HILLS count boundaries
 
-- **TC19: Constructor_With2Brick_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 2 BRICK instead of 3
+- **TC19: Constructor_With2Hills_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 2 HILLS instead of 3
   - Expected output: `IllegalArgumentException`
 
-- **TC20: Constructor_With3Brick_NoExceptionThrown** ( not implemented )
-  - State of the system: 19 hexes, exactly 3 BRICK
+- **TC20: Constructor_With3Hills_NoExceptionThrown** ( not implemented )
+  - State of the system: 19 hexes, exactly 3 HILLS
   - Expected output: no exception thrown
 
-- **TC21: Constructor_With4Brick_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 4 BRICK instead of 3
+- **TC21: Constructor_With4Hills_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: 19 hexes, 4 HILLS instead of 3
   - Expected output: `IllegalArgumentException`
 
 ## Method under test: `getHexes()`
@@ -151,28 +151,28 @@
   - State of the system: valid board, id = 72
   - Expected output: `IllegalArgumentException`
 
-## Method under test: `getHexCount(ResourceType)`
+## Method under test: `getHexCount(TerrainType)`
 - **TC33: GetHexCount_ForDesert_ReturnsOne** ( not implemented )
   - State of the system: valid board
   - Expected output: `1`
 
-- **TC34: GetHexCount_ForGrain_ReturnsFour** ( not implemented )
+- **TC34: GetHexCount_ForField_ReturnsFour** ( not implemented )
   - State of the system: valid board
   - Expected output: `4`
 
-- **TC35: GetHexCount_ForWool_ReturnsFour** ( not implemented )
+- **TC35: GetHexCount_ForPasture_ReturnsFour** ( not implemented )
   - State of the system: valid board
   - Expected output: `4`
 
-- **TC36: GetHexCount_ForLumber_ReturnsFour** ( not implemented )
+- **TC36: GetHexCount_ForForest_ReturnsFour** ( not implemented )
   - State of the system: valid board
   - Expected output: `4`
 
-- **TC37: GetHexCount_ForOre_ReturnsThree** ( not implemented )
+- **TC37: GetHexCount_ForMountains_ReturnsThree** ( not implemented )
   - State of the system: valid board
   - Expected output: `3`
 
-- **TC38: GetHexCount_ForBrick_ReturnsThree** ( not implemented )
+- **TC38: GetHexCount_ForHills_ReturnsThree** ( not implemented )
   - State of the system: valid board
   - Expected output: `3`
 
