@@ -2,8 +2,6 @@
 
 ## Method under test: `Player(String name, PlayerColor color)`
 
-### Name and color boundaries
-
 - **TC1: constructor_WithNullName_ThrowsIllegalArgumentException** ( not implemented )
     - State of the system: constructor is passed null name, PlayerColor color is present
     - Expected output: `IllegalArgumentException`
@@ -48,7 +46,7 @@
     - State of the system: Player constructed successfully
     - Expected output: valid PlayerColor object
 
-## Method under test: `getResourceCount()`
+## Method under test: `getResourceCount(ResourceType type)`
 
 - **TC11: getResourceCount_brickType_ReturnsZero** ( not implemented )
   - State of the system: getResourceCount called with brick as ResourceType input, player has 0 brick
@@ -69,3 +67,25 @@
 - **TC15: getResourceCount_nullResourceType_ThrowsIllegalArgumentException** ( not implemented )
     - State of the system: getResourceCount called with null as ResourceType input
     - Expected output:`IllegalArgumentException`
+
+## Method under test: `addResources(ResourceType type, int amount)`
+
+- **TC16: addResources_nullResourceType_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: addResources called with null as ResourceType input
+  - Expected output: `IllegalArgumentException`
+
+- **TC17: addResources_woolType, amountLessThanZero_ThrowsIllegalArgumentException** ( not implemented )
+  - State of the system: addResources called with -1 as amount integer value, wool as resourceType input
+  - Expected output: `IllegalArgumentException`
+
+- **TC18: addResources_brickType_amountZero_noExceptionThrown** ( not implemented )
+  - State of the system: addResources called with 0 as amount integer value and brick as ResourceType input
+  - Expected output: no exception thrown
+
+- **TC19: addResources_lumberType_amountOne_noExceptionThrown** ( not implemented )
+  - State of the system: addResources called with 1 as amount integer value and lumber as ResourceType input
+  - Expected output: no exception thrown
+
+- **TC20: addResources_grainType_amountTwo_throwsIllegalArgumentException** ( not implemented )
+  - State of the system: addResources called with 2 as amount integer value and grain as ResourceType input
+  - Expected output: `IllegalArgumentException`
