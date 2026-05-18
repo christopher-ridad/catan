@@ -61,7 +61,10 @@ public class Board {
     }
 
     public Edge getEdge(int id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (id < 0 || id > 71) {
+            throw new IllegalArgumentException("Edge id must be between 0 and 71");
+        }
+        return edges.get(id);
     }
 
     public int getHexCount(TerrainType terrainType) {

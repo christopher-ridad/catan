@@ -210,4 +210,26 @@ public class BoardTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> board.getVertex(54));
         assertEquals("Vertex id must be between 0 and 53", exception.getMessage());
     }
+
+    @Test
+    void GetEdge_WithNegativeId_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> board.getEdge(-1));
+        assertEquals("Edge id must be between 0 and 71", exception.getMessage());
+    }
+
+    @Test
+    void GetEdge_WithLowerBoundaryId_ReturnsEdge() {
+        assertEquals(0, board.getEdge(0).getId());
+    }
+
+    @Test
+    void GetEdge_WithUpperBoundaryId_ReturnsEdge() {
+        assertEquals(71, board.getEdge(71).getId());
+    }
+
+    @Test
+    void GetEdge_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> board.getEdge(72));
+        assertEquals("Edge id must be between 0 and 71", exception.getMessage());
+    }
 }
