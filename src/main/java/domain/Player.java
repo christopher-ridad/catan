@@ -65,6 +65,6 @@ public class Player {
     }
 
     public int getTotalResourceCount() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.resources.values().stream().mapToInt(Integer::intValue).sum();
     }
 }

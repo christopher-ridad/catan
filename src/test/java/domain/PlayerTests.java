@@ -211,4 +211,13 @@ public class PlayerTests {
 
         assertEquals(0, playerOne.getResourceCount(ResourceType.GRAIN));
     }
+
+    @Test
+    public void getTotalResourceCount_ReturnsZero() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.ORANGE;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertEquals(0, playerOne.getTotalResourceCount());
+    }
 }
