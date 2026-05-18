@@ -48,6 +48,9 @@ public class Player {
     }
 
     public int getResourceCount(ResourceType resourceType) {
+        if (resourceType == null) {
+            throw new IllegalArgumentException("Resource type cannot be null");
+        }
         return this.resources.get(resourceType);
     }
 

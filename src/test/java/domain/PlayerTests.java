@@ -137,4 +137,15 @@ public class PlayerTests {
         Player playerOne = new Player(playerOneName, playerOneColor, maxIntOre);
         assertEquals(Integer.MAX_VALUE, playerOne.getResourceCount(ResourceType.ORE));
     }
+
+    @Test
+    public void getResourceCount_nullResourceType_ThrowsIllegalArgumentException() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertThrows(IllegalArgumentException.class, () -> {
+            playerOne.getResourceCount(null);
+        });
+    }
 }
