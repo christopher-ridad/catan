@@ -21,8 +21,8 @@ public class Board {
         this.vertices = new ArrayList<>();
         this.edges = new ArrayList<>();
 
-        for (int i = 0; i < 54; i++) vertices.add(new Vertex(i, new ArrayList<>(), new ArrayList<>()));
-        for (int i = 0; i < 72; i++) edges.add(new Edge(i, null, null));
+        initializeVertices();
+        initializeEdges();
     }
 
     Board(List<Hex> hexes, List<Vertex> vertices, List<Edge> edges) {
@@ -41,6 +41,18 @@ public class Board {
         long count = hexes.stream().filter(h -> h.getTerrainType() == terrainType).count();
         if (count != expected) {
             throw new IllegalArgumentException("Board must have exactly " + expected + " " + terrainType + " hexes");
+        }
+    }
+
+    private void initializeVertices() {
+        for (int i = 0; i < 54; i++) {
+            vertices.add(new Vertex(i, new ArrayList<>(), new ArrayList<>()));
+        }
+    }
+
+    private void initializeEdges() {
+        for (int i = 0; i < 72; i++) {
+            edges.add(new Edge(i, null, null));
         }
     }
 
