@@ -31,9 +31,18 @@ public class PlayerTests {
 
     @Test
     public void constructor_WithNullColor_ThrowsIllegalArgumentException() {
-        String playerName = "Bob";
+        String playerOneName = "Bob";
         assertThrows(IllegalArgumentException.class, () -> {
-            Player playerOne = new Player(playerName, null);
+            Player playerOne = new Player(playerOneName, null);
+        });
+    }
+
+    @Test
+    public void constructor_WithNameLengthGreaterThanMax_ThrowsIllegalArgumentException() {
+        String playerOneName = "BOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOB";
+        PlayerColor playerOneColor = PlayerColor.BLUE;
+        assertThrows(IllegalArgumentException.class, () -> {
+            Player playerOne = new Player(playerOneName, playerOneColor);
         });
     }
 }

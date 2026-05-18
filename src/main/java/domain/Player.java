@@ -3,10 +3,19 @@ package domain;
 public class Player {
 
     public Player(String name, PlayerColor color) {
-        if (name == null || name.isBlank() || color == null) {
+        if (name == null) {
             throw new IllegalArgumentException("Player name cannot be null");
         }
-    }
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("Player name cannot be an empty string");
+        }
+        if (color == null) {
+            throw new IllegalArgumentException("Player color cannot be null");
+        }
+        if (name.length() > 50) {
+            throw new IllegalArgumentException("Player name cannot exceed 50 characters");
+        }
+     }
 
     public String getName() {
         throw new UnsupportedOperationException("Not implemented yet");
