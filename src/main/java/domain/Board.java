@@ -12,26 +12,13 @@ public class Board {
         if (hexes.size() != 19) {
             throw new IllegalArgumentException("Board must have exactly 19 hexes");
         }
-        long desertCount = hexes.stream().filter(Hex::isDesert).count();
-        if (desertCount != 1) {
-            throw new IllegalArgumentException("Board must have exactly 1 DESERT hex");
-        }
-        long fieldsCount = hexes.stream().filter(h -> h.getTerrainType() == TerrainType.FIELDS).count();
-        if (fieldsCount != 4) {
-            throw new IllegalArgumentException("Board must have exactly 4 FIELDS hexes");
-        }
-        long pastureCount = hexes.stream().filter(h -> h.getTerrainType() == TerrainType.PASTURE).count();
-        if (pastureCount != 4) {
-            throw new IllegalArgumentException("Board must have exactly 4 PASTURE hexes");
-        }
-        long forestCount = hexes.stream().filter(h -> h.getTerrainType() == TerrainType.FOREST).count();
-        if (forestCount != 4) {
-            throw new IllegalArgumentException("Board must have exactly 4 FOREST hexes");
-        }
-        long mountainsCount = hexes.stream().filter(h -> h.getTerrainType() == TerrainType.MOUNTAINS).count();
-        if (mountainsCount != 3) {
-            throw new IllegalArgumentException("Board must have exactly 3 MOUNTAINS hexes");
-        }
+
+        validateTerrainCount(hexes, TerrainType.DESERT, 1);
+        validateTerrainCount(hexes, TerrainType.FIELDS, 4);
+        validateTerrainCount(hexes, TerrainType.PASTURE, 4);
+        validateTerrainCount(hexes, TerrainType.FOREST, 4);
+        validateTerrainCount(hexes, TerrainType.MOUNTAINS, 3);
+        validateTerrainCount(hexes, TerrainType.HILLS, 3);
 
         this.hexes = hexes;
         this.vertices = new ArrayList<>();
@@ -45,6 +32,13 @@ public class Board {
         this.hexes = hexes;
         this.vertices = vertices;
         this.edges = edges;
+    }
+
+    private void validateTerrainCount(List<Hex> hexes, TerrainType terrainType, int expected) {
+        long count = hexes.stream().filter(h -> h.getTerrainType() == terrainType).count();
+        if (count != expected) {
+            throw new IllegalArgumentException("Board must have exactly " + expected + " " + terrainType + " hexes");
+        }
     }
 
     public List<Hex> getHexes() {

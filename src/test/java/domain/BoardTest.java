@@ -55,7 +55,7 @@ public class BoardTest {
         hexes.add(new Hex(TerrainType.HILLS));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
-        assertEquals("Board must have exactly 1 DESERT hex", exception.getMessage());
+        assertEquals("Board must have exactly 1 DESERT hexes", exception.getMessage());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class BoardTest {
         hexes.add(new Hex(TerrainType.DESERT));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
-        assertEquals("Board must have exactly 1 DESERT hex", exception.getMessage());
+        assertEquals("Board must have exactly 1 DESERT hexes", exception.getMessage());
     }
 
     @Test
