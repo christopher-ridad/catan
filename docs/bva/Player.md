@@ -89,3 +89,17 @@
 - **TC20: addResources_grainType_amountTwo_throwsIllegalArgumentException** ( not implemented )
   - State of the system: addResources called with 2 as amount integer value and grain as ResourceType input
   - Expected output: `IllegalArgumentException`
+
+## Method under test: `getTotalResourceCount()`
+
+- **TC21: getTotalResourceCount_ReturnsZero** ( not implemented )
+  - State of the system: getTotalResourceCount called on a player with no resources (each resource is mapped to 0)
+  - Expected output: 0
+
+- **TC22: getTotalResourceCount_ReturnsOne** ( not implemented )
+  - State of the system: getTotalResourceCount called on a player with only one resource card
+  - Expected output: 1
+
+- **TC23: getTotalResourceCount_MaxPossibleValue** ( not implemented )
+  - State of the system: getTotalResourceCount called on a player with resources that sum to INT_MAX
+  - Expected output: INT_MAX
