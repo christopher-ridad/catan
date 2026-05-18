@@ -159,4 +159,15 @@ public class PlayerTests {
             playerOne.addResources(null, 2);
         });
     }
+
+    @Test
+    public void addResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertThrows(IllegalArgumentException.class, () -> {
+            playerOne.addResources(ResourceType.WOOL, -1);
+        });
+    }
 }

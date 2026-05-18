@@ -58,6 +58,9 @@ public class Player {
         if (resourceType == null) {
             throw new IllegalArgumentException("Resource type cannot be null");
         }
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
         this.resources.merge(resourceType, amount, Integer::sum);
     }
 

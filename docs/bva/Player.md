@@ -74,7 +74,7 @@
   - State of the system: addResources called with null as ResourceType input
   - Expected output: `IllegalArgumentException`
 
-- **TC17: addResources_woolType, amountLessThanZero_ThrowsIllegalArgumentException** ( not implemented )
+- **TC17: addResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: addResources called with -1 as amount integer value, wool as resourceType input
   - Expected output: `IllegalArgumentException`
 
