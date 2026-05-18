@@ -47,3 +47,25 @@
 - **TC10: getColor_OnValidPlayer_ReturnsPlayerColor** ( not implemented )
     - State of the system: Player constructed successfully
     - Expected output: valid PlayerColor object
+
+## Method under test: `getResourceCount()`
+
+- **TC11: getResourceCount_brickType_ReturnsZero** ( not implemented )
+  - State of the system: getResourceCount called with brick as ResourceType input, player has 0 brick
+  - Expected output: 0
+
+- **TC12: getResourceCount_lumberType_ReturnsOne** ( not implemented )
+    - State of the system: getResourceCount called with lumber as ResourceType input, player has 1 lumber
+    - Expected output: 1
+
+- **TC13: getResourceCount_woolType_ReturnsMoreThanOne** ( not implemented )
+    - State of the system: getResourceCount called with wool as ResourceType input, player has 3 wool
+    - Expected output: 3
+
+- **TC14: getResourceCount_oreType_ReturnsMaxPossibleInteger** ( not implemented )
+    - State of the system: getResourceCount called with ore as ResourceType input, player has INT_MAX ore
+    - Expected output: INT_MAX
+
+- **TC15: getResourceCount_nullResourceType_ThrowsIllegalArgumentException** ( not implemented )
+    - State of the system: getResourceCount called with null as ResourceType input
+    - Expected output:`IllegalArgumentException`
