@@ -54,7 +54,10 @@ public class Board {
     }
 
     public Vertex getVertex(int id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (id < 0 || id > 53) {
+            throw new IllegalArgumentException("Vertex id must be between 0 and 53");
+        }
+        return vertices.get(id);
     }
 
     public Edge getEdge(int id) {

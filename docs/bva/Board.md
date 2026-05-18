@@ -60,29 +60,29 @@
 
 ### FOREST count boundaries
 
-- **TC13: Constructor_With3Forest_ThrowsIllegalArgumentException** ( not implemented )
+- **TC13: Constructor_With3Forest_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 3 FOREST instead of 4
   - Expected output: `IllegalArgumentException`
 
-- **TC14: Constructor_With4Forest_NoExceptionThrown** ( not implemented )
+- **TC14: Constructor_With4Forest_NoExceptionThrown** ( implemented )
   - State of the system: 19 hexes, exactly 4 FOREST
   - Expected output: no exception thrown
 
-- **TC15: Constructor_With5Forest_ThrowsIllegalArgumentException** ( not implemented )
+- **TC15: Constructor_With5Forest_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 5 FOREST instead of 4
   - Expected output: `IllegalArgumentException`
 
 ### MOUNTAINS count boundaries
 
-- **TC16: Constructor_With2Mountains_ThrowsIllegalArgumentException** ( not implemented )
+- **TC16: Constructor_With2Mountains_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 2 MOUNTAINS instead of 3
   - Expected output: `IllegalArgumentException`
 
-- **TC17: Constructor_With3Mountains_NoExceptionThrown** ( not implemented )
+- **TC17: Constructor_With3Mountains_NoExceptionThrown** ( implemented )
   - State of the system: 19 hexes, exactly 3 MOUNTAINS
   - Expected output: no exception thrown
 
-- **TC18: Constructor_With4Mountains_ThrowsIllegalArgumentException** ( not implemented )
+- **TC18: Constructor_With4Mountains_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 4 MOUNTAINS instead of 3
   - Expected output: `IllegalArgumentException`
 
@@ -91,19 +91,19 @@
 - **Note:** HILLS count is implicitly validated by the combination of the total hex count check (exactly 19) and the individual counts for DESERT (1), FIELDS (4), PASTURE (4), FOREST (4), and MOUNTAINS (3). Any deviation in HILLS count would necessarily violate one of these other checks first, making independent HILLS boundary tests redundant.
 
 ## Method under test: `getHexes()`
-- **TC19: GetHexes_OnValidBoard_Returns19Hexes** ( not implemented )
+- **TC19: GetHexes_OnValidBoard_Returns19Hexes** ( implemented )
   - State of the system: Board constructed successfully
   - Expected output: list of size `19`
 
 ## Method under test: `getVertices()`
 
-- **TC20: GetVertices_OnValidBoard_Returns54Vertices** ( not implemented )
+- **TC20: GetVertices_OnValidBoard_Returns54Vertices** ( implemented )
   - State of the system: Board constructed successfully
   - Expected output: list of size `54`
 
 ## Method under test: `getEdges()`
 
-- **TC21: GetEdges_OnValidBoard_Returns72Edges** ( not implemented )
+- **TC21: GetEdges_OnValidBoard_Returns72Edges** ( implemented )
   - State of the system: Board constructed successfully
   - Expected output: list of size `72`
 

@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BoardTest {
 
     private List<Hex> hexes;
+    private Board board;
 
     @BeforeEach
     void setUp() {
@@ -22,6 +23,7 @@ public class BoardTest {
         for (int i = 0; i < 4; i++) hexes.add(new Hex(TerrainType.FOREST));
         for (int i = 0; i < 3; i++) hexes.add(new Hex(TerrainType.MOUNTAINS));
         for (int i = 0; i < 3; i++) hexes.add(new Hex(TerrainType.HILLS));
+        board = new Board(hexes);
     }
 
     @Test
@@ -174,19 +176,38 @@ public class BoardTest {
 
     @Test
     void GetHexes_OnValidBoard_Returns19Hexes() {
-        Board board = new Board(hexes);
         assertEquals(19, board.getHexes().size());
     }
 
     @Test
     void GetVertices_OnValidBoard_Returns54Vertices() {
-        Board board = new Board(hexes);
         assertEquals(54, board.getVertices().size());
     }
 
     @Test
     void GetEdges_OnValidBoard_Returns72Edges() {
-        Board board = new Board(hexes);
         assertEquals(72, board.getEdges().size());
+    }
+
+    @Test
+    void GetVertex_WithNegativeId_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> board.getVertex(-1));
+        assertEquals("Vertex id must be between 0 and 53", exception.getMessage());
+    }
+
+    @Test
+    void GetVertex_WithLowerBoundaryId_ReturnsVertex() {
+        assertEquals(0, board.getVertex(0).getId());
+    }
+
+    @Test
+    void GetVertex_WithUpperBoundaryId_ReturnsVertex() {
+        assertEquals(53, board.getVertex(53).getId());
+    }
+
+    @Test
+    void GetVertex_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> board.getVertex(54));
+        assertEquals("Vertex id must be between 0 and 53", exception.getMessage());
     }
 }
