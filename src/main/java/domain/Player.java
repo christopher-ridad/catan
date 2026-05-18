@@ -46,7 +46,7 @@ public class Player {
     }
 
     public void addResources(ResourceType resourceType, int amount) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.resources.merge(resourceType, amount, Integer::sum);
     }
 
     public int getTotalResourceCount() {

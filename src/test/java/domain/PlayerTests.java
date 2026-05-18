@@ -97,5 +97,13 @@ public class PlayerTests {
         assertEquals(0, playerOne.getResourceCount(ResourceType.BRICK));
     }
 
-    
+    @Test
+    public void getResourceCount_lumberType_ReturnsOne() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+        Player playerOne = new Player(playerOneName, playerOneColor);
+
+        playerOne.addResources(ResourceType.LUMBER, 1);
+        assertEquals(1, playerOne.getResourceCount(ResourceType.LUMBER));
+    }
 }
