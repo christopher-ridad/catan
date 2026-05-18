@@ -170,4 +170,17 @@ public class PlayerTests {
             playerOne.addResources(ResourceType.WOOL, -1);
         });
     }
+
+    @Test
+    public void addResources_brickType_amountZero_noExceptionThrown() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertDoesNotThrow(() -> {
+            playerOne.addResources(ResourceType.BRICK, 0);
+        });
+
+        assertEquals(0, playerOne.getResourceCount(ResourceType.BRICK));
+    }
 }
