@@ -2,6 +2,7 @@ package domain;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PlayerTests {
@@ -42,6 +43,15 @@ public class PlayerTests {
         String playerOneName = "BOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOB";
         PlayerColor playerOneColor = PlayerColor.BLUE;
         assertThrows(IllegalArgumentException.class, () -> {
+            Player playerOne = new Player(playerOneName, playerOneColor);
+        });
+    }
+
+    @Test
+    public void constructor_WithNameLengthEqualToMax_NoExceptionThrown() {
+        String playerOneName = "BOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBO";
+        PlayerColor playerOneColor = PlayerColor.BLUE;
+        assertDoesNotThrow(() -> {
             Player playerOne = new Player(playerOneName, playerOneColor);
         });
     }
