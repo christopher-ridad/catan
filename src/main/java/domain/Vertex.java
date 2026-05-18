@@ -4,9 +4,11 @@ import java.util.List;
 
 public class Vertex {
     private final int id;
+    private final List<Vertex> adjacentVertices;
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
         this.id = id;
+        this.adjacentVertices = adjacentVertices;
     }
 
     public int getId() {
@@ -26,6 +28,6 @@ public class Vertex {
     }
 
     public List<Vertex> getAdjacentVertices() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return adjacentVertices;
     }
 }

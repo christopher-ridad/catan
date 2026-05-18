@@ -1,6 +1,6 @@
 package domain;
 
-import org.junit.jupiter.api.Assertions;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -261,5 +261,29 @@ public class BoardTest {
     @Test
     void GetHexCount_ForHills_ReturnsThree() {
         assertEquals(3, board.getHexCount(TerrainType.HILLS));
+    }
+
+    @Test
+    void SatisfiesDistanceRule_WhenAllNeighborsEmpty_ReturnsTrue() {
+        Vertex neighbor1 = EasyMock.createMock(Vertex.class);
+        EasyMock.expect(neighbor1.isOccupied()).andReturn(false);
+        EasyMock.replay(neighbor1);
+
+        Vertex vertex = new Vertex(0, new ArrayList<>(), List.of(neighbor1));
+        assertTrue(board.satisfiesDistanceRule(vertex));
+
+        EasyMock.verify(neighbor1);
+    }
+
+    @Test
+    void SatisfiesDistanceRule_WhenOneNeighborOccupied_ReturnsFalse() {
+        Vertex neighbor1 = EasyMock.createMock(Vertex.class);
+        EasyMock.expect(neighbor1.isOccupied()).andReturn(true);
+        EasyMock.replay(neighbor1);
+
+        Vertex vertex = new Vertex(0, new ArrayList<>(), List.of(neighbor1));
+        assertFalse(board.satisfiesDistanceRule(vertex));
+
+        EasyMock.verify(neighbor1);
     }
 }

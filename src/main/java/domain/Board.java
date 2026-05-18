@@ -72,7 +72,7 @@ public class Board {
     }
 
     public boolean satisfiesDistanceRule(Vertex vertex) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return vertex.getAdjacentVertices().stream().noneMatch(Vertex::isOccupied);
     }
 
     public boolean isConnectedToPlayer(Vertex vertex, Player player) {
