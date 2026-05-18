@@ -12,6 +12,10 @@ public class Board {
         if (desertCount != 1) {
             throw new IllegalArgumentException("Board must have exactly 1 desert hex");
         }
+        long fieldsCount = hexes.stream().filter(h -> h.getTerrainType() == TerrainType.FIELDS).count();
+        if (fieldsCount != 4) {
+            throw new IllegalArgumentException("Board must have exactly 4 FIELDS hexes");
+        }
     }
 
     public List<Hex> getHexes() {
