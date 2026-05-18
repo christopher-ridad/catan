@@ -2,6 +2,9 @@ package domain;
 
 public class Player {
 
+    private final PlayerColor color;
+    private final String name;
+
     public Player(String name, PlayerColor color) {
         if (name == null) {
             throw new IllegalArgumentException("Player name cannot be null");
@@ -15,14 +18,16 @@ public class Player {
         if (name.length() > 50) {
             throw new IllegalArgumentException("Player name cannot exceed 50 characters");
         }
+        this.name = name;
+        this.color = color;
      }
 
     public String getName() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.name;
     }
 
     public PlayerColor getColor() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.color;
     }
 
     public int getResourceCount(ResourceType resourceType) {

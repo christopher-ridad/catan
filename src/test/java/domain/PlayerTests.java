@@ -2,8 +2,7 @@ package domain;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTests {
     @Test
@@ -41,7 +40,7 @@ public class PlayerTests {
     @Test
     public void constructor_WithNameLengthGreaterThanMax_ThrowsIllegalArgumentException() {
         String playerOneName = "BOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOB";
-        PlayerColor playerOneColor = PlayerColor.BLUE;
+        PlayerColor playerOneColor = PlayerColor.WHITE;
         assertThrows(IllegalArgumentException.class, () -> {
             Player playerOne = new Player(playerOneName, playerOneColor);
         });
@@ -50,7 +49,7 @@ public class PlayerTests {
     @Test
     public void constructor_WithNameLengthEqualToMax_NoExceptionThrown() {
         String playerOneName = "BOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBO";
-        PlayerColor playerOneColor = PlayerColor.BLUE;
+        PlayerColor playerOneColor = PlayerColor.RED;
         assertDoesNotThrow(() -> {
             Player playerOne = new Player(playerOneName, playerOneColor);
         });
@@ -63,5 +62,14 @@ public class PlayerTests {
         assertDoesNotThrow(() -> {
             Player playerOne = new Player(playerOneName, playerOneColor);
         });
+    }
+
+    @Test
+    public void constructor_WithCorrectName_NoExceptionThrown() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.ORANGE;
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertEquals(playerOneColor, playerOne.getColor());
+        assertEquals(playerOneName, playerOne.getName());
     }
 }
