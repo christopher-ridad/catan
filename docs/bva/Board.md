@@ -88,113 +88,103 @@
 
 ### HILLS count boundaries
 
-- **TC19: Constructor_With2Hills_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 2 HILLS instead of 3
-  - Expected output: `IllegalArgumentException`
-
-- **TC20: Constructor_With3Hills_NoExceptionThrown** ( not implemented )
-  - State of the system: 19 hexes, exactly 3 HILLS
-  - Expected output: no exception thrown
-
-- **TC21: Constructor_With4Hills_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: 19 hexes, 4 HILLS instead of 3
-  - Expected output: `IllegalArgumentException`
+- **Note:** HILLS count is implicitly validated by the combination of the total hex count check (exactly 19) and the individual counts for DESERT (1), FIELDS (4), PASTURE (4), FOREST (4), and MOUNTAINS (3). Any deviation in HILLS count would necessarily violate one of these other checks first, making independent HILLS boundary tests redundant.
 
 ## Method under test: `getHexes()`
-- **TC22: GetHexes_OnValidBoard_Returns19Hexes** ( not implemented )
+- **TC19: GetHexes_OnValidBoard_Returns19Hexes** ( not implemented )
   - State of the system: Board constructed successfully
   - Expected output: list of size `19`
 
 ## Method under test: `getVertices()`
 
-- **TC23: GetVertices_OnValidBoard_Returns54Vertices** ( not implemented )
+- **TC20: GetVertices_OnValidBoard_Returns54Vertices** ( not implemented )
   - State of the system: Board constructed successfully
   - Expected output: list of size `54`
 
 ## Method under test: `getEdges()`
 
-- **TC24: GetEdges_OnValidBoard_Returns72Edges** ( not implemented )
+- **TC21: GetEdges_OnValidBoard_Returns72Edges** ( not implemented )
   - State of the system: Board constructed successfully
   - Expected output: list of size `72`
 
 ## Method under test: `getVertex(int id)`
-- **TC25: GetVertex_WithNegativeId_ThrowsIllegalArgumentException** ( not implemented )
+- **TC22: GetVertex_WithNegativeId_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: valid board, id = -1
   - Expected output: `IllegalArgumentException`
 
-- **TC26: GetVertex_WithLowerBoundaryId_ReturnsVertex** ( not implemented )
+- **TC23: GetVertex_WithLowerBoundaryId_ReturnsVertex** ( not implemented )
   - State of the system: valid board, id = 0
   - Expected output: Vertex with id `0`
 
-- **TC27: GetVertex_WithUpperBoundaryId_ReturnsVertex** ( not implemented )
+- **TC24: GetVertex_WithUpperBoundaryId_ReturnsVertex** ( not implemented )
   - State of the system: valid board, id = 53
   - Expected output: Vertex with id `53`
 
-- **TC28: GetVertex_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException** ( not implemented )
+- **TC25: GetVertex_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: valid board, id = 54
   - Expected output: `IllegalArgumentException`
 
 ## Method under test: `getEdge(int id)`
-- **TC29: GetEdge_WithNegativeId_ThrowsIllegalArgumentException** ( not implemented )
+- **TC26: GetEdge_WithNegativeId_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: valid board, id = -1
   - Expected output: `IllegalArgumentException`
 
-- **TC30: GetEdge_WithLowerBoundaryId_ReturnsEdge** ( not implemented )
+- **TC27: GetEdge_WithLowerBoundaryId_ReturnsEdge** ( not implemented )
   - State of the system: valid board, id = 0
   - Expected output: Edge with id `0`
 
-- **TC31: GetEdge_WithUpperBoundaryId_ReturnsEdge** ( not implemented )
+- **TC28: GetEdge_WithUpperBoundaryId_ReturnsEdge** ( not implemented )
   - State of the system: valid board, id = 71
   - Expected output: Edge with id `71`
 
-- **TC32: GetEdge_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException** ( not implemented )
+- **TC29: GetEdge_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: valid board, id = 72
   - Expected output: `IllegalArgumentException`
 
 ## Method under test: `getHexCount(TerrainType)`
-- **TC33: GetHexCount_ForDesert_ReturnsOne** ( not implemented )
+- **TC30: GetHexCount_ForDesert_ReturnsOne** ( not implemented )
   - State of the system: valid board
   - Expected output: `1`
 
-- **TC34: GetHexCount_ForField_ReturnsFour** ( not implemented )
+- **TC31: GetHexCount_ForField_ReturnsFour** ( not implemented )
   - State of the system: valid board
   - Expected output: `4`
 
-- **TC35: GetHexCount_ForPasture_ReturnsFour** ( not implemented )
+- **TC32: GetHexCount_ForPasture_ReturnsFour** ( not implemented )
   - State of the system: valid board
   - Expected output: `4`
 
-- **TC36: GetHexCount_ForForest_ReturnsFour** ( not implemented )
+- **TC33: GetHexCount_ForForest_ReturnsFour** ( not implemented )
   - State of the system: valid board
   - Expected output: `4`
 
-- **TC37: GetHexCount_ForMountains_ReturnsThree** ( not implemented )
+- **TC34: GetHexCount_ForMountains_ReturnsThree** ( not implemented )
   - State of the system: valid board
   - Expected output: `3`
 
-- **TC38: GetHexCount_ForHills_ReturnsThree** ( not implemented )
+- **TC35: GetHexCount_ForHills_ReturnsThree** ( not implemented )
   - State of the system: valid board
   - Expected output: `3`
 
 ## Method under test: `satisfiesDistanceRule(Vertex)`
-- **TC39: SatisfiesDistanceRule_WhenAllNeighborsEmpty_ReturnsTrue** ( not implemented )
+- **TC36: SatisfiesDistanceRule_WhenAllNeighborsEmpty_ReturnsTrue** ( not implemented )
   - State of the system: valid board, target vertex has no occupied neighbors
   - Expected output: `true`
 
-- **TC40: SatisfiesDistanceRule_WhenOneNeighborOccupied_ReturnsFalse** ( not implemented )
+- **TC37: SatisfiesDistanceRule_WhenOneNeighborOccupied_ReturnsFalse** ( not implemented )
   - State of the system: valid board, one adjacent vertex is occupied
   - Expected output: `false`
 
 ## Method under test: `isConnectedToPlayer(Vertex, Player)`
-- **TC41: IsConnectedToPlayer_WhenNoAdjacentRoads_ReturnsFalse** ( not implemented )
+- **TC38: IsConnectedToPlayer_WhenNoAdjacentRoads_ReturnsFalse** ( not implemented )
   - State of the system: valid board, no edges adjacent to vertex have roads
   - Expected output: `false`
 
-- **TC42: IsConnectedToPlayer_WhenAdjacentRoadOwnedByPlayer_ReturnsTrue** ( not implemented )
+- **TC39: IsConnectedToPlayer_WhenAdjacentRoadOwnedByPlayer_ReturnsTrue** ( not implemented )
   - State of the system: valid board, one adjacent edge has a road owned by the player
   - Expected output: `true`
 
-- **TC43: IsConnectedToPlayer_WhenAdjacentRoadOwnedByDifferentPlayer_ReturnsFalse** ( not implemented )
+- **TC40: IsConnectedToPlayer_WhenAdjacentRoadOwnedByDifferentPlayer_ReturnsFalse** ( not implemented )
   - State of the system: valid board, adjacent edge has road owned by another player
   - Expected output: `false`
 
