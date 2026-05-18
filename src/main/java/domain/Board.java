@@ -16,6 +16,10 @@ public class Board {
         if (fieldsCount != 4) {
             throw new IllegalArgumentException("Board must have exactly 4 FIELDS hexes");
         }
+        long pastureCount = hexes.stream().filter(h -> h.getTerrainType() == TerrainType.PASTURE).count();
+        if (pastureCount != 4) {
+            throw new IllegalArgumentException("Board must have exactly 4 PASTURE hexes");
+        }
     }
 
     public List<Hex> getHexes() {

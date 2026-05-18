@@ -82,4 +82,25 @@ public class BoardTest {
         hexes.add(new Hex(TerrainType.FIELDS));
         assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
     }
+
+    @Test
+    void Constructor_With3Pasture_ThrowsIllegalArgumentException() {
+        List<Hex> hexes = validHexList();
+        hexes.remove(5);
+        hexes.add(new Hex(TerrainType.HILLS));
+        assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
+    }
+
+    @Test
+    void Constructor_With4Pasture_NoExceptionThrown() {
+        assertDoesNotThrow(() -> new Board(validHexList()));
+    }
+
+    @Test
+    void Constructor_With5Pasture_ThrowsIllegalArgumentException() {
+        List<Hex> hexes = validHexList();
+        hexes.remove(hexes.size() - 1);
+        hexes.add(new Hex(TerrainType.PASTURE));
+        assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
+    }
 }

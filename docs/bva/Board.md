@@ -8,53 +8,53 @@
     - State of the system: list of 18 hexes with otherwise valid terrain distribution
     - Expected output: `IllegalArgumentException`
 
-- **TC2: Constructor_With19Hexes_NoExceptionThrown** ( not implemented )
+- **TC2: Constructor_With19Hexes_NoExceptionThrown** ( implemented )
     - State of the system: list of exactly 19 hexes with valid terrain distribution
     - Expected output: no exception thrown
 
-- **TC3: Constructor_With20Hexes_ThrowsIllegalArgumentException** ( not implemented )
+- **TC3: Constructor_With20Hexes_ThrowsIllegalArgumentException** ( implemented )
     - State of the system: list of 20 hexes with otherwise valid terrain distribution
     - Expected output: `IllegalArgumentException`
 
 ### DESERT count boundaries
 
-- **TC4: Constructor_WithNoDesert_ThrowsIllegalArgumentException** ( not implemented )
+- **TC4: Constructor_WithNoDesert_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 0 DESERT
   - Expected output: `IllegalArgumentException`
 
-- **TC5: Constructor_WithOneDesert_NoExceptionThrown** ( not implemented )
+- **TC5: Constructor_WithOneDesert_NoExceptionThrown** ( implemented )
   - State of the system: 19 hexes, exactly 1 DESERT
   - Expected output: no exception thrown
 
-- **TC6: Constructor_WithTwoDeserts_ThrowsIllegalArgumentException** ( not implemented )
+- **TC6: Constructor_WithTwoDeserts_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 2 DESERT
   - Expected output: `IllegalArgumentException`
 
 ### FIELD count boundaries
 
-- **TC7: Constructor_With3Field_ThrowsIllegalArgumentException** ( not implemented )
+- **TC7: Constructor_With3Field_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 3 FIELD instead of 4
   - Expected output: `IllegalArgumentException`
 
-- **TC8: Constructor_With4Field_NoExceptionThrown** ( not implemented )
+- **TC8: Constructor_With4Field_NoExceptionThrown** ( implemented )
   - State of the system: 19 hexes, exactly 4 FIELD
   - Expected output: no exception thrown
 
-- **TC9: Constructor_With5Field_ThrowsIllegalArgumentException** ( not implemented )
+- **TC9: Constructor_With5Field_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 5 FIELD instead of 4
   - Expected output: `IllegalArgumentException`
 
 ### PASTURE count boundaries
 
-- **TC10: Constructor_With3Pasture_ThrowsIllegalArgumentException** ( not implemented )
+- **TC10: Constructor_With3Pasture_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 3 PASTURE instead of 4
   - Expected output: `IllegalArgumentException`
 
-- **TC11: Constructor_With4Pasture_NoExceptionThrown** ( not implemented )
+- **TC11: Constructor_With4Pasture_NoExceptionThrown** ( implemented )
   - State of the system: 19 hexes, exactly 4 PASTURE
   - Expected output: no exception thrown
 
-- **TC12: Constructor_With5Pasture_ThrowsIllegalArgumentException** ( not implemented )
+- **TC12: Constructor_With5Pasture_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: 19 hexes, 5 PASTURE instead of 4
   - Expected output: `IllegalArgumentException`
 
