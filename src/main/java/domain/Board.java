@@ -9,10 +9,7 @@ public class Board {
     private final List<Edge> edges;
 
     public Board(List<Hex> hexes) {
-        if (hexes.size() != 19) {
-            throw new IllegalArgumentException("Board must have exactly 19 hexes");
-        }
-
+        validateHexCount(hexes);
         validateTerrainCount(hexes, TerrainType.DESERT, 1);
         validateTerrainCount(hexes, TerrainType.FIELDS, 4);
         validateTerrainCount(hexes, TerrainType.PASTURE, 4);
@@ -32,6 +29,12 @@ public class Board {
         this.hexes = hexes;
         this.vertices = vertices;
         this.edges = edges;
+    }
+
+    private void validateHexCount(List<Hex> hexes) {
+        if (hexes.size() != 19) {
+            throw new IllegalArgumentException("Board must have exactly 19 hexes");
+        }
     }
 
     private void validateTerrainCount(List<Hex> hexes, TerrainType terrainType, int expected) {
