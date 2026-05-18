@@ -20,4 +20,12 @@ public class PlayerTests {
             Player playerOne = new Player("", playerOneColor);
         });
     }
+
+    @Test
+    public void constructor_WithSpacesForName_ThrowsIllegalArgumentException() {
+        PlayerColor playerOneColor = PlayerColor.BLUE;
+        assertThrows(IllegalArgumentException.class, () -> {
+            Player playerOne = new Player("   ", playerOneColor);
+        });
+    }
 }
