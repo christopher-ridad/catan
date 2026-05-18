@@ -36,70 +36,70 @@
 
 ## Method under test: `getName()`
 
-- **TC9: getName_OnValidPlayer_ReturnsPlayerNameString** ( not implemented )
+- **TC9: getName_OnValidPlayer_ReturnsPlayerNameString** ( implemented )
     - State of the system: Player constructed successfully
     - Expected output: player name string
 
 ## Method under test: `getColor()`
 
-- **TC10: getColor_OnValidPlayer_ReturnsPlayerColor** ( not implemented )
+- **TC10: getColor_OnValidPlayer_ReturnsPlayerColor** ( implemented )
     - State of the system: Player constructed successfully
     - Expected output: valid PlayerColor object
 
 ## Method under test: `getResourceCount(ResourceType type)`
 
-- **TC11: getResourceCount_brickType_ReturnsZero** ( not implemented )
+- **TC11: getResourceCount_brickType_ReturnsZero** ( implemented )
   - State of the system: getResourceCount called with brick as ResourceType input, player has 0 brick
   - Expected output: 0
 
-- **TC12: getResourceCount_lumberType_ReturnsOne** ( not implemented )
+- **TC12: getResourceCount_lumberType_ReturnsOne** ( implemented )
     - State of the system: getResourceCount called with lumber as ResourceType input, player has 1 lumber
     - Expected output: 1
 
-- **TC13: getResourceCount_woolType_ReturnsMoreThanOne** ( not implemented )
+- **TC13: getResourceCount_woolType_ReturnsMoreThanOne** ( implemented )
     - State of the system: getResourceCount called with wool as ResourceType input, player has 3 wool
     - Expected output: 3
 
-- **TC14: getResourceCount_oreType_ReturnsMaxPossibleInteger** ( not implemented )
+- **TC14: getResourceCount_oreType_ReturnsMaxPossibleInteger** ( implemented )
     - State of the system: getResourceCount called with ore as ResourceType input, player has INT_MAX ore
     - Expected output: INT_MAX
 
-- **TC15: getResourceCount_nullResourceType_ThrowsIllegalArgumentException** ( not implemented )
+- **TC15: getResourceCount_nullResourceType_ThrowsIllegalArgumentException** ( implemented )
     - State of the system: getResourceCount called with null as ResourceType input
     - Expected output:`IllegalArgumentException`
 
 ## Method under test: `addResources(ResourceType type, int amount)`
 
-- **TC16: addResources_nullResourceType_ThrowsIllegalArgumentException** ( not implemented )
+- **TC16: addResources_nullResourceType_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: addResources called with null as ResourceType input
   - Expected output: `IllegalArgumentException`
 
-- **TC17: addResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException** ( not implemented )
+- **TC17: addResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException** ( implemented )
   - State of the system: addResources called with -1 as amount integer value, wool as resourceType input
   - Expected output: `IllegalArgumentException`
 
-- **TC18: addResources_brickType_amountZero_noExceptionThrown** ( not implemented )
+- **TC18: addResources_brickType_amountZero_noExceptionThrown** ( implemented )
   - State of the system: addResources called with 0 as amount integer value and brick as ResourceType input
   - Expected output: no exception thrown
 
-- **TC19: addResources_lumberType_amountOne_noExceptionThrown** ( not implemented )
+- **TC19: addResources_lumberType_amountOne_noExceptionThrown** ( implemented )
   - State of the system: addResources called with 1 as amount integer value and lumber as ResourceType input
   - Expected output: no exception thrown
 
-- **TC20: addResources_grainType_amountTwo_throwsIllegalArgumentException** ( not implemented )
+- **TC20: addResources_grainType_amountTwo_throwsIllegalArgumentException** ( implemented )
   - State of the system: addResources called with 2 as amount integer value and grain as ResourceType input
   - Expected output: `IllegalArgumentException`
 
 ## Method under test: `getTotalResourceCount()`
 
-- **TC21: getTotalResourceCount_ReturnsZero** ( not implemented )
+- **TC21: getTotalResourceCount_ReturnsZero** ( implemented )
   - State of the system: getTotalResourceCount called on a player with no resources (each resource is mapped to 0)
   - Expected output: 0
 
-- **TC22: getTotalResourceCount_ReturnsOne** ( not implemented )
+- **TC22: getTotalResourceCount_ReturnsOne** ( implemented )
   - State of the system: getTotalResourceCount called on a player with only one resource card
   - Expected output: 1
 
-- **TC23: getTotalResourceCount_MaxPossibleValue** ( not implemented )
+- **TC23: getTotalResourceCount_MaxPossibleValue** ( implemented )
   - State of the system: getTotalResourceCount called on a player with resources that sum to INT_MAX
   - Expected output: INT_MAX
