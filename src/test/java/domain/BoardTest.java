@@ -171,4 +171,22 @@ public class BoardTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 3 MOUNTAINS hexes", exception.getMessage());
     }
+
+    @Test
+    void GetHexes_OnValidBoard_Returns19Hexes() {
+        Board board = new Board(hexes);
+        assertEquals(19, board.getHexes().size());
+    }
+
+    @Test
+    void GetVertices_OnValidBoard_Returns54Vertices() {
+        Board board = new Board(hexes);
+        assertEquals(54, board.getVertices().size());
+    }
+
+    @Test
+    void GetEdges_OnValidBoard_Returns72Edges() {
+        Board board = new Board(hexes);
+        assertEquals(72, board.getEdges().size());
+    }
 }

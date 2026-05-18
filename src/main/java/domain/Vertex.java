@@ -3,13 +3,14 @@ package domain;
 import java.util.List;
 
 public class Vertex {
+    private final int id;
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.id = id;
     }
 
     public int getId() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return id;
     }
 
     public boolean isOccupied() {

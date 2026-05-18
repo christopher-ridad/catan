@@ -1,13 +1,14 @@
 package domain;
 
 public class Edge {
+    private final int id;
 
     public Edge(int id, Vertex endpoint1, Vertex endpoint2) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.id = id;
     }
 
     public int getId() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return id;
     }
 
     public boolean hasRoad() {

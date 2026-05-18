@@ -1,8 +1,12 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
+    private final List<Hex> hexes;
+    private final List<Vertex> vertices;
+    private final List<Edge> edges;
 
     public Board(List<Hex> hexes) {
         if (hexes.size() != 19) {
@@ -28,18 +32,25 @@ public class Board {
         if (mountainsCount != 3) {
             throw new IllegalArgumentException("Board must have exactly 3 MOUNTAINS hexes");
         }
+
+        this.hexes = hexes;
+        this.vertices = new ArrayList<>();
+        this.edges = new ArrayList<>();
+
+        for (int i = 0; i < 54; i++) vertices.add(new Vertex(i, new ArrayList<>(), new ArrayList<>()));
+        for (int i = 0; i < 72; i++) edges.add(new Edge(i, null, null));
     }
 
     public List<Hex> getHexes() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return hexes;
     }
 
     public List<Vertex> getVertices() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return vertices;
     }
 
     public List<Edge> getEdges() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return edges;
     }
 
     public Vertex getVertex(int id) {
