@@ -88,4 +88,14 @@ public class PlayerTests {
         Player playerOne = new Player(playerOneName, playerOneColor);
         assertEquals(playerOneColor, playerOne.getColor());
     }
+
+    @Test
+    public void getResourceCount_brickType_ReturnsZero() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertEquals(0, playerOne.getResourceCount(ResourceType.BRICK));
+    }
+
+    
 }
