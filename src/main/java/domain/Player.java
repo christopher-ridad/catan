@@ -33,6 +33,12 @@ public class Player {
         ));
     }
 
+    Player(String name, PlayerColor color, Map<ResourceType, Integer> customResources) {
+        this.name = name;
+        this.color = color;
+        this.resources = new HashMap<>(customResources);
+    }
+
     public String getName() {
         return this.name;
     }

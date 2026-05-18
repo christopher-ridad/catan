@@ -2,6 +2,9 @@ package domain;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTests {
@@ -117,5 +120,21 @@ public class PlayerTests {
         playerOne.addResources(ResourceType.WOOL, 1);
         playerOne.addResources(ResourceType.WOOL, 1);
         assertEquals(3, playerOne.getResourceCount(ResourceType.WOOL));
+    }
+
+    @Test
+    public void getResourceCount_oreType_ReturnsMaxPossibleInteger() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+        Map<ResourceType, Integer> maxIntOre = new HashMap<>(Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, Integer.MAX_VALUE,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+
+        Player playerOne = new Player(playerOneName, playerOneColor, maxIntOre);
+        assertEquals(Integer.MAX_VALUE, playerOne.getResourceCount(ResourceType.ORE));
     }
 }
