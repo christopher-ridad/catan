@@ -55,4 +55,13 @@ public class PlayerTests {
             Player playerOne = new Player(playerOneName, playerOneColor);
         });
     }
+
+    @Test
+    public void constructor_WithNameLengthLessThanMax_NoExceptionThrown() {
+        String playerOneName = "BOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOB";
+        PlayerColor playerOneColor = PlayerColor.BLUE;
+        assertDoesNotThrow(() -> {
+            Player playerOne = new Player(playerOneName, playerOneColor);
+        });
+    }
 }
