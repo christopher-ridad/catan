@@ -286,4 +286,55 @@ public class BoardTest {
 
         EasyMock.verify(neighbor1);
     }
+
+    @Test
+    void IsConnectedToPlayer_WhenNoAdjacentRoads_ReturnsFalse() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Player player = EasyMock.createMock(Player.class);
+
+        Edge mockEdge = EasyMock.createMock(Edge.class);
+        EasyMock.expect(mockEdge.connectsTo(vertex)).andReturn(true);
+        EasyMock.expect(mockEdge.hasRoad()).andReturn(false);
+        EasyMock.replay(mockEdge);
+
+        Board testBoard = new Board(hexes, new ArrayList<>(), List.of(mockEdge));
+
+        assertFalse(testBoard.isConnectedToPlayer(vertex, player));
+        EasyMock.verify(mockEdge);
+    }
+
+    @Test
+    void IsConnectedToPlayer_WhenAdjacentRoadOwnedByPlayer_ReturnsTrue() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Player player = EasyMock.createMock(Player.class);
+
+        Edge mockEdge = EasyMock.createMock(Edge.class);
+        EasyMock.expect(mockEdge.connectsTo(vertex)).andReturn(true);
+        EasyMock.expect(mockEdge.hasRoad()).andReturn(true);
+        EasyMock.expect(mockEdge.getOwner()).andReturn(player);
+        EasyMock.replay(mockEdge);
+
+        Board testBoard = new Board(hexes, new ArrayList<>(), List.of(mockEdge));
+
+        assertTrue(testBoard.isConnectedToPlayer(vertex, player));
+        EasyMock.verify(mockEdge);
+    }
+
+    @Test
+    void IsConnectedToPlayer_WhenAdjacentRoadOwnedByDifferentPlayer_ReturnsFalse() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Player player = EasyMock.createMock(Player.class);
+        Player otherPlayer = EasyMock.createMock(Player.class);
+
+        Edge mockEdge = EasyMock.createMock(Edge.class);
+        EasyMock.expect(mockEdge.connectsTo(vertex)).andReturn(true);
+        EasyMock.expect(mockEdge.hasRoad()).andReturn(true);
+        EasyMock.expect(mockEdge.getOwner()).andReturn(otherPlayer);
+        EasyMock.replay(mockEdge);
+
+        Board testBoard = new Board(hexes, new ArrayList<>(), List.of(mockEdge));
+
+        assertFalse(testBoard.isConnectedToPlayer(vertex, player));
+        EasyMock.verify(mockEdge);
+    }
 }

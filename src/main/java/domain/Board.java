@@ -41,6 +41,12 @@ public class Board {
         for (int i = 0; i < 72; i++) edges.add(new Edge(i, null, null));
     }
 
+    Board(List<Hex> hexes, List<Vertex> vertices, List<Edge> edges) {
+        this.hexes = hexes;
+        this.vertices = vertices;
+        this.edges = edges;
+    }
+
     public List<Hex> getHexes() {
         return hexes;
     }
@@ -76,6 +82,8 @@ public class Board {
     }
 
     public boolean isConnectedToPlayer(Vertex vertex, Player player) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return edges.stream()
+                .filter(e -> e.connectsTo(vertex))
+                .anyMatch(e -> e.hasRoad() && e.getOwner() == player);
     }
 }
