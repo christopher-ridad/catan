@@ -106,4 +106,16 @@ public class PlayerTests {
         playerOne.addResources(ResourceType.LUMBER, 1);
         assertEquals(1, playerOne.getResourceCount(ResourceType.LUMBER));
     }
+
+    @Test
+    public void getResourceCount_woolType_ReturnsMoreThanOne() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+        Player playerOne = new Player(playerOneName, playerOneColor);
+
+        playerOne.addResources(ResourceType.WOOL, 1);
+        playerOne.addResources(ResourceType.WOOL, 1);
+        playerOne.addResources(ResourceType.WOOL, 1);
+        assertEquals(3, playerOne.getResourceCount(ResourceType.WOOL));
+    }
 }
