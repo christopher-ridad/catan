@@ -80,4 +80,12 @@ public class PlayerTests {
         Player playerOne = new Player(playerOneName, playerOneColor);
         assertEquals(playerOneName, playerOne.getName());
     }
+
+    @Test
+    public void getColor_OnValidPlayer_ReturnsPlayerColor() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertEquals(playerOneColor, playerOne.getColor());
+    }
 }
