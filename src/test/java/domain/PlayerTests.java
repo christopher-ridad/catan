@@ -183,4 +183,18 @@ public class PlayerTests {
 
         assertEquals(0, playerOne.getResourceCount(ResourceType.BRICK));
     }
+
+    @Test
+    public void addResources_lumberType_amountOne_noExceptionThrown() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertEquals(0, playerOne.getResourceCount(ResourceType.LUMBER));
+        assertDoesNotThrow(() -> {
+            playerOne.addResources(ResourceType.LUMBER, 1);
+        });
+
+        assertEquals(1, playerOne.getResourceCount(ResourceType.LUMBER));
+    }
 }
