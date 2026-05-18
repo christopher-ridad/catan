@@ -3,7 +3,7 @@ package domain;
 public class Player {
 
     public Player(String name, PlayerColor color) {
-        if (name == null) {
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Player name cannot be null");
         }
     }

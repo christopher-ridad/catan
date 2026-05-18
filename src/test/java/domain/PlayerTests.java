@@ -12,4 +12,12 @@ public class PlayerTests {
             Player playerOne = new Player(null, playerOneColor);
         });
     }
+
+    @Test
+    public void constructor_WithEmptyStringForName_ThrowsIllegalArgumentException() {
+        PlayerColor playerOneColor = PlayerColor.BLUE;
+        assertThrows(IllegalArgumentException.class, () -> {
+            Player playerOne = new Player("", playerOneColor);
+        });
+    }
 }
