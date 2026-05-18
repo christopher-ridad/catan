@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BoardTest {
@@ -23,6 +24,18 @@ public class BoardTest {
     void Constructor_With18Hexes_ThrowsIllegalArgumentException() {
         List<Hex> hexes = validHexList();
         hexes.remove(0);
+        assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
+    }
+
+    @Test
+    void Constructor_With19Hexes_NoExceptionThrown() {
+        assertDoesNotThrow(() -> new Board(validHexList()));
+    }
+
+    @Test
+    void Constructor_With20Hexes_ThrowsIllegalArgumentException() {
+        List<Hex> hexes = validHexList();
+        hexes.add(new Hex(TerrainType.HILLS));
         assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
     }
 }
