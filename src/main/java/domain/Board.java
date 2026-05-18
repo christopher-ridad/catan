@@ -8,6 +8,10 @@ public class Board {
         if (hexes.size() != 19) {
             throw new IllegalArgumentException("Board must have exactly 19 hexes");
         }
+        long desertCount = hexes.stream().filter(Hex::isDesert).count();
+        if (desertCount != 1) {
+            throw new IllegalArgumentException("Board must have exactly 1 desert hex");
+        }
     }
 
     public List<Hex> getHexes() {

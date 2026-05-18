@@ -38,4 +38,25 @@ public class BoardTest {
         hexes.add(new Hex(TerrainType.HILLS));
         assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
     }
+
+    @Test
+    void Constructor_WithNoDesert_ThrowsIllegalArgumentException() {
+        List<Hex> hexes = validHexList();
+        hexes.remove(0);
+        hexes.add(new Hex(TerrainType.HILLS));
+        assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
+    }
+
+    @Test
+    void Constructor_WithOneDesert_NoExceptionThrown() {
+        assertDoesNotThrow(() -> new Board(validHexList()));
+    }
+
+    @Test
+    void Constructor_WithTwoDeserts_ThrowsIllegalArgumentException() {
+        List<Hex> hexes = validHexList();
+        hexes.remove(hexes.size() - 1);
+        hexes.add(new Hex(TerrainType.DESERT));
+        assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
+    }
 }
