@@ -3,7 +3,9 @@ package domain;
 public class Player {
 
     public Player(String name, PlayerColor color) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (name == null) {
+            throw new IllegalArgumentException("Player name cannot be null");
+        }
     }
 
     public String getName() {
