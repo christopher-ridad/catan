@@ -68,7 +68,7 @@ public class Board {
     }
 
     public int getHexCount(TerrainType terrainType) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return (int) hexes.stream().filter(h -> h.getTerrainType() == terrainType).count();
     }
 
     public boolean satisfiesDistanceRule(Vertex vertex) {

@@ -232,4 +232,34 @@ public class BoardTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> board.getEdge(72));
         assertEquals("Edge id must be between 0 and 71", exception.getMessage());
     }
+
+    @Test
+    void GetHexCount_ForDesert_ReturnsOne() {
+        assertEquals(1, board.getHexCount(TerrainType.DESERT));
+    }
+
+    @Test
+    void GetHexCount_ForFields_ReturnsFour() {
+        assertEquals(4, board.getHexCount(TerrainType.FIELDS));
+    }
+
+    @Test
+    void GetHexCount_ForPasture_ReturnsFour() {
+        assertEquals(4, board.getHexCount(TerrainType.PASTURE));
+    }
+
+    @Test
+    void GetHexCount_ForForest_ReturnsFour() {
+        assertEquals(4, board.getHexCount(TerrainType.FOREST));
+    }
+
+    @Test
+    void GetHexCount_ForMountains_ReturnsThree() {
+        assertEquals(3, board.getHexCount(TerrainType.MOUNTAINS));
+    }
+
+    @Test
+    void GetHexCount_ForHills_ReturnsThree() {
+        assertEquals(3, board.getHexCount(TerrainType.HILLS));
+    }
 }
