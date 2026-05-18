@@ -220,4 +220,15 @@ public class PlayerTests {
         Player playerOne = new Player(playerOneName, playerOneColor);
         assertEquals(0, playerOne.getTotalResourceCount());
     }
+
+    @Test
+    public void getTotalResourceCount_ReturnsOne() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.ORANGE;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+
+        playerOne.addResources(ResourceType.ORE, 1);
+        assertEquals(1, playerOne.getTotalResourceCount());
+    }
 }
