@@ -72,4 +72,12 @@ public class PlayerTests {
         assertEquals(playerOneColor, playerOne.getColor());
         assertEquals(playerOneName, playerOne.getName());
     }
+
+    @Test
+    public void getName_OnValidPlayer_ReturnsPlayerNameString() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.BLUE;
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertEquals(playerOneName, playerOne.getName());
+    }
 }
