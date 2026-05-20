@@ -1,5 +1,13 @@
 plugins {
     id("java")
+    id("info.solidsoft.pitest") version "1.15.0"
+}
+
+pitest {
+    junit5PluginVersion = "1.2.1"
+    targetClasses = setOf("domain.*")
+    outputFormats = setOf("HTML")
+    mutationThreshold = 100
 }
 
 group = "nu.csse.sqe"
