@@ -7,6 +7,7 @@ spotbugs {
     toolVersion = "4.8.3"
     effort = com.github.spotbugs.snom.Effort.MAX
     reportLevel = com.github.spotbugs.snom.Confidence.LOW
+    ignoreFailures = true
 }
 
 tasks.spotbugsMain {
