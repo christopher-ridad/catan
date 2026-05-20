@@ -3,7 +3,7 @@
 1. [waiting to be merged] [Ariel]: Document Game Setup Phase user story, acceptance criteria, and use cases (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/14)
 2. [done] [Isabella]: Document class/method design for Game Setup Phase in docs/design/ (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/13)
 3. [not started] []: Implement ResourceType enum and Hex class with BVA and TDD
-4. [not started] []: Implement Board class with standard tile distribution
+4. [waiting to be merged] [Chris]: Implement Board class with standard tile distribution
 5. [not started] []: Implement Player class
 6. [not started] []: Implement Game class with player count validation
 7. [not started] []: Implement Initial Placement Phase logic
