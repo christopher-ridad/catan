@@ -1,5 +1,11 @@
 plugins {
     id("java")
+    id("checkstyle")
+}
+
+checkstyle {
+    toolVersion = "10.12.4"
+    configFile = file("config/checkstyle/checkstyle.xml")
 }
 
 group = "nu.csse.sqe"
