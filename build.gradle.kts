@@ -1,5 +1,18 @@
 plugins {
     id("java")
+    id("com.github.spotbugs") version "6.0.9"
+}
+
+spotbugs {
+    toolVersion = "4.8.3"
+    effort = com.github.spotbugs.snom.Effort.MAX
+    reportLevel = com.github.spotbugs.snom.Confidence.LOW
+}
+
+tasks.spotbugsMain {
+    reports.create("html") {
+        required = true
+    }
 }
 
 group = "nu.csse.sqe"
