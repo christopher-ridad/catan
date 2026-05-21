@@ -50,4 +50,10 @@ public class VertexTest {
         Vertex vertex = new Vertex(5, new ArrayList<>(), new ArrayList<>());
         assertEquals(5, vertex.getId());
     }
+
+    @Test
+    void IsOccupied_WhenNoOwner_ReturnsFalse() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        assertFalse(vertex.isOccupied());
+    }
 }

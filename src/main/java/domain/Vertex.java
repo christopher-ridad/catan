@@ -5,6 +5,7 @@ import java.util.List;
 public class Vertex {
 
     private final int id;
+    private Player owner = null;
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
         if (id < 0 || id > 53) {
@@ -24,7 +25,7 @@ public class Vertex {
     }
 
     public boolean isOccupied() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return owner != null;
     }
 
     public Player getOwner() {
