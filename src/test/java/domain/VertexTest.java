@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VertexTest {
     @Test
@@ -13,5 +12,10 @@ public class VertexTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new Vertex(-1, new ArrayList<>(), new ArrayList<>()));
         assertEquals("Vertex id must be between 0 and 53", exception.getMessage());
+    }
+
+    @Test
+    void Constructor_WithLowerBoundaryId_NoExceptionThrown() {
+        assertDoesNotThrow(() -> new Vertex(0, new ArrayList<>(), new ArrayList<>()));
     }
 }
