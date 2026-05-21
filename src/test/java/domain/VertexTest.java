@@ -4,6 +4,7 @@ import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -80,5 +81,13 @@ public class VertexTest {
         vertex.setOwner(player);
         Player owner = vertex.getOwner();
         assertEquals(player, owner);
+    }
+
+    @Test
+    void GetAdjacentHexes_ReturnsAdjacentHexes() {
+        Hex hex = EasyMock.createMock(Hex.class);
+        List<Hex> adjacentHexes = List.of(hex);
+        Vertex vertex = new Vertex(0, adjacentHexes, new ArrayList<>());
+        assertEquals(adjacentHexes, vertex.getAdjacentHexes());
     }
 }
