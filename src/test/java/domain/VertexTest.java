@@ -65,4 +65,11 @@ public class VertexTest {
         vertex.setOwner(player);
         assertTrue(vertex.isOccupied());
     }
+
+    @Test
+    void GetOwner_WhenNoOwner_ReturnsNull() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Player owner = vertex.getOwner();
+        assertNull(owner);
+    }
 }

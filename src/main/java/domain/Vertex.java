@@ -33,7 +33,7 @@ public class Vertex {
     }
 
     public Player getOwner() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return owner;
     }
 
     public List<Hex> getAdjacentHexes() {
