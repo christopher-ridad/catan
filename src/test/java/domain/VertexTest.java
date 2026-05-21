@@ -90,4 +90,12 @@ public class VertexTest {
         Vertex vertex = new Vertex(0, adjacentHexes, new ArrayList<>());
         assertEquals(adjacentHexes, vertex.getAdjacentHexes());
     }
+
+    @Test
+    void GetAdjacentVertices_ReturnsAdjacentVertices() {
+        Vertex neighbor = new Vertex(1, new ArrayList<>(), new ArrayList<>());
+        List<Vertex> adjacentVertices = List.of(neighbor);
+        Vertex vertex = new Vertex(0, new ArrayList<>(), adjacentVertices);
+        assertEquals(adjacentVertices, vertex.getAdjacentVertices());
+    }
 }

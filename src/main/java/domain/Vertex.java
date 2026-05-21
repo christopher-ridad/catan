@@ -7,6 +7,7 @@ public class Vertex {
     private final int id;
     private Player owner = null;
     private final List<Hex> adjacentHexes;
+    private final List<Vertex> adjacentVertices;
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
         if (id < 0 || id > 53) {
@@ -20,6 +21,7 @@ public class Vertex {
         }
         this.id = id;
         this.adjacentHexes = adjacentHexes;
+        this.adjacentVertices = adjacentVertices;
     }
 
     public int getId() {
@@ -43,6 +45,6 @@ public class Vertex {
     }
 
     public List<Vertex> getAdjacentVertices() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return adjacentVertices;
     }
 }
