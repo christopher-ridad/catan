@@ -8,6 +8,9 @@ public class Vertex {
         if (id < 0 || id > 53) {
             throw new IllegalArgumentException("Vertex id must be between 0 and 53");
         }
+        if (adjacentHexes == null) {
+            throw new IllegalArgumentException("Adjacent hexes cannot be null");
+        }
     }
 
     public int getId() {
