@@ -5,7 +5,9 @@ import java.util.List;
 public class Vertex {
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (id < 0) {
+            throw new IllegalArgumentException("Vertex id must be between 0 and 53");
+        }
     }
 
     public int getId() {
