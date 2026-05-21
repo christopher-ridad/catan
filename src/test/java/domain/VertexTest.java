@@ -72,4 +72,13 @@ public class VertexTest {
         Player owner = vertex.getOwner();
         assertNull(owner);
     }
+
+    @Test
+    void GetOwner_WhenOwnerSet_ReturnsOwner() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Player player = EasyMock.createMock(Player.class);
+        vertex.setOwner(player);
+        Player owner = vertex.getOwner();
+        assertEquals(player, owner);
+    }
 }
