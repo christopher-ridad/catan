@@ -25,3 +25,41 @@
 - **TC6: Constructor_WithNullAdjacentVertices_ThrowsIllegalArgumentException** ( not implemented )
     - State of the system: valid id, null adjacentVertices
     - Expected output: `IllegalArgumentException`
+
+## Method under test: `getId()`
+
+- **TC7: GetId_ReturnsCorrectId** ( not implemented )
+  - State of the system: Vertex constructed with id = 5
+  - Expected output: `5`
+
+## Method under test: `isOccupied()`
+
+- **TC8: IsOccupied_WhenNoOwner_ReturnsFalse** ( not implemented )
+  - State of the system: Vertex with no owner set
+  - Expected output: `false`
+
+- **TC9: IsOccupied_WhenOwnerSet_ReturnsTrue** ( not implemented )
+  - State of the system: Vertex with an owner set
+  - Expected output: `true`
+
+## Method under test: `getOwner()`
+
+- **TC10: GetOwner_WhenNoOwner_ReturnsNull** ( not implemented )
+  - State of the system: Vertex with no owner set
+  - Expected output: `null`
+
+- **TC11: GetOwner_WhenOwnerSet_ReturnsOwner** ( not implemented )
+  - State of the system: Vertex with an owner set
+  - Expected output: the Player object that was set as owner
+
+## Method under test: `getAdjacentHexes()`
+
+- **TC12: GetAdjacentHexes_ReturnsAdjacentHexes** ( not implemented )
+  - State of the system: Vertex constructed with a list of adjacent hexes
+  - Expected output: the same list of adjacent hexes passed in the constructor
+
+## Method under test: `getAdjacentVertices()`
+
+- **TC13: GetAdjacentVertices_ReturnsAdjacentVertices** ( not implemented )
+  - State of the system: Vertex constructed with a list of adjacent vertices
+  - Expected output: the same list of adjacent vertices passed in the constructor
