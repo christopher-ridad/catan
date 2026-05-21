@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Vertex {
 
+    private final int id;
+
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
         if (id < 0 || id > 53) {
             throw new IllegalArgumentException("Vertex id must be between 0 and 53");
@@ -14,10 +16,11 @@ public class Vertex {
         if (adjacentVertices == null) {
             throw new IllegalArgumentException("Adjacent vertices cannot be null");
         }
+        this.id = id;
     }
 
     public int getId() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return id;
     }
 
     public boolean isOccupied() {

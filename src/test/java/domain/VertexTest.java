@@ -44,4 +44,10 @@ public class VertexTest {
                 () -> new Vertex(0, new ArrayList<>(), null));
         assertEquals("Adjacent vertices cannot be null", exception.getMessage());
     }
+
+    @Test
+    void GetId_ReturnsCorrectId() {
+        Vertex vertex = new Vertex(5, new ArrayList<>(), new ArrayList<>());
+        assertEquals(5, vertex.getId());
+    }
 }
