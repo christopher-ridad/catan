@@ -24,6 +24,10 @@ public class Vertex {
         return id;
     }
 
+    public void setOwner(Player player) {
+        this.owner = player;
+    }
+
     public boolean isOccupied() {
         return owner != null;
     }

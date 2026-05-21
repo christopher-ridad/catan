@@ -1,5 +1,6 @@
 package domain;
 
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -55,5 +56,13 @@ public class VertexTest {
     void IsOccupied_WhenNoOwner_ReturnsFalse() {
         Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
         assertFalse(vertex.isOccupied());
+    }
+
+    @Test
+    void IsOccupied_WhenOwnerSet_ReturnsTrue() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Player player = EasyMock.createMock(Player.class);
+        vertex.setOwner(player);
+        assertTrue(vertex.isOccupied());
     }
 }
