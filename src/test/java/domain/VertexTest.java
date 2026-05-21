@@ -37,4 +37,11 @@ public class VertexTest {
                 () -> new Vertex(0, null, new ArrayList<>()));
         assertEquals("Adjacent hexes cannot be null", exception.getMessage());
     }
+
+    @Test
+    void Constructor_WithNullAdjacentVertices_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new Vertex(0, new ArrayList<>(), null));
+        assertEquals("Adjacent vertices cannot be null", exception.getMessage());
+    }
 }

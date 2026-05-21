@@ -11,6 +11,9 @@ public class Vertex {
         if (adjacentHexes == null) {
             throw new IllegalArgumentException("Adjacent hexes cannot be null");
         }
+        if (adjacentVertices == null) {
+            throw new IllegalArgumentException("Adjacent vertices cannot be null");
+        }
     }
 
     public int getId() {
