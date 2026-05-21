@@ -18,4 +18,9 @@ public class VertexTest {
     void Constructor_WithLowerBoundaryId_NoExceptionThrown() {
         assertDoesNotThrow(() -> new Vertex(0, new ArrayList<>(), new ArrayList<>()));
     }
+
+    @Test
+    void Constructor_WithUpperBoundaryId_NoExceptionThrown() {
+        assertDoesNotThrow(() -> new Vertex(53, new ArrayList<>(), new ArrayList<>()));
+    }
 }
