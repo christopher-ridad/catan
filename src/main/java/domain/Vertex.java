@@ -5,7 +5,7 @@ import java.util.List;
 public class Vertex {
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
-        if (id < 0) {
+        if (id < 0 || id > 53) {
             throw new IllegalArgumentException("Vertex id must be between 0 and 53");
         }
     }

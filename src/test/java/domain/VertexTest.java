@@ -23,4 +23,11 @@ public class VertexTest {
     void Constructor_WithUpperBoundaryId_NoExceptionThrown() {
         assertDoesNotThrow(() -> new Vertex(53, new ArrayList<>(), new ArrayList<>()));
     }
+
+    @Test
+    void Constructor_WithIdAboveUpperBoundary_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new Vertex(54, new ArrayList<>(), new ArrayList<>()));
+        assertEquals("Vertex id must be between 0 and 53", exception.getMessage());
+    }
 }
