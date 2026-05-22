@@ -70,8 +70,7 @@ public class VertexTest {
     @Test
     void GetOwner_WhenNoOwner_ReturnsNull() {
         Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
-        Player owner = vertex.getOwner();
-        assertNull(owner);
+        assertTrue(vertex.getOwner().isEmpty());
     }
 
     @Test
@@ -79,7 +78,7 @@ public class VertexTest {
         Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
         Player player = EasyMock.createMock(Player.class);
         vertex.setOwner(player);
-        Player owner = vertex.getOwner();
+        Player owner = vertex.getOwner().orElseThrow();
         assertEquals(player, owner);
     }
 

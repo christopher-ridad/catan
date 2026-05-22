@@ -4,11 +4,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class Vertex {
 
     private final int id;
-    private Player owner = null;
+    private Optional<Player> owner = Optional.empty();
     private final List<Hex> adjacentHexes;
     private final List<Vertex> adjacentVertices;
 
@@ -44,20 +45,20 @@ public final class Vertex {
     }
 
     public boolean isOccupied() {
-        return owner != null;
+        return owner.isPresent();
     }
 
     // Player is intentionally mutable (resources change during gameplay).
     // Defensive copying is not appropriate here as it would break object identity
     // checks and mock-based tests. Suppressing EI warnings by design.
     @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
-    public Player getOwner() {
+    public Optional<Player> getOwner() {
         return owner;
     }
 
     @SuppressFBWarnings("EI_EXPOSE_REP2")
     public void setOwner(Player player) {
-        this.owner = player;
+        this.owner = Optional.of(player);
     }
 
     public List<Hex> getAdjacentHexes() {
