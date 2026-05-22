@@ -2,6 +2,19 @@ plugins {
     id("java")
     id("checkstyle")
     id("com.github.spotbugs") version "6.0.9"
+    id("jacoco")
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
 
 checkstyle {
@@ -46,4 +59,5 @@ tasks.compileJava {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
