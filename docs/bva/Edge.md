@@ -52,3 +52,11 @@
 - **TC11: GetOwner_WhenRoadPlaced_ReturnsOwner** ( not implemented )
   - State of the system: Edge with a road placed by a player
   - Expected output: the Player object that placed the road
+
+
+## Method under test: `getEndpoints()`
+
+- **TC12: GetEndpoints_ReturnsCorrectEndpoints** ( not implemented )
+  - State of the system: Edge constructed with two valid endpoints
+  - Expected output: array containing endpoint1 and endpoint2
+
