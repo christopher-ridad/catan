@@ -1,8 +1,9 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Vertex {
+public final class Vertex {
 
     private final int id;
     private Player owner = null;
@@ -14,8 +15,8 @@ public class Vertex {
         validateAdjacentHexes(adjacentHexes);
         validateAdjacentVertices(adjacentVertices);
         this.id = id;
-        this.adjacentHexes = adjacentHexes;
-        this.adjacentVertices = adjacentVertices;
+        this.adjacentHexes = new ArrayList<>(adjacentHexes);
+        this.adjacentVertices = new ArrayList<>(adjacentVertices);
     }
 
     private void validateId(int id) {
@@ -53,10 +54,10 @@ public class Vertex {
     }
 
     public List<Hex> getAdjacentHexes() {
-        return adjacentHexes;
+        return new ArrayList<>(adjacentHexes);
     }
 
     public List<Vertex> getAdjacentVertices() {
-        return adjacentVertices;
+        return new ArrayList<>(adjacentVertices);
     }
 }
