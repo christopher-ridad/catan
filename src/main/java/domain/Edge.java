@@ -3,7 +3,9 @@ package domain;
 public class Edge {
 
     public Edge(int id, Vertex endpoint1, Vertex endpoint2) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (id < 0) {
+            throw new IllegalArgumentException("Edge id must be between 0 and 71");
+        }
     }
 
     public int getId() {
