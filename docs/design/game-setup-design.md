@@ -135,7 +135,7 @@ Holds the complete board topology: all hexes, vertices, and edges.
 **Invariants (validated in constructor):**
 - Exactly 19 hexes total
 - Exactly 1 DESERT hex
-- Exactly 4 FIELDS, 4 PASTURE, 4 FOREST, 3 MOUNTAINS, 3 HILLS hexes (using TerrainType values)
+- Exactly 4 FIELDS, 4 PASTURE, 4 FOREST, 3 MOUNTAINS, 3 HILLS hexes
 - Exactly 18 non-desert hexes have valid number tokens
 
 ---
