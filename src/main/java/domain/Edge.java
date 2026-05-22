@@ -41,6 +41,6 @@ public class Edge {
     }
 
     public boolean connectsTo(Vertex vertex) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return endpoints[0] == vertex || endpoints[1] == vertex;
     }
 }
