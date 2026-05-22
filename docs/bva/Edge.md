@@ -25,3 +25,9 @@
 - **TC6: Constructor_WithNullEndpoint2_ThrowsIllegalArgumentException** ( not implemented )
     - State of the system: valid id, valid endpoint1, null endpoint2
     - Expected output: `IllegalArgumentException`
+
+## Method under test: `getId()`
+
+- **TC7: GetId_ReturnsCorrectId** ( not implemented )
+  - State of the system: Edge constructed with id = 5
+  - Expected output: `5`
