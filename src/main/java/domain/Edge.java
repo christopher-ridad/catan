@@ -5,7 +5,7 @@ import java.util.Optional;
 public final class Edge {
 
     private final int id;
-    private Optional<Player> owner = Optional.empty();
+    private Player owner = null;
     private final Vertex[] endpoints;
 
     public Edge(int id, Vertex endpoint1, Vertex endpoint2) {
@@ -32,15 +32,15 @@ public final class Edge {
     }
 
     public boolean hasRoad() {
-        return owner.isPresent();
+        return owner != null;
     }
 
     public void setOwner(Player player) {
-        this.owner = Optional.of(player);
+        this.owner = player;
     }
 
     public Optional<Player> getOwner() {
-        return owner;
+        return Optional.ofNullable(owner);
     }
 
     public Vertex[] getEndpoints() {
