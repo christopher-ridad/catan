@@ -2,6 +2,8 @@ package domain;
 
 public class Edge {
 
+    private final int id;
+
     public Edge(int id, Vertex endpoint1, Vertex endpoint2) {
         if (id < 0 || id > 71) {
             throw new IllegalArgumentException("Edge id must be between 0 and 71");
@@ -12,10 +14,11 @@ public class Edge {
         if (endpoint2 == null) {
             throw new IllegalArgumentException("Endpoints cannot be null");
         }
+        this.id = id;
     }
 
     public int getId() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return id;
     }
 
     public boolean hasRoad() {

@@ -54,4 +54,12 @@ public class EdgeTest {
                 () -> new Edge(0, endpoint1, null));
         assertEquals("Endpoints cannot be null", exception.getMessage());
     }
+
+    @Test
+    void GetId_ReturnsCorrectId() {
+        Vertex endpoint1 = EasyMock.createMock(Vertex.class);
+        Vertex endpoint2 = EasyMock.createMock(Vertex.class);
+        Edge edge = new Edge(5, endpoint1, endpoint2);
+        assertEquals(5, edge.getId());
+    }
 }
