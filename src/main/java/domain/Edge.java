@@ -26,6 +26,10 @@ public class Edge {
         return owner != null;
     }
 
+    public void setOwner (Player player) {
+        this.owner = player;
+    }
+
     public Player getOwner() {
         throw new UnsupportedOperationException("Not implemented yet");
     }

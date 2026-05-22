@@ -70,4 +70,14 @@ public class EdgeTest {
         Edge edge = new Edge(0, endpoint1, endpoint2);
         assertFalse(edge.hasRoad());
     }
+
+    @Test
+    void HasRoad_WhenRoadPlaced_ReturnsTrue() {
+        Vertex endpoint1 = EasyMock.createMock(Vertex.class);
+        Vertex endpoint2 = EasyMock.createMock(Vertex.class);
+        Edge edge = new Edge(0, endpoint1, endpoint2);
+        Player player = EasyMock.createMock(Player.class);
+        edge.setOwner(player);
+        assertTrue(edge.hasRoad());
+    }
 }
