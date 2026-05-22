@@ -46,4 +46,12 @@ public class EdgeTest {
                 () -> new Edge(0, null, endpoint2));
         assertEquals("Endpoints cannot be null", exception.getMessage());
     }
+
+    @Test
+    void Constructor_WithNullEndpoint2_ThrowsIllegalArgumentException() {
+        Vertex endpoint1 = EasyMock.createMock(Vertex.class);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new Edge(0, endpoint1, null));
+        assertEquals("Endpoints cannot be null", exception.getMessage());
+    }
 }

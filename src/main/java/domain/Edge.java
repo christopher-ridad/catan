@@ -9,6 +9,9 @@ public class Edge {
         if (endpoint1 == null) {
             throw new IllegalArgumentException("Endpoints cannot be null");
         }
+        if (endpoint2 == null) {
+            throw new IllegalArgumentException("Endpoints cannot be null");
+        }
     }
 
     public int getId() {
