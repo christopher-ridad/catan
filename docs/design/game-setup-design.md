@@ -68,12 +68,13 @@ Represents one terrain tile on the board.
 
 An intersection on the board — the point where up to 3 hexes meet. Settlements and cities are placed here.
 
-| Field           | Type           | Description                                     |
-|-----------------|----------------|-------------------------------------------------|
-| `id`            | `int`          | Unique identifier (0–53)                        |
-| `adjacentHexes` | `List<Hex>`    | Hexes touching this intersection (1–3)          |
-| `adjacentVertices` | `List<Vertex>` | Neighboring intersections (for Distance Rule) |
-| `owner`         | `Player`       | Null if unoccupied                              |
+| Field                                                                      | Type           | Description                                                                            |
+|----------------------------------------------------------------------------|----------------|----------------------------------------------------------------------------------------|
+| `Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices)`   | —              | Constructor; throws `IllegalArgumentException` if id is out of range or lists are null |
+| `id`                                                                       | `int`          | Unique identifier (0–53)                                                               |
+| `adjacentHexes`                                                            | `List<Hex>`    | Hexes touching this intersection (1–3)                                                 |
+| `adjacentVertices`                                                         | `List<Vertex>` | Neighboring intersections (for Distance Rule)                                          |
+| `owner`                                                                    | `Player`       | Null if unoccupied                                                                     |
 
 | Method                      | Return Type    | Description                                         |
 |-----------------------------|----------------|-----------------------------------------------------|
