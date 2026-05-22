@@ -3,6 +3,14 @@ plugins {
     id("checkstyle")
     id("com.github.spotbugs") version "6.0.9"
     id("jacoco")
+    id("info.solidsoft.pitest") version "1.15.0"
+}
+
+pitest {
+    junit5PluginVersion = "1.2.1"
+    targetClasses = setOf("domain.*")
+    outputFormats = setOf("HTML")
+    mutationThreshold = 100
 }
 
 jacoco {
