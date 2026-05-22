@@ -60,3 +60,16 @@
   - State of the system: Edge constructed with two valid endpoints
   - Expected output: array containing endpoint1 and endpoint2
 
+## Method under test: `connectsTo(Vertex)`
+
+- **TC13: ConnectsTo_WhenVertexIsEndpoint1_ReturnsTrue** ( not implemented )
+  - State of the system: Edge constructed with endpoint1, checking connectsTo(endpoint1)
+  - Expected output: `true`
+
+- **TC14: ConnectsTo_WhenVertexIsEndpoint2_ReturnsTrue** ( not implemented )
+  - State of the system: Edge constructed with endpoint2, checking connectsTo(endpoint2)
+  - Expected output: `true`
+
+- **TC15: ConnectsTo_WhenVertexIsNotEndpoint_ReturnsFalse** ( not implemented )
+  - State of the system: Edge constructed with two endpoints, checking connectsTo with a different vertex
+  - Expected output: `false`
