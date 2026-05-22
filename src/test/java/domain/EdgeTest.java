@@ -38,4 +38,12 @@ public class EdgeTest {
                 () -> new Edge(72, endpoint1, endpoint2));
         assertEquals("Edge id must be between 0 and 71", exception.getMessage());
     }
+
+    @Test
+    void Constructor_WithNullEndpoint1_ThrowsIllegalArgumentException() {
+        Vertex endpoint2 = EasyMock.createMock(Vertex.class);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new Edge(0, null, endpoint2));
+        assertEquals("Endpoints cannot be null", exception.getMessage());
+    }
 }

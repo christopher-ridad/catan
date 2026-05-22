@@ -6,6 +6,9 @@ public class Edge {
         if (id < 0 || id > 71) {
             throw new IllegalArgumentException("Edge id must be between 0 and 71");
         }
+        if (endpoint1 == null) {
+            throw new IllegalArgumentException("Endpoints cannot be null");
+        }
     }
 
     public int getId() {
