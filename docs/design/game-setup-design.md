@@ -75,13 +75,14 @@ An intersection on the board — the point where up to 3 hexes meet. Settlements
 | `adjacentVertices` | `List<Vertex>` | Neighboring intersections (for Distance Rule) |
 | `owner`         | `Player`       | Null if unoccupied                              |
 
-| Method                        | Return Type   | Description                                         |
-|-------------------------------|---------------|-----------------------------------------------------|
-| `getId()`                     | `int`         | Returns the vertex id                               |
-| `isOccupied()`                | `boolean`     | Returns true if a settlement or city is placed here |
-| `getOwner()`                  | `Player`      | Returns the occupying player, or null               |
-| `getAdjacentHexes()`          | `List<Hex>`   | Returns hexes adjacent to this vertex               |
-| `getAdjacentVertices()`       | `List<Vertex>`| Returns neighboring vertices                        |
+| Method                                              | Return Type    | Description                                                                            |
+|-----------------------------------------------------|----------------|----------------------------------------------------------------------------------------|
+| `Edge(int id, Vertex endpoint1, Vertex endpoint2)`  | —              | Constructor; throws `IllegalArgumentException` if id is invalid or endpoints are null  |
+| `getId()`                                           | `int`          | Returns the vertex id                                                                  |
+| `isOccupied()`                                      | `boolean`      | Returns true if a settlement or city is placed here                                    |
+| `getOwner()`                                        | `Player`       | Returns the occupying player, or null                                                  |
+| `getAdjacentHexes()`                                | `List<Hex>`    | Returns hexes adjacent to this vertex                                                  |
+| `getAdjacentVertices()`                             | `List<Vertex>` | Returns neighboring vertices                                                           |
 
 ---
 
