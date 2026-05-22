@@ -42,3 +42,13 @@
 - **TC9: HasRoad_WhenRoadPlaced_ReturnsTrue** ( not implemented )
   - State of the system: Edge with a road placed
   - Expected output: `true`
+
+## Method under test: `getOwner()`
+
+- **TC10: GetOwner_WhenNoRoad_ReturnsNull** ( not implemented )
+  - State of the system: Edge with no road placed
+  - Expected output: `null`
+
+- **TC11: GetOwner_WhenRoadPlaced_ReturnsOwner** ( not implemented )
+  - State of the system: Edge with a road placed by a player
+  - Expected output: the Player object that placed the road
