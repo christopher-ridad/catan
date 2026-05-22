@@ -62,4 +62,12 @@ public class EdgeTest {
         Edge edge = new Edge(5, endpoint1, endpoint2);
         assertEquals(5, edge.getId());
     }
+
+    @Test
+    void HasRoad_WhenNoRoad_ReturnsFalse() {
+        Vertex endpoint1 = EasyMock.createMock(Vertex.class);
+        Vertex endpoint2 = EasyMock.createMock(Vertex.class);
+        Edge edge = new Edge(0, endpoint1, endpoint2);
+        assertFalse(edge.hasRoad());
+    }
 }

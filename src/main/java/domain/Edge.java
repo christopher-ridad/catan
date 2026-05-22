@@ -3,6 +3,7 @@ package domain;
 public class Edge {
 
     private final int id;
+    private Player owner = null;
 
     public Edge(int id, Vertex endpoint1, Vertex endpoint2) {
         if (id < 0 || id > 71) {
@@ -22,7 +23,7 @@ public class Edge {
     }
 
     public boolean hasRoad() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return owner != null;
     }
 
     public Player getOwner() {
