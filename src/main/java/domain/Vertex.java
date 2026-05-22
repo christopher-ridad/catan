@@ -10,18 +10,30 @@ public class Vertex {
     private final List<Vertex> adjacentVertices;
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
-        if (id < 0 || id > 53) {
-            throw new IllegalArgumentException("Vertex id must be between 0 and 53");
-        }
-        if (adjacentHexes == null) {
-            throw new IllegalArgumentException("Adjacent hexes cannot be null");
-        }
-        if (adjacentVertices == null) {
-            throw new IllegalArgumentException("Adjacent vertices cannot be null");
-        }
+        validateId(id);
+        validateAdjacentHexes(adjacentHexes);
+        validateAdjacentVertices(adjacentVertices);
         this.id = id;
         this.adjacentHexes = adjacentHexes;
         this.adjacentVertices = adjacentVertices;
+    }
+
+    private void validateId(int id) {
+        if (id < 0 || id > 53) {
+            throw new IllegalArgumentException("Vertex id must be between 0 and 53");
+        }
+    }
+
+    private void validateAdjacentHexes(List<Hex> adjacentHexes) {
+        if (adjacentHexes == null) {
+            throw new IllegalArgumentException("Adjacent hexes cannot be null");
+        }
+    }
+
+    private void validateAdjacentVertices(List<Vertex> adjacentVertices) {
+        if (adjacentVertices == null) {
+            throw new IllegalArgumentException("Adjacent vertices cannot be null");
+        }
     }
 
     public int getId() {
