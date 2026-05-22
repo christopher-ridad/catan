@@ -3,7 +3,7 @@ package domain;
 public class Edge {
 
     public Edge(int id, Vertex endpoint1, Vertex endpoint2) {
-        if (id < 0) {
+        if (id < 0 || id > 71) {
             throw new IllegalArgumentException("Edge id must be between 0 and 71");
         }
     }
