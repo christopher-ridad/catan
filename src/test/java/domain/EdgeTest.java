@@ -125,4 +125,13 @@ public class EdgeTest {
         Edge edge = new Edge(0, endpoint1, endpoint2);
         assertTrue(edge.connectsTo(endpoint2));
     }
+
+    @Test
+    void ConnectsTo_WhenVertexIsNotEndpoint_ReturnsFalse() {
+        Vertex endpoint1 = EasyMock.createMock(Vertex.class);
+        Vertex endpoint2 = EasyMock.createMock(Vertex.class);
+        Vertex otherVertex = EasyMock.createMock(Vertex.class);
+        Edge edge = new Edge(0, endpoint1, endpoint2);
+        assertFalse(edge.connectsTo(otherVertex));
+    }
 }
