@@ -1,5 +1,7 @@
 package domain;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.Optional;
 
 public final class Edge {
@@ -35,6 +37,9 @@ public final class Edge {
         return owner != null;
     }
 
+    // Player is intentionally mutable (resources change during gameplay).
+    // Defensive copying would break object identity. Suppressing EI2 by design.
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
     public void setOwner(Player player) {
         this.owner = player;
     }
