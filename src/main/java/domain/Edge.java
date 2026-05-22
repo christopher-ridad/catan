@@ -31,7 +31,7 @@ public class Edge {
     }
 
     public Player getOwner() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return owner;
     }
 
     public Vertex[] getEndpoints() {
