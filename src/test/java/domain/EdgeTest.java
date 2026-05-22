@@ -100,4 +100,13 @@ public class EdgeTest {
         Player owner = edge.getOwner();
         assertEquals(player, owner);
     }
+
+    @Test
+    void GetEndpoints_ReturnsCorrectEndpoints() {
+        Vertex endpoint1 = EasyMock.createMock(Vertex.class);
+        Vertex endpoint2 = EasyMock.createMock(Vertex.class);
+        Edge edge = new Edge(0, endpoint1, endpoint2);
+        Vertex[] endpoints = edge.getEndpoints();
+        assertArrayEquals(new Vertex[]{endpoint1, endpoint2}, endpoints);
+    }
 }

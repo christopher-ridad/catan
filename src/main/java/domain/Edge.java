@@ -4,6 +4,7 @@ public class Edge {
 
     private final int id;
     private Player owner = null;
+    private final Vertex[] endpoints;
 
     public Edge(int id, Vertex endpoint1, Vertex endpoint2) {
         if (id < 0 || id > 71) {
@@ -16,6 +17,7 @@ public class Edge {
             throw new IllegalArgumentException("Endpoints cannot be null");
         }
         this.id = id;
+        this.endpoints = new Vertex[]{endpoint1, endpoint2};
     }
 
     public int getId() {
@@ -35,7 +37,7 @@ public class Edge {
     }
 
     public Vertex[] getEndpoints() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return endpoints;
     }
 
     public boolean connectsTo(Vertex vertex) {
