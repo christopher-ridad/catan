@@ -7,17 +7,22 @@ public class Edge {
     private final Vertex[] endpoints;
 
     public Edge(int id, Vertex endpoint1, Vertex endpoint2) {
+        validateId(id);
+        validateEndpoints(endpoint1, endpoint2);
+        this.id = id;
+        this.endpoints = new Vertex[]{endpoint1, endpoint2};
+    }
+
+    private void validateId(int id) {
         if (id < 0 || id > 71) {
             throw new IllegalArgumentException("Edge id must be between 0 and 71");
         }
-        if (endpoint1 == null) {
+    }
+
+    private void validateEndpoints(Vertex endpoint1, Vertex endpoint2) {
+        if (endpoint1 == null || endpoint2 == null) {
             throw new IllegalArgumentException("Endpoints cannot be null");
         }
-        if (endpoint2 == null) {
-            throw new IllegalArgumentException("Endpoints cannot be null");
-        }
-        this.id = id;
-        this.endpoints = new Vertex[]{endpoint1, endpoint2};
     }
 
     public int getId() {
