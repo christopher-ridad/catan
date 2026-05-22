@@ -1,12 +1,12 @@
 plugins {
     id("java")
     id("checkstyle")
+    id("com.github.spotbugs") version "6.0.9"
 }
 
 checkstyle {
     toolVersion = "10.12.4"
     configFile = file("config/checkstyle/checkstyle.xml")
-    id("com.github.spotbugs") version "6.0.9"
 }
 
 spotbugs {
