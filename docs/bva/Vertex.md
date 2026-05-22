@@ -44,13 +44,13 @@
 
 ## Method under test: `getOwner()`
 
-- **TC10: GetOwner_WhenNoOwner_ReturnsNull** ( implemented )
+- **TC10: GetOwner_WhenNoOwner_ReturnsEmpty** ( implemented )
   - State of the system: Vertex with no owner set
-  - Expected output: `null`
+  - Expected output: `Optional.empty()`
 
 - **TC11: GetOwner_WhenOwnerSet_ReturnsOwner** ( implemented )
   - State of the system: Vertex with an owner set
-  - Expected output: the Player object that was set as owner
+  - Expected output: `Optional` containing the Player object that was set as owner
 
 ## Method under test: `getAdjacentHexes()`
 

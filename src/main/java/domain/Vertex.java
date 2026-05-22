@@ -9,7 +9,7 @@ import java.util.Optional;
 public final class Vertex {
 
     private final int id;
-    private Optional<Player> owner = Optional.empty();
+    private Player owner = null;
     private final List<Hex> adjacentHexes;
     private final List<Vertex> adjacentVertices;
 
@@ -45,20 +45,18 @@ public final class Vertex {
     }
 
     public boolean isOccupied() {
-        return owner.isPresent();
+        return owner != null;
+    }
+
+    public Optional<Player> getOwner() {
+        return Optional.ofNullable(owner);
     }
 
     // Player is intentionally mutable (resources change during gameplay).
-    // Defensive copying is not appropriate here as it would break object identity
-    // checks and mock-based tests. Suppressing EI warnings by design.
-    @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
-    public Optional<Player> getOwner() {
-        return owner;
-    }
-
+    // Defensive copying would break object identity. Suppressing EI2 by design.
     @SuppressFBWarnings("EI_EXPOSE_REP2")
     public void setOwner(Player player) {
-        this.owner = Optional.of(player);
+        this.owner = player;
     }
 
     public List<Hex> getAdjacentHexes() {

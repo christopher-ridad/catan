@@ -68,7 +68,7 @@ public class VertexTest {
     }
 
     @Test
-    void GetOwner_WhenNoOwner_ReturnsNull() {
+    void GetOwner_WhenNoOwner_ReturnsEmpty() {
         Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
         assertTrue(vertex.getOwner().isEmpty());
     }
