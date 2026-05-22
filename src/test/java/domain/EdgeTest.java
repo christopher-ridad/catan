@@ -22,4 +22,11 @@ public class EdgeTest {
         Vertex endpoint2 = EasyMock.createMock(Vertex.class);
         assertDoesNotThrow(() -> new Edge(0, endpoint1, endpoint2));
     }
+
+    @Test
+    void Constructor_WithUpperBoundaryId_NoExceptionThrown() {
+        Vertex endpoint1 = EasyMock.createMock(Vertex.class);
+        Vertex endpoint2 = EasyMock.createMock(Vertex.class);
+        assertDoesNotThrow(() -> new Edge(71, endpoint1, endpoint2));
+    }
 }
