@@ -45,13 +45,13 @@
 
 ## Method under test: `getOwner()`
 
-- **TC10: GetOwner_WhenNoRoad_ReturnsNull** ( implemented )
+- **TC10: GetOwner_WhenNoRoad_ReturnsEmpty** ( implemented )
   - State of the system: Edge with no road placed
-  - Expected output: `null`
+  - Expected output: `Optional.empty()`
 
 - **TC11: GetOwner_WhenRoadPlaced_ReturnsOwner** ( implemented )
   - State of the system: Edge with a road placed by a player
-  - Expected output: the Player object that placed the road
+  - Expected output: `Optional` containing the Player object that placed the road
 
 
 ## Method under test: `getEndpoints()`

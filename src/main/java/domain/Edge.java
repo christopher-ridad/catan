@@ -1,9 +1,11 @@
 package domain;
 
-public class Edge {
+import java.util.Optional;
+
+public final class Edge {
 
     private final int id;
-    private Player owner = null;
+    private Optional<Player> owner = Optional.empty();
     private final Vertex[] endpoints;
 
     public Edge(int id, Vertex endpoint1, Vertex endpoint2) {
@@ -30,19 +32,19 @@ public class Edge {
     }
 
     public boolean hasRoad() {
-        return owner != null;
+        return owner.isPresent();
     }
 
-    public void setOwner (Player player) {
-        this.owner = player;
+    public void setOwner(Player player) {
+        this.owner = Optional.of(player);
     }
 
-    public Player getOwner() {
+    public Optional<Player> getOwner() {
         return owner;
     }
 
     public Vertex[] getEndpoints() {
-        return endpoints;
+        return endpoints.clone();
     }
 
     public boolean connectsTo(Vertex vertex) {

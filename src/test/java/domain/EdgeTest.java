@@ -82,13 +82,13 @@ public class EdgeTest {
     }
 
     @Test
-    void GetOwner_WhenNoRoad_ReturnsNull() {
+    void GetOwner_WhenNoRoad_ReturnsEmpty() {
         Vertex endpoint1 = EasyMock.createMock(Vertex.class);
         Vertex endpoint2 = EasyMock.createMock(Vertex.class);
         Edge edge = new Edge(0, endpoint1, endpoint2);
-        Player owner = edge.getOwner();
-        assertNull(owner);
+        assertTrue(edge.getOwner().isEmpty());
     }
+
 
     @Test
     void GetOwner_WhenRoadPlaced_ReturnsOwner() {
@@ -97,7 +97,7 @@ public class EdgeTest {
         Edge edge = new Edge(0, endpoint1, endpoint2);
         Player player = EasyMock.createMock(Player.class);
         edge.setOwner(player);
-        Player owner = edge.getOwner();
+        Player owner = edge.getOwner().orElseThrow();
         assertEquals(player, owner);
     }
 
