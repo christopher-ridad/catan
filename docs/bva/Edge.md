@@ -31,3 +31,14 @@
 - **TC7: GetId_ReturnsCorrectId** ( not implemented )
   - State of the system: Edge constructed with id = 5
   - Expected output: `5`
+
+
+## Method under test: `hasRoad()`
+
+- **TC8: HasRoad_WhenNoRoad_ReturnsFalse** ( not implemented )
+  - State of the system: Edge with no road placed
+  - Expected output: `false`
+
+- **TC9: HasRoad_WhenRoadPlaced_ReturnsTrue** ( not implemented )
+  - State of the system: Edge with a road placed
+  - Expected output: `true`
