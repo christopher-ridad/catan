@@ -6,9 +6,12 @@ plugins {
     id("info.solidsoft.pitest") version "1.15.0"
 }
 
+// targetClasses only includes fully implemented classes.
+// Add new classes here as they are implemented and tested.
 pitest {
     junit5PluginVersion = "1.2.1"
-    targetClasses = setOf("domain.*")
+    targetClasses = setOf("domain.Board", "domain.Edge", "domain.Vertex")
+    targetTests = setOf("domain.BoardTest", "domain.EdgeTest", "domain.VertexTest")
     outputFormats = setOf("HTML")
     mutationThreshold = 100
 }

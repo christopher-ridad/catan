@@ -322,4 +322,16 @@ public class BoardTest {
         Board testBoard = new Board(hexes, new ArrayList<>(), List.of(edge));
         assertFalse(testBoard.isConnectedToPlayer(vertex, player));
     }
+
+    @Test
+    void IsConnectedToPlayer_WhenRoadOnNonAdjacentEdge_ReturnsFalse() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Vertex other1 = new Vertex(1, new ArrayList<>(), new ArrayList<>());
+        Vertex other2 = new Vertex(2, new ArrayList<>(), new ArrayList<>());
+        Player player = EasyMock.createMock(Player.class);
+        Edge nonAdjacentEdge = new Edge(0, other1, other2);
+        nonAdjacentEdge.setOwner(player);
+        Board testBoard = new Board(hexes, new ArrayList<>(), List.of(nonAdjacentEdge));
+        assertFalse(testBoard.isConnectedToPlayer(vertex, player));
+    }
 }

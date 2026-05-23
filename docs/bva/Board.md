@@ -188,4 +188,10 @@
   - State of the system: valid board, adjacent edge has road owned by another player
   - Expected output: `false`
 
+- **TC41: IsConnectedToPlayer_WhenRoadOnNonAdjacentEdge_ReturnsFalse** ( implemented )
+  - State of the system: valid board, edge connects two other vertices (not the target vertex) but has a road owned by the player
+  - Expected output: `false`
+
+
+
 

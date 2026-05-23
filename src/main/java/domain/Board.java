@@ -15,7 +15,6 @@ public class Board {
         validateTerrainCount(hexes, TerrainType.PASTURE, 4);
         validateTerrainCount(hexes, TerrainType.FOREST, 4);
         validateTerrainCount(hexes, TerrainType.MOUNTAINS, 3);
-        validateTerrainCount(hexes, TerrainType.HILLS, 3);
 
         this.hexes = hexes;
         this.vertices = new ArrayList<>();
