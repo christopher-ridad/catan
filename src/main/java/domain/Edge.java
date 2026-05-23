@@ -2,6 +2,7 @@ package domain;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.List;
 import java.util.Optional;
 
 public final class Edge {
@@ -48,8 +49,8 @@ public final class Edge {
         return Optional.ofNullable(owner);
     }
 
-    public Vertex[] getEndpoints() {
-        return endpoints.clone();
+    public List<Vertex> getEndpoints() {
+        return List.of(endpoints[0], endpoints[1]);
     }
 
     public boolean connectsTo(Vertex vertex) {
