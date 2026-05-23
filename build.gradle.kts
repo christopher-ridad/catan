@@ -53,6 +53,8 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.easymock:easymock:5.2.0")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.8.3")
 }
 
 java {

@@ -68,20 +68,22 @@ Represents one terrain tile on the board.
 
 An intersection on the board — the point where up to 3 hexes meet. Settlements and cities are placed here.
 
-| Field           | Type           | Description                                     |
-|-----------------|----------------|-------------------------------------------------|
-| `id`            | `int`          | Unique identifier (0–53)                        |
-| `adjacentHexes` | `List<Hex>`    | Hexes touching this intersection (1–3)          |
-| `adjacentVertices` | `List<Vertex>` | Neighboring intersections (for Distance Rule) |
-| `owner`         | `Player`       | Null if unoccupied                              |
+| Field                                                                      | Type           | Description                                                                            |
+|----------------------------------------------------------------------------|----------------|----------------------------------------------------------------------------------------|
+| `Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices)`   | —              | Constructor; throws `IllegalArgumentException` if id is out of range or lists are null |
+| `id`                                                                       | `int`          | Unique identifier (0–53)                                                               |
+| `adjacentHexes`                                                            | `List<Hex>`    | Hexes touching this intersection (1–3)                                                 |
+| `adjacentVertices`                                                         | `List<Vertex>` | Neighboring intersections (for Distance Rule)                                          |
+| `owner`                                                                    | `Player`       | Null if unoccupied                                                                     |
 
-| Method                        | Return Type   | Description                                         |
-|-------------------------------|---------------|-----------------------------------------------------|
-| `getId()`                     | `int`         | Returns the vertex id                               |
-| `isOccupied()`                | `boolean`     | Returns true if a settlement or city is placed here |
-| `getOwner()`                  | `Player`      | Returns the occupying player, or null               |
-| `getAdjacentHexes()`          | `List<Hex>`   | Returns hexes adjacent to this vertex               |
-| `getAdjacentVertices()`       | `List<Vertex>`| Returns neighboring vertices                        |
+| Method                      | Return Type    | Description                                         |
+|-----------------------------|----------------|-----------------------------------------------------|
+| `getId()`                   | `int`          | Returns the vertex id                               |
+| `setOwner(Player player)`   | `void`         | Sets the owner of this vertex when a settlement is placed |
+| `isOccupied()`              | `boolean`      | Returns true if a settlement or city is placed here |
+| `getOwner()`                | `Player`       | Returns the occupying player, or null               |
+| `getAdjacentHexes()`        | `List<Hex>`    | Returns hexes adjacent to this vertex               |
+| `getAdjacentVertices()`     | `List<Vertex>` | Returns neighboring vertices                        |
 
 ---
 
