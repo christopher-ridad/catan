@@ -68,20 +68,22 @@ Represents one terrain tile on the board.
 
 An intersection on the board — the point where up to 3 hexes meet. Settlements and cities are placed here.
 
-| Field           | Type           | Description                                     |
-|-----------------|----------------|-------------------------------------------------|
-| `id`            | `int`          | Unique identifier (0–53)                        |
-| `adjacentHexes` | `List<Hex>`    | Hexes touching this intersection (1–3)          |
-| `adjacentVertices` | `List<Vertex>` | Neighboring intersections (for Distance Rule) |
-| `owner`         | `Player`       | Null if unoccupied                              |
+| Field               | Type           | Description                                     |
+|---------- ----------|----------------|-------------------------------------------------|
+| `id`                | `int`          | Unique identifier (0–53)                        |
+| `adjacentHexes`     | `List<Hex>`    | Hexes touching this intersection (1–3)          |
+| `adjacentVertices`  | `List<Vertex>` | Neighboring intersections (for Distance Rule)   |
+| `owner`             | `Player`       | Null if unoccupied                              |
 
-| Method                                              | Return Type    | Description                                                                            |
-|-----------------------------------------------------|----------------|----------------------------------------------------------------------------------------|
-| `getId()`                                           | `int`          | Returns the vertex id                                                                  |
-| `isOccupied()`                                      | `boolean`      | Returns true if a settlement or city is placed here                                    |
-| `getOwner()`                                        | `Player`       | Returns the occupying player, or null                                                  |
-| `getAdjacentHexes()`                                | `List<Hex>`    | Returns hexes adjacent to this vertex                                                  |
-| `getAdjacentVertices()`                             | `List<Vertex>` | Returns neighboring vertices                                                           |
+| Method                                                                     | Return Type          | Description                                                                            |
+|----------------------------------------------------------------------------|----------------------|----------------------------------------------------------------------------------------|
+| `Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices)`   | —                    | Constructor; throws `IllegalArgumentException` if id is out of range or lists are null |
+| `getId()`                                                                  | `int`                | Returns the vertex id                                                                  |
+| `setOwner(Player player)`                                                  | `void`               | Sets the owner of this vertex when a settlement is placed                              |
+| `isOccupied()`                                                             | `boolean`            | Returns true if a settlement or city is placed here                                    |
+| `getOwner()`                                                               | `Optional<Player>`   | Returns the occupying player as an Optional, or Optional.empty() if unoccupied         |
+| `getAdjacentHexes()`                                                       | `List<Hex>`          | Returns hexes adjacent to this vertex                                                  |
+| `getAdjacentVertices()`                                                    | `List<Vertex>`       | Returns neighboring vertices                                                           |
 
 ---
 
@@ -95,15 +97,15 @@ A path on the board — the border between two hexes (or a hex and the frame). R
 | `endpoints` | `Vertex[]` | The two vertices this edge connects |
 | `owner`     | `Player`   | Null if no road placed              |
 
-| Method                                             | Return Type | Description                                                                           |
-|----------------------------------------------------|-------------|---------------------------------------------------------------------------------------|
-| `Edge(int id, Vertex endpoint1, Vertex endpoint2)` | —           | Constructor; throws `IllegalArgumentException` if id is invalid or endpoints are null |
-| `getId()`                                          | `int`       | Returns the edge id                                                                   |
-| `hasRoad()`                                        | `boolean`   | Returns true if a road is placed here                                                 |
-| `setOwner(Player player)`                          | `void`      | Sets the owner of this edge when a road is placed                                     | 
-| `getOwner()`                                       | `Player`    | Returns the player who placed a road, or null                                         |
-| `getEndpoints()`                                   | `Vertex[]`  | Returns the two endpoint vertices                                                     |
-| `connectsTo(Vertex)`                               | `boolean`   | Returns true if the given vertex is an endpoint                                       |
+| Method                                             | Return Type         | Description                                                                            |
+|----------------------------------------------------|---------------------|----------------------------------------------------------------------------------------|
+| `Edge(int id, Vertex endpoint1, Vertex endpoint2)` | —                   | Constructor; throws `IllegalArgumentException` if id is invalid or endpoints are null  |
+| `getId()`                                          | `int`               | Returns the edge id                                                                    |
+| `hasRoad()`                                        | `boolean`           | Returns true if a road is placed here                                                  |
+| `setOwner(Player player)`                          | `void`              | Sets the owner of this edge when a road is placed                                      | 
+| `getOwner()`                                       | `Optional<Player>`  | Returns the occupying player as an Optional, or Optional.empty() if unoccupied         |
+| `getEndpoints()`                                   | `Vertex[]`          | Returns the two endpoint vertices                                                      |
+| `connectsTo(Vertex)`                               | `boolean`           | Returns true if the given vertex is an endpoint                                        |
 
 ---
 
