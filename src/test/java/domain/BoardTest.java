@@ -19,11 +19,21 @@ public class BoardTest {
     void setUp() {
         hexes = new ArrayList<>();
         hexes.add(new Hex(TerrainType.DESERT));
-        for (int i = 0; i < 4; i++) hexes.add(new Hex(TerrainType.FIELDS));
-        for (int i = 0; i < 4; i++) hexes.add(new Hex(TerrainType.PASTURE));
-        for (int i = 0; i < 4; i++) hexes.add(new Hex(TerrainType.FOREST));
-        for (int i = 0; i < 3; i++) hexes.add(new Hex(TerrainType.MOUNTAINS));
-        for (int i = 0; i < 3; i++) hexes.add(new Hex(TerrainType.HILLS));
+        for (int i = 0; i < 4; i++) {
+            hexes.add(new Hex(TerrainType.FIELDS));
+        }
+        for (int i = 0; i < 4; i++) {
+            hexes.add(new Hex(TerrainType.PASTURE));
+        }
+        for (int i = 0; i < 4; i++) {
+            hexes.add(new Hex(TerrainType.FOREST));
+        }
+        for (int i = 0; i < 3; i++) {
+            hexes.add(new Hex(TerrainType.MOUNTAINS));
+        }
+        for (int i = 0; i < 3; i++) {
+            hexes.add(new Hex(TerrainType.HILLS));
+        }
         board = new Board(hexes);
     }
 
