@@ -7,6 +7,8 @@
 5. [not started] []: Implement Player class
 6. [not started] []: Implement Game class with player count validation
 7. [not started] []: Implement Initial Placement Phase logic
+8. [done] [Chris]: Implement Vertex class
+9. [done] [Chris]: Implement Edge class
 
 
 # Week 4 (04/20/2026–04/26/2026)
