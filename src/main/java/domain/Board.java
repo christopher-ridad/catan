@@ -52,7 +52,7 @@ public class Board {
 
     private void initializeEdges() {
         for (int i = 0; i < 72; i++) {
-            edges.add(new Edge(i, null, null));
+            edges.add(new Edge(i, vertices.get(0), vertices.get(1)));
         }
     }
 
@@ -93,6 +93,6 @@ public class Board {
     public boolean isConnectedToPlayer(Vertex vertex, Player player) {
         return edges.stream()
                 .filter(e -> e.connectsTo(vertex))
-                .anyMatch(e -> e.hasRoad() && e.getOwner() == player);
+                .anyMatch(e -> e.hasRoad() && e.getOwner().isPresent() && e.getOwner().get() == player);
     }
 }
