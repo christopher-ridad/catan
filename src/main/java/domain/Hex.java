@@ -1,24 +1,17 @@
 package domain;
 
 public class Hex {
+    private final TerrainType terrainType;
 
-    public Hex(TerrainType terrainType, int numberToken) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public Hex(TerrainType terrainType) {
+        this.terrainType = terrainType;
     }
 
     public TerrainType getTerrainType() {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public int getNumberToken() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return terrainType;
     }
 
     public boolean isDesert() {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public boolean producesResource() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return terrainType == TerrainType.DESERT;
     }
 }
