@@ -1,9 +1,10 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Board {
+public final class Board {
     private final List<Hex> hexes;
     private final List<Vertex> vertices;
     private final List<Edge> edges;
@@ -16,7 +17,7 @@ public class Board {
         validateTerrainCount(hexes, TerrainType.FOREST, 4);
         validateTerrainCount(hexes, TerrainType.MOUNTAINS, 3);
 
-        this.hexes = hexes;
+        this.hexes = new ArrayList<>(hexes);
         this.vertices = new ArrayList<>();
         this.edges = new ArrayList<>();
 
@@ -56,15 +57,15 @@ public class Board {
     }
 
     public List<Hex> getHexes() {
-        return hexes;
+        return new ArrayList<>(hexes);
     }
 
     public List<Vertex> getVertices() {
-        return vertices;
+        return new ArrayList<>(vertices);
     }
 
     public List<Edge> getEdges() {
-        return edges;
+        return new ArrayList<>(edges);
     }
 
     public Vertex getVertex(int id) {
