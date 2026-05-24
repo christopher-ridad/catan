@@ -92,6 +92,6 @@ public class Board {
     public boolean isConnectedToPlayer(Vertex vertex, Player player) {
         return edges.stream()
                 .filter(e -> e.connectsTo(vertex))
-                .anyMatch(e -> e.hasRoad() && e.getOwner().isPresent() && e.getOwner().get() == player);
+                .anyMatch(e -> e.hasRoad() && e.getOwner().get() == player);
     }
 }
