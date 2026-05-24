@@ -1,6 +1,22 @@
+# Week 8 (05/18/2026–05/24/2026)
+1. [done] [Chris]: Implement Vertex class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/33)
+2. [done] [Chris]: Implement Edge class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/34)
+3. [done] [Chris]: Implement Board class with standard tile distribution (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/26)
+4. [done] [Chris]: Setup Checkstyle (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/29)
+5. [done] [Chris]: Setup Jacoco (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/30)
+6. [done] [Chris]: Setup Pitest (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/31)
+7. [done] [Chris]: Setup Spotbugs (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/32)
+8. [waiting to be merged] [Ananya]: Implement Player class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/17)
+8. [not started] [Ariel]: Implement ResourceType enum and Hex class
+
+
+# Week 7 (05/11/2026–05/17/2026)
+
+# Week 6 (05/04/2026–05/10/2026)
+
 # Week 5 (04/27/2026–05/03/2026)
 **Planning and Progress Tracking**:
-1. [waiting to be merged] [Ariel]: Document Game Setup Phase user story, acceptance criteria, and use cases (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/14)
+1. [done] [Ariel]: Document Game Setup Phase user story, acceptance criteria, and use cases (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/14)
 2. [done] [Isabella]: Document class/method design for Game Setup Phase in docs/design/ (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/13)
 3. [not started] []: Implement ResourceType enum and Hex class with BVA and TDD
 4. [waiting to be merged] [Chris]: Implement Board class with standard tile distribution
