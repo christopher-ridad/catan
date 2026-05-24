@@ -18,21 +18,21 @@ public class BoardTest {
     @BeforeEach
     void setUp() {
         hexes = new ArrayList<>();
-        hexes.add(new Hex(TerrainType.DESERT));
+        hexes.add(new Hex(TerrainType.DESERT, 0));
         for (int i = 0; i < 4; i++) {
-            hexes.add(new Hex(TerrainType.FIELDS));
+            hexes.add(new Hex(TerrainType.FIELDS, 9));
         }
         for (int i = 0; i < 4; i++) {
-            hexes.add(new Hex(TerrainType.PASTURE));
+            hexes.add(new Hex(TerrainType.PASTURE, 10));
         }
         for (int i = 0; i < 4; i++) {
-            hexes.add(new Hex(TerrainType.FOREST));
+            hexes.add(new Hex(TerrainType.FOREST, 11));
         }
         for (int i = 0; i < 3; i++) {
-            hexes.add(new Hex(TerrainType.MOUNTAINS));
+            hexes.add(new Hex(TerrainType.MOUNTAINS, 12));
         }
         for (int i = 0; i < 3; i++) {
-            hexes.add(new Hex(TerrainType.HILLS));
+            hexes.add(new Hex(TerrainType.HILLS, 4));
         }
         board = new Board(hexes);
     }
@@ -53,7 +53,7 @@ public class BoardTest {
 
     @Test
     void Constructor_With20Hexes_ThrowsIllegalArgumentException() {
-        hexes.add(new Hex(TerrainType.HILLS));
+        hexes.add(new Hex(TerrainType.HILLS, 5));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 19 hexes", exception.getMessage());
@@ -63,7 +63,7 @@ public class BoardTest {
     void Constructor_WithNoDesert_ThrowsIllegalArgumentException() {
         int desertHexToRemoveIndex = 0;
         hexes.remove(desertHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.HILLS));
+        hexes.add(new Hex(TerrainType.HILLS, 5));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 1 DESERT hexes", exception.getMessage());
@@ -78,7 +78,7 @@ public class BoardTest {
     void Constructor_WithTwoDeserts_ThrowsIllegalArgumentException() {
         int hillsHexToRemoveIndex = hexes.size() - 1;
         hexes.remove(hillsHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.DESERT));
+        hexes.add(new Hex(TerrainType.DESERT, 0));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 1 DESERT hexes", exception.getMessage());
@@ -88,7 +88,7 @@ public class BoardTest {
     void Constructor_With3Fields_ThrowsIllegalArgumentException() {
         int fieldsHexToRemoveIndex = 1;
         hexes.remove(fieldsHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.HILLS));
+        hexes.add(new Hex(TerrainType.HILLS, 5));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 4 FIELDS hexes", exception.getMessage());
@@ -103,7 +103,7 @@ public class BoardTest {
     void Constructor_With5Fields_ThrowsIllegalArgumentException() {
         int hillsHexToRemoveIndex = hexes.size() - 1;
         hexes.remove(hillsHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.FIELDS));
+        hexes.add(new Hex(TerrainType.FIELDS, 5));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 4 FIELDS hexes", exception.getMessage());
@@ -113,7 +113,7 @@ public class BoardTest {
     void Constructor_With3Pasture_ThrowsIllegalArgumentException() {
         int pastureHexToRemoveIndex = 5;
         hexes.remove(pastureHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.HILLS));
+        hexes.add(new Hex(TerrainType.HILLS,6));
         assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
@@ -129,7 +129,7 @@ public class BoardTest {
     void Constructor_With5Pasture_ThrowsIllegalArgumentException() {
         int hillsHexToRemoveIndex = hexes.size() - 1;
         hexes.remove(hillsHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.PASTURE));
+        hexes.add(new Hex(TerrainType.PASTURE, 5));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 4 PASTURE hexes", exception.getMessage());
@@ -139,7 +139,7 @@ public class BoardTest {
     void Constructor_With3Forest_ThrowsIllegalArgumentException() {
         int forestHexToRemoveIndex = 9;
         hexes.remove(forestHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.HILLS));
+        hexes.add(new Hex(TerrainType.HILLS,5));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 4 FOREST hexes", exception.getMessage());
@@ -154,7 +154,7 @@ public class BoardTest {
     void Constructor_With5Forest_ThrowsIllegalArgumentException() {
         int hillsHexToRemoveIndex = hexes.size() - 1;
         hexes.remove(hillsHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.FOREST));
+        hexes.add(new Hex(TerrainType.FOREST, 5));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 4 FOREST hexes", exception.getMessage());
@@ -164,7 +164,7 @@ public class BoardTest {
     void Constructor_With2Mountains_ThrowsIllegalArgumentException() {
         int mountainsHexToRemoveIndex = 13;
         hexes.remove(mountainsHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.HILLS));
+        hexes.add(new Hex(TerrainType.HILLS, 5));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 3 MOUNTAINS hexes", exception.getMessage());
@@ -179,7 +179,7 @@ public class BoardTest {
     void Constructor_With4Mountains_ThrowsIllegalArgumentException() {
         int hillsHexToRemoveIndex = hexes.size() - 1;
         hexes.remove(hillsHexToRemoveIndex);
-        hexes.add(new Hex(TerrainType.MOUNTAINS));
+        hexes.add(new Hex(TerrainType.MOUNTAINS, 5));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Board(hexes));
         assertEquals("Board must have exactly 3 MOUNTAINS hexes", exception.getMessage());
