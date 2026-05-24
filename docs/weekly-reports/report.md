@@ -7,7 +7,7 @@
 6. [done] [Chris]: Setup Pitest (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/31)
 7. [done] [Chris]: Setup Spotbugs (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/32)
 8. [waiting to be merged] [Ananya]: Implement Player class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/17)
-8. [not started] [Ariel]: Implement ResourceType enum and Hex class
+8. [in progress] [Ariel]: Implement ResourceType enum and Hex class
 
 
 # Week 7 (05/11/2026–05/17/2026)
