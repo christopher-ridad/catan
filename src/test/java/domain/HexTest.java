@@ -66,4 +66,10 @@ public class HexTest {
         Hex hex = new Hex(TerrainType.DESERT, 0);
         assertEquals(0, hex.getNumberToken());
     }
+
+    @Test
+    void isDesert_onDesertHex_returnsTrue() {
+        Hex hex = new Hex(TerrainType.DESERT, 0);
+        assertTrue(hex.isDesert());
+    }
 }
