@@ -29,7 +29,9 @@ public class Game {
         this.currentPlayerIndex = 0;
     }
 
-    public List<Player> getPlayers() { throw new UnsupportedOperationException("Not implemented yet"); }
+    public List<Object> getPlayers() {
+        return players;
+    }
 
     public int getPlayerCount() {
         throw new UnsupportedOperationException("Not implemented yet");

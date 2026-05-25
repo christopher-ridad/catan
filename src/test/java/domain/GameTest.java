@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -108,5 +109,20 @@ public class GameTest {
     void gameConstructor_withNullBoard_throwsNullPointer() {
         assertThrows(NullPointerException.class,
                 () -> new Game(Arrays.asList(alice, bob), null));
+    }
+
+    //
+    // Fetching player list
+    //
+
+    @Test
+    void getPlayers_returnsPlayersInOriginalOrder() {
+        List<Object> input = Arrays.asList(alice, bob, charlie);
+        Game game = new Game(input, board);
+        List<Object> result = game.getPlayers();
+        assertEquals(input.size(), result.size());
+        for (int i = 0; i < input.size(); i++) {
+            assertSame(input.get(i), result.get(i));
+        }
     }
 }
