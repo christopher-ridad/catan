@@ -157,4 +157,14 @@ public class GameTest {
         assertSame(alice, game.getCurrentPlayer());
     }
 
+    //
+    // Fetch board
+    //
+
+    @Test
+    void getBoard_returnsValidBoardObject() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        assertSame(board, game.getBoard());
+    }
+
 }
