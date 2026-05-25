@@ -50,6 +50,6 @@
 
 ## Method under test: `getPlayerCount()`
 
-- **TC11: getPlayerCount_withTwoPlayers_returnsTwo** ( implemented )
+- **TC12: getPlayerCount_withTwoPlayers_returnsTwo** ( implemented )
     - State of the system: Game constructed with 2 valid players
     - Expected output: 2

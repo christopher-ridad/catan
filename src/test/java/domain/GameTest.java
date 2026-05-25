@@ -141,4 +141,10 @@ public class GameTest {
     void getPlayerCount_withTwoPlayers_returnsTwo() {
         assertEquals(2, new Game(Arrays.asList(alice, bob), board).getPlayerCount());
     }
+
+    @Test
+    void getPlayerCount_withFourPlayers_returnsFour() {
+        assertEquals(4, new Game(Arrays.asList(alice, bob, charlie, diana), board).getPlayerCount());
+    }
+
 }
