@@ -33,3 +33,7 @@
 - **TC8: gameConstructor_withNullPlayerInList_throwsNullPointer** ( implemented )
     - State of the system: constructor is passed a list of 2 elements where one entry is null
     - Expected output: `NullPointerException`
+
+- **TC9: gameConstructor_withNullBoard_throwsNullPointer** ( implemented )
+    - State of the system: constructor is passed a null Board object
+    - Expected output: `NullPointerException`
