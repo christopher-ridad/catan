@@ -125,4 +125,11 @@ public class GameTest {
             assertSame(input.get(i), result.get(i));
         }
     }
+
+    @Test
+    void getPlayers_returnsUnmodifiableList() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        assertThrows(UnsupportedOperationException.class,
+                () -> game.getPlayers().add(charlie));
+    }
 }
