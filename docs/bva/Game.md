@@ -60,6 +60,6 @@
 
 ## Method under test: `getCurrentPlayer()`
 
-- **TC14: getCurrentPlayer_atGameStart_returnsFirstPlayer** ( NOT implemented )
+- **TC14: getCurrentPlayer_atGameStart_returnsFirstPlayer** ( implemented )
     - State of the system: Game constructed with 3 valid players, no turns have been taken
     - Expected output: the first player passed to the constructor
