@@ -24,4 +24,8 @@ public class Hex {
     public boolean isDesert() {
         return terrainType == TerrainType.DESERT;
     }
+
+    public boolean producesResource() {
+        return terrainType != TerrainType.DESERT;
+    }
 }
