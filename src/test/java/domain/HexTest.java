@@ -30,4 +30,9 @@ public class HexTest {
     void hexConstructor_tokenAtBottomOfUpperRange_doesNotThrow() {
         assertDoesNotThrow(() -> new Hex(TerrainType.FOREST, 8));
     }
+
+    @Test
+    void hexConstructor_tokenAtMax_doesNotThrow() {
+        assertDoesNotThrow(() -> new Hex(TerrainType.FOREST, 12));
+    }
 }
