@@ -2,8 +2,7 @@ package domain;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HexTest {
     @Test
@@ -54,5 +53,11 @@ public class HexTest {
     @Test
     void hexConstructor_nonDesertWithNoToken_throwsIllegalArgument() {
         assertThrows(IllegalArgumentException.class, () -> new Hex(TerrainType.FOREST, 0));
+    }
+
+    @Test
+    void getNumberToken_onNonDesertHex_returnsToken() {
+        Hex hex = new Hex(TerrainType.FOREST, 6);
+        assertEquals(6, hex.getNumberToken());
     }
 }

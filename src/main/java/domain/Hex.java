@@ -2,6 +2,7 @@ package domain;
 
 public class Hex {
     private final TerrainType terrainType;
+    private final int numToken;
 
     public Hex(TerrainType terrainType, int numToken) {
         if (terrainType == TerrainType.DESERT && numToken != 0) {
@@ -11,11 +12,14 @@ public class Hex {
             throw new IllegalArgumentException("Invalid number token: " + numToken);
         }
         this.terrainType = terrainType;
+        this.numToken = numToken;
     }
 
     public TerrainType getTerrainType() {
         return terrainType;
     }
+
+    public int getNumberToken() { return numToken; }
 
     public boolean isDesert() {
         return terrainType == TerrainType.DESERT;
