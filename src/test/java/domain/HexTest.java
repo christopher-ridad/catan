@@ -45,4 +45,9 @@ public class HexTest {
     void hexConstructor_desertWithNoToken_doesNotThrow() {
         assertDoesNotThrow(() -> new Hex(TerrainType.DESERT, 0));
     }
+
+    @Test
+    void hexConstructor_desertWithToken_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () -> new Hex(TerrainType.DESERT, 8));
+    }
 }
