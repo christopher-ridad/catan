@@ -41,3 +41,13 @@
 - **TC10: hexConstructor_nonDesertWithNoToken_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `TerrainType.FOREST`, `numberToken = 0`
     - **Expected output**: `IllegalArgumentException`
+
+### Method under test: `getNumberToken()`
+
+- **TC11: getNumberToken_onNonDesertHex_returnsToken** ( :x: )
+  - **State of the system**: `Hex(TerrainType.FOREST, 6)`
+  - **Expected output**: `6`
+
+- **TC12: getNumberToken_onDesertHex_returnsZero** ( :x: )
+  - **State of the system**: `Hex(TerrainType.DESERT, 0)`
+  - **Expected output**: `0`
