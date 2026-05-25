@@ -29,12 +29,10 @@ public class Game {
         this.currentPlayerIndex = 0;
     }
 
-    public List<Object> getPlayers() {
-        return players;
-    }
+    public List<Object> getPlayers() { return players; }
 
     public int getPlayerCount() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return players.size();
     }
 
     public Board getBoard() {
