@@ -88,4 +88,13 @@ public class GameTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new Game(Arrays.asList(alice, bob, charlie, diana, eve), board));
     }
+
+    //
+    // Null inputs
+    //
+
+    @Test
+    void gameConstructor_withNullList_throwsNullPointer() {
+        assertThrows(NullPointerException.class, () -> new Game(null, board));
+    }
 }
