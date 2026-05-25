@@ -47,3 +47,9 @@
 - **TC11: getPlayers_returnsUnmodifiableList** ( implemented )
     - State of the system: Game constructed with 2 valid players, caller attempts to add to the returned list
     - Expected output: `UnsupportedOperationException`
+
+## Method under test: `getPlayerCount()`
+
+- **TC11: getPlayerCount_withTwoPlayers_returnsTwo** ( NOT implemented )
+    - State of the system: Game constructed with 2 valid players
+    - Expected output: 2

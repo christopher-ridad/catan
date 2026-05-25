@@ -132,4 +132,13 @@ public class GameTest {
         assertThrows(UnsupportedOperationException.class,
                 () -> game.getPlayers().add(charlie));
     }
+
+    //
+    // Player count
+    //
+
+    @Test
+    void getPlayerCount_withTwoPlayers_returnsTwo() {
+        assertEquals(2, new Game(Arrays.asList(alice, bob), board).getPlayerCount());
+    }
 }
