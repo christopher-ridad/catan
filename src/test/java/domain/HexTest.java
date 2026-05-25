@@ -72,4 +72,10 @@ public class HexTest {
         Hex hex = new Hex(TerrainType.DESERT, 0);
         assertTrue(hex.isDesert());
     }
+
+    @Test
+    void isDesert_onNonDesertHex_returnsFalse() {
+        Hex hex = new Hex(TerrainType.FOREST, 6);
+        assertFalse(hex.isDesert());
+    }
 }
