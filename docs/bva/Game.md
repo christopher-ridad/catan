@@ -1,1 +1,7 @@
 # BVA Analysis: Game
+
+## Method under test: `Game(List<Player> players, Board board)`
+
+- **TC1: gameConstructor_withTwoPlayers_doesNotThrow** ( implemented )
+    - State of the system: constructor is passed a list of 2 valid Player objects
+    - Expected output: no exception thrown
