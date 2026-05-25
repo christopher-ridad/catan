@@ -5,9 +5,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents a Game of Catan
+ *
+ * Adresses issue #9: Implement Game setup with player count validation.
+ *
+ * NOTE: Player is typed as Object temporarily until PR #17 (domain/Player) gets merged.
+ */
+
 public class Game {
 
-    // NOTE: All instances of 'players' should be reverted to type 'Player' after PR #17 is merged
+    // NOTE: All instances of 'Object' should be reverted to type 'Player' after PR #17 is merged
 
     private static final int MIN_PLAYERS = 2;
     private static final int MAX_PLAYERS = 4;

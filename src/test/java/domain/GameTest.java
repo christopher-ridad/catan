@@ -9,8 +9,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
 import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * TDD tests for Game class (written before implementation)
+ *
+ * Adresses issue #9: Implement Game setup with player count validation.
+ *
+ * Board is constructed via its private constructor
+ * to bypass validation (no need to instantiate 19 hexes).
+ *
+ * Player is stubbed below — remove the stub once PR #17 is merged.
+ */
 
 public class GameTest {
 
