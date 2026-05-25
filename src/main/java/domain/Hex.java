@@ -7,7 +7,7 @@ public class Hex {
         if (terrainType == TerrainType.DESERT && numToken != 0) {
             throw new IllegalArgumentException("Desert hex cannot have a number token");
         }
-        if (terrainType != TerrainType.DESERT && (numToken == 7 || numToken > 12)) {
+        if (terrainType != TerrainType.DESERT && (numToken == 7 || numToken > 12 || numToken < 2)) {
             throw new IllegalArgumentException("Invalid number token: " + numToken);
         }
         this.terrainType = terrainType;
