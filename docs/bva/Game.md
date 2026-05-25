@@ -17,3 +17,7 @@
 - **TC4: gameConstructor_withNoPlayers_throwsIllegalArgument** ( implemented )
     - State of the system: constructor is passed an empty list
     - Expected output: `IllegalArgumentException`
+
+- **TC5: gameConstructor_withOnePlayer_throwsIllegalArgument** ( implemented )
+    - State of the system: constructor is passed a list of 1 valid Player object
+    - Expected output: `IllegalArgumentException`
