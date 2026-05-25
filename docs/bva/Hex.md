@@ -2,42 +2,42 @@
 
 ### Method under test: `Hex(TerrainType, int)`
 
-- **TC1: hexConstructor_tokenBelowMin_throwsIllegalArgument** ( :x: )
+- **TC1: hexConstructor_tokenBelowMin_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `TerrainType.FOREST`, `numberToken = 1`
     - **Expected output**: `IllegalArgumentException`
 
-- **TC2: hexConstructor_tokenAtMin_doesNotThrow** ( :x: )
+- **TC2: hexConstructor_tokenAtMin_doesNotThrow** ( :white_check_mark: )
     - **State of the system**: `TerrainType.FOREST`, `numberToken = 2`
     - **Expected output**: Accept (no exception)
 
-- **TC3: hexConstructor_tokenAtTopOfLowerRange_doesNotThrow** ( :x: )
+- **TC3: hexConstructor_tokenAtTopOfLowerRange_doesNotThrow** ( :white_check_mark: )
     - **State of the system**: `TerrainType.FOREST`, `numberToken = 6`
     - **Expected output**: Accept (no exception)
 
-- **TC4: hexConstructor_tokenAtGap_throwsIllegalArgument** ( :x: )
+- **TC4: hexConstructor_tokenAtGap_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `TerrainType.FOREST`, `numberToken = 7`
     - **Expected output**: `IllegalArgumentException`
 
-- **TC5: hexConstructor_tokenAtBottomOfUpperRange_doesNotThrow** ( :x: )
+- **TC5: hexConstructor_tokenAtBottomOfUpperRange_doesNotThrow** ( :white_check_mark: )
     - **State of the system**: `TerrainType.FOREST`, `numberToken = 8`
     - **Expected output**: Accept (no exception)
 
-- **TC6: hexConstructor_tokenAtMax_doesNotThrow** ( :x: )
+- **TC6: hexConstructor_tokenAtMax_doesNotThrow** ( :white_check_mark: )
     - **State of the system**: `TerrainType.FOREST`, `numberToken = 12`
     - **Expected output**: Accept (no exception)
 
-- **TC7: hexConstructor_tokenAboveMax_throwsIllegalArgument** ( :x: )
+- **TC7: hexConstructor_tokenAboveMax_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `TerrainType.FOREST`, `numberToken = 13`
     - **Expected output**: `IllegalArgumentException`
 
-- **TC8: hexConstructor_desertWithNoToken_doesNotThrow** ( :x: )
+- **TC8: hexConstructor_desertWithNoToken_doesNotThrow** ( :white_check_mark: )
     - **State of the system**: `TerrainType.DESERT`, `numberToken = 0`
     - **Expected output**: Accept (no exception)
 
-- **TC9: hexConstructor_desertWithToken_throwsIllegalArgument** ( :x: )
+- **TC9: hexConstructor_desertWithToken_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `TerrainType.DESERT`, `numberToken = 8`
     - **Expected output**: `IllegalArgumentException`
 
-- **TC10: hexConstructor_nonDesertWithNoToken_throwsIllegalArgument** ( :x: )
+- **TC10: hexConstructor_nonDesertWithNoToken_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `TerrainType.FOREST`, `numberToken = 0`
     - **Expected output**: `IllegalArgumentException`
