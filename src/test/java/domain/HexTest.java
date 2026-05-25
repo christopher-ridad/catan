@@ -84,4 +84,10 @@ public class HexTest {
         Hex hex = new Hex(TerrainType.FOREST, 6);
         assertTrue(hex.producesResource());
     }
+
+    @Test
+    void producesResource_onDesertHex_returnsFalse() {
+        Hex hex = new Hex(TerrainType.DESERT, 0);
+        assertFalse(hex.producesResource());
+    }
 }
