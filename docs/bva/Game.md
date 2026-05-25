@@ -43,3 +43,7 @@
 - **TC10: getPlayers_returnsPlayersInOriginalOrder** ( implemented )
     - State of the system: Game constructed with 3 valid players
     - Expected output: list of players in the same order as provided to the constructor
+
+- **TC11: getPlayers_returnsUnmodifiableList** ( implemented )
+    - State of the system: Game constructed with 2 valid players, caller attempts to add to the returned list
+    - Expected output: `UnsupportedOperationException`
