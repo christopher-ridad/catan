@@ -37,3 +37,9 @@
 - **TC9: gameConstructor_withNullBoard_throwsNullPointer** ( implemented )
     - State of the system: constructor is passed a null Board object
     - Expected output: `NullPointerException`
+
+## Method under test: `getPlayers()`
+
+- **TC10: getPlayers_returnsPlayersInOriginalOrder** ( implemented )
+    - State of the system: Game constructed with 3 valid players
+    - Expected output: list of players in the same order as provided to the constructor
