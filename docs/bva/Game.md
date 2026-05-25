@@ -53,3 +53,7 @@
 - **TC12: getPlayerCount_withTwoPlayers_returnsTwo** ( implemented )
     - State of the system: Game constructed with 2 valid players
     - Expected output: 2
+
+- **TC13: getPlayerCount_withFourPlayers_returnsFour** ( implemented )
+    - State of the system: Game constructed with 4 valid players
+    - Expected output: 4
