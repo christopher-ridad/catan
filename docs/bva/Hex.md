@@ -61,3 +61,13 @@
 - **TC14: isDesert_onNonDesertHex_returnsFalse** ( :x: )
   - **State of the system**: `Hex(TerrainType.FOREST, 6)`
   - **Expected output**: `false`
+
+### Method under test: `producesResource()`
+
+- **TC15: producesResource_onNonDesertHex_returnsTrue** ( :x: )
+  - **State of the system**: `Hex(TerrainType.FOREST, 6)`
+  - **Expected output**: `true`
+
+- **TC16: producesResource_onDesertHex_returnsFalse** ( :x: )
+  - **State of the system**: `Hex(TerrainType.DESERT, 0)`
+  - **Expected output**: `false`
