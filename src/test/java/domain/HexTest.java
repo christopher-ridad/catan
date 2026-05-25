@@ -25,4 +25,9 @@ public class HexTest {
     void hexConstructor_tokenAtGap_throwsIllegalArgument() {
         assertThrows(IllegalArgumentException.class, () -> new Hex(TerrainType.FOREST, 7));
     }
+
+    @Test
+    void hexConstructor_tokenAtBottomOfUpperRange_doesNotThrow() {
+        assertDoesNotThrow(() -> new Hex(TerrainType.FOREST, 8));
+    }
 }
