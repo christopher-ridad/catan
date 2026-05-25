@@ -34,8 +34,13 @@ public class GameTest {
             this.color = color;
         }
 
-        public String getName()       { return name; }
-        public PlayerColor getColor() { return color; }
+        public String getName()       {
+            return name;
+        }
+
+        public PlayerColor getColor() {
+            return color;
+        }
     }
     // End stub
 

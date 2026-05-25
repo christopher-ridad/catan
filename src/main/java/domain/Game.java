@@ -39,16 +39,21 @@ public class Game {
         this.currentPlayerIndex = 0;
     }
 
-    public List<Object> getPlayers() { return players; }
+    public List<Object> getPlayers() {
+        return players;
+    }
 
     public int getPlayerCount() {
         return players.size();
     }
 
+    public Board getBoard() {
+        return board;
+    }
 
-    public Board getBoard() { return board; }
-
-    public Object getCurrentPlayer() { return players.get(currentPlayerIndex); }
+    public Object getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
 
     // Private helpers (following the Clean Code style used in Board/Vertex/Edge)
 
