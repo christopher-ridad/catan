@@ -21,3 +21,7 @@
 - **TC5: gameConstructor_withOnePlayer_throwsIllegalArgument** ( implemented )
     - State of the system: constructor is passed a list of 1 valid Player object
     - Expected output: `IllegalArgumentException`
+
+- **TC6: gameConstructor_withFivePlayers_throwsIllegalArgument** ( implemented )
+    - State of the system: constructor is passed a list of 5 valid Player objects
+    - Expected output: `IllegalArgumentException`
