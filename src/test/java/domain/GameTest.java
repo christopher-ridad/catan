@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,6 +60,16 @@ public class GameTest {
     @Test
     void gameConstructor_withFourPlayers_doesNotThrow() {
         assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob, charlie, diana), board));
+    }
+
+    //
+    // Invalid player count - below min players (2)
+    //
+
+    @Test
+    void gameConstructor_withNoPlayers_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Game(Collections.emptyList(), board));
     }
 
 }
