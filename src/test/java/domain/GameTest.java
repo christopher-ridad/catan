@@ -1,46 +1,33 @@
 package domain;
 
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
-    // -----------------------------------------------------------------------
-    // Stubs — delete these once PR #17 (Player) is merged into your branch
-    // -----------------------------------------------------------------------
-    enum PlayerColor { RED, BLUE, ORANGE, WHITE }
 
+    // Stub — remove once PR #17 (wip/player-class) is merged
     static class Player {
         private final String name;
         private final PlayerColor color;
 
         Player(String name, PlayerColor color) {
-            if (name == null) {
-                throw new IllegalArgumentException("Player name cannot be null");
-            }
-            if (name.isBlank()) {
-                throw new IllegalArgumentException("Player name cannot be blank");
-            }
-            if (color == null) {
-                throw new IllegalArgumentException("Player color cannot be null");
-            }
-            if (name.length() > 50) {
-                throw new IllegalArgumentException("Player name cannot exceed 50 characters");
-            }
             this.name = name;
             this.color = color;
         }
 
-        String getName()       { return name; }
-        PlayerColor getColor() { return color; }
+        public String getName()       { return name; }
+        public PlayerColor getColor() { return color; }
     }
-    // -----------------------------------------------------------------------
-    // End stubs
-    // -----------------------------------------------------------------------
+    // End stub
 
+    private Board board;
     private Player alice;
     private Player bob;
     private Player charlie;
@@ -48,6 +35,7 @@ public class GameTest {
 
     @BeforeEach
     void setUp() {
+        board   = new Board(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         alice   = new Player("Alice",   PlayerColor.RED);
         bob     = new Player("Bob",     PlayerColor.BLUE);
         charlie = new Player("Charlie", PlayerColor.ORANGE);
@@ -60,7 +48,7 @@ public class GameTest {
 
     @Test
     void gameConstructor_withTwoPlayers_doesNotThrow() {
-        assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob)));
+        assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob), board));
     }
 
 }

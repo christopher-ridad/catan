@@ -7,18 +7,21 @@ import java.util.Objects;
 
 public class Game {
 
+    // NOTE: All instances of 'players' should be reverted to type 'Player' after PR #17 is merged
+
     private static final int MIN_PLAYERS = 2;
     private static final int MAX_PLAYERS = 4;
 
-    private final List<Player> players;
+    private final List<Object> players; // Change type to <Player> once PR #17 gets merged
     private int currentPlayerIndex;
 
     // Creates a new Game with the given ordered list of players.
     // Throws NullPointerException if {@code players} is null or contains a null entry
     // Throws IllegalArgumentException if the player count is outside [2, 4]
 
-    public Game(List<Player> players, Board board) {
+    public Game(List<Object> players, Board board) {
         Objects.requireNonNull(players, "Player list must not be null");
+        Objects.requireNonNull(board, "Board must not be null");
         validatePlayerCount(players.size());
         validateNoNullPlayers(players);
 
@@ -50,8 +53,8 @@ public class Game {
         }
     }
 
-    private void validateNoNullPlayers(List<Player> players) {
-        for (Player p : players) {
+    private void validateNoNullPlayers(List<Object> players) {
+        for (Object p : players) {
             Objects.requireNonNull(p, "Player list must not contain null entries");
         }
     }
