@@ -25,3 +25,7 @@
 - **TC6: gameConstructor_withFivePlayers_throwsIllegalArgument** ( implemented )
     - State of the system: constructor is passed a list of 5 valid Player objects
     - Expected output: `IllegalArgumentException`
+
+- **TC7: gameConstructor_withNullList_throwsNullPointer** ( implemented )
+    - State of the system: constructor is passed null instead of a list
+    - Expected output: `NullPointerException`
