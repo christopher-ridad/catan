@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class HexTest {
     @Test
     void hexConstructor_tokenBelowMin_throwsIllegalArgument() {
-        assertDoesNotThrow(() -> new Hex(TerrainType.FOREST, 1));
+        assertThrows(IllegalArgumentException.class, () -> new Hex(TerrainType.FOREST, 1));
     }
 
     @Test
