@@ -51,4 +51,9 @@ public class GameTest {
         assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob), board));
     }
 
+    @Test
+    void gameConstructor_withThreePlayers_doesNotThrow() {
+        assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob, charlie), board));
+    }
+
 }
