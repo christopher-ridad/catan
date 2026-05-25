@@ -4,9 +4,10 @@ public class Hex {
     private final TerrainType terrainType;
 
     public Hex(TerrainType terrainType, int numToken) {
-
+        if (terrainType != TerrainType.DESERT && (numToken == 7)) {
+            throw new IllegalArgumentException("Invalid number token: " + numToken);
+        }
         this.terrainType = terrainType;
-
     }
 
     public TerrainType getTerrainType() {
