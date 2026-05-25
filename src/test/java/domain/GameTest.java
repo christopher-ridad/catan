@@ -72,4 +72,11 @@ public class GameTest {
                 () -> new Game(Collections.emptyList(), board));
     }
 
+    @Test
+    void gameConstructor_withOnePlayer_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Game(Collections.singletonList(alice), board));
+    }
+
+
 }
