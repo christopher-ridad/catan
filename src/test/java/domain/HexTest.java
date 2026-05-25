@@ -40,4 +40,9 @@ public class HexTest {
     void hexConstructor_tokenAboveMax_throwsIllegalArgument() {
         assertThrows(IllegalArgumentException.class, () -> new Hex(TerrainType.FOREST, 13));
     }
+
+    @Test
+    void hexConstructor_desertWithNoToken_doesNotThrow() {
+        assertDoesNotThrow(() -> new Hex(TerrainType.DESERT, 0));
+    }
 }
