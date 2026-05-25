@@ -97,4 +97,10 @@ public class GameTest {
     void gameConstructor_withNullList_throwsNullPointer() {
         assertThrows(NullPointerException.class, () -> new Game(null, board));
     }
+
+    @Test
+    void gameConstructor_withNullPlayerInList_throwsNullPointer() {
+        assertThrows(NullPointerException.class,
+                () -> new Game(Arrays.asList(alice, null), board));
+    }
 }
