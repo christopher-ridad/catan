@@ -103,4 +103,10 @@ public class GameTest {
         assertThrows(NullPointerException.class,
                 () -> new Game(Arrays.asList(alice, null), board));
     }
+
+    @Test
+    void gameConstructor_withNullBoard_throwsNullPointer() {
+        assertThrows(NullPointerException.class,
+                () -> new Game(Arrays.asList(alice, bob), null));
+    }
 }
