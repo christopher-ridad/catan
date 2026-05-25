@@ -13,6 +13,7 @@ public class Game {
     private static final int MAX_PLAYERS = 4;
 
     private final List<Object> players; // Change type to <Player> once PR #17 gets merged
+    private final Board board;
     private int currentPlayerIndex;
 
     // Creates a new Game with the given ordered list of players.
@@ -26,6 +27,7 @@ public class Game {
         validateNoNullPlayers(players);
 
         this.players = Collections.unmodifiableList(new ArrayList<>(players));
+        this.board = board;
         this.currentPlayerIndex = 0;
     }
 
@@ -35,13 +37,10 @@ public class Game {
         return players.size();
     }
 
-    public Board getBoard() {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
 
-    public Player getPlayer(int index) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+    public Board getBoard() { return board; }
+
+    public Object getCurrentPlayer() { return players.get(currentPlayerIndex); }
 
     // Private helpers (following the Clean Code style used in Board/Vertex/Edge)
 
