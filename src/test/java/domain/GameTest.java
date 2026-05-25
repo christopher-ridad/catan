@@ -147,4 +147,14 @@ public class GameTest {
         assertEquals(4, new Game(Arrays.asList(alice, bob, charlie, diana), board).getPlayerCount());
     }
 
+    //
+    // Current player
+    //
+
+    @Test
+    void getCurrentPlayer_atGameStart_returnsFirstPlayer() {
+        Game game = new Game(Arrays.asList(alice, bob, charlie), board);
+        assertSame(alice, game.getCurrentPlayer());
+    }
+
 }

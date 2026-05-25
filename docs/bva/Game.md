@@ -57,3 +57,9 @@
 - **TC13: getPlayerCount_withFourPlayers_returnsFour** ( implemented )
     - State of the system: Game constructed with 4 valid players
     - Expected output: 4
+
+## Method under test: `getCurrentPlayer()`
+
+- **TC13: getCurrentPlayer_atGameStart_returnsFirstPlayer** ( NOT implemented )
+    - State of the system: Game constructed with 3 valid players, no turns have been taken
+    - Expected output: the first player passed to the constructor
