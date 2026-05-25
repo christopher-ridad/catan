@@ -78,5 +78,14 @@ public class GameTest {
                 () -> new Game(Collections.singletonList(alice), board));
     }
 
+    //
+    // Invalid player count — above max players (4)
+    //
 
+    @Test
+    void gameConstructor_withFivePlayers_throwsIllegalArgument() {
+        Player eve = new Player("Eve", PlayerColor.RED);
+        assertThrows(IllegalArgumentException.class,
+                () -> new Game(Arrays.asList(alice, bob, charlie, diana, eve), board));
+    }
 }
