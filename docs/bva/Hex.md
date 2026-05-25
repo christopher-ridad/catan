@@ -54,11 +54,11 @@
 
 ### Method under test: `isDesert()`
 
-- **TC13: isDesert_onDesertHex_returnsTrue** ( :x: )
+- **TC13: isDesert_onDesertHex_returnsTrue** ( :white_check_mark: )
   - **State of the system**: `Hex(TerrainType.DESERT, 0)`
   - **Expected output**: `true`
 
-- **TC14: isDesert_onNonDesertHex_returnsFalse** ( :x: )
+- **TC14: isDesert_onNonDesertHex_returnsFalse** ( :white_check_mark: )
   - **State of the system**: `Hex(TerrainType.FOREST, 6)`
   - **Expected output**: `false`
 
