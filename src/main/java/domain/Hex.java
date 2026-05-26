@@ -27,7 +27,9 @@ public class Hex {
         return terrainType;
     }
 
-    public int getNumberToken() { return numToken; }
+    public int getNumberToken() {
+        return numToken;
+    }
 
     public boolean isDesert() {
         return terrainType == TerrainType.DESERT;
