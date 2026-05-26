@@ -64,10 +64,10 @@
 
 ### Method under test: `producesResource()`
 
-- **TC15: producesResource_onNonDesertHex_returnsTrue** ( :x: )
+- **TC15: producesResource_onNonDesertHex_returnsTrue** ( :white_check_mark: )
   - **State of the system**: `Hex(TerrainType.FOREST, 6)`
   - **Expected output**: `true`
 
-- **TC16: producesResource_onDesertHex_returnsFalse** ( :x: )
+- **TC16: producesResource_onDesertHex_returnsFalse** ( :white_check_mark: )
   - **State of the system**: `Hex(TerrainType.DESERT, 0)`
   - **Expected output**: `false`
