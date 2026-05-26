@@ -199,20 +199,6 @@ public class PlayerTests {
     }
 
     @Test
-    public void addResources_grainType_amountTwo_throwsIllegalArgumentException() {
-        String playerOneName = "Bob";
-        PlayerColor playerOneColor = PlayerColor.RED;
-
-        Player playerOne = new Player(playerOneName, playerOneColor);
-        assertEquals(0, playerOne.getResourceCount(ResourceType.GRAIN));
-        assertThrows(IllegalArgumentException.class, () -> {
-            playerOne.addResources(ResourceType.GRAIN, 2);
-        });
-
-        assertEquals(0, playerOne.getResourceCount(ResourceType.GRAIN));
-    }
-
-    @Test
     public void getTotalResourceCount_ReturnsZero() {
         String playerOneName = "Bob";
         PlayerColor playerOneColor = PlayerColor.ORANGE;

@@ -10,18 +10,8 @@ public class Player {
     private Map<ResourceType, Integer> resources;
 
     public Player(String name, PlayerColor color) {
-        if (name == null) {
-            throw new IllegalArgumentException("Player name cannot be null");
-        }
-        if (name.isBlank()) {
-            throw new IllegalArgumentException("Player name cannot be an empty string");
-        }
-        if (color == null) {
-            throw new IllegalArgumentException("Player color cannot be null");
-        }
-        if (name.length() > 50) {
-            throw new IllegalArgumentException("Player name cannot exceed 50 characters");
-        }
+        validateName(name);
+        validateColor(color);
         this.name = name;
         this.color = color;
         this.resources = new HashMap<>(Map.of(
@@ -31,6 +21,24 @@ public class Player {
                 ResourceType.GRAIN, 0,
                 ResourceType.WOOL, 0
         ));
+    }
+
+    private void validateName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Player name cannot be null");
+        }
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("Player name cannot be an empty string");
+        }
+        if (name.length() > 50) {
+            throw new IllegalArgumentException("Player name cannot exceed 50 characters");
+        }
+    }
+
+    private void validateColor(PlayerColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Player color cannot be null");
+        }
     }
 
     // package private constructor for testing
@@ -58,8 +66,8 @@ public class Player {
         if (resourceType == null) {
             throw new IllegalArgumentException("Resource type cannot be null");
         }
-        if (amount < 0 || amount > 1) {
-            throw new IllegalArgumentException("Amount must be 0 or 1");
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
         }
         this.resources.merge(resourceType, amount, Integer::sum);
     }
