@@ -10,9 +10,9 @@ This document covers the classes and public methods needed to fully initialize a
 
 ```
 ResourceType (enum)
+TerrainType (enum)
 PlayerColor (enum)
-
-Hex ──────────────────► ResourceType
+Hex ──────────────────► TerrainType
 Vertex ────────────────► Hex (adjacent hexes)
 Edge ──────────────────► Vertex (two endpoints)
 Board ─────────────────► Hex, Vertex, Edge
@@ -27,7 +27,12 @@ SetupPhase ────────────► Game, Vertex, Edge
 
 ### `ResourceType`
 ```
-BRICK, LUMBER, ORE, GRAIN, WOOL, DESERT
+BRICK, LUMBER, ORE, GRAIN, WOOL
+```
+
+### `TerrainType`
+```
+HILLS, FOREST, MOUNTAINS, FIELDS, PASTURE, DESERT
 ```
 
 ### `PlayerColor`
@@ -45,18 +50,18 @@ RED, BLUE, WHITE, ORANGE
 
 Represents one terrain tile on the board.
 
-| Field         | Type           | Description                                   |
-|---------------|----------------|-----------------------------------------------|
-| `resourceType`| `ResourceType` | The resource this hex produces                |
-| `numberToken` | `int`          | Dice number (2–12, never 7); 0 for Desert     |
+| Field         | Type           | Description                               |
+|---------------|----------------|-------------------------------------------|
+| `terrainType` | `TerrainType`  | The terrain type of this hex              |
+| `numberToken` | `int`          | Dice number (2–12, never 7); 0 for Desert |
 
-| Method                             | Return Type      | Description                                              |
-|------------------------------------|------------------|----------------------------------------------------------|
-| `Hex(ResourceType, int)`           | —                | Constructor; throws `IllegalArgumentException` if numberToken is invalid (7, <2, or >12) or if DESERT is given a token |
-| `getResourceType()`                | `ResourceType`   | Returns the hex's resource type                          |
-| `getNumberToken()`                 | `int`            | Returns the number token (0 if Desert)                   |
-| `isDesert()`                       | `boolean`        | Returns true if resourceType is DESERT                   |
-| `producesResource()`               | `boolean`        | Returns false for Desert, true otherwise                 |
+| Method                  | Return Type     | Description                                                                                                            |
+|-------------------------|-----------------|------------------------------------------------------------------------------------------------------------------------|
+| `Hex(TerrainType, int)` | —               | Constructor; throws `IllegalArgumentException` if numberToken is invalid (7, <2, or >12) or if DESERT is given a token |
+| `getTerrainType()`      | `TerrainType`   | Returns the hex's terrain type                                                                                         |
+| `getNumberToken()`      | `int`           | Returns the number token (0 if Desert)                                                                                 |
+| `isDesert()`            | `boolean`       | Returns true if terrainType is DESERT                                                                                  |
+| `producesResource()`    | `boolean`       | Returns false for Desert, true otherwise                                                                               |
 
 **Invariants:**
 - Desert hex always has `numberToken == 0`
@@ -68,20 +73,22 @@ Represents one terrain tile on the board.
 
 An intersection on the board — the point where up to 3 hexes meet. Settlements and cities are placed here.
 
-| Field           | Type           | Description                                     |
-|-----------------|----------------|-------------------------------------------------|
-| `id`            | `int`          | Unique identifier (0–53)                        |
-| `adjacentHexes` | `List<Hex>`    | Hexes touching this intersection (1–3)          |
-| `adjacentVertices` | `List<Vertex>` | Neighboring intersections (for Distance Rule) |
-| `owner`         | `Player`       | Null if unoccupied                              |
+| Field               | Type           | Description                                     |
+|---------- ----------|----------------|-------------------------------------------------|
+| `id`                | `int`          | Unique identifier (0–53)                        |
+| `adjacentHexes`     | `List<Hex>`    | Hexes touching this intersection (1–3)          |
+| `adjacentVertices`  | `List<Vertex>` | Neighboring intersections (for Distance Rule)   |
+| `owner`             | `Player`       | Null if unoccupied                              |
 
-| Method                        | Return Type   | Description                                         |
-|-------------------------------|---------------|-----------------------------------------------------|
-| `getId()`                     | `int`         | Returns the vertex id                               |
-| `isOccupied()`                | `boolean`     | Returns true if a settlement or city is placed here |
-| `getOwner()`                  | `Player`      | Returns the occupying player, or null               |
-| `getAdjacentHexes()`          | `List<Hex>`   | Returns hexes adjacent to this vertex               |
-| `getAdjacentVertices()`       | `List<Vertex>`| Returns neighboring vertices                        |
+| Method                                                                     | Return Type          | Description                                                                            |
+|----------------------------------------------------------------------------|----------------------|----------------------------------------------------------------------------------------|
+| `Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices)`   | —                    | Constructor; throws `IllegalArgumentException` if id is out of range or lists are null |
+| `getId()`                                                                  | `int`                | Returns the vertex id                                                                  |
+| `setOwner(Player player)`                                                  | `void`               | Sets the owner of this vertex when a settlement is placed                              |
+| `isOccupied()`                                                             | `boolean`            | Returns true if a settlement or city is placed here                                    |
+| `getOwner()`                                                               | `Optional<Player>`   | Returns the occupying player as an Optional, or Optional.empty() if unoccupied         |
+| `getAdjacentHexes()`                                                       | `List<Hex>`          | Returns hexes adjacent to this vertex                                                  |
+| `getAdjacentVertices()`                                                    | `List<Vertex>`       | Returns neighboring vertices                                                           |
 
 ---
 
@@ -89,19 +96,21 @@ An intersection on the board — the point where up to 3 hexes meet. Settlements
 
 A path on the board — the border between two hexes (or a hex and the frame). Roads are placed here.
 
-| Field       | Type       | Description                             |
-|-------------|------------|-----------------------------------------|
-| `id`        | `int`      | Unique identifier (0–71)                |
-| `endpoints` | `Vertex[]` | The two vertices this edge connects     |
-| `owner`     | `Player`   | Null if no road placed                  |
+| Field       | Type       | Description                         |
+|-------------|------------|-------------------------------------|
+| `id`        | `int`      | Unique identifier (0–71)            |
+| `endpoints` | `Vertex[]` | The two vertices this edge connects |
+| `owner`     | `Player`   | Null if no road placed              |
 
-| Method              | Return Type | Description                                   |
-|---------------------|-------------|-----------------------------------------------|
-| `getId()`           | `int`       | Returns the edge id                           |
-| `hasRoad()`         | `boolean`   | Returns true if a road is placed here         |
-| `getOwner()`        | `Player`    | Returns the player who placed a road, or null |
-| `getEndpoints()`    | `Vertex[]`  | Returns the two endpoint vertices             |
-| `connectsTo(Vertex)`| `boolean`   | Returns true if the given vertex is an endpoint |
+| Method                                             | Return Type         | Description                                                                            |
+|----------------------------------------------------|---------------------|----------------------------------------------------------------------------------------|
+| `Edge(int id, Vertex endpoint1, Vertex endpoint2)` | —                   | Constructor; throws `IllegalArgumentException` if id is invalid or endpoints are null  |
+| `getId()`                                          | `int`               | Returns the edge id                                                                    |
+| `hasRoad()`                                        | `boolean`           | Returns true if a road is placed here                                                  |
+| `setOwner(Player player)`                          | `void`              | Sets the owner of this edge when a road is placed                                      | 
+| `getOwner()`                                       | `Optional<Player>`  | Returns the occupying player as an Optional, or Optional.empty() if unoccupied         |
+| `getEndpoints()`                                   | `Vertex[]`          | Returns the two endpoint vertices                                                      |
+| `connectsTo(Vertex)`                               | `boolean`           | Returns true if the given vertex is an endpoint                                        |
 
 ---
 
@@ -115,22 +124,22 @@ Holds the complete board topology: all hexes, vertices, and edges.
 | `vertices` | `List<Vertex>` | All 54 intersection points            |
 | `edges`    | `List<Edge>`   | All 72 paths                          |
 
-| Method                                    | Return Type    | Description                                                                 |
-|-------------------------------------------|----------------|-----------------------------------------------------------------------------|
-| `Board(List<Hex>)`                        | —              | Constructor; throws `IllegalArgumentException` if hex list is invalid (see invariants) |
-| `getHexes()`                              | `List<Hex>`    | Returns all 19 hexes                                                        |
-| `getVertices()`                           | `List<Vertex>` | Returns all 54 vertices                                                     |
-| `getEdges()`                              | `List<Edge>`   | Returns all 72 edges                                                        |
-| `getVertex(int id)`                       | `Vertex`       | Returns the vertex with the given id                                        |
-| `getEdge(int id)`                         | `Edge`         | Returns the edge with the given id                                          |
-| `getHexCount(ResourceType)`               | `int`          | Returns the number of hexes of the given type                               |
-| `satisfiesDistanceRule(Vertex)`           | `boolean`      | Returns true if no adjacent vertex of the given vertex is occupied          |
-| `isConnectedToPlayer(Vertex, Player)`     | `boolean`      | Returns true if any edge adjacent to the vertex has a road owned by player  |
+| Method                                | Return Type    | Description                                                                 |
+|---------------------------------------|----------------|-----------------------------------------------------------------------------|
+| `Board(List<Hex>)`                    | —              | Constructor; throws `IllegalArgumentException` if hex list is invalid (see invariants) |
+| `getHexes()`                          | `List<Hex>`    | Returns all 19 hexes                                                        |
+| `getVertices()`                       | `List<Vertex>` | Returns all 54 vertices                                                     |
+| `getEdges()`                          | `List<Edge>`   | Returns all 72 edges                                                        |
+| `getVertex(int id)`                   | `Vertex`       | Returns the vertex with the given id                                        |
+| `getEdge(int id)`                     | `Edge`         | Returns the edge with the given id                                          |
+| `getHexCount(TerrainType)`            | `int`          | Returns the number of hexes of the given terrain type |
+| `satisfiesDistanceRule(Vertex)`       | `boolean`      | Returns true if no adjacent vertex of the given vertex is occupied          |
+| `isConnectedToPlayer(Vertex, Player)` | `boolean`      | Returns true if any edge adjacent to the vertex has a road owned by player  |
 
 **Invariants (validated in constructor):**
 - Exactly 19 hexes total
 - Exactly 1 DESERT hex
-- Exactly 4 GRAIN, 4 PASTURE, 4 FOREST, 3 ORE, 3 BRICK hexes (using ResourceType values GRAIN, WOOL, LUMBER, ORE, BRICK)
+- Exactly 4 FIELDS, 4 PASTURE, 4 FOREST, 3 MOUNTAINS, 3 HILLS hexes
 - Exactly 18 non-desert hexes have valid number tokens
 
 ---
@@ -223,6 +232,7 @@ Manages the two-round initial placement sequence: clockwise in Round 1, counter-
 ```
 src/main/java/domain/
 ├── ResourceType.java       (enum)
+├── TerrainType.java       (enum)
 ├── PlayerColor.java        (enum)
 ├── Hex.java
 ├── Vertex.java
