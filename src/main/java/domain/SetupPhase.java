@@ -3,9 +3,17 @@ package domain;
 import java.util.List;
 
 public class SetupPhase {
+    private final Game game;
 
     public SetupPhase(Game game) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        validateGame(game);
+        this.game = game;
+    }
+
+    private void validateGame(Game game){
+       if (game == null) {
+           throw new IllegalArgumentException("Game cannot be null");
+       }
     }
 
     public List<Player> getPlacementOrder() {
