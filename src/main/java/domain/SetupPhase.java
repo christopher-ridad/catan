@@ -10,7 +10,7 @@ public class SetupPhase {
         this.game = game;
     }
 
-    private void validateGame(Game game){
+    private void validateGame(Game game) {
        if (game == null) {
            throw new IllegalArgumentException("Game cannot be null");
        }
