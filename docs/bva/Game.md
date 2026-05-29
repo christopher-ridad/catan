@@ -79,3 +79,8 @@
 - **TC17: gameConstructor_withTwoPlayersOfSameColor_throwsIllegalArgument** ( implemented )
   - State of the system: 2 players both assigned PlayerColor.RED passed to constructor
   - Expected output: IllegalArgumentException thrown
+    
+- **TC19: gameConstructor_withDuplicateColorAmongFourPlayers_throwsIllegalArgument** ( implemented )
+  - State of the system: 4 players where two share PlayerColor.BLUE passed to constructor 
+  - Expected output: IllegalArgumentException thrown
+
