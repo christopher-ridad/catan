@@ -84,3 +84,6 @@
   - State of the system: 4 players where two share PlayerColor.BLUE passed to constructor 
   - Expected output: IllegalArgumentException thrown
 
+- **TC20: gameConstructor_withAllUniqueColors_doesNotThrow** ( implemented )
+  - State of the system: 4 players each with a distinct PlayerColor (RED, BLUE, ORANGE, WHITE) passed to constructor 
+  - Expected output: no exception thrown
