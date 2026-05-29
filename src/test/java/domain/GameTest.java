@@ -172,6 +172,12 @@ public class GameTest {
         assertSame(alice, game.getPlayer(0));
     }
 
+    @Test
+    void getPlayer_withLastIndex_returnsLastPlayer() {
+        Game game = new Game(Arrays.asList(alice, bob, charlie), board);
+        assertSame(charlie, game.getPlayer(2));
+    }
+
     //
     // Fetch board
     //
