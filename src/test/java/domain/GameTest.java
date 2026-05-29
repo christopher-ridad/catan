@@ -206,4 +206,9 @@ public class GameTest {
                 () -> new Game(Arrays.asList(alice, bob, charlie2, diana), board));
     }
 
+    @Test
+    void gameConstructor_withAllUniqueColors_doesNotThrow() {
+        assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob, charlie, diana), board));
+    }
+
 }
