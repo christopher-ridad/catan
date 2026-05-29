@@ -58,14 +58,24 @@
     - State of the system: Game constructed with 4 valid players
     - Expected output: 4
 
-## Method under test: `getCurrentPlayer()`
+## Method under test: `getPlayer(int index)`
 
-- **TC14: getCurrentPlayer_atGameStart_returnsFirstPlayer** ( implemented )
-    - State of the system: Game constructed with 3 valid players, no turns have been taken
-    - Expected output: the first player passed to the constructor
+- **TC16: getPlayer_withIndexZero_returnsFirstPlayer** ( implemented )
+  - State of the system: Game constructed with 3 valid players, index 0 passed to getPlayer()
+  - Expected output: the first player passed to the constructor
+
+- **TC17: getPlayer_withLastIndex_returnsLastPlayer** ( implemented )
+  - State of the system: Game constructed with 3 valid players, index 2 (last valid index) passed to getPlayer()
+  - Expected output: the third player passed to the constructor
 
 ## Method under test: `getBoard()`
 
-- **TC15: getCurrentPlayer_atGameStart_returnsFirstPlayer** ( implemented )
+- **TC15: getBoard_returnsCorrectBoard** ( implemented )
     - State of the system: Game constructed with valid board
     - Expected output: the board object used to instantiate the game
+
+## Method under test: `Game(List<Object> players, Board board)` — duplicate color validation
+
+- **TC18: gameConstructor_withTwoPlayersOfSameColor_throwsIllegalArgument** ( implemented )
+  - State of the system: 2 players both assigned PlayerColor.RED passed to constructor
+  - Expected output: IllegalArgumentException thrown

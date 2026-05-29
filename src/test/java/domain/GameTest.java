@@ -163,13 +163,13 @@ public class GameTest {
     }
 
     //
-    // Current player
+    // getPlayer by index
     //
 
     @Test
-    void getCurrentPlayer_atGameStart_returnsFirstPlayer() {
+    void getPlayer_withIndexZero_returnsFirstPlayer() {
         Game game = new Game(Arrays.asList(alice, bob, charlie), board);
-        assertSame(alice, game.getCurrentPlayer());
+        assertSame(alice, game.getPlayer(0));
     }
 
     //
@@ -180,6 +180,17 @@ public class GameTest {
     void getBoard_returnsValidBoardObject() {
         Game game = new Game(Arrays.asList(alice, bob), board);
         assertSame(board, game.getBoard());
+    }
+
+    //
+    // Duplicate color validation
+    //
+
+    @Test
+    void gameConstructor_withTwoPlayersOfSameColor_throwsIllegalArgument() {
+        Player aliceRed = new Player("Alice2", PlayerColor.RED); // RED same as alice
+        assertThrows(IllegalArgumentException.class,
+                () -> new Game(Arrays.asList(alice, aliceRed), board));
     }
 
 }
