@@ -199,4 +199,11 @@ public class GameTest {
                 () -> new Game(Arrays.asList(alice, aliceRed), board));
     }
 
+    @Test
+    void gameConstructor_withDuplicateColorAmongFourPlayers_throwsIllegalArgument() {
+        Player charlie2 = new Player("Charlie2", PlayerColor.BLUE); // BLUE same as bob
+        assertThrows(IllegalArgumentException.class,
+                () -> new Game(Arrays.asList(alice, bob, charlie2, diana), board));
+    }
+
 }
