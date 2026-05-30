@@ -132,4 +132,28 @@ public class ResourceProductionTest {
         assertEquals(0, alice.getResourceCount(ResourceType.BRICK));
         assertEquals(0, bob.getResourceCount(ResourceType.BRICK));
     }
+
+    @Test
+    void DistributeResources_BankHasExactlyEnough_ResourceDistributed() {
+        Player player = new Player("Alice", PlayerColor.RED);
+        Hex hex = new Hex(TerrainType.HILLS, 6);
+        Vertex vertex = settledVertex(0, player, List.of(hex));
+        Bank bank = bankWith(ResourceType.BRICK, 1);
+
+        new ResourceProduction().distributeResources(6, List.of(vertex), bank);
+
+        assertEquals(1, player.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
+    void DistributeResources_BankDeductedAfterDistribution() {
+        Player player = new Player("Alice", PlayerColor.RED);
+        Hex hex = new Hex(TerrainType.HILLS, 6);
+        Vertex vertex = settledVertex(0, player, List.of(hex));
+        Bank bank = bankWith(ResourceType.BRICK, 5);
+
+        new ResourceProduction().distributeResources(6, List.of(vertex), bank);
+
+        assertEquals(4, bank.getResourceCount(ResourceType.BRICK));
+    }
 }
