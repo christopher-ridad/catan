@@ -66,15 +66,15 @@
 
 ## Method under test: `isCity()`
 
-- **TC14: IsCity_WhenNoOwner_ReturnsFalse** ( :x: )
+- **TC14: IsCity_WhenNoOwner_ReturnsFalse** ( :white_check_mark: )
   - State of the system: Vertex with no owner set
   - Expected output: `false`
 
-- **TC15: IsCity_WhenOwnerSetButNotUpgraded_ReturnsFalse** ( :x: )
+- **TC15: IsCity_WhenOwnerSetButNotUpgraded_ReturnsFalse** ( :white_check_mark: )
   - State of the system: Vertex with an owner set, `upgradeToCity()` not called
   - Expected output: `false`
 
-- **TC16: IsCity_AfterUpgradeToCity_ReturnsTrue** ( :x: )
+- **TC16: IsCity_AfterUpgradeToCity_ReturnsTrue** ( :white_check_mark: )
   - State of the system: Vertex with an owner set, `upgradeToCity()` called
   - Expected output: `true`
 

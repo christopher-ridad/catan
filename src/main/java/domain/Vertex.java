@@ -69,10 +69,10 @@ public final class Vertex {
     }
 
     public boolean isCity() {
-        throw new UnsupportedOperationException("Not implemented");
+        return city;
     }
 
     public void upgradeToCity() {
-        throw new UnsupportedOperationException("Not implemented");
+        this.city = true;
     }
 }
