@@ -4,6 +4,13 @@ public enum TerrainType {
     HILLS, FOREST, MOUNTAINS, FIELDS, PASTURE, DESERT;
 
     public ResourceType getResourceType() {
-        throw new UnsupportedOperationException("Not implemented");
+        switch (this) {
+            case HILLS: return ResourceType.BRICK;
+            case FOREST: return ResourceType.LUMBER;
+            case MOUNTAINS: return ResourceType.ORE;
+            case FIELDS: return ResourceType.GRAIN;
+            case PASTURE: return ResourceType.WOOL;
+            default: throw new IllegalStateException("DESERT does not produce a resource");
+        }
     }
 }
