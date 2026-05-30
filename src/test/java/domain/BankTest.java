@@ -70,4 +70,11 @@ public class BankTest {
         Bank bank = bankWithBrick(5);
         assertThrows(IllegalArgumentException.class, () -> bank.deduct(ResourceType.BRICK, 6));
     }
+
+    @Test
+    void PackagePrivateConstructor_WithMissingResourceType_ThrowsIllegalArgumentException() {
+        Map<ResourceType, Integer> incomplete = new EnumMap<>(ResourceType.class);
+        incomplete.put(ResourceType.BRICK, 5);
+        assertThrows(IllegalArgumentException.class, () -> new Bank(incomplete));
+    }
 }

@@ -49,3 +49,30 @@
     - **State of the system**: roll = 6, one HILLS hex with token 6, one player has settlement
       adjacent, bank starts with 5 BRICK
     - **Expected output**: bank's BRICK count is 4 after distribution (deduction actually occurred)
+
+- **TC11: DistributeResources_NullVertices_ThrowsIllegalArgumentException** ( :white_check_mark: )
+    - **State of the system**: `null` passed as `vertices`
+    - **Expected output**: `IllegalArgumentException`
+
+- **TC12: DistributeResources_NullBank_ThrowsIllegalArgumentException** ( :white_check_mark: )
+    - **State of the system**: `null` passed as `bank`
+    - **Expected output**: `IllegalArgumentException`
+
+- **TC13: DistributeResources_SinglePlayer_CityAdjacent_BankHasOneLessThanNeeded_PlayerReceivesWhatRemains** ( :white_check_mark: )
+    - **State of the system**: roll = 6, one HILLS hex with token 6, one player has a city on an
+      adjacent vertex (needs 2 BRICK), bank has exactly 1 BRICK (one below what the city needs)
+    - **Expected output**: player's BRICK count increases by 1 (receives what remains per Catan rules:
+      when only 1 player is affected and bank is short, that player gets as many as remain)
+
+- **TC14: DistributeResources_TwoPlayers_BankHasExactAmountNeededForBoth_BothReceive** ( :white_check_mark: )
+    - **State of the system**: roll = 8, one HILLS hex with token 8, two players each have a settlement
+      adjacent (total needed = 2 BRICK), bank has exactly 2 BRICK (at the lower boundary of "enough")
+    - **Expected output**: both players' BRICK count increases by 1 (bank exactly covering demand is
+      treated as sufficient — not as a shortfall)
+
+- **TC15: DistributeResources_TwoPlayersNeedingDifferentResources_BankShortForOne_AffectedPlayerReceivesWhatRemains** ( :white_check_mark: )
+    - **State of the system**: roll = 6, one HILLS hex (token 6) and one MOUNTAINS hex (token 6);
+      one player has a city adjacent to HILLS (needs 2 BRICK), another has a settlement adjacent to
+      MOUNTAINS (needs 1 ORE); bank has 1 BRICK (short for the city) and 19 ORE
+    - **Expected output**: city player receives 1 BRICK (single-player exception applies — only one
+      player needs BRICK), settlement player receives 1 ORE (normal distribution)

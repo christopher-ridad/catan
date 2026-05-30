@@ -37,3 +37,10 @@
 - **TC8: Deduct_OneMoreThanAvailable_ThrowsIllegalArgumentException** ( :white_check_mark: )
     - **State of the system**: Bank with 5 BRICK, amount = 6 (one above boundary)
     - **Expected output**: `IllegalArgumentException`
+
+## Method under test: `Bank(Map<ResourceType, Integer>)` (package-private)
+
+- **TC9: PackagePrivateConstructor_WithMissingResourceType_ThrowsIllegalArgumentException** ( :white_check_mark: )
+    - **State of the system**: map contains only BRICK (missing LUMBER, ORE, GRAIN, WOOL)
+    - **Expected output**: `IllegalArgumentException` (all resource types must be present to prevent
+      `NullPointerException` on auto-unboxing in `getResourceCount`)

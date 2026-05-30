@@ -73,6 +73,9 @@ public final class Vertex {
     }
 
     public void upgradeToCity() {
+        if (!isOccupied()) {
+            throw new IllegalStateException("Cannot upgrade an unoccupied vertex to a city");
+        }
         this.city = true;
     }
 }

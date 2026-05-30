@@ -120,4 +120,10 @@ public class VertexTest {
         vertex.upgradeToCity();
         assertTrue(vertex.isCity());
     }
+
+    @Test
+    void UpgradeToCity_WhenVertexIsUnoccupied_ThrowsIllegalStateException() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        assertThrows(IllegalStateException.class, vertex::upgradeToCity);
+    }
 }

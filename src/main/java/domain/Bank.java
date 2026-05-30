@@ -16,6 +16,11 @@ public class Bank {
     }
 
     Bank(Map<ResourceType, Integer> initialResources) {
+        for (ResourceType type : ResourceType.values()) {
+            if (!initialResources.containsKey(type)) {
+                throw new IllegalArgumentException("Initial resources must include all resource types");
+            }
+        }
         this.resources = new EnumMap<>(initialResources);
     }
 

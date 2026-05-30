@@ -81,3 +81,7 @@
 ## Method under test: `upgradeToCity()`
 
 - **TC17: UpgradeToCity_SetsIsCityTrue** ( implemented in TC16 )
+
+- **TC18: UpgradeToCity_WhenVertexIsUnoccupied_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: Vertex with no owner set, `upgradeToCity()` called
+  - Expected output: `IllegalStateException` (a city upgrade requires an existing settlement)

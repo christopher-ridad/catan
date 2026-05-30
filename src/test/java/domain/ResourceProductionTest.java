@@ -156,4 +156,67 @@ public class ResourceProductionTest {
 
         assertEquals(4, bank.getResourceCount(ResourceType.BRICK));
     }
+
+    @Test
+    void DistributeResources_NullVertices_ThrowsIllegalArgumentException() {
+        Bank bank = new Bank();
+        assertThrows(IllegalArgumentException.class,
+                () -> new ResourceProduction().distributeResources(6, null, bank));
+    }
+
+    @Test
+    void DistributeResources_NullBank_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new ResourceProduction().distributeResources(6, new ArrayList<>(), null));
+    }
+
+    @Test
+    void DistributeResources_SinglePlayer_CityAdjacent_BankHasOneLessThanNeeded_PlayerReceivesWhatRemains() {
+        Player player = new Player("Alice", PlayerColor.RED);
+        Hex hex = new Hex(TerrainType.HILLS, 6);
+        Vertex vertex = cityVertex(0, player, List.of(hex));
+        Bank bank = bankWith(ResourceType.BRICK, 1);
+
+        new ResourceProduction().distributeResources(6, List.of(vertex), bank);
+
+        assertEquals(1, player.getResourceCount(ResourceType.BRICK));
+        assertEquals(0, bank.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
+    void DistributeResources_TwoPlayers_BankHasExactAmountNeededForBoth_BothReceive() {
+        Hex hex = new Hex(TerrainType.HILLS, 8);
+        Player alice = new Player("Alice", PlayerColor.RED);
+        Player bob = new Player("Bob", PlayerColor.BLUE);
+        Vertex v1 = settledVertex(0, alice, List.of(hex));
+        Vertex v2 = settledVertex(1, bob, List.of(hex));
+        Bank bank = bankWith(ResourceType.BRICK, 2);
+
+        new ResourceProduction().distributeResources(8, List.of(v1, v2), bank);
+
+        assertEquals(1, alice.getResourceCount(ResourceType.BRICK));
+        assertEquals(1, bob.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
+    void DistributeResources_TwoPlayersNeedingDifferentResources_BankShortForOne_AffectedPlayerReceivesWhatRemains() {
+        Hex hillsHex = new Hex(TerrainType.HILLS, 6);
+        Hex mountainsHex = new Hex(TerrainType.MOUNTAINS, 6);
+        Player alice = new Player("Alice", PlayerColor.RED);
+        Player bob = new Player("Bob", PlayerColor.BLUE);
+        Vertex aliceVertex = cityVertex(0, alice, List.of(hillsHex));
+        Vertex bobVertex = settledVertex(1, bob, List.of(mountainsHex));
+        Map<ResourceType, Integer> amounts = new EnumMap<>(ResourceType.class);
+        for (ResourceType t : ResourceType.values()) {
+            amounts.put(t, 0);
+        }
+        amounts.put(ResourceType.BRICK, 1);
+        amounts.put(ResourceType.ORE, 19);
+        Bank bank = new Bank(amounts);
+
+        new ResourceProduction().distributeResources(6, List.of(aliceVertex, bobVertex), bank);
+
+        assertEquals(1, alice.getResourceCount(ResourceType.BRICK));
+        assertEquals(1, bob.getResourceCount(ResourceType.ORE));
+    }
 }
