@@ -20,10 +20,23 @@ public class Bank {
     }
 
     public int getResourceCount(ResourceType type) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (type == null) {
+            throw new IllegalArgumentException("Resource type cannot be null");
+        }
+        return resources.get(type);
     }
 
     public void deduct(ResourceType type, int amount) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (type == null) {
+            throw new IllegalArgumentException("Resource type cannot be null");
+        }
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
+        int current = resources.get(type);
+        if (amount > current) {
+            throw new IllegalArgumentException("Insufficient resources in bank");
+        }
+        resources.put(type, current - amount);
     }
 }
