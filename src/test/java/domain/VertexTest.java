@@ -97,4 +97,27 @@ public class VertexTest {
         Vertex vertex = new Vertex(0, new ArrayList<>(), adjacentVertices);
         assertEquals(adjacentVertices, vertex.getAdjacentVertices());
     }
+
+    @Test
+    void IsCity_WhenNoOwner_ReturnsFalse() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        assertFalse(vertex.isCity());
+    }
+
+    @Test
+    void IsCity_WhenOwnerSetButNotUpgraded_ReturnsFalse() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Player player = EasyMock.createMock(Player.class);
+        vertex.setOwner(player);
+        assertFalse(vertex.isCity());
+    }
+
+    @Test
+    void IsCity_AfterUpgradeToCity_ReturnsTrue() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Player player = EasyMock.createMock(Player.class);
+        vertex.setOwner(player);
+        vertex.upgradeToCity();
+        assertTrue(vertex.isCity());
+    }
 }

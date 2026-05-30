@@ -10,6 +10,7 @@ public final class Vertex {
 
     private final int id;
     private Player owner = null;
+    private boolean city = false;
     private final List<Hex> adjacentHexes;
     private final List<Vertex> adjacentVertices;
 
@@ -65,5 +66,13 @@ public final class Vertex {
 
     public List<Vertex> getAdjacentVertices() {
         return new ArrayList<>(adjacentVertices);
+    }
+
+    public boolean isCity() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void upgradeToCity() {
+        throw new UnsupportedOperationException("Not implemented");
     }
 }
