@@ -13,6 +13,8 @@ public class DiceRoll {
     }
 
     public int roll() {
-        throw new UnsupportedOperationException("Not implemented");
+        int die1 = random.nextInt(6) + 1;
+        int die2 = random.nextInt(6) + 1;
+        return die1 + die2;
     }
 }

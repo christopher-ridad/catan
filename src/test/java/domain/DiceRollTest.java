@@ -1,4 +1,4 @@
-git package domain;
+package domain;
 
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,7 @@ public class DiceRollTest {
     @Test
     void roll_canReturn7() {
         Random mockRandom = EasyMock.createMock(Random.class);
-        EasyMock.expect(mockRandom.nextInt(6)).andReturn(2).andReturn(4);
+        EasyMock.expect(mockRandom.nextInt(6)).andReturn(2).andReturn(3);
         EasyMock.replay(mockRandom);
 
         DiceRoll dice = new DiceRoll(mockRandom);
