@@ -4,7 +4,7 @@
 
 This document covers the classes and public methods needed to execute a single player's turn in Catan. A turn has three mandatory phases in order: **Resource Production** (dice roll), **Trade** (optional), and **Build** (optional). This design doc covers the full first-turn implementation, beginning from the moment `SetupPhase` is complete and the first player rolls.
 
-The classes introduced here are `Dice`, `Bank`, `TradeOffer`, `TurnPhase` (enum), and `Turn`. They depend on the domain objects already implemented in the Setup Phase (`Game`, `Board`, `Hex`, `Vertex`, `Edge`, `Player`, `ResourceType`).
+The classes introduced here are `DiceRoll`, `Bank`, `TradeOffer`, `TurnPhase` (enum), and `Turn`. They depend on the domain objects already implemented in the Setup Phase (`Game`, `Board`, `Hex`, `Vertex`, `Edge`, `Player`, `ResourceType`).
 
 ---
 
@@ -12,10 +12,10 @@ The classes introduced here are `Dice`, `Bank`, `TradeOffer`, `TurnPhase` (enum)
 
 ```
 TurnPhase (enum)
-Dice ──────────────────────► (no domain dependencies; pure randomness)
+DiceRoll ──────────────────► (no domain dependencies; pure randomness)
 Bank ──────────────────────► ResourceType
 TradeOffer ────────────────► Player, ResourceType
-Turn ──────────────────────► Game, Dice, Bank, TradeOffer, Vertex, Edge, TurnPhase
+Turn ──────────────────────► Game, DiceRoll, Bank, TradeOffer, Vertex, Edge, TurnPhase
 ```
 
 ---
@@ -34,27 +34,17 @@ Represents the current phase within an active turn. Phases advance in order and 
 
 ---
 
-### `Dice`
+### `DiceRoll`
 
-Simulates rolling two dice. Keeps the most recent individual die values so callers can detect a 7 and inspect each die separately.
+Simulates rolling two dice and returns their sum.
 
-| Field     | Type  | Description                              |
-|-----------|-------|------------------------------------------|
-| `die1`    | `int` | Result of the first die (last roll)      |
-| `die2`    | `int` | Result of the second die (last roll)     |
-
-| Method         | Return Type | Description                                                                                 |
-|----------------|-------------|---------------------------------------------------------------------------------------------|
-| `Dice()`       | —           | Default constructor; initializes both dice to 0 (no roll yet)                               |
-| `roll()`       | `int`       | Rolls both dice, stores results in `die1` and `die2`, returns their sum (2–12)              |
-| `getTotal()`   | `int`       | Returns the sum of the last roll; throws `IllegalStateException` if `roll()` has not been called |
-| `getDie1()`    | `int`       | Returns the value of the first die from the last roll                                       |
-| `getDie2()`    | `int`       | Returns the value of the second die from the last roll                                      |
-| `isSevenRolled()` | `boolean` | Returns true if the last roll summed to 7                                                  |
+| Method                  | Return Type | Description                                          |
+|-------------------------|-------------|------------------------------------------------------|
+| `DiceRoll(Random)`      | —           | Constructor; throws `NullPointerException` if random is null |
+| `roll()`                | `int`       | Rolls both dice and returns their sum (2–12)         |
 
 **Invariants:**
-- `die1` and `die2` are each in {1, 2, 3, 4, 5, 6} after any `roll()` call
-- `getTotal()` == `die1` + `die2` always holds after a roll
+- Every value returned by `roll()` is in [2, 12]
 
 ---
 
@@ -125,7 +115,7 @@ Orchestrates a single player's turn through its three phases. Enforces phase ord
 |------------------------|---------------|--------------------------------------------------------------------------------|
 | `game`                 | `Game`        | The current game state                                                         |
 | `activePlayer`         | `Player`      | The player taking this turn                                                    |
-| `dice`                 | `Dice`        | The dice used for resource production                                          |
+| `dice`                 | `DiceRoll`    | The dice used for resource production                                          |
 | `bank`                 | `Bank`        | The shared resource bank                                                       |
 | `phase`                | `TurnPhase`   | The current phase of this turn                                                 |
 | `rolledThisTurn`       | `boolean`     | True once `rollDice()` has been called                                         |
@@ -134,7 +124,7 @@ Orchestrates a single player's turn through its three phases. Enforces phase ord
 
 | Method                                                      | Return Type | Description                                                                                                                                                              |
 |-------------------------------------------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Turn(Game game, Player activePlayer, Dice dice, Bank bank)`| —           | Constructor; validates no argument is null, sets `phase` to `PRODUCTION`                                                                                                |
+| `Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank)`| —           | Constructor; validates no argument is null, sets `phase` to `PRODUCTION`                                                                                                |
 | `getActivePlayer()`                                         | `Player`    | Returns the player whose turn this is                                                                                                                                    |
 | `getPhase()`                                               | `TurnPhase` | Returns the current phase                                                                                                                                                |
 | `rollDice()`                                               | `int`       | Calls `dice.roll()`, advances to `TRADE` phase, triggers production or robber logic; throws `IllegalStateException` if called outside `PRODUCTION` phase or called twice |
@@ -218,7 +208,7 @@ src/main/java/domain/
 ├── Player.java                (existing)
 ├── Game.java                  (existing)
 ├── SetupPhase.java            (existing)
-├── Dice.java                  (NEW)
+├── DiceRoll.java              (NEW)
 ├── Bank.java                  (NEW)
 ├── TradeOffer.java            (NEW)
 └── Turn.java                  (NEW)
@@ -229,7 +219,7 @@ src/test/java/domain/
 ├── PlayerTest.java            (existing)
 ├── GameTest.java              (existing)
 ├── SetupPhaseTest.java        (existing)
-├── DiceTest.java              (NEW)
+├── DiceRollTest.java          (NEW)
 ├── BankTest.java              (NEW)
 ├── TradeOfferTest.java        (NEW)
 └── TurnTest.java              (NEW)
@@ -241,7 +231,7 @@ src/test/java/domain/
 
 - `Turn` depends on `Game` for board topology and player list, but should not modify `Game` state directly. All state mutations (resource counts, vertex/edge ownership) go through `Player`, `Vertex`, and `Edge` methods already defined in the Setup Phase design.
 - `Bank` is a standalone class, not embedded in `Game`, so it can be mocked independently in `TurnTest`.
-- `Dice` has no domain dependencies and should be straightforward to test with a fixed-seed or mock subclass for deterministic rolls.
+- `DiceRoll` has no domain dependencies and should be straightforward to test by injecting a seeded or mocked `Random` for deterministic rolls.
 - `TradeOffer` is a pure data/state class with no dependency on `Turn` — test it in isolation in `TradeOfferTest` before wiring it into `TurnTest`.
 - Only one domestic trade offer may be pending at a time. `Turn` must clear `pendingTrade` (set to null) as soon as an offer is accepted or rejected, before another `proposeTrade()` call is permitted.
 - Maritime trade rate lookup in `getMaritimeRate()` requires checking which vertices the active player has settlements or cities on, then inspecting the harbor type at each. This will likely require a `getHarborAt(Vertex)` or similar query on `Board` — that may be a small extension needed there.
