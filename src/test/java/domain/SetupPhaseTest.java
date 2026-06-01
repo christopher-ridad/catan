@@ -94,4 +94,13 @@ public class SetupPhaseTest {
         assertEquals(1, phase4.getCurrentRound());
         assertFalse(phase4.isComplete());
     }
+
+    @Test
+    void placeSettlement_nullPlayer_throwsIllegalArgument() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> phase4.placeSettlement(null, 0),
+                "Player cannot be null"
+        );
+    }
 }

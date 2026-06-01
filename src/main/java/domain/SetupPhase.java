@@ -61,7 +61,9 @@ public class SetupPhase {
     }
 
     public void placeSettlement(Player player, int vertexId) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (player == null) {
+            throw new IllegalArgumentException("Player cannot be null");
+        }
     }
 
     public void placeRoad(Player player, int edgeId) {
