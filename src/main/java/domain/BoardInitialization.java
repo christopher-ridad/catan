@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class BoardInitialization {
-    private BoardInitialization() {}
+    private BoardInitialization() {
+
+    }
 
     private static final int[][] ADJACENT_VERTICES = {
             { 3,  4    }, // vertex  0
@@ -220,7 +222,7 @@ public class BoardInitialization {
         }
         return Collections.unmodifiableList(result);
     }
-    
+
     public static int[][] getEdgeEndpoints() {
         return EDGE_ENDPOINTS;
     }
