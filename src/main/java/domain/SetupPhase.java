@@ -7,10 +7,12 @@ import static java.util.Collections.reverse;
 
 public class SetupPhase {
     private final Game game;
+    private final List<Player> placementOrder;
 
     public SetupPhase(Game game) {
         validateGame(game);
         this.game = game;
+        this.placementOrder = buildPlacementOrder();
     }
 
     private void validateGame(Game game) {
@@ -19,16 +21,20 @@ public class SetupPhase {
        }
     }
 
-    public List<Player> getPlacementOrder() {
-        List<Player> placementOrder = new ArrayList<>();
+    private List<Player> buildPlacementOrder() {
+        List<Player> order = new ArrayList<>();
         List<Player> players = game.getPlayers();
 
-        placementOrder.addAll(players);
+        order.addAll(players);
 
         for (int i = players.size() - 1; i >= 0; i--) {
-            placementOrder.add(players.get(i));
+            order.add(players.get(i));
         }
 
+        return order;
+    }
+
+    public List<Player> getPlacementOrder() {
         return placementOrder;
     }
 
