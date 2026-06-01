@@ -139,7 +139,6 @@ public class SetupPhaseTest {
         assertEquals(p2, phase4.getCurrentPlayer());
         assertTrue(v0.isOccupied());
 
-        // Act & Assert: P2 tries vertex 0 (occupied)
         assertThrows(
                 IllegalStateException.class,
                 () -> phase4.placeSettlement(p2, 0)

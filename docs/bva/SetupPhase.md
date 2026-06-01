@@ -28,7 +28,7 @@
   - **State of the system**: It is P1's turn; `player = P1` (current), `vertexId = 999` (out of range 0–53)
   - **Expected output**: `IllegalArgumentException` (likely delegated to `Board.getVertex()`)
 
-- **TC7: placeSettlement_occupiedVertex_throwsIllegalState** ( :xwhite_check_mark )
+- **TC7: placeSettlement_occupiedVertex_throwsIllegalState** ( :white_check_mark: )
   - **State of the system**: It is P2's turn; Edge (Connected by Vertex 0 & 1) is already occupied by P1's settlement; `player = P2
   - **Expected output**: `IllegalStateException`
 
