@@ -99,8 +99,15 @@ public class SetupPhaseTest {
     void placeSettlement_nullPlayer_throwsIllegalArgument() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> phase4.placeSettlement(null, 0),
-                "Player cannot be null"
+                () -> phase4.placeSettlement(null, 0)
+        );
+    }
+
+    @Test
+    void placeSettlement_wrongPlayer_throwsIllegalState() {
+        assertThrows(
+                IllegalStateException.class,
+                () -> phase4.placeSettlement(p2, 0)
         );
     }
 }

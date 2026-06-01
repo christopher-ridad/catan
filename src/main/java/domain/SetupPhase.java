@@ -64,6 +64,13 @@ public class SetupPhase {
         if (player == null) {
             throw new IllegalArgumentException("Player cannot be null");
         }
+        
+        if (!player.equals(getCurrentPlayer())) {
+            throw new IllegalStateException(
+                    "It is not " + player.getName() + "'s turn. Current player is " +
+                            getCurrentPlayer().getName()
+            );
+        }
     }
 
     public void placeRoad(Player player, int edgeId) {
