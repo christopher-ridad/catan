@@ -2,15 +2,15 @@
 
 ### Method under test: `SetupPhase(Game)`
 
-- **TC1: constructor_nullGame_throwsIllegalArgument** ( :x: )
+- **TC1: constructor_nullGame_throwsIllegalArgument** ( :white_check_mark: )
   - **State of the system**: `game = null`
   - **Expected output**: `IllegalArgumentException`
 
-- **TC2: constructor_validGame_2Players_buildsCorrectPlacementOrder** ( :x: )
+- **TC2: constructor_validGame_2Players_buildsCorrectPlacementOrder** ( :white_check_mark: )
   - **State of the system**: Valid `Game` with players `[P1, P2]`
   - **Expected output**: Phase created; `getPlacementOrder()` returns `[P1, P2, P2, P1]` (length = 4); `getCurrentPlayer()` returns `P1`; `isComplete()` returns `false`
 
-- **TC3: constructor_validGame_4Players_buildsCorrectPlacementOrder** ( :x: )
+- **TC3: constructor_validGame_4Players_buildsCorrectPlacementOrder** ( :white_check_mark: )
   - **State of the system**: Valid `Game` with players `[P1, P2, P3, P4]`
   - **Expected output**: Phase created; `getPlacementOrder()` returns `[P1, P2, P3, P4, P4, P3, P2, P1]` (length = 8); `getCurrentPlayer()` returns `P1`; `isComplete()` returns `false`
 
