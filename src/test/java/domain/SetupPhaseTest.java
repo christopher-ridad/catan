@@ -118,4 +118,31 @@ public class SetupPhaseTest {
                 () -> phase4.placeSettlement(p1, 999)
         );
     }
+
+    @Test
+    void placeSettlement_occupiedVertex_throwsIllegalState() {
+        Vertex v0 = board.getVertex(0);
+        Vertex v1 = board.getVertex(1);
+
+        Edge roadEdge = null;
+        for (Edge edge : board.getEdges()) {
+            if (edge.connectsTo(v0) && !edge.hasRoad()) {
+                roadEdge = edge;
+                break;
+            }
+        }
+        assertNotNull(roadEdge);
+
+        phase4.placeSettlement(p1, 0);
+        phase4.placeRoad(p1, roadEdge.getId());
+
+        assertEquals(p2, phase4.getCurrentPlayer());
+        assertTrue(v0.isOccupied());
+
+        // Act & Assert: P2 tries vertex 0 (occupied)
+        assertThrows(
+                IllegalStateException.class,
+                () -> phase4.placeSettlement(p2, 0)
+        );
+    }
 }
