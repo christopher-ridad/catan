@@ -90,4 +90,14 @@ public class SetupPhaseTest {
         assertEquals(1, phase.getCurrentRound());
         assertFalse(phase.isComplete());
     }
+
+    @Test
+    void constructor_validGame_4Players_buildsCorrectPlacementOrder() {
+        List<Player> expectedOrder = Arrays.asList(p1, p2, p3, p4, p4, p3, p2, p1);
+        assertEquals(expectedOrder, phase4.getPlacementOrder());
+        assertEquals(8, phase4.getPlacementOrder().size());
+        assertEquals(p1, phase4.getCurrentPlayer());
+        assertEquals(1, phase4.getCurrentRound());
+        assertFalse(phase4.isComplete());
+    }
 }
