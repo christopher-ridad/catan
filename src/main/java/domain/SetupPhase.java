@@ -1,6 +1,9 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Collections.reverse;
 
 public class SetupPhase {
     private final Game game;
@@ -17,7 +20,16 @@ public class SetupPhase {
     }
 
     public List<Player> getPlacementOrder() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        List<Player> placementOrder = new ArrayList<>();
+        List<Player> players = game.getPlayers();
+
+        placementOrder.addAll(players);
+
+        for (int i = players.size() - 1; i >= 0; i--) {
+            placementOrder.add(players.get(i));
+        }
+
+        return placementOrder;
     }
 
     public Player getCurrentPlayer() {
