@@ -68,19 +68,11 @@ public class SetupPhase {
     }
 
     public void placeSettlement(Player player, int vertexId) {
-        if (player == null) {
-            throw new IllegalArgumentException("Player cannot be null");
-        }
+        validatePlayer(player);
+        validateCurrentPlayersTurn(player);
 
         if (vertexId < 0 || vertexId > 53) {
             throw new IllegalArgumentException("vertexId must be between 0 and 53");
-        }
-
-        if (!player.equals(getCurrentPlayer())) {
-            throw new IllegalStateException(
-                    "It is not " + player.getName() + "'s turn. Current player is " +
-                            getCurrentPlayer().getName()
-            );
         }
 
         // Board.getVertex handles range validation
@@ -100,16 +92,8 @@ public class SetupPhase {
     }
 
     public void placeRoad(Player player, int edgeId) {
-        if (player == null) {
-            throw new IllegalArgumentException("Player cannot be null");
-        }
-
-        if (!player.equals(getCurrentPlayer())) {
-            throw new IllegalStateException(
-                    "It is not " + player.getName() + "'s turn. Current player is " +
-                            getCurrentPlayer().getName()
-            );
-        }
+        validatePlayer(player);
+        validateCurrentPlayersTurn(player);
 
         if (lastPlacedSettlement == null) {
             throw new IllegalStateException(
@@ -141,6 +125,21 @@ public class SetupPhase {
     private void advanceTurn() {
         lastPlacedSettlement = null;
         currentPlacementIndex++;
+    }
+
+    private void validatePlayer(Player player) {
+        if (player == null) {
+            throw new IllegalArgumentException("Player cannot be null");
+        }
+    }
+
+    private void validateCurrentPlayersTurn(Player player) {
+        if (!player.equals(getCurrentPlayer())) {
+            throw new IllegalStateException(
+                    "It is not " + player.getName() + "'s turn. Current player is " +
+                            getCurrentPlayer().getName()
+            );
+        }
     }
 
     public void distributeStartingResources(Player player) {
