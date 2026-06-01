@@ -24,25 +24,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
-    // Stub — remove once PR #17 (wip/player-class) is merged
-    static class Player {
-        private final String name;
-        private final PlayerColor color;
-
-        Player(String name, PlayerColor color) {
-            this.name = name;
-            this.color = color;
-        }
-
-        public String getName()       {
-            return name;
-        }
-
-        public PlayerColor getColor() {
-            return color;
-        }
-    }
-    // End stub
+//    // Stub — remove once PR #17 (wip/player-class) is merged
+//    static class Player {
+//        private final String name;
+//        private final PlayerColor color;
+//
+//        Player(String name, PlayerColor color) {
+//            this.name = name;
+//            this.color = color;
+//        }
+//
+//        public String getName()       {
+//            return name;
+//        }
+//
+//        public PlayerColor getColor() {
+//            return color;
+//        }
+//    }
+//    // End stub
 
     private Board board;
     private Player alice;
@@ -132,9 +132,9 @@ public class GameTest {
 
     @Test
     void getPlayers_returnsPlayersInOriginalOrder() {
-        List<Object> input = Arrays.asList(alice, bob, charlie);
+        List<Player> input = Arrays.asList(alice, bob, charlie);
         Game game = new Game(input, board);
-        List<Object> result = game.getPlayers();
+        List<Player> result = game.getPlayers();
         assertEquals(input.size(), result.size());
         for (int i = 0; i < input.size(); i++) {
             assertSame(input.get(i), result.get(i));
