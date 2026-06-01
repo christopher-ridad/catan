@@ -64,7 +64,11 @@ public class SetupPhase {
         if (player == null) {
             throw new IllegalArgumentException("Player cannot be null");
         }
-        
+
+        if (vertexId < 0 || vertexId > 53) {
+            throw new IllegalArgumentException("vertexId must be between 0 and 53");
+        }
+
         if (!player.equals(getCurrentPlayer())) {
             throw new IllegalStateException(
                     "It is not " + player.getName() + "'s turn. Current player is " +

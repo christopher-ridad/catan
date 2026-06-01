@@ -110,4 +110,12 @@ public class SetupPhaseTest {
                 () -> phase4.placeSettlement(p2, 0)
         );
     }
+
+    @Test
+    void placeSettlement_invalidVertexId_throwsIllegalArgument() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> phase4.placeSettlement(p1, 999)
+        );
+    }
 }
