@@ -20,35 +20,29 @@ public class SetupPhaseTest {
     private Board createStandardBoard() {
         List<Hex> hexes = new ArrayList<>();
 
-        // FIELDS (4)
         hexes.add(new Hex(TerrainType.FIELDS, 5));
         hexes.add(new Hex(TerrainType.FIELDS, 10));
         hexes.add(new Hex(TerrainType.FIELDS, 4));
         hexes.add(new Hex(TerrainType.FIELDS, 8));
 
-        // PASTURE (4)
         hexes.add(new Hex(TerrainType.PASTURE, 9));
         hexes.add(new Hex(TerrainType.PASTURE, 3));
         hexes.add(new Hex(TerrainType.PASTURE, 11));
         hexes.add(new Hex(TerrainType.PASTURE, 6));
 
-        // FOREST (4)
         hexes.add(new Hex(TerrainType.FOREST, 2));
         hexes.add(new Hex(TerrainType.FOREST, 12));
         hexes.add(new Hex(TerrainType.FOREST, 5));
         hexes.add(new Hex(TerrainType.FOREST, 9));
 
-        // MOUNTAINS (3)
         hexes.add(new Hex(TerrainType.MOUNTAINS, 4));
         hexes.add(new Hex(TerrainType.MOUNTAINS, 8));
         hexes.add(new Hex(TerrainType.MOUNTAINS, 10));
 
-        // HILLS (3)
         hexes.add(new Hex(TerrainType.HILLS, 6));
         hexes.add(new Hex(TerrainType.HILLS, 3));
         hexes.add(new Hex(TerrainType.HILLS, 11));
 
-        // DESERT (1)
         hexes.add(new Hex(TerrainType.DESERT, 0));
 
         return new Board(hexes);
@@ -81,7 +75,7 @@ public class SetupPhaseTest {
     }
 
     @Test
-    public void constructor_validGame_2Players_buildsCorrectPlacementOrder(){
+    public void constructor_validGame_2Players_buildsCorrectPlacementOrder() {
         SetupPhase phase = new SetupPhase(game2Players);
 
         List<Player> expectedOrder = Arrays.asList(p1, p2, p2, p1);
