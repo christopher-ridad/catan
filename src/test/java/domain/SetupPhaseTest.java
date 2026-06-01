@@ -86,5 +86,8 @@ public class SetupPhaseTest {
 
         List<Player> expectedOrder = Arrays.asList(p1, p2, p2, p1);
         assertEquals(expectedOrder, phase.getPlacementOrder());
+        assertEquals(p1, phase.getCurrentPlayer());
+        assertEquals(1, phase.getCurrentRound());
+        assertFalse(phase.isComplete());
     }
 }

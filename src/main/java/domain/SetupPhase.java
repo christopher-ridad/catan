@@ -8,11 +8,14 @@ import static java.util.Collections.reverse;
 public class SetupPhase {
     private final Game game;
     private final List<Player> placementOrder;
+    private int currentPlacementIndex;
+
 
     public SetupPhase(Game game) {
         validateGame(game);
         this.game = game;
         this.placementOrder = buildPlacementOrder();
+        this.currentPlacementIndex = 0;
     }
 
     private void validateGame(Game game) {
@@ -39,15 +42,22 @@ public class SetupPhase {
     }
 
     public Player getCurrentPlayer() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (isComplete()) {
+            throw new IllegalStateException("Setup phase is complete");
+        }
+        return placementOrder.get(currentPlacementIndex);
     }
 
     public int getCurrentRound() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        int playerCount = game.getPlayerCount();
+        if (currentPlacementIndex < playerCount) {
+            return 1;
+        }
+        return 2;
     }
 
     public boolean isComplete() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return currentPlacementIndex >= placementOrder.size();
     }
 
     public void placeSettlement(Player player, int vertexId) {
