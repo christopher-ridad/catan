@@ -16,20 +16,20 @@
 
 ### Method under test: `placeSettlement(Player, int)`
 
-- **TC4: placeSettlement_nullPlayer_throwsIllegalArgument** ( :x: )
+- **TC4: placeSettlement_nullPlayer_throwsIllegalArgument** ( :white_check_mark: )
   - **State of the system**: It is P1's turn; `player = null`, `vertexId = 0` (valid)
   - **Expected output**: `IllegalArgumentException`
 
-- **TC5: placeSettlement_wrongPlayer_throwsIllegalState** ( :x: )
+- **TC5: placeSettlement_wrongPlayer_throwsIllegalState** ( :white_check_mark: )
   - **State of the system**: It is P1's turn; `player = P2` (not current), `vertexId = 0` (valid and unoccupied)
   - **Expected output**: `IllegalStateException`
 
-- **TC6: placeSettlement_invalidVertexId_throwsIllegalArgument** ( :x: )
+- **TC6: placeSettlement_invalidVertexId_throwsIllegalArgument** ( :white_check_mark: )
   - **State of the system**: It is P1's turn; `player = P1` (current), `vertexId = 999` (out of range 0–53)
   - **Expected output**: `IllegalArgumentException` (likely delegated to `Board.getVertex()`)
 
-- **TC7: placeSettlement_occupiedVertex_throwsIllegalState** ( :x: )
-  - **State of the system**: It is P2's turn; vertex 5 is already occupied by P1's settlement; `player = P2`, `vertexId = 5`
+- **TC7: placeSettlement_occupiedVertex_throwsIllegalState** ( :xwhite_check_mark )
+  - **State of the system**: It is P2's turn; Edge (Connected by Vertex 0 & 1) is already occupied by P1's settlement; `player = P2
   - **Expected output**: `IllegalStateException`
 
 - **TC8: placeSettlement_vertexAdjacentToExistingSettlement_throwsIllegalState** ( :x: )
