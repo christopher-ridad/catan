@@ -38,7 +38,7 @@
 
 - **TC9: BuildRoad_EdgeIsOccupied_ThrowsIllegalStateException** ( :x: )
     - State of the system: valid `edgeId`, edge is occupied by a road already
-    - Expected output: `hasRoad()` returns true, throws `IllegalStateException`
+    - Expected output: `IllegalStateException`
 
 - **TC10: BuildRoad_PlayerHasFourteenRoads_NoExceptionThrown** ( :x: )
     - State of the system: valid `edgeId`, activePlayer has one less than the maximum number of roads allowed (14)

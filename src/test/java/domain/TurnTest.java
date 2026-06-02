@@ -129,9 +129,7 @@ public class TurnTest {
                 () -> assertEquals(0, p3.getResourceCount(ResourceType.LUMBER))
         );
     }
-//    - **TC9: BuildRoad_EdgeIsOccupied_ThrowsIllegalStateException** ( :x: )
-//            - State of the system: valid `edgeId`, edge is occupied by a road already
-//    - Expected output: `hasRoad()` returns true, throws `IllegalStateException`
+
 //
 //            - **TC10: BuildRoad_PlayerHasFourteenRoads_NoExceptionThrown** ( :x: )
 //            - State of the system: valid `edgeId`, activePlayer has one less than the maximum number of roads allowed (14)
@@ -172,6 +170,23 @@ public class TurnTest {
         int edgeId = 4;
         board.getEdge(edgeId).setOwner(p4);
         assertThrows(IllegalStateException.class, () -> {
+            turn.buildRoad(edgeId);
+        });
+    }
+
+    @Test
+    public void BuildRoad_PlayerHasFourteenRoads_NoExceptionThrown() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        for (int i = 1; i < 15; i++) {
+            board.getEdge(i).setOwner(p3);
+        }
+
+        int edgeId = 15;
+
+        assertDoesNotThrow(() -> {
             turn.buildRoad(edgeId);
         });
     }
