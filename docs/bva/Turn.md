@@ -68,6 +68,10 @@
     - State of the system: valid `edgeId`, edge is connected to another edge with activePlayer's road built on it, but edge is connected to a vertex with an enemy settlement on it 
     - Expected output: `IllegalStateException`
 
+- **TC16 BuildRoad_TurnPhaseNotBuilding_ThrowsIllegalStateException** ( :x: )
+    - State of the system: valid `edgeId`, phase is set to `TRADING`
+    - Expected output: `IllegalStateException`
+
   
 
 

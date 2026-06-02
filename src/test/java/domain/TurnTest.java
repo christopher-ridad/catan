@@ -47,10 +47,10 @@ public class TurnTest {
     void setUp() {
         this.board = createBoard();
 
-        p1 = new Player("first",   PlayerColor.RED);
-        p2 = new Player("second",     PlayerColor.BLUE);
+        p1 = new Player("first", PlayerColor.RED);
+        p2 = new Player("second", PlayerColor.BLUE);
         p3 = new Player("third", PlayerColor.WHITE);
-        p4 = new Player("fourth",   PlayerColor.ORANGE);
+        p4 = new Player("fourth", PlayerColor.ORANGE);
 
         playerList = Arrays.asList(p1, p2, p3, p4);
 
@@ -97,4 +97,5 @@ public class TurnTest {
         TurnPhase expected = TurnPhase.PRODUCTION;
         assertEquals(expected, turn.getPhase());
     }
+
 }
