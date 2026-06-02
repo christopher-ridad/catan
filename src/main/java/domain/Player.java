@@ -76,6 +76,7 @@ public class Player {
         if (getResourceCount(resourceType) < amount) {
             throw new IllegalStateException("Amount cannot be greater than current resource count");
         }
+        this.resources.put(resourceType, getResourceCount(resourceType) - amount);
     }
 
     private void validateAddRemoveArgs(ResourceType resourceType, int amount) {
@@ -83,7 +84,7 @@ public class Player {
             throw new IllegalArgumentException("Resource type cannot be null");
         }
         if (amount < 0) {
-            throw new IllegalArgumentException("Amount must be greater than 0");
+            throw new IllegalArgumentException("Amount cannot be negative");
         }
     }
 }
