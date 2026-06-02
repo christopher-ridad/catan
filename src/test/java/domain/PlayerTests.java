@@ -233,4 +233,37 @@ public class PlayerTests {
         Player playerOne = new Player(playerOneName, playerOneColor, maxResourcesMap);
         assertEquals(Integer.MAX_VALUE, playerOne.getTotalResourceCount());
     }
+
+//    ## Method under test: `removeResources(ResourceType type, int amount)`
+//
+//            - **TC23: removeResources_nullResourceType_throwsIllegalArgumentException** ( not implemented )
+//            - State of the system: removeResources called with null as ResourceType input
+//  - Expected output: `IllegalArgumentException`
+//
+//            - **TC24: removeResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException** ( not implemented )
+//            - State of the system: removeResources called with -1 as amount integer value, wool as resourceType input
+//  - Expected output: `IllegalArgumentException`
+//
+//            - **TC25: removeResources_brickType_amountZero_noExceptionThrown** ( not implemented )
+//            - State of the system: removeResources called with 0 as amount integer value and brick as ResourceType input
+//  - Expected output: no exception thrown
+//
+//- **TC26: removeResources_grainType_playerDoesNotHaveEnough_ThrowsIllegalStateException** ( not implemented )
+//            - State of the system: removeResources called with 1 as amount integer value, grain as resourceType input, player has 0 grain
+//  - Expected output: `IllegalStateException`
+//
+//            - **TC27: removeResources_lumberType_playerHasEnough_noExceptionThrown** ( not implemented )
+//            - State of the system: removeResources called with 3 as amount integer value, lumber as resourceType input, player has 5 lumber
+//  - Expected output: `getResourceCount` called on player returns 2
+
+    @Test
+    public void removeResources_nullResourceType_throwsIllegalArgumentException() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertThrows(IllegalArgumentException.class, () -> {
+            playerOne.removeResources(null, 2);
+        });
+    }
 }
