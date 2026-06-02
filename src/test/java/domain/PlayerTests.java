@@ -234,11 +234,6 @@ public class PlayerTests {
         assertEquals(Integer.MAX_VALUE, playerOne.getTotalResourceCount());
     }
 
-//    ## Method under test: `removeResources(ResourceType type, int amount)`
-//
-//            - **TC24: removeResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException** ( not implemented )
-//            - State of the system: removeResources called with -1 as amount integer value, wool as resourceType input
-//  - Expected output: `IllegalArgumentException`
 //
 //            - **TC25: removeResources_brickType_amountZero_noExceptionThrown** ( not implemented )
 //            - State of the system: removeResources called with 0 as amount integer value and brick as ResourceType input
@@ -272,5 +267,19 @@ public class PlayerTests {
         assertThrows(IllegalArgumentException.class, () -> {
             playerOne.removeResources(ResourceType.WOOL, -1);
         });
+    }
+
+    @Test
+    public void removeResources_brickType_amountZero_noExceptionThrown() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        playerOne.addResources(ResourceType.BRICK, 1);
+        assertDoesNotThrow(() -> {
+            playerOne.removeResources(ResourceType.BRICK, 0);
+        });
+
+        assertEquals(1, playerOne.getResourceCount(ResourceType.BRICK));
     }
 }
