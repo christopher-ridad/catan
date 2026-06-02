@@ -55,5 +55,9 @@ public class Turn {
         if (activePlayer.getResourceCount(ResourceType.BRICK) < 1) {
             throw new IllegalStateException("Player does not have enough brick for road");
         }
+
+        if (activePlayer.getResourceCount(ResourceType.LUMBER) < 1) {
+            throw new IllegalStateException("Player does not have enough lumber for road");
+        }
     }
 }

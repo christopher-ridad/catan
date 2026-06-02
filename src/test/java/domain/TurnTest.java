@@ -106,4 +106,13 @@ public class TurnTest {
             turn.buildRoad(2);
         });
     }
+
+    @Test
+    public void BuildRoad_PlayerDoesNotHaveLumber_ThrowsIllegalStateException() {
+        p2.addResources(ResourceType.BRICK, 1);
+        Turn turn = new Turn(game, p2, dice, bank);
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildRoad(2);
+        });
+    }
 }
