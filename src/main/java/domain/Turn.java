@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.List;
+
 public class Turn {
 
     private final Game game;
@@ -58,5 +60,21 @@ public class Turn {
         if (game.getBoard().getEdge(edgeId).hasRoad()) {
             throw new IllegalStateException("Edge is already occupied by road");
         }
+        if (playerRoadCount() == 15) {
+            throw new IllegalStateException("Player has already built maximum number of roads");
+        }
+    }
+
+    private int playerRoadCount() {
+        Board board = game.getBoard();
+        List<Edge> edgeList = board.getEdges();
+
+        int roadCount = 0;
+        for (Edge edge : edgeList) {
+            if (edge.getOwner().map(owner -> owner == activePlayer).orElse(false)) {
+                roadCount += 1;
+            }
+        }
+        return roadCount;
     }
 }

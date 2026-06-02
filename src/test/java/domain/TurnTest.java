@@ -130,14 +130,7 @@ public class TurnTest {
         );
     }
 
-//
-//            - **TC10: BuildRoad_PlayerHasFourteenRoads_NoExceptionThrown** ( :x: )
-//            - State of the system: valid `edgeId`, activePlayer has one less than the maximum number of roads allowed (14)
-//    - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
-//
-//            - **TC10: BuildRoad_PlayerHasFifteenRoads_ThrowsIllegalStateException** ( :x: )
-//            - State of the system: valid `edgeId`, activePlayer already has the maximum number of roads allowed (15)
-//    - Expected output: `IllegalStateException`
+
 //
 //            - **TC11: BuildRoad_EdgeIsNotConnectedToExistingNetwork_ThrowsIllegalStateException** ( :x: )
 //            - State of the system: valid `edgeId`, edge is not connected to the player's existing network
@@ -191,4 +184,20 @@ public class TurnTest {
         });
     }
 
+    @Test
+    public void BuildRoad_PlayerHasFifteenRoads_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        for (int i = 1; i < 16; i++) {
+            board.getEdge(i).setOwner(p3);
+        }
+
+        int edgeId = 17;
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildRoad(edgeId);
+        });
+    }
 }
