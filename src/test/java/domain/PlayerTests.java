@@ -236,10 +236,6 @@ public class PlayerTests {
 
 //    ## Method under test: `removeResources(ResourceType type, int amount)`
 //
-//            - **TC23: removeResources_nullResourceType_throwsIllegalArgumentException** ( not implemented )
-//            - State of the system: removeResources called with null as ResourceType input
-//  - Expected output: `IllegalArgumentException`
-//
 //            - **TC24: removeResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException** ( not implemented )
 //            - State of the system: removeResources called with -1 as amount integer value, wool as resourceType input
 //  - Expected output: `IllegalArgumentException`
@@ -264,6 +260,17 @@ public class PlayerTests {
         Player playerOne = new Player(playerOneName, playerOneColor);
         assertThrows(IllegalArgumentException.class, () -> {
             playerOne.removeResources(null, 2);
+        });
+    }
+
+    @Test
+    public void removeResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertThrows(IllegalArgumentException.class, () -> {
+            playerOne.removeResources(ResourceType.WOOL, -1);
         });
     }
 }
