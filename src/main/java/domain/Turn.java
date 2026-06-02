@@ -52,12 +52,11 @@ public class Turn {
     }
 
     public void buildRoad(int edgeId) {
-        if (activePlayer.getResourceCount(ResourceType.BRICK) < 1) {
-            throw new IllegalStateException("Player does not have enough brick for road");
-        }
+        activePlayer.removeResources(ResourceType.BRICK, 1);
+        activePlayer.removeResources(ResourceType.LUMBER, 1);
 
-        if (activePlayer.getResourceCount(ResourceType.LUMBER) < 1) {
-            throw new IllegalStateException("Player does not have enough lumber for road");
+        if (game.getBoard().getEdge(edgeId).hasRoad()) {
+            throw new IllegalStateException("Edge is already occupied by road");
         }
     }
 }

@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TurnTest {
     private Board board;
@@ -115,4 +114,66 @@ public class TurnTest {
             turn.buildRoad(2);
         });
     }
+
+    @Test
+    public void BuildRoad_PlayerHasExactlyOneBrickAndLumber_NoExceptionThrown() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int edgeId = 2;
+        turn.buildRoad(edgeId);
+
+        assertAll(
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.LUMBER))
+        );
+    }
+//    - **TC9: BuildRoad_EdgeIsOccupied_ThrowsIllegalStateException** ( :x: )
+//            - State of the system: valid `edgeId`, edge is occupied by a road already
+//    - Expected output: `hasRoad()` returns true, throws `IllegalStateException`
+//
+//            - **TC10: BuildRoad_PlayerHasFourteenRoads_NoExceptionThrown** ( :x: )
+//            - State of the system: valid `edgeId`, activePlayer has one less than the maximum number of roads allowed (14)
+//    - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
+//
+//            - **TC10: BuildRoad_PlayerHasFifteenRoads_ThrowsIllegalStateException** ( :x: )
+//            - State of the system: valid `edgeId`, activePlayer already has the maximum number of roads allowed (15)
+//    - Expected output: `IllegalStateException`
+//
+//            - **TC11: BuildRoad_EdgeIsNotConnectedToExistingNetwork_ThrowsIllegalStateException** ( :x: )
+//            - State of the system: valid `edgeId`, edge is not connected to the player's existing network
+//            - Expected output: `IllegalStateException`
+//
+//            - **TC12: BuildRoad_RoadIsConnectedToRoad_NoExceptionThrown** ( :x: )
+//            - State of the system: valid `edgeId`, edge is connected to another edge with activePlayer's road built on it
+//            - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
+//
+//            - **TC13: BuildRoad_RoadIsConnectedToSettlement_NoExceptionThrown** ( :x: )
+//            - State of the system: valid `edgeId`, edge is connected to a vertex with activePlayer's settlement built on it
+//            - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
+//
+//            - **TC14: BuildRoad_RoadIsConnectedToCity_NoExceptionThrown** ( :x: )
+//            - State of the system: valid `edgeId`, edge is connected to a vertex with activePlayer's city built on it
+//            - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
+//
+//            - **TC15: BuildRoad_ConnectedToRoadButBlockedByEnemySettlement_ThrowsIllegalStateException** ( :x: )
+//            - State of the system: valid `edgeId`, edge is connected to another edge with activePlayer's road built on it, but edge is connected to a vertex with an enemy settlement on it
+//            - Expected output: `IllegalStateException`
+//
+//            - **TC16 BuildRoad_TurnPhaseNotBuilding_ThrowsIllegalStateException** ( :x: )
+//            - State of the system: valid `edgeId`, phase is set to `TRADING`
+//            - Expected output: `IllegalStateException`
+    @Test
+    public void BuildRoad_EdgeIsOccupied_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+        int edgeId = 4;
+        board.getEdge(edgeId).setOwner(p4);
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildRoad(edgeId);
+        });
+    }
+
 }
