@@ -20,7 +20,7 @@
 
 - **TC5: Constructor_WithValidArgs_SetsPhaseToProduction** ( :x: )
     - State of the system: valid `game`, valid `activePlayer = P1`, valid `dice`, valid `bank`
-    - Expected output: `getActivePlayer()` returns `P1`, `getPhase()` returns `PRODUCTION`
+    - Expected output: `getPhase()` returns `PRODUCTION`
 
 ## Method under test: `buildRoad(int edgeId)`
 
