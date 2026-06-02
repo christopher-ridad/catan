@@ -34,7 +34,7 @@
 
 - **TC8: BuildRoad_PlayerHasExactlyOneBrickAndLumber_NoExceptionThrown** ( :x: )
     - State of the system: valid `edgeId`, `activePlayer` has exactly one of each required resource
-    - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
+    - Expected output: `getOwner` called on `edgeId` returns `activePlayer`, `getResources` called on `activePlayer` returns 0 for both `BRICK` and `LUMBER`
 
 - **TC9: BuildRoad_EdgeIsOccupied_ThrowsIllegalStateException** ( :x: )
     - State of the system: valid `edgeId`, edge is occupied by a road already

@@ -98,4 +98,12 @@ public class TurnTest {
         assertEquals(expected, turn.getPhase());
     }
 
+    @Test
+    public void BuildRoad_PlayerDoesNotHaveBrick_ThrowsIllegalStateException() {
+        p2.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p2, dice, bank);
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildRoad(2);
+        });
+    }
 }

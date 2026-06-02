@@ -50,4 +50,10 @@ public class Turn {
     public TurnPhase getPhase() {
         return this.phase;
     }
+
+    public void buildRoad(int edgeId) {
+        if (activePlayer.getResourceCount(ResourceType.BRICK) < 1) {
+            throw new IllegalStateException("Player does not have enough brick for road");
+        }
+    }
 }
