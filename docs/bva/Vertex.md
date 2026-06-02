@@ -63,3 +63,25 @@
 - **TC13: GetAdjacentVertices_ReturnsAdjacentVertices** ( implemented )
   - State of the system: Vertex constructed with a list of adjacent vertices
   - Expected output: the same list of adjacent vertices passed in the constructor
+
+## Method under test: `isCity()`
+
+- **TC14: IsCity_WhenNoOwner_ReturnsFalse** ( :white_check_mark: )
+  - State of the system: Vertex with no owner set
+  - Expected output: `false`
+
+- **TC15: IsCity_WhenOwnerSetButNotUpgraded_ReturnsFalse** ( :white_check_mark: )
+  - State of the system: Vertex with an owner set, `upgradeToCity()` not called
+  - Expected output: `false`
+
+- **TC16: IsCity_AfterUpgradeToCity_ReturnsTrue** ( :white_check_mark: )
+  - State of the system: Vertex with an owner set, `upgradeToCity()` called
+  - Expected output: `true`
+
+## Method under test: `upgradeToCity()`
+
+- **TC17: UpgradeToCity_SetsIsCityTrue** ( implemented in TC16 )
+
+- **TC18: UpgradeToCity_WhenVertexIsUnoccupied_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: Vertex with no owner set, `upgradeToCity()` called
+  - Expected output: `IllegalStateException` (a city upgrade requires an existing settlement)

@@ -175,6 +175,10 @@
   - State of the system: valid board, one adjacent vertex is occupied
   - Expected output: `false`
 
+- **TC42: SatisfiesDistanceRule_WhenTargetVertexIsOccupied_ReturnsFalse** ( :white_check_mark: )
+  - State of the system: valid board, the target vertex itself already has a settlement (no neighbors occupied)
+  - Expected output: `false` (cannot place a second settlement on an already-occupied vertex)
+
 ## Method under test: `isConnectedToPlayer(Vertex, Player)`
 - **TC38: IsConnectedToPlayer_WhenNoAdjacentRoads_ReturnsFalse** ( implemented )
   - State of the system: valid board, no edges adjacent to vertex have roads
