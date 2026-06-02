@@ -73,6 +73,9 @@ public class Player {
 
     public void removeResources(ResourceType resourceType, int amount) {
         validateAddRemoveArgs(resourceType, amount);
+        if (getResourceCount(resourceType) < amount) {
+            throw new IllegalStateException("Amount cannot be greater than current resource count");
+        }
     }
 
     private void validateAddRemoveArgs(ResourceType resourceType, int amount) {

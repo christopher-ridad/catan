@@ -234,11 +234,7 @@ public class PlayerTests {
         assertEquals(Integer.MAX_VALUE, playerOne.getTotalResourceCount());
     }
 
-//
-//            - **TC25: removeResources_brickType_amountZero_noExceptionThrown** ( not implemented )
-//            - State of the system: removeResources called with 0 as amount integer value and brick as ResourceType input
-//  - Expected output: no exception thrown
-//
+
 //- **TC26: removeResources_grainType_playerDoesNotHaveEnough_ThrowsIllegalStateException** ( not implemented )
 //            - State of the system: removeResources called with 1 as amount integer value, grain as resourceType input, player has 0 grain
 //  - Expected output: `IllegalStateException`
@@ -281,5 +277,17 @@ public class PlayerTests {
         });
 
         assertEquals(1, playerOne.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
+    public void removeResources_grainType_playerDoesNotHaveEnough_ThrowsIllegalStateException() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.ORANGE;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        playerOne.addResources(ResourceType.GRAIN, 1);
+        assertThrows(IllegalStateException.class, () -> {
+            playerOne.removeResources(ResourceType.GRAIN, 3);
+        });
     }
 }
