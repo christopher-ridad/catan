@@ -162,6 +162,7 @@ Represents a single player's state.
 | `getResourceCount(ResourceType)`            | `int`       | Returns how many of that resource the player holds                                                                                |
 | `addResources(ResourceType, int amount)`    | `void`      | Adds the given amount of a resource; throws if amount < 0                                                                         |
 | `getTotalResourceCount()`                   | `int`       | Returns the total number of resource cards in hand                                                                                |
+| `removeResources(ResourceType, int amount)` | `int`       | Removes the given amount of a resource, throws if player has less than the given amount, throws if amount < 0                     |
 
 ---
 
