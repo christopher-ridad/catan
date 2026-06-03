@@ -40,7 +40,7 @@
   - **State of the system**: It is P1's turn (Round 1, index 0); vertex 0 is unoccupied and distance-compliant; `player = P1`, `vertexId = 0`
   - **Expected output**: Settlement placed at vertex 0; `getCurrentRound()` still returns 1; next action must be `placeRoad()`
 
-- **TC10: placeSettlement_validRound2_placesSuccessfullyAndTriggersResourceDistribution** ( :x: )
+- **TC10: placeSettlement_validRound2_placesSuccessfullyAndTriggersResourceDistribution** ( :white_check_mark: )
   - **State of the system**: It is P4's turn (Round 2, first in reverse order); P4 has not yet placed their second settlement; vertex 20 is unoccupied and distance-compliant; vertex 20 is adjacent to hexes producing GRAIN, LUMBER, WOOL
   - **Expected output**: Settlement placed at vertex 20; internally triggers `distributeStartingResources(P4)` (happens after the subsequent `placeRoad()`)
 

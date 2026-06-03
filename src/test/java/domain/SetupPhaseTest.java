@@ -180,4 +180,42 @@ public class SetupPhaseTest {
         assertEquals(1, phase4.getCurrentRound());
         assertEquals(p1, phase4.getCurrentPlayer());
     }
+
+    @Test
+    void placeSettlement_validRound2_placesSuccessfully() {
+        // TC10: P4 places their second settlement in round 2
+        completeRound1();
+
+        assertEquals(2, phase4.getCurrentRound());
+        assertEquals(p4, phase4.getCurrentPlayer());
+
+        // Vertex 38 is non-adjacent to all round-1 vertices (0, 10, 20, 30)
+        phase4.placeSettlement(p4, 38);
+
+        assertTrue(board.getVertex(38).isOccupied());
+        assertEquals(p4, board.getVertex(38).getOwner().get());
+    }
+
+    private Edge findAdjacentEdge(Vertex vertex) {
+        for (Edge edge : board.getEdges()) {
+            if (edge.connectsTo(vertex) && !edge.hasRoad()) {
+                return edge;
+            }
+        }
+        throw new IllegalStateException("No available adjacent edge found for vertex " + vertex.getId());
+    }
+
+    private void completeRound1() {
+        phase4.placeSettlement(p1, 0);
+        phase4.placeRoad(p1, findAdjacentEdge(board.getVertex(0)).getId());
+
+        phase4.placeSettlement(p2, 10);
+        phase4.placeRoad(p2, findAdjacentEdge(board.getVertex(10)).getId());
+
+        phase4.placeSettlement(p3, 20);
+        phase4.placeRoad(p3, findAdjacentEdge(board.getVertex(20)).getId());
+
+        phase4.placeSettlement(p4, 30);
+        phase4.placeRoad(p4, findAdjacentEdge(board.getVertex(30)).getId());
+    }
 }
