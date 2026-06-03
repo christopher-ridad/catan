@@ -70,7 +70,7 @@
   - **State of the system**: It is P1's turn; P1 has placed a settlement at vertex 0; edge 10 is valid and unoccupied but not adjacent to vertex 0; `player = P1`, `edgeId = 10`
   - **Expected output**: `IllegalStateException`
 
-- **TC17: placeRoad_validRound1_placesAndAdvancesClockwise** ( :x: )
+- **TC17: placeRoad_validRound1_placesAndAdvancesClockwise** ( :white_check_mark: )
   - **State of the system**: It is P1's turn (Round 1, placement index 0); P1 has placed settlement at vertex 0; edge 0 is adjacent and unoccupied; `player = P1`, `edgeId = 0`
   - **Expected output**: Road placed; `getCurrentPlayer()` returns P2; `getCurrentRound()` still returns 1
 
