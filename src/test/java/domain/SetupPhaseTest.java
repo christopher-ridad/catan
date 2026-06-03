@@ -144,4 +144,30 @@ public class SetupPhaseTest {
                 () -> phase4.placeSettlement(p2, 0)
         );
     }
+
+    @Test
+    void placeSettlement_vertexAdjacentToExistingSettlement_throwsIllegalState() {
+        Vertex v0 = board.getVertex(0);
+
+        Edge roadEdge = null;
+        for (Edge edge : board.getEdges()) {
+            if (edge.connectsTo(v0) && !edge.hasRoad()) {
+                roadEdge = edge;
+                break;
+            }
+        }
+        assertNotNull(roadEdge);
+
+        phase4.placeSettlement(p1, 0);
+        phase4.placeRoad(p1, roadEdge.getId());
+
+        assertEquals(p2, phase4.getCurrentPlayer());
+
+        assertTrue(board.getVertex(0).getAdjacentVertices().contains(board.getVertex(3)));
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> phase4.placeSettlement(p2, 3)
+        );
+    }
 }

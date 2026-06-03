@@ -85,6 +85,12 @@ public class SetupPhase {
             );
         }
 
+        if (!game.getBoard().satisfiesDistanceRule(vertex)) {
+            throw new IllegalStateException(
+                    "Vertex " + vertexId + " violates the distance rule"
+            );
+        }
+
         vertex.setOwner(player);
         lastPlacedSettlement = vertex;
 

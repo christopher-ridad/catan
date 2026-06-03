@@ -32,7 +32,7 @@
   - **State of the system**: It is P2's turn; Edge (Connected by Vertex 0 & 1) is already occupied by P1's settlement; `player = P2
   - **Expected output**: `IllegalStateException`
 
-- **TC8: placeSettlement_vertexAdjacentToExistingSettlement_throwsIllegalState** ( :x: )
+- **TC8: placeSettlement_vertexAdjacentToExistingSettlement_throwsIllegalState** ( :white_check_mark: )
   - **State of the system**: It is P2's turn; vertex 5 is occupied by P1; vertex 6 is adjacent to vertex 5 (distance rule violation); `player = P2`, `vertexId = 6`
   - **Expected output**: `IllegalStateException`
 
