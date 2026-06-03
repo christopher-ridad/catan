@@ -357,6 +357,22 @@ public class SetupPhaseTest {
         assertEquals(p4, phase4.getCurrentPlayer());
     }
 
+    @Test
+    void getCurrentPlayer_midRound2_returnsCorrectCounterClockwisePlayer() {
+        // TC30: P4 then P3 complete round 2; P2 is next
+        completeRound1();
+
+        phase4.placeSettlement(p4, 38);
+        phase4.placeRoad(p4, findAdjacentEdge(board.getVertex(38)).getId());
+
+        assertEquals(p3, phase4.getCurrentPlayer());
+
+        phase4.placeSettlement(p3, 42);
+        phase4.placeRoad(p3, findAdjacentEdge(board.getVertex(42)).getId());
+
+        assertEquals(p2, phase4.getCurrentPlayer());
+    }
+
 
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
