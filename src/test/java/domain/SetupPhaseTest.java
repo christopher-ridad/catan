@@ -170,4 +170,14 @@ public class SetupPhaseTest {
                 () -> phase4.placeSettlement(p2, 3)
         );
     }
+
+    @Test
+    void placeSettlement_validRound1_placesSuccessfully() {
+        phase4.placeSettlement(p1, 0);
+
+        assertTrue(board.getVertex(0).isOccupied());
+        assertEquals(p1, board.getVertex(0).getOwner().get());
+        assertEquals(1, phase4.getCurrentRound());
+        assertEquals(p1, phase4.getCurrentPlayer());
+    }
 }

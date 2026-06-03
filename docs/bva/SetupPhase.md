@@ -36,7 +36,7 @@
   - **State of the system**: It is P2's turn; vertex 5 is occupied by P1; vertex 6 is adjacent to vertex 5 (distance rule violation); `player = P2`, `vertexId = 6`
   - **Expected output**: `IllegalStateException`
 
-- **TC9: placeSettlement_validRound1_placesSuccessfully** ( :x: )
+- **TC9: placeSettlement_validRound1_placesSuccessfully** ( :white_check_mark: )
   - **State of the system**: It is P1's turn (Round 1, index 0); vertex 0 is unoccupied and distance-compliant; `player = P1`, `vertexId = 0`
   - **Expected output**: Settlement placed at vertex 0; `getCurrentRound()` still returns 1; next action must be `placeRoad()`
 
