@@ -427,6 +427,22 @@ public class SetupPhaseTest {
         assertEquals(resourcesBefore, p1.getTotalResourceCount());
     }
 
+    @Test
+    void resourceDistribution_multiplePlayersDoNotInterfere() {
+        completeRound1();
+
+        phase4.placeSettlement(p4, 38);
+        phase4.placeRoad(p4, findAdjacentEdge(board.getVertex(38)).getId());
+
+        int p4ResourcesAfterPlacement = p4.getTotalResourceCount();
+
+        phase4.placeSettlement(p3, 42);
+        phase4.placeRoad(p3, findAdjacentEdge(board.getVertex(42)).getId());
+
+        assertEquals(p4ResourcesAfterPlacement, p4.getTotalResourceCount());
+        assertTrue(p3.getTotalResourceCount() > 0);
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
