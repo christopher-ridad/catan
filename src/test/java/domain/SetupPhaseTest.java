@@ -317,6 +317,12 @@ public class SetupPhaseTest {
         assertEquals(2, phase4.getCurrentRound());
     }
 
+    @Test
+    void getCurrentPlayer_atStart_returnsFirstPlayerOfRound1() {
+        // TC26
+        assertEquals(p1, phase4.getCurrentPlayer());
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
