@@ -156,18 +156,18 @@
 
 ### Method under test: `distributeStartingResources(Player)`
 
-- **TC35: resourceDistribution_afterSecondSettlementAndRoad_grantsOnePerAdjacentProducingHex** ( :x: )
+- **TC35: resourceDistribution_afterSecondSettlementAndRoad_grantsOnePerAdjacentProducingHex** ( :white_check_mark: )
   - **State of the system**: Round 2; P4 places second settlement at vertex 38; vertex 38 is adjacent to hex 12 (MOUNTAINS) only; `player = P4`
   - **Expected output**: After `placeRoad()`, P4 has exactly 1 ORE; `getTotalResourceCount()` returns 1
 
-- **TC36: resourceDistribution_desertHexDoesNotGrantResource** ( :x: )
+- **TC36: resourceDistribution_desertHexDoesNotGrantResource** ( :white_check_mark: )
   - **State of the system**: Round 2; P1 places second settlement at vertex 53; vertex 53 is adjacent to hex 18 (DESERT) only; `player = P1`
   - **Expected output**: After `placeRoad()`, P1 has 0 resources; `getTotalResourceCount()` returns 0
 
-- **TC37: resourceDistribution_multiplePlayersDoNotInterfere** ( :x: )
+- **TC37: resourceDistribution_multiplePlayersDoNotInterfere** ( :white_check_mark: )
   - **State of the system**: Round 2; P4 places at vertex 38 (adjacent to MOUNTAINS -> 1 ORE); P3 then places at vertex 42 (adjacent to HILLS -> 1 BRICK)
   - **Expected output**: After P3 places, P4's resource count is unchanged; P3's `getTotalResourceCount()` returns 1
 
-- **TC38: resourceDistribution_firstRoundPlacementGrantsNoResources** ( :x: )
+- **TC38: resourceDistribution_firstRoundPlacementGrantsNoResources** ( :white_check_mark: )
   - **State of the system**: Round 1; P1 places settlement at vertex 0 then places road; vertex 0 is adjacent to producing hexes
   - **Expected output**: After `placeRoad()`, P1 has 0 resources; `getTotalResourceCount()` returns 0
