@@ -26,9 +26,9 @@ public final class Board {
     }
 
     Board(List<Hex> hexes, List<Vertex> vertices, List<Edge> edges) {
-        this.hexes = hexes;
-        this.vertices = vertices;
-        this.edges = edges;
+        this.hexes = new ArrayList<>(hexes);
+        this.vertices = new ArrayList<>(vertices);
+        this.edges = new ArrayList<>(edges);
     }
 
     private void validateHexCount(List<Hex> hexes) {
@@ -104,12 +104,15 @@ public final class Board {
     }
 
     public boolean satisfiesDistanceRule(Vertex vertex) {
+        if (vertex.isOccupied()) {
+            return false;
+        }
         return vertex.getAdjacentVertices().stream().noneMatch(Vertex::isOccupied);
     }
 
     public boolean isConnectedToPlayer(Vertex vertex, Player player) {
         return edges.stream()
                 .filter(e -> e.connectsTo(vertex))
-                .anyMatch(e -> e.hasRoad() && e.getOwner().get() == player);
+                .anyMatch(e -> e.getOwner().filter(o -> o == player).isPresent());
     }
 }

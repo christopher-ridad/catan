@@ -10,6 +10,7 @@ public final class Vertex {
 
     private final int id;
     private Player owner = null;
+    private boolean city = false;
     private final List<Hex> adjacentHexes;
     private List<Vertex> adjacentVertices;
 
@@ -69,5 +70,16 @@ public final class Vertex {
 
     void setAdjacentVertices(List<Vertex> adjacentVertices) {
         this.adjacentVertices = new ArrayList<>(adjacentVertices);
+    }
+  
+    public boolean isCity() {
+        return city;
+    }
+
+    public void upgradeToCity() {
+        if (!isOccupied()) {
+            throw new IllegalStateException("Cannot upgrade an unoccupied vertex to a city");
+        }
+        this.city = true;
     }
 }
