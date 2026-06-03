@@ -262,6 +262,14 @@ public class SetupPhaseTest {
     }
 
     @Test
+    void placeRoad_round1LastPlayer_transitionsToRound2() {
+        completeRound1();
+
+        assertEquals(p4, phase4.getCurrentPlayer());
+        assertEquals(2, phase4.getCurrentRound());
+    }
+
+    @Test
     void placeRoad_validRound1_placesAndAdvancesClockwise() {
         phase4.placeSettlement(p1, 0);
         Edge roadEdge = findAdjacentEdge(board.getVertex(0));
