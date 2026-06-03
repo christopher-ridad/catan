@@ -373,7 +373,13 @@ public class SetupPhaseTest {
 
     @Test
     void isComplete_atStart_returnsFalse() {
-        // TC31
+        assertFalse(phase4.isComplete());
+    }
+
+    @Test
+    void isComplete_afterRound1Complete_returnsFalse() {
+        completeRound1();
+
         assertFalse(phase4.isComplete());
     }
 
