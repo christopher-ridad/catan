@@ -371,6 +371,12 @@ public class SetupPhaseTest {
         assertEquals(p2, phase4.getCurrentPlayer());
     }
 
+    @Test
+    void isComplete_atStart_returnsFalse() {
+        // TC31
+        assertFalse(phase4.isComplete());
+    }
+
 
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
