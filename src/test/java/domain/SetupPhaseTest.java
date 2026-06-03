@@ -319,8 +319,20 @@ public class SetupPhaseTest {
 
     @Test
     void getCurrentPlayer_atStart_returnsFirstPlayerOfRound1() {
-        // TC26
         assertEquals(p1, phase4.getCurrentPlayer());
+    }
+
+    @Test
+    void getCurrentPlayer_midRound1_returnsCorrectClockwisePlayer() {
+        phase4.placeSettlement(p1, 0);
+        phase4.placeRoad(p1, findAdjacentEdge(board.getVertex(0)).getId());
+
+        assertEquals(p2, phase4.getCurrentPlayer());
+
+        phase4.placeSettlement(p2, 10);
+        phase4.placeRoad(p2, findAdjacentEdge(board.getVertex(10)).getId());
+
+        assertEquals(p3, phase4.getCurrentPlayer());
     }
 
     private Edge findAdjacentEdge(Vertex vertex) {
