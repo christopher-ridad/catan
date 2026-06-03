@@ -216,6 +216,15 @@ public class SetupPhaseTest {
         );
     }
 
+    @Test
+    void placeRoad_beforeSettlementPlaced_throwsIllegalState() {
+        // TC13: P1 tries to place road without placing settlement first
+        assertThrows(
+                IllegalStateException.class,
+                () -> phase4.placeRoad(p1, 0)
+        );
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
