@@ -88,68 +88,68 @@
 
 ### Method under test: `getPlacementOrder()`
 
-- **TC21: getPlacementOrder_2Players_returnsCorrectSequence** ( :x: )
+- **TC21: getPlacementOrder_2Players_returnsCorrectSequence** ( :white_check_mark: )
   - **State of the system**: `SetupPhase` initialized with 2-player `Game` containing `[P1, P2]`
   - **Expected output**: Returns `[P1, P2, P2, P1]` (Round 1 clockwise, then Round 2 counter-clockwise)
 
-- **TC22: getPlacementOrder_4Players_returnsCorrectSequence** ( :x: )
+- **TC22: getPlacementOrder_4Players_returnsCorrectSequence** ( :white_check_mark: )
   - **State of the system**: `SetupPhase` initialized with 4-player `Game` containing `[P1, P2, P3, P4]`
   - **Expected output**: Returns `[P1, P2, P3, P4, P4, P3, P2, P1]` (length = 8)
 
-- **TC23: getPlacementOrder_lengthAlwaysEqualsDoublePlayerCount** ( :x: )
+- **TC23: getPlacementOrder_lengthAlwaysEqualsDoublePlayerCount** ( :white_check_mark: )
   - **State of the system**: `SetupPhase` with any valid `Game`
   - **Expected output**: Length of placement order == 2 × (number of players)
 
 ### Method under test: `getCurrentRound()`
 
-- **TC24: getCurrentRound_placementIndices0ToN_returnsRound1** ( :x: )
+- **TC24: getCurrentRound_placementIndices0ToN_returnsRound1** ( :white_check_mark: )
   - **State of the system**: 4-player game; placements at indices 0, 1, 2, 3 have been made
   - **Expected output**: `getCurrentRound()` returns 1
 
-- **TC24b: getCurrentRound_atIndexN_returnsRound2** ( :x: )
+- **TC24b: getCurrentRound_atIndexN_returnsRound2** ( :white_check_mark: )
   - **State of the system**: 4-player game (n=4); all Round 1 placements complete; about to start index 4
   - **Expected output**: `getCurrentRound()` returns 2
 
-- **TC25: getCurrentRound_placementIndicesNTo2N_returnsRound2** ( :x: )
+- **TC25: getCurrentRound_placementIndicesNTo2N_returnsRound2** ( :white_check_mark: )
   - **State of the system**: 4-player game; placements at indices 4, 5, 6, 7 in progress
   - **Expected output**: `getCurrentRound()` returns 2
 
 ### Method under test: `getCurrentPlayer()`
 
-- **TC26: getCurrentPlayer_atStart_returnsFirstPlayerOfRound1** ( :x: )
+- **TC26: getCurrentPlayer_atStart_returnsFirstPlayerOfRound1** ( :white_check_mark: )
   - **State of the system**: Fresh `SetupPhase` with 4-player game; no placements made yet; placement index = 0
   - **Expected output**: `P1`
 
-- **TC27: getCurrentPlayer_midRound1_returnsCorrectClockwisePlayer** ( :x: )
+- **TC27: getCurrentPlayer_midRound1_returnsCorrectClockwisePlayer** ( :white_check_mark: )
   - **State of the system**: 4-player game; placements complete at indices 0 and 1; placement index = 2
   - **Expected output**: `P3`
 
-- **TC28: getCurrentPlayer_lastOfRound1_returnsLastPlayer** ( :x: )
+- **TC28: getCurrentPlayer_lastOfRound1_returnsLastPlayer** ( :white_check_mark: )
   - **State of the system**: 4-player game; placements complete at indices 0, 1, 2; placement index = 3
   - **Expected output**: `P4`
 
-- **TC29: getCurrentPlayer_firstOfRound2_returnsLastPlayer** ( :x: )
+- **TC29: getCurrentPlayer_firstOfRound2_returnsLastPlayer** ( :white_check_mark: )
   - **State of the system**: 4-player game; all Round 1 complete; placement index = 4 (first of Round 2)
   - **Expected output**: `P4`
 
-- **TC30: getCurrentPlayer_midRound2_returnsCorrectCounterClockwisePlayer** ( :x: )
+- **TC30: getCurrentPlayer_midRound2_returnsCorrectCounterClockwisePlayer** ( :white_check_mark: )
   - **State of the system**: 4-player game; placements complete at indices 4, 5, 6; placement index = 7
   - **Expected output**: `P1`
 
 ### Method under test: `isComplete()`
 
-- **TC24: isComplete_atStart_returnsFalse** ( :x: )
+- **TC31: isComplete_atStart_returnsFalse** ( :x: )
   - **State of the system**: Fresh `PlacementPhase`, no placements made
   - **Expected output**: `false`
 
-- **TC25: isComplete_afterRound1Complete_returnsFalse** ( :x: )
+- **TC32: isComplete_afterRound1Complete_returnsFalse** ( :x: )
   - **State of the system**: All 4 players have completed Round 1 placements; Round 2 has not yet begun
   - **Expected output**: `false`
 
-- **TC26: isComplete_midRound2_returnsFalse** ( :x: )
+- **TC33: isComplete_midRound2_returnsFalse** ( :x: )
   - **State of the system**: Round 2 in progress; P4, P3, P2 have placed; P1 has not yet gone
   - **Expected output**: `false`
 
-- **TC27: isComplete_afterAllRound2PlacementsFinished_returnsTrue** ( :x: )
+- **TC34: isComplete_afterAllRound2PlacementsFinished_returnsTrue** ( :x: )
   - **State of the system**: All 4 players have completed Round 1 and Round 2 placements
   - **Expected output**: `true`

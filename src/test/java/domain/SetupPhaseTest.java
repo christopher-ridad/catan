@@ -351,7 +351,6 @@ public class SetupPhaseTest {
 
     @Test
     void getCurrentPlayer_firstOfRound2_returnsLastPlayer() {
-        // TC29: P4 is first in round 2
         completeRound1();
 
         assertEquals(p4, phase4.getCurrentPlayer());
@@ -359,7 +358,6 @@ public class SetupPhaseTest {
 
     @Test
     void getCurrentPlayer_midRound2_returnsCorrectCounterClockwisePlayer() {
-        // TC30: P4 then P3 complete round 2; P2 is next
         completeRound1();
 
         phase4.placeSettlement(p4, 38);
