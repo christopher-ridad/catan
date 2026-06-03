@@ -138,18 +138,18 @@
 
 ### Method under test: `isComplete()`
 
-- **TC31: isComplete_atStart_returnsFalse** ( :x: )
+- **TC31: isComplete_atStart_returnsFalse** ( :white_check_mark: )
   - **State of the system**: Fresh `PlacementPhase`, no placements made
   - **Expected output**: `false`
 
-- **TC32: isComplete_afterRound1Complete_returnsFalse** ( :x: )
+- **TC32: isComplete_afterRound1Complete_returnsFalse** ( :white_check_mark: )
   - **State of the system**: All 4 players have completed Round 1 placements; Round 2 has not yet begun
   - **Expected output**: `false`
 
-- **TC33: isComplete_midRound2_returnsFalse** ( :x: )
+- **TC33: isComplete_midRound2_returnsFalse** ( :white_check_mark: )
   - **State of the system**: Round 2 in progress; P4, P3, P2 have placed; P1 has not yet gone
   - **Expected output**: `false`
 
-- **TC34: isComplete_afterAllRound2PlacementsFinished_returnsTrue** ( :x: )
+- **TC34: isComplete_afterAllRound2PlacementsFinished_returnsTrue** ( :white_check_mark: )
   - **State of the system**: All 4 players have completed Round 1 and Round 2 placements
   - **Expected output**: `true`
