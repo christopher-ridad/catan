@@ -218,10 +218,19 @@ public class SetupPhaseTest {
 
     @Test
     void placeRoad_beforeSettlementPlaced_throwsIllegalState() {
-        // TC13: P1 tries to place road without placing settlement first
         assertThrows(
                 IllegalStateException.class,
                 () -> phase4.placeRoad(p1, 0)
+        );
+    }
+
+    @Test
+    void placeRoad_invalidEdgeId_throwsIllegalArgument() {
+        phase4.placeSettlement(p1, 0);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> phase4.placeRoad(p1, 999)
         );
     }
 

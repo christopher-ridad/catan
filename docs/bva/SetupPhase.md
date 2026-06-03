@@ -58,7 +58,7 @@
   - **State of the system**: It is P1's turn; P1 has NOT yet placed a settlement this turn; `player = P1`, `edgeId = 0`
   - **Expected output**: `IllegalStateException`
 
-- **TC14: placeRoad_invalidEdgeId_throwsIllegalArgument** ( :x: )
+- **TC14: placeRoad_invalidEdgeId_throwsIllegalArgument** ( :white_check_mark: )
   - **State of the system**: It is P1's turn; P1 has placed a settlement; `player = P1`, `edgeId = 999` (out of range 0–71)
   - **Expected output**: `IllegalArgumentException` (likely delegated to `Board.getEdge()`)
 
