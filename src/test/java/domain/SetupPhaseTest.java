@@ -383,6 +383,16 @@ public class SetupPhaseTest {
         assertFalse(phase4.isComplete());
     }
 
+    @Test
+    void isComplete_midRound2_returnsFalse() {
+        completeRound1();
+
+        phase4.placeSettlement(p4, 38);
+        phase4.placeRoad(p4, findAdjacentEdge(board.getVertex(38)).getId());
+
+        assertFalse(phase4.isComplete());
+    }
+
 
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
