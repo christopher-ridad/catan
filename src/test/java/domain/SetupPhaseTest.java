@@ -300,6 +300,16 @@ public class SetupPhaseTest {
         assertEquals(1, phase4.getCurrentRound());
     }
 
+    @Test
+    void getCurrentRound_placementIndices0ToN_returnsRound1() {
+        assertEquals(1, phase4.getCurrentRound());
+
+        phase4.placeSettlement(p1, 0);
+        phase4.placeRoad(p1, findAdjacentEdge(board.getVertex(0)).getId());
+
+        assertEquals(1, phase4.getCurrentRound());
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
