@@ -270,6 +270,18 @@ public class SetupPhaseTest {
     }
 
     @Test
+    void placeRoad_round2_placesAndAdvancesCounterClockwise() {
+        // TC19: P4 completes round 2 turn; advances to P3
+        completeRound1();
+
+        phase4.placeSettlement(p4, 38);
+        phase4.placeRoad(p4, findAdjacentEdge(board.getVertex(38)).getId());
+
+        assertEquals(p3, phase4.getCurrentPlayer());
+        assertEquals(2, phase4.getCurrentRound());
+    }
+
+    @Test
     void placeRoad_validRound1_placesAndAdvancesClockwise() {
         phase4.placeSettlement(p1, 0);
         Edge roadEdge = findAdjacentEdge(board.getVertex(0));
