@@ -196,6 +196,17 @@ public class SetupPhaseTest {
         assertEquals(p4, board.getVertex(38).getOwner().get());
     }
 
+    @Test
+    void placeRoad_nullPlayer_throwsIllegalArgument() {
+        // TC11
+        phase4.placeSettlement(p1, 0);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> phase4.placeRoad(null, 0)
+        );
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {

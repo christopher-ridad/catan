@@ -46,7 +46,7 @@
 
 ### Method under test: `placeRoad(Player, int)`
 
-- **TC11: placeRoad_nullPlayer_throwsIllegalArgument** ( :x: )
+- **TC11: placeRoad_nullPlayer_throwsIllegalArgument** ( :white_check_mark: )
   - **State of the system**: It is P1's turn; P1 has placed a settlement; `player = null`, `edgeId = 0` (valid and adjacent)
   - **Expected output**: `IllegalArgumentException`
 
