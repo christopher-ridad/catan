@@ -443,6 +443,17 @@ public class SetupPhaseTest {
         assertTrue(p3.getTotalResourceCount() > 0);
     }
 
+    @Test
+    void resourceDistribution_firstRoundPlacementGrantsNoResources() {
+        assertEquals(0, p1.getTotalResourceCount());
+
+        phase4.placeSettlement(p1, 0);
+        assertEquals(0, p1.getTotalResourceCount());
+
+        phase4.placeRoad(p1, findAdjacentEdge(board.getVertex(0)).getId());
+        assertEquals(0, p1.getTotalResourceCount());
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
