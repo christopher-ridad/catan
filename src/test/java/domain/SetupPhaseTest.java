@@ -310,6 +310,13 @@ public class SetupPhaseTest {
         assertEquals(1, phase4.getCurrentRound());
     }
 
+    @Test
+    void getCurrentRound_placementIndicesNTo2N_returnsRound2() {
+        completeRound1();
+
+        assertEquals(2, phase4.getCurrentRound());
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
