@@ -234,6 +234,21 @@ public class SetupPhaseTest {
         );
     }
 
+    @Test
+    void placeRoad_occupiedEdge_throwsIllegalState() {
+        phase4.placeSettlement(p1, 0);
+        Edge roadEdge = findAdjacentEdge(board.getVertex(0));
+        phase4.placeRoad(p1, roadEdge.getId());
+
+        phase4.placeSettlement(p2, 10);
+
+        int occupiedEdgeId = roadEdge.getId();
+        assertThrows(
+                IllegalStateException.class,
+                () -> phase4.placeRoad(p2, occupiedEdgeId)
+        );
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
