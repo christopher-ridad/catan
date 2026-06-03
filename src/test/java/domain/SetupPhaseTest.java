@@ -335,6 +335,20 @@ public class SetupPhaseTest {
         assertEquals(p3, phase4.getCurrentPlayer());
     }
 
+    @Test
+    void getCurrentPlayer_lastOfRound1_returnsLastPlayer() {
+        phase4.placeSettlement(p1, 0);
+        phase4.placeRoad(p1, findAdjacentEdge(board.getVertex(0)).getId());
+
+        phase4.placeSettlement(p2, 10);
+        phase4.placeRoad(p2, findAdjacentEdge(board.getVertex(10)).getId());
+
+        phase4.placeSettlement(p3, 20);
+        phase4.placeRoad(p3, findAdjacentEdge(board.getVertex(20)).getId());
+
+        assertEquals(p4, phase4.getCurrentPlayer());
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
