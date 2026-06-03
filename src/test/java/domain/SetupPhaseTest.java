@@ -393,6 +393,14 @@ public class SetupPhaseTest {
         assertFalse(phase4.isComplete());
     }
 
+    @Test
+    void isComplete_afterAllPlacementsFinished_returnsTrue() {
+        completeRound1();
+        completeRound2Except(null);
+
+        assertTrue(phase4.isComplete());
+    }
+
 
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
