@@ -401,6 +401,18 @@ public class SetupPhaseTest {
         assertTrue(phase4.isComplete());
     }
 
+    @Test
+    void resourceDistribution_afterSecondSettlementAndRoad_grantsOnePerAdjacentProducingHex() {
+        completeRound1();
+
+        int resourcesBefore = p4.getTotalResourceCount();
+
+        phase4.placeSettlement(p4, 38);
+        phase4.placeRoad(p4, findAdjacentEdge(board.getVertex(38)).getId());
+
+        assertEquals(resourcesBefore + 1, p4.getTotalResourceCount());
+        assertEquals(1, p4.getResourceCount(ResourceType.ORE));
+    }
 
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {

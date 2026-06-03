@@ -125,6 +125,10 @@ public class SetupPhase {
 
         edge.setOwner(player);
 
+        if (getCurrentRound() == 2) {
+            distributeStartingResources(player);
+        }
+
         advanceTurn();
     }
 
@@ -149,6 +153,36 @@ public class SetupPhase {
     }
 
     public void distributeStartingResources(Player player) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (lastPlacedSettlement == null) {
+            return;
+        }
+
+        List<Hex> adjacentHexes = lastPlacedSettlement.getAdjacentHexes();
+
+        for (Hex hex : adjacentHexes) {
+            if (hex.producesResource()) {
+                ResourceType resource = getResourceFromTerrain(hex.getTerrainType());
+                player.addResources(resource, 1);
+            }
+        }
+    }
+
+    private ResourceType getResourceFromTerrain(TerrainType terrain) {
+        if (terrain == TerrainType.FIELDS) {
+            return ResourceType.GRAIN;
+        }
+        if (terrain == TerrainType.PASTURE) {
+            return ResourceType.WOOL;
+        }
+        if (terrain == TerrainType.FOREST) {
+            return ResourceType.LUMBER;
+        }
+        if (terrain == TerrainType.MOUNTAINS) {
+            return ResourceType.ORE;
+        }
+        if (terrain == TerrainType.HILLS) {
+            return ResourceType.BRICK;
+        }
+        throw new IllegalArgumentException("DESERT does not produce resources");
     }
 }
