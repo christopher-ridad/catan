@@ -271,7 +271,6 @@ public class SetupPhaseTest {
 
     @Test
     void placeRoad_round2_placesAndAdvancesCounterClockwise() {
-        // TC19: P4 completes round 2 turn; advances to P3
         completeRound1();
 
         phase4.placeSettlement(p4, 38);
@@ -279,6 +278,14 @@ public class SetupPhaseTest {
 
         assertEquals(p3, phase4.getCurrentPlayer());
         assertEquals(2, phase4.getCurrentRound());
+    }
+
+    @Test
+    void placeRoad_round2LastPlayer_completesPhase() {
+        completeRound1();
+        completeRound2Except(null);
+
+        assertTrue(phase4.isComplete());
     }
 
     @Test
@@ -323,5 +330,24 @@ public class SetupPhaseTest {
 
         phase4.placeSettlement(p4, 30);
         phase4.placeRoad(p4, findAdjacentEdge(board.getVertex(30)).getId());
+    }
+
+    private void completeRound2Except(Player skip) {
+        if (p4 != skip) {
+            phase4.placeSettlement(p4, 38);
+            phase4.placeRoad(p4, findAdjacentEdge(board.getVertex(38)).getId());
+        }
+        if (p3 != skip) {
+            phase4.placeSettlement(p3, 42);
+            phase4.placeRoad(p3, findAdjacentEdge(board.getVertex(42)).getId());
+        }
+        if (p2 != skip) {
+            phase4.placeSettlement(p2, 32);
+            phase4.placeRoad(p2, findAdjacentEdge(board.getVertex(32)).getId());
+        }
+        if (p1 != skip) {
+            phase4.placeSettlement(p1, 11);
+            phase4.placeRoad(p1, findAdjacentEdge(board.getVertex(11)).getId());
+        }
     }
 }
