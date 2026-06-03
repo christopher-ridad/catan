@@ -74,15 +74,15 @@
   - **State of the system**: It is P1's turn (Round 1, placement index 0); P1 has placed settlement at vertex 0; edge 0 is adjacent and unoccupied; `player = P1`, `edgeId = 0`
   - **Expected output**: Road placed; `getCurrentPlayer()` returns P2; `getCurrentRound()` still returns 1
 
-- **TC18: placeRoad_round1LastPlayer_transitionsToRound2** ( :x: )
+- **TC18: placeRoad_round1LastPlayer_transitionsToRound2** ( :white_check_mark: )
   - **State of the system**: It is P4's turn (Round 1, placement index 3 of 4-player game); P4 has placed settlement; edge is valid and adjacent; `player = P4`, `edgeId = X`
   - **Expected output**: Road placed; `getCurrentPlayer()` returns P4 (same player, starts Round 2); `getCurrentRound()` returns 2
 
-- **TC19: placeRoad_round2_placesAndAdvancesCounterClockwise** ( :x: )
+- **TC19: placeRoad_round2_placesAndAdvancesCounterClockwise** ( :white_check_mark: )
   - **State of the system**: It is P4's turn (Round 2, placement index 4 of 8); P4 has placed settlement; edge is valid and adjacent; `player = P4`, `edgeId = Y`
   - **Expected output**: Road placed; `getCurrentPlayer()` returns P3; `getCurrentRound()` still returns 2
 
-- **TC20: placeRoad_round2LastPlayer_completesPhaseAndDistributesResources** ( :x: )
+- **TC20: placeRoad_round2LastPlayer_completesPhaseAndDistributesResources** ( :white_check_mark: )
   - **State of the system**: It is P1's turn (Round 2, placement index 7 of 8); P1 has placed second settlement adjacent to BRICK and ORE hexes; edge is valid and adjacent; `player = P1`, `edgeId = Z`
   - **Expected output**: Road placed; `isComplete()` returns `true`; P1 has gained 1 BRICK and 1 ORE resource card
 
