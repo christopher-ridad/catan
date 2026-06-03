@@ -50,7 +50,7 @@
   - **State of the system**: It is P1's turn; P1 has placed a settlement; `player = null`, `edgeId = 0` (valid and adjacent)
   - **Expected output**: `IllegalArgumentException`
 
-- **TC12: placeRoad_wrongPlayer_throwsIllegalState** ( :x: )
+- **TC12: placeRoad_wrongPlayer_throwsIllegalState** ( :white_check_mark: )
   - **State of the system**: It is P1's turn; P1 has placed a settlement; `player = P2` (not current), `edgeId = 0` (valid and adjacent)
   - **Expected output**: `IllegalStateException`
 

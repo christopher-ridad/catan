@@ -183,13 +183,11 @@ public class SetupPhaseTest {
 
     @Test
     void placeSettlement_validRound2_placesSuccessfully() {
-        // TC10: P4 places their second settlement in round 2
         completeRound1();
 
         assertEquals(2, phase4.getCurrentRound());
         assertEquals(p4, phase4.getCurrentPlayer());
 
-        // Vertex 38 is non-adjacent to all round-1 vertices (0, 10, 20, 30)
         phase4.placeSettlement(p4, 38);
 
         assertTrue(board.getVertex(38).isOccupied());
@@ -198,12 +196,23 @@ public class SetupPhaseTest {
 
     @Test
     void placeRoad_nullPlayer_throwsIllegalArgument() {
-        // TC11
         phase4.placeSettlement(p1, 0);
 
         assertThrows(
                 IllegalArgumentException.class,
                 () -> phase4.placeRoad(null, 0)
+        );
+    }
+
+    @Test
+    void placeRoad_wrongPlayer_throwsIllegalState() {
+        phase4.placeSettlement(p1, 0);
+
+        Edge roadEdge = findAdjacentEdge(board.getVertex(0));
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> phase4.placeRoad(p2, roadEdge.getId())
         );
     }
 
