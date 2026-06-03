@@ -5,16 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Collections.reverse;
-
 public class SetupPhase {
+
+    // =========================================================================
+    // Fields
+    // =========================================================================
+
     private final Game game;
     private final List<Player> placementOrder;
     private int currentPlacementIndex;
     private Vertex lastPlacedSettlement;
     private final Map<Player, List<Vertex>> placedSettlements;
 
-
+    // =========================================================================
+    // Constructor
+    // =========================================================================
 
     public SetupPhase(Game game) {
         validateGame(game);
@@ -25,24 +30,9 @@ public class SetupPhase {
         this.placedSettlements = new HashMap<>();
     }
 
-    private void validateGame(Game game) {
-       if (game == null) {
-           throw new IllegalArgumentException("Game cannot be null");
-       }
-    }
-
-    private List<Player> buildPlacementOrder() {
-        List<Player> order = new ArrayList<>();
-        List<Player> players = game.getPlayers();
-
-        order.addAll(players);
-
-        for (int i = players.size() - 1; i >= 0; i--) {
-            order.add(players.get(i));
-        }
-
-        return order;
-    }
+    // =========================================================================
+    // Public Methods
+    // =========================================================================
 
     public List<Player> getPlacementOrder() {
         return placementOrder;
@@ -70,58 +60,27 @@ public class SetupPhase {
     public void placeSettlement(Player player, int vertexId) {
         validatePlayer(player);
         validateCurrentPlayersTurn(player);
+        validateVertexId(vertexId);
 
-        if (vertexId < 0 || vertexId > 53) {
-            throw new IllegalArgumentException("vertexId must be between 0 and 53");
-        }
-
-        // Board.getVertex handles range validation
         Vertex vertex = game.getBoard().getVertex(vertexId);
 
-        if (vertex.isOccupied()) {
-            throw new IllegalStateException(
-                    "Vertex " + vertexId + " is already occupied by " +
-                            vertex.getOwner().get().getName()
-            );
-        }
-
-        if (!game.getBoard().satisfiesDistanceRule(vertex)) {
-            throw new IllegalStateException(
-                    "Vertex " + vertexId + " violates the distance rule"
-            );
-        }
+        validateVertexNotOccupied(vertex, vertexId);
+        validateDistanceRule(vertex, vertexId);
 
         vertex.setOwner(player);
         lastPlacedSettlement = vertex;
-
         placedSettlements.computeIfAbsent(player, k -> new ArrayList<>()).add(vertex);
     }
 
     public void placeRoad(Player player, int edgeId) {
         validatePlayer(player);
         validateCurrentPlayersTurn(player);
-
-        if (lastPlacedSettlement == null) {
-            throw new IllegalStateException(
-                    "Settlement must be placed before road. No settlement placed in current turn."
-            );
-        }
+        validateSettlementPlacedThisTurn();
 
         Edge edge = game.getBoard().getEdge(edgeId);
 
-        if (edge.hasRoad()) {
-            throw new IllegalStateException(
-                    "Edge " + edgeId + " already has a road owned by " +
-                            edge.getOwner().get().getName()
-            );
-        }
-
-        if (!edge.connectsTo(lastPlacedSettlement)) {
-            throw new IllegalStateException(
-                    "Road at edge " + edgeId + " is not adjacent to the placed settlement. " +
-                            "Road must connect to an endpoint of the settlement vertex."
-            );
-        }
+        validateEdgeNotOccupied(edge, edgeId);
+        validateEdgeAdjacentToSettlement(edge, edgeId);
 
         edge.setOwner(player);
 
@@ -130,26 +89,6 @@ public class SetupPhase {
         }
 
         advanceTurn();
-    }
-
-    private void advanceTurn() {
-        lastPlacedSettlement = null;
-        currentPlacementIndex++;
-    }
-
-    private void validatePlayer(Player player) {
-        if (player == null) {
-            throw new IllegalArgumentException("Player cannot be null");
-        }
-    }
-
-    private void validateCurrentPlayersTurn(Player player) {
-        if (!player.equals(getCurrentPlayer())) {
-            throw new IllegalStateException(
-                    "It is not " + player.getName() + "'s turn. Current player is " +
-                            getCurrentPlayer().getName()
-            );
-        }
     }
 
     public void distributeStartingResources(Player player) {
@@ -164,6 +103,110 @@ public class SetupPhase {
                 ResourceType resource = getResourceFromTerrain(hex.getTerrainType());
                 player.addResources(resource, 1);
             }
+        }
+    }
+
+    // =========================================================================
+    // Private helpers — setup
+    // =========================================================================
+
+    private void validateGame(Game game) {
+        if (game == null) {
+            throw new IllegalArgumentException("Game cannot be null");
+        }
+    }
+
+    private List<Player> buildPlacementOrder() {
+        List<Player> order = new ArrayList<>();
+        List<Player> players = game.getPlayers();
+
+        order.addAll(players);
+
+        for (int i = players.size() - 1; i >= 0; i--) {
+            order.add(players.get(i));
+        }
+
+        return order;
+    }
+
+    private void advanceTurn() {
+        lastPlacedSettlement = null;
+        currentPlacementIndex++;
+    }
+
+    // =========================================================================
+    // Private helpers — placeSettlement validation
+    // =========================================================================
+
+    private void validateVertexId(int vertexId) {
+        if (vertexId < 0 || vertexId > 53) {
+            throw new IllegalArgumentException("vertexId must be between 0 and 53");
+        }
+    }
+
+    private void validateVertexNotOccupied(Vertex vertex, int vertexId) {
+        if (vertex.isOccupied()) {
+            throw new IllegalStateException(
+                    "Vertex " + vertexId + " is already occupied by " +
+                            vertex.getOwner().get().getName()
+            );
+        }
+    }
+
+    private void validateDistanceRule(Vertex vertex, int vertexId) {
+        if (!game.getBoard().satisfiesDistanceRule(vertex)) {
+            throw new IllegalStateException(
+                    "Vertex " + vertexId + " violates the distance rule"
+            );
+        }
+    }
+
+    // =========================================================================
+    // Private helpers — placeRoad validation
+    // =========================================================================
+
+    private void validateSettlementPlacedThisTurn() {
+        if (lastPlacedSettlement == null) {
+            throw new IllegalStateException(
+                    "Settlement must be placed before road. No settlement placed in current turn."
+            );
+        }
+    }
+
+    private void validateEdgeNotOccupied(Edge edge, int edgeId) {
+        if (edge.hasRoad()) {
+            throw new IllegalStateException(
+                    "Edge " + edgeId + " already has a road owned by " +
+                            edge.getOwner().get().getName()
+            );
+        }
+    }
+
+    private void validateEdgeAdjacentToSettlement(Edge edge, int edgeId) {
+        if (!edge.connectsTo(lastPlacedSettlement)) {
+            throw new IllegalStateException(
+                    "Road at edge " + edgeId + " is not adjacent to the placed settlement. " +
+                            "Road must connect to an endpoint of the settlement vertex."
+            );
+        }
+    }
+
+    // =========================================================================
+    // Private helpers — resource distribution
+    // =========================================================================
+
+    private void validatePlayer(Player player) {
+        if (player == null) {
+            throw new IllegalArgumentException("Player cannot be null");
+        }
+    }
+
+    private void validateCurrentPlayersTurn(Player player) {
+        if (!player.equals(getCurrentPlayer())) {
+            throw new IllegalStateException(
+                    "It is not " + player.getName() + "'s turn. Current player is " +
+                            getCurrentPlayer().getName()
+            );
         }
     }
 
