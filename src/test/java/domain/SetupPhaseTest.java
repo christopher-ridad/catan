@@ -414,6 +414,19 @@ public class SetupPhaseTest {
         assertEquals(1, p4.getResourceCount(ResourceType.ORE));
     }
 
+    @Test
+    void resourceDistribution_desertHexDoesNotGrantResource() {
+        completeRound1();
+        completeRound2Except(p1);
+
+        int resourcesBefore = p1.getTotalResourceCount();
+
+        phase4.placeSettlement(p1, 53);
+        phase4.placeRoad(p1, findAdjacentEdge(board.getVertex(53)).getId());
+
+        assertEquals(resourcesBefore, p1.getTotalResourceCount());
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
