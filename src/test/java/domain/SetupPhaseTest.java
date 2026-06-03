@@ -349,6 +349,15 @@ public class SetupPhaseTest {
         assertEquals(p4, phase4.getCurrentPlayer());
     }
 
+    @Test
+    void getCurrentPlayer_firstOfRound2_returnsLastPlayer() {
+        // TC29: P4 is first in round 2
+        completeRound1();
+
+        assertEquals(p4, phase4.getCurrentPlayer());
+    }
+
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
