@@ -66,7 +66,7 @@
   - **State of the system**: It is P2's turn; P2 has placed a settlement; edge 5 is already occupied by P1's road; `player = P2`, `edgeId = 5`
   - **Expected output**: `IllegalStateException`
 
-- **TC16: placeRoad_notAdjacentToCurrentSettlement_throwsIllegalState** ( :x: )
+- **TC16: placeRoad_notAdjacentToCurrentSettlement_throwsIllegalState** ( :white_check_mark: )
   - **State of the system**: It is P1's turn; P1 has placed a settlement at vertex 0; edge 10 is valid and unoccupied but not adjacent to vertex 0; `player = P1`, `edgeId = 10`
   - **Expected output**: `IllegalStateException`
 

@@ -249,6 +249,18 @@ public class SetupPhaseTest {
         );
     }
 
+    @Test
+    void placeRoad_notAdjacentToCurrentSettlement_throwsIllegalState() {
+        phase4.placeSettlement(p1, 0);
+
+        Edge nonAdjacentEdge = findNonAdjacentEdge(board.getVertex(0));
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> phase4.placeRoad(p1, nonAdjacentEdge.getId())
+        );
+    }
+
     private Edge findAdjacentEdge(Vertex vertex) {
         for (Edge edge : board.getEdges()) {
             if (edge.connectsTo(vertex) && !edge.hasRoad()) {
@@ -256,6 +268,15 @@ public class SetupPhaseTest {
             }
         }
         throw new IllegalStateException("No available adjacent edge found for vertex " + vertex.getId());
+    }
+
+    private Edge findNonAdjacentEdge(Vertex vertex) {
+        for (Edge edge : board.getEdges()) {
+            if (!edge.connectsTo(vertex) && !edge.hasRoad()) {
+                return edge;
+            }
+        }
+        throw new IllegalStateException("No non-adjacent edge found");
     }
 
     private void completeRound1() {
