@@ -1,9 +1,6 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SetupPhase {
     private final Game game;
@@ -22,7 +19,7 @@ public class SetupPhase {
     }
 
     public List<Player> getPlacementOrder() {
-        return placementOrder;
+        return Collections.unmodifiableList(placementOrder);
     }
 
     public Player getCurrentPlayer() {
