@@ -121,4 +121,10 @@ public class TradeOfferTest {
         TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
         assertEquals(recipient, offer.getRecipient());
     }
+
+    @Test
+    void getStatus_freshlyConstructed_returnsPending() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        assertEquals(TradeOffer.TradeStatus.PENDING, offer.getStatus());
+    }
 }
