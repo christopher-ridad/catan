@@ -44,11 +44,11 @@
 
 ### Method under test: `getOffering()`
 
-- **TO-11: getOffering_validTradeOffer_returnsMatchingOfferingMap** ( :x: )
+- **TO-11: getOffering_validTradeOffer_returnsMatchingOfferingMap** ( :white_check_mark: )
     - **State of the system**: Valid `TradeOffer` constructed
     - **Expected output**: Returns map equal to `offering` passed to constructor
 
-- **TO-12: getOffering_validTradeOffer_mutationAttemptThrowsUnsupportedOperation** ( :x: )
+- **TO-12: getOffering_validTradeOffer_mutationAttemptThrowsUnsupportedOperation** ( :white_check_mark: )
     - **State of the system**: Valid `TradeOffer` constructed
     - **Expected output**: `UnsupportedOperationException` on `put()` attempt
 
