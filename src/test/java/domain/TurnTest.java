@@ -280,6 +280,8 @@ public class TurnTest {
         Turn turn = new Turn(game, p2, dice, bank);
 
         int vertexId = 2;
+        int edgeId = 4;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
 
         assertThrows(IllegalStateException.class, () -> {
             turn.buildSettlement(vertexId);
@@ -294,6 +296,8 @@ public class TurnTest {
         Turn turn = new Turn(game, p2, dice, bank);
 
         int vertexId = 2;
+        int edgeId = 4;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
 
         assertThrows(IllegalStateException.class, () -> {
             turn.buildSettlement(vertexId);
@@ -308,6 +312,8 @@ public class TurnTest {
         Turn turn = new Turn(game, p2, dice, bank);
 
         int vertexId = 2;
+        int edgeId = 4;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
 
         assertThrows(IllegalStateException.class, () -> {
             turn.buildSettlement(vertexId);
@@ -322,6 +328,8 @@ public class TurnTest {
         Turn turn = new Turn(game, p2, dice, bank);
 
         int vertexId = 2;
+        int edgeId = 4;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
 
         assertThrows(IllegalStateException.class, () -> {
             turn.buildSettlement(vertexId);
@@ -337,7 +345,7 @@ public class TurnTest {
         Turn turn = new Turn(game, p3, dice, bank);
 
         int vertexId = 2;
-        int edgeId = 2;
+        int edgeId = 4;
         game.getBoard().getEdge(edgeId).setOwner(p3);
 
         turn.buildSettlement(vertexId);
@@ -348,6 +356,21 @@ public class TurnTest {
                 () -> assertEquals(0, p3.getResourceCount(ResourceType.WOOL)),
                 () -> assertEquals(0, p3.getResourceCount(ResourceType.GRAIN))
         );
+    }
+
+    @Test
+    public void BuildSettlement_VertexIsNotConnectedToExistingRoad_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        p3.addResources(ResourceType.WOOL, 1);
+        p3.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildSettlement(vertexId);
+        });
     }
 }
 

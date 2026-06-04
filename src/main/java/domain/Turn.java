@@ -110,6 +110,13 @@ public class Turn {
         activePlayer.removeResources(ResourceType.LUMBER, 1);
         activePlayer.removeResources(ResourceType.WOOL, 1);
         activePlayer.removeResources(ResourceType.GRAIN, 1);
+
+        Board board = game.getBoard();
+        Vertex vertex = board.getVertex(vertexId);
+
+        if (!(board.isConnectedToPlayer(vertex, activePlayer))) {
+            throw new IllegalStateException("Settlement is not connected to existing road");
+        }
     }
 
 
