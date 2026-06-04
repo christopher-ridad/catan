@@ -13,7 +13,7 @@ public class TradeOffer {
                       Map<ResourceType, Integer> requesting) {
 
         validateOffererAndRecipient(offerer, recipient);
-        validateOfferIsntEmpty(offering);
+        validateOffer(offering);
         validateRequestIsntEmpty(requesting);
 
         this.offerer = offerer;
@@ -28,9 +28,14 @@ public class TradeOffer {
         }
     }
 
-    private void validateOfferIsntEmpty(Map<ResourceType, Integer> offering) {
+    private void validateOffer(Map<ResourceType, Integer> offering) {
         if (offering == null || offering.isEmpty()) {
             throw new IllegalArgumentException("Offering must not be null or empty.");
+        }
+        for (int value : offering.values()) {
+            if (value <= 0) {
+                throw new IllegalArgumentException("All values in offering must be greater than 0.");
+            }
         }
     }
 
