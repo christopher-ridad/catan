@@ -26,6 +26,10 @@ public class MaritimeTrade {
         this.receiving = receiving;
     }
 
+    public Player getPlayer() {
+          return player;
+    }
+
     private void validateGivingAndReceivingResources(ResourceType giving, ResourceType receiving) {
         if (giving == receiving) {
             throw new IllegalArgumentException("Giving and receiving resources must be different.");
@@ -84,5 +88,4 @@ public class MaritimeTrade {
                     "Amount must equal the player's best available rate of " + rate + " for " + giving + ".");
         }
     }
-
 }
