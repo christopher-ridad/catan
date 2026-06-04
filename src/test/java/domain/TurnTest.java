@@ -140,15 +140,6 @@ public class TurnTest {
         );
     }
 
-
-//
-//            - **TC15: BuildRoad_ConnectedToRoadButBlockedByEnemySettlement_ThrowsIllegalStateException** ( :x: )
-//            - State of the system: valid `edgeId`, edge is connected to another edge with activePlayer's road built on it, but edge is connected to a vertex with an enemy settlement on it
-//            - Expected output: `IllegalStateException`
-//
-//            - **TC16 BuildRoad_TurnPhaseNotBuilding_ThrowsIllegalStateException** ( :x: )
-//            - State of the system: valid `edgeId`, phase is set to `TRADING`
-//            - Expected output: `IllegalStateException`
     @Test
     public void BuildRoad_EdgeIsOccupied_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.BRICK, 1);

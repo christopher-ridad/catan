@@ -62,28 +62,19 @@ public class Turn {
         Vertex endpoint1 = edge.getEndpoints().get(0);
         Vertex endpoint2 = edge.getEndpoints().get(1);
 
+        validateRoadConditions(edge, endpoint1, endpoint2, board);
+        edge.setOwner(activePlayer);
+    }
+
+    private void validateRoadConditions(Edge edge, Vertex endpoint1, Vertex endpoint2, Board board) {
         if (edge.hasRoad()) {
             throw new IllegalStateException("Edge is already occupied by road");
         }
         if (playerRoadCount() == 15) {
             throw new IllegalStateException("Player has already built maximum number of roads");
         }
-
-        boolean isConnected = false;
-
-        if (endpoint1.getOwner().filter(owner -> owner == activePlayer).isPresent() || endpoint2.getOwner().filter(owner -> owner == activePlayer).isPresent()) {
-            isConnected = true;
-            // add bank collection logic?
-        } else if (board.isConnectedToPlayer(endpoint1, activePlayer) && !endpoint1.isOccupied()) {
-            isConnected = true;
-        } else if (board.isConnectedToPlayer(endpoint2, activePlayer) && !endpoint2.isOccupied()) {
-            isConnected = true;
-        }
-
-        if (!isConnected) {
+        if (!isConnected(endpoint1, endpoint2, board)) {
             throw new IllegalStateException("Road must be connected to existing network");
-        } else {
-            edge.setOwner(activePlayer);
         }
     }
 
@@ -99,4 +90,19 @@ public class Turn {
         }
         return roadCount;
     }
+
+    private boolean isConnected(Vertex endpoint1, Vertex endpoint2, Board board) {
+        boolean connected = false;
+
+        if (endpoint1.getOwner().filter(owner -> owner == activePlayer).isPresent() || endpoint2.getOwner().filter(owner -> owner == activePlayer).isPresent()) {
+            connected = true;
+        } else if (board.isConnectedToPlayer(endpoint1, activePlayer) && !endpoint1.isOccupied()) {
+            connected = true;
+        } else if (board.isConnectedToPlayer(endpoint2, activePlayer) && !endpoint2.isOccupied()) {
+            connected = true;
+        }
+
+        return connected;
+    }
+
 }

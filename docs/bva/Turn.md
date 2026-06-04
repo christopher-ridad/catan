@@ -2,74 +2,70 @@
 
 ## Method under test: `Turn(Game game, Player activePlayer, Dice dice, Bank bank)`
 
-- **TC1: Constructor_WithNullGame_ThrowsIllegalArgumentException** ( :x: )
+- **TC1: Constructor_WithNullGame_ThrowsIllegalArgumentException** ( :white_check_mark: )
     - State of the system: `game = null`
     - Expected output: `IllegalArgumentException`
 
-- **TC2: Constructor_WithNullActivePlayer_ThrowsIllegalArgumentException** ( :x: )
+- **TC2: Constructor_WithNullActivePlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
     - State of the system: `activePlayer = null`
     - Expected output: `IllegalArgumentException`
 
-- **TC3: Constructor_WithNullDice_ThrowsIllegalArgumentException** ( :x: )
+- **TC3: Constructor_WithNullDice_ThrowsIllegalArgumentException** ( :white_check_mark: )
     - State of the system: `dice = null`
     - Expected output: `IllegalArgumentException`
 
-- **TC4: Constructor_WithNullBank_ThrowsIllegalArgumentException** ( :x: )
+- **TC4: Constructor_WithNullBank_ThrowsIllegalArgumentException** ( :white_check_mark: )
     - State of the system: `bank = null`
     - Expected output: `IllegalArgumentException`
 
-- **TC5: Constructor_WithValidArgs_SetsPhaseToProduction** ( :x: )
+- **TC5: Constructor_WithValidArgs_SetsPhaseToProduction** ( :white_check_mark: )
     - State of the system: valid `game`, valid `activePlayer = P1`, valid `dice`, valid `bank`
     - Expected output: `getPhase()` returns `PRODUCTION`
 
 ## Method under test: `buildRoad(int edgeId)`
 
-- **TC6: BuildRoad_PlayerDoesNotHaveBrick_ThrowsIllegalStateException** ( :x: )
+- **TC6: BuildRoad_PlayerDoesNotHaveBrick_ThrowsIllegalStateException** ( :white_check_mark: )
     - State of the system: valid `edgeId`, `activePlayer` does not have the required 1 brick
     - Expected output: `IllegalStateException`
 
-- **TC7: BuildRoad_PlayerDoesNotHaveLumber_ThrowsIllegalStateException** ( :x: )
+- **TC7: BuildRoad_PlayerDoesNotHaveLumber_ThrowsIllegalStateException** ( :white_check_mark: )
     - State of the system: valid `edgeId`, `activePlayer` does not have the required 1 lumber
     - Expected output: `IllegalStateException`
 
-- **TC8: BuildRoad_PlayerHasExactlyOneBrickAndLumber_NoExceptionThrown** ( :x: )
+- **TC8: BuildRoad_PlayerHasExactlyOneBrickAndLumber_NoExceptionThrown** ( :white_check_mark: )
     - State of the system: valid `edgeId`, `activePlayer` has exactly one of each required resource
     - Expected output: `getResources` called on `activePlayer` returns 0 for both `BRICK` and `LUMBER`
 
-- **TC9: BuildRoad_EdgeIsOccupied_ThrowsIllegalStateException** ( :x: )
+- **TC9: BuildRoad_EdgeIsOccupied_ThrowsIllegalStateException** ( :white_check_mark: )
     - State of the system: valid `edgeId`, edge is occupied by a road already
     - Expected output: `IllegalStateException`
 
-- **TC10: BuildRoad_PlayerHasFourteenRoads_NoExceptionThrown** ( :x: )
+- **TC10: BuildRoad_PlayerHasFourteenRoads_NoExceptionThrown** ( :white_check_mark: )
     - State of the system: valid `edgeId`, activePlayer has one less than the maximum number of roads allowed (14)
     - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
   
-- **TC10: BuildRoad_PlayerHasFifteenRoads_ThrowsIllegalStateException** ( :x: )
+- **TC10: BuildRoad_PlayerHasFifteenRoads_ThrowsIllegalStateException** ( :white_check_mark: )
     - State of the system: valid `edgeId`, activePlayer already has the maximum number of roads allowed (15)
     - Expected output: `IllegalStateException`
 
-- **TC11: BuildRoad_EdgeIsNotConnectedToExistingNetwork_ThrowsIllegalStateException** ( :x: )
+- **TC11: BuildRoad_EdgeIsNotConnectedToExistingNetwork_ThrowsIllegalStateException** ( :white_check_mark: )
     - State of the system: valid `edgeId`, edge is not connected to the player's existing network
     - Expected output: `IllegalStateException`
 
-- **TC12: BuildRoad_RoadIsConnectedToRoad_NoExceptionThrown** ( :x: )
+- **TC12: BuildRoad_RoadIsConnectedToRoad_NoExceptionThrown** ( :white_check_mark: )
     - State of the system: valid `edgeId`, edge is connected to another edge with activePlayer's road built on it
     - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
 
-- **TC13: BuildRoad_RoadIsConnectedToSettlement_NoExceptionThrown** ( :x: )
+- **TC13: BuildRoad_RoadIsConnectedToSettlement_NoExceptionThrown** ( :white_check_mark: )
     - State of the system: valid `edgeId`, edge is connected to a vertex with activePlayer's settlement built on it
     - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
 
-- **TC14: BuildRoad_RoadIsConnectedToCity_NoExceptionThrown** ( :x: )
+- **TC14: BuildRoad_RoadIsConnectedToCity_NoExceptionThrown** ( :white_check_mark: )
     - State of the system: valid `edgeId`, edge is connected to a vertex with activePlayer's city built on it 
     - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
 
-- **TC15: BuildRoad_ConnectedToRoadButBlockedByEnemySettlement_ThrowsIllegalStateException** ( :x: )
+- **TC15: BuildRoad_ConnectedToRoadButBlockedByEnemySettlement_ThrowsIllegalStateException** ( :white_check_mark: )
     - State of the system: valid `edgeId`, edge is connected to another edge with activePlayer's road built on it, but edge is connected to a vertex with an enemy settlement on it 
-    - Expected output: `IllegalStateException`
-
-- **TC16 BuildRoad_TurnPhaseNotBuilding_ThrowsIllegalStateException** ( :x: )
-    - State of the system: valid `edgeId`, phase is set to `TRADING`
     - Expected output: `IllegalStateException`
 
   
