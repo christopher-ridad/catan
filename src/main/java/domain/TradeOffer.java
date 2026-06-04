@@ -58,6 +58,11 @@ public class TradeOffer {
         status = TradeStatus.ACCEPTED;
     }
 
+    public void reject() {
+        validatePendingTrade();
+        status = TradeStatus.REJECTED;
+    }
+
     private void validateOffererAndRecipient(Player offerer, Player recipient) {
         if (offerer.equals(recipient)) {
             throw new IllegalArgumentException("Offerer and recipient must be different players.");
@@ -88,7 +93,7 @@ public class TradeOffer {
 
     private void validatePendingTrade() {
         if (status != TradeStatus.PENDING) {
-            throw new IllegalStateException("Cannot accept a trade offer that is not pending.");
+            throw new IllegalStateException("Cannot accept/reject a trade offer that is not pending.");
         }
     }
 }

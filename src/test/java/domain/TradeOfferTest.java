@@ -140,4 +140,11 @@ public class TradeOfferTest {
         offer.accept();
         assertFalse(offer.isPending());
     }
+
+    @Test
+    void isPending_statusRejected_returnsFalse() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        offer.reject();
+        assertFalse(offer.isPending());
+    }
 }
