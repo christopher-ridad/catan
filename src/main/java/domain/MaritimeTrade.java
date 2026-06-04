@@ -30,6 +30,10 @@ public class MaritimeTrade {
           return player;
     }
 
+    public ResourceType getGiving() {
+        return giving;
+    }
+
     private void validateGivingAndReceivingResources(ResourceType giving, ResourceType receiving) {
         if (giving == receiving) {
             throw new IllegalArgumentException("Giving and receiving resources must be different.");
