@@ -63,16 +63,28 @@ public class Player {
     }
 
     public void addResources(ResourceType resourceType, int amount) {
-        if (resourceType == null) {
-            throw new IllegalArgumentException("Resource type cannot be null");
-        }
-        if (amount < 0) {
-            throw new IllegalArgumentException("Amount must be greater than 0");
-        }
+        ValidateResourceAndAmount(resourceType, amount);
         this.resources.merge(resourceType, amount, Integer::sum);
     }
 
     public int getTotalResourceCount() {
         return this.resources.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public void removeResources(ResourceType resourceType, int amount) {
+        ValidateResourceAndAmount(resourceType, amount);
+        if (getResourceCount(resourceType) < amount) {
+            throw new IllegalStateException("Amount cannot be greater than current resource count");
+        }
+        this.resources.put(resourceType, getResourceCount(resourceType) - amount);
+    }
+
+    private void ValidateResourceAndAmount(ResourceType resourceType, int amount) {
+        if (resourceType == null) {
+            throw new IllegalArgumentException("Resource type cannot be null");
+        }
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
     }
 }
