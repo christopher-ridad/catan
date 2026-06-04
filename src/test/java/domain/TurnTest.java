@@ -468,6 +468,45 @@ public class TurnTest {
 
         assertEquals(p3, game.getBoard().getVertex(vertexId).getOwner().orElse(null));
     }
+
+    @Test
+    public void BuildSettlement_VertexAlreadyOccupied_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        p3.addResources(ResourceType.WOOL, 1);
+        p3.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+        int edgeId = 4;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
+        game.getBoard().getVertex(vertexId).setOwner(p4);
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildSettlement(vertexId);
+        });
+    }
+
+    @Test
+    public void BuildSettlement_PlayerHasFiveSettlements_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        p3.addResources(ResourceType.WOOL, 1);
+        p3.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        for (int i = 10; i < 15; i++) {
+            game.getBoard().getVertex(i).setOwner(p3);
+        }
+
+        int vertexId = 2;
+        int edgeId = 4;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildSettlement(vertexId);
+        });
+    }
 }
 
 

@@ -118,11 +118,32 @@ public class Turn {
             throw new IllegalStateException("Settlement is not connected to existing road");
         }
 
+        if (vertex.isOccupied()) {
+            throw new IllegalStateException("Vertex is already occupied");
+        }
+
+        if (playerSettlementCount() == 5) {
+            throw new IllegalStateException("Player already has maximum number of settlements");
+        }
+
         if (!(board.satisfiesDistanceRule(vertex))) {
             throw new IllegalStateException("Settlement does not satisfy distance rule");
         }
 
         vertex.setOwner(activePlayer);
+    }
+
+    private int playerSettlementCount() {
+        Board board = game.getBoard();
+        List<Vertex> vertexList = board.getVertices();
+
+        int settlementCount = 0;
+        for (Vertex vertex : vertexList) {
+            if (vertex.getOwner().map(owner -> owner == activePlayer).orElse(false) && !vertex.isCity()) {
+                settlementCount += 1;
+            }
+        }
+        return settlementCount;
     }
 
 
