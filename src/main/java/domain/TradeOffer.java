@@ -20,7 +20,7 @@ public class TradeOffer {
 
         validateOffererAndRecipient(offerer, recipient);
         validateOffer(offering);
-        validateRequestIsntEmpty(requesting);
+        validateRequest(requesting);
 
         this.offerer = offerer;
         this.recipient = recipient;
@@ -53,6 +53,11 @@ public class TradeOffer {
         return status == TradeStatus.PENDING;
     }
 
+    public void accept() {
+        validatePendingTrade();
+        status = TradeStatus.ACCEPTED;
+    }
+
     private void validateOffererAndRecipient(Player offerer, Player recipient) {
         if (offerer.equals(recipient)) {
             throw new IllegalArgumentException("Offerer and recipient must be different players.");
@@ -70,7 +75,7 @@ public class TradeOffer {
         }
     }
 
-    private void validateRequestIsntEmpty(Map<ResourceType, Integer> requesting) {
+    private void validateRequest(Map<ResourceType, Integer> requesting) {
         if (requesting == null || requesting.isEmpty()) {
             throw new IllegalArgumentException("Requesting must not be null or empty.");
         }
@@ -78,6 +83,12 @@ public class TradeOffer {
             if (value <= 0) {
                 throw new IllegalArgumentException("All values in requesting must be greater than 0.");
             }
+        }
+    }
+
+    private void validatePendingTrade() {
+        if (status != TradeStatus.PENDING) {
+            throw new IllegalStateException("Cannot accept a trade offer that is not pending.");
         }
     }
 }
