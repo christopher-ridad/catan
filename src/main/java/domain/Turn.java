@@ -167,4 +167,15 @@ public class Turn {
             throw new IllegalStateException("Settlement does not satisfy distance rule");
         }
     }
+
+    private void validateCityResources() {
+        if (activePlayer.getResourceCount(ResourceType.ORE) < 3 ||
+                activePlayer.getResourceCount(ResourceType.GRAIN) < 2) {
+            throw new IllegalStateException("Player does not have the required resources for a city");
+        }
+    }
+
+    public void buildCity(int vertexId) {
+        validateCityResources();
+    }
 }

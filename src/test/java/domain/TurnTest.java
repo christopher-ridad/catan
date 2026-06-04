@@ -530,6 +530,20 @@ public class TurnTest {
 
         assertEquals(p3, game.getBoard().getVertex(vertexId).getOwner().orElse(null));
     }
+
+    @Test
+    public void BuildCity_PlayerDoesNotHaveEnoughOre_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.ORE, 2);
+        p3.addResources(ResourceType.GRAIN, 2);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+        game.getBoard().getVertex(vertexId).setOwner(p3);
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildCity(vertexId);
+        });
+    }
 }
 
 
