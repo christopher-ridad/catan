@@ -378,4 +378,9 @@ public class BoardTest {
     void getHarborType_ForWoolHarborVertex_ReturnsWool() {
         assertEquals(HarborType.WOOL, board.getHarborType(board.getVertex(42)).orElseThrow());
     }
+
+    @Test
+    void getHarborType_ForBrickHarborVertex_ReturnsBrick() {
+        assertEquals(HarborType.BRICK, board.getHarborType(board.getVertex(33)).orElseThrow());
+    }
 }
