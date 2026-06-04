@@ -257,6 +257,19 @@ public class MaritimeTradeTest {
         assertEquals(ResourceType.BRICK, trade.getGiving());
     }
 
+    @Test
+    void getAmount_validMaritimeTrade_returnsCorrectAmount() {
+        Player player = playerWithSettlementAt(4, Map.of(
+                ResourceType.BRICK, 4,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.BRICK, 4, ResourceType.LUMBER, board);
+        assertEquals(4, trade.getAmount());
+    }
+
     private Player playerWithSettlementAt(int vertexId, Map<ResourceType, Integer> resources) {
         Player player = new Player("Alice", PlayerColor.RED, resources);
         board.getVertex(vertexId).setOwner(player);

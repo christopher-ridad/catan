@@ -33,6 +33,9 @@ public class MaritimeTrade {
     public ResourceType getGiving() {
         return giving;
     }
+    public int getAmount() {
+        return amount;
+    }
 
     private void validateGivingAndReceivingResources(ResourceType giving, ResourceType receiving) {
         if (giving == receiving) {
