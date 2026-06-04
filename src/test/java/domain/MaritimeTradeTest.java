@@ -309,6 +309,19 @@ public class MaritimeTradeTest {
         assertEquals(3, trade.getRate());
     }
 
+    @Test
+    void getRate_specialHarbor_returnsTwo() {
+        Player player = playerWithSettlementAt(33, Map.of(
+                ResourceType.BRICK, 2,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.BRICK, 2, ResourceType.LUMBER, board);
+        assertEquals(2, trade.getRate());
+    }
+
 
     private Player playerWithSettlementAt(int vertexId, Map<ResourceType, Integer> resources) {
         Player player = new Player("Alice", PlayerColor.RED, resources);
