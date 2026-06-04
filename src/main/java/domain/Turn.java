@@ -117,6 +117,8 @@ public class Turn {
         if (!(board.isConnectedToPlayer(vertex, activePlayer))) {
             throw new IllegalStateException("Settlement is not connected to existing road");
         }
+
+        vertex.setOwner(activePlayer);
     }
 
 
