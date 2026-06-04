@@ -196,6 +196,36 @@
   - State of the system: valid board, edge connects two other vertices (not the target vertex) but has a road owned by the player
   - Expected output: `false`
 
+## Method under test: `getHarborType(Vertex)`
+
+- **TC42: getHarborType_ForNonHarborVertex_ReturnsEmpty** ( :x: )
+  - **State of the system**: Valid board constructed, vertex 4 requested (non-harbor inner vertex)
+  - **Expected output**: `Optional.empty()`
+
+- **TC43: getHarborType_ForGenericHarborVertex_ReturnsGeneric** ( :x: )
+  - **State of the system**: Valid board constructed, vertex 0 requested
+  - **Expected output**: `Optional` containing `HarborType.GENERIC`
+
+- **TC44: getHarborType_ForGrainHarborVertex_ReturnsGrain** ( :x: )
+  - **State of the system**: Valid board constructed, vertex 1 requested
+  - **Expected output**: `Optional` containing `HarborType.GRAIN`
+
+- **TC45: getHarborType_ForOreHarborVertex_ReturnsOre** ( :x: )
+  - **State of the system**: Valid board constructed, vertex 10 requested
+  - **Expected output**: `Optional` containing `HarborType.ORE`
+
+- **TC46: getHarborType_ForWoolHarborVertex_ReturnsWool** ( :x: )
+  - **State of the system**: Valid board constructed, vertex 42 requested
+  - **Expected output**: `Optional` containing `HarborType.WOOL`
+
+- **TC47: getHarborType_ForBrickHarborVertex_ReturnsBrick** ( :x: )
+  - **State of the system**: Valid board constructed, vertex 33 requested
+  - **Expected output**: `Optional` containing `HarborType.BRICK`
+
+- **TC48: getHarborType_ForLumberHarborVertex_ReturnsLumber** ( :x: )
+  - **State of the system**: Valid board constructed, vertex 11 requested
+  - **Expected output**: `Optional` containing `HarborType.LUMBER`
+
 
 
 
