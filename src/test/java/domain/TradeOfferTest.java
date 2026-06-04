@@ -35,7 +35,6 @@ public class TradeOfferTest {
     }
 
     @Test
-        // TO-03
     void tradeOfferConstructor_requestingNull_throwsIllegalArgument() {
         assertThrows(IllegalArgumentException.class, () ->
                 new TradeOffer(offerer, recipient, validOffering, null));
@@ -72,7 +71,6 @@ public class TradeOfferTest {
     }
 
     @Test
-        // TO-09
     void tradeOfferConstructor_requestingValueNegative_throwsIllegalArgument() {
         assertThrows(IllegalArgumentException.class, () ->
                 new TradeOffer(offerer, recipient, validOffering, Map.of(ResourceType.LUMBER, -1)));
