@@ -42,6 +42,10 @@ public class MaritimeTrade {
         return receiving;
     }
 
+    public int getRate() {
+        return rate;
+    }
+
     private void validateGivingAndReceivingResources(ResourceType giving, ResourceType receiving) {
         if (giving == receiving) {
             throw new IllegalArgumentException("Giving and receiving resources must be different.");
