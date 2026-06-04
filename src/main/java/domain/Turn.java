@@ -105,4 +105,12 @@ public class Turn {
         return connected;
     }
 
+    public void buildSettlement(int vertexId) {
+        activePlayer.removeResources(ResourceType.BRICK, 1);
+        activePlayer.removeResources(ResourceType.LUMBER, 1);
+        activePlayer.removeResources(ResourceType.WOOL, 1);
+        activePlayer.removeResources(ResourceType.GRAIN, 1);
+    }
+
+
 }

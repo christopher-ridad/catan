@@ -271,6 +271,84 @@ public class TurnTest {
             turn.buildRoad(edgeId2);
         });
     }
+
+    @Test
+    public void BuildSettlement_PlayerDoesNotHaveBrick_ThrowsIllegalStateException() {
+        p2.addResources(ResourceType.LUMBER, 1);
+        p2.addResources(ResourceType.WOOL, 1);
+        p2.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p2, dice, bank);
+
+        int vertexId = 2;
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildSettlement(vertexId);
+        });
+    }
+
+    @Test
+    public void BuildSettlement_PlayerDoesNotHaveLumber_ThrowsIllegalStateException() {
+        p2.addResources(ResourceType.BRICK, 1);
+        p2.addResources(ResourceType.WOOL, 1);
+        p2.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p2, dice, bank);
+
+        int vertexId = 2;
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildSettlement(vertexId);
+        });
+    }
+
+    @Test
+    public void BuildSettlement_PlayerDoesNotHaveWool_ThrowsIllegalStateException() {
+        p2.addResources(ResourceType.BRICK, 1);
+        p2.addResources(ResourceType.LUMBER, 1);
+        p2.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p2, dice, bank);
+
+        int vertexId = 2;
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildSettlement(vertexId);
+        });
+    }
+
+    @Test
+    public void BuildSettlement_PlayerDoesNotHaveGrain_ThrowsIllegalStateException() {
+        p2.addResources(ResourceType.BRICK, 1);
+        p2.addResources(ResourceType.LUMBER, 1);
+        p2.addResources(ResourceType.WOOL, 1);
+        Turn turn = new Turn(game, p2, dice, bank);
+
+        int vertexId = 2;
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildSettlement(vertexId);
+        });
+    }
+
+    @Test
+    public void BuildSettlement_PlayerHasExactlyOneOfEachRequiredResource_NoExceptionThrown() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        p3.addResources(ResourceType.WOOL, 1);
+        p3.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+        int edgeId = 2;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
+
+        turn.buildSettlement(vertexId);
+
+        assertAll(
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.LUMBER)),
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.WOOL)),
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.GRAIN))
+        );
+    }
 }
 
 

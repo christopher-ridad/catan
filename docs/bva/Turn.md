@@ -69,7 +69,7 @@
   - Expected output: `IllegalStateException`
 
 ## Method under test: `buildSettlement(int vertexId)`
-Validates player can afford a settlement (1 Brick + 1 Lumber + 1 Wool + 1 Grain), Distance Rule, and road connection; deducts cost; throws if invalid
+
 - **TC16: BuildSettlement_PlayerDoesNotHaveBrick_ThrowsIllegalStateException** ( :x: )
   - State of the system: valid `vertexId`, `activePlayer` does not have the required 1 `BRICK`
   - Expected output: `IllegalStateException`
