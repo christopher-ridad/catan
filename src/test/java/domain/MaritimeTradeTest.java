@@ -16,11 +16,21 @@ public class MaritimeTradeTest {
     void setUp() {
         ArrayList<Hex> hexes = new ArrayList<>();
         hexes.add(new Hex(TerrainType.DESERT, 0));
-        for (int i = 0; i < 4; i++) hexes.add(new Hex(TerrainType.FIELDS, 9));
-        for (int i = 0; i < 4; i++) hexes.add(new Hex(TerrainType.PASTURE, 10));
-        for (int i = 0; i < 4; i++) hexes.add(new Hex(TerrainType.FOREST, 11));
-        for (int i = 0; i < 3; i++) hexes.add(new Hex(TerrainType.MOUNTAINS, 12));
-        for (int i = 0; i < 3; i++) hexes.add(new Hex(TerrainType.HILLS, 4));
+        for (int i = 0; i < 4; i++) {
+            hexes.add(new Hex(TerrainType.FIELDS, 9));
+        }
+        for (int i = 0; i < 4; i++) {
+            hexes.add(new Hex(TerrainType.PASTURE, 10));
+        }
+        for (int i = 0; i < 4; i++) {
+            hexes.add(new Hex(TerrainType.FOREST, 11));
+        }
+        for (int i = 0; i < 3; i++) {
+            hexes.add(new Hex(TerrainType.MOUNTAINS, 12));
+        }
+        for (int i = 0; i < 3; i++) {
+            hexes.add(new Hex(TerrainType.HILLS, 4));
+        }
         board = new Board(hexes);
     }
 
