@@ -77,4 +77,10 @@ public class TradeOfferTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new TradeOffer(offerer, recipient, validOffering, Map.of(ResourceType.LUMBER, -1)));
     }
+
+    @Test
+    void tradeOfferConstructor_allValuesMinimumValid_objectCreatedWithPendingStatus() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        assertEquals(TradeOffer.TradeStatus.PENDING, offer.getStatus());
+    }
 }

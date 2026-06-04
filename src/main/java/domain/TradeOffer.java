@@ -3,10 +3,15 @@ package domain;
 import java.util.Map;
 
 public class TradeOffer {
+    public enum TradeStatus {
+        PENDING, ACCEPTED, REJECTED
+    }
+
     private final Player offerer;
     private final Player recipient;
     private final Map<ResourceType, Integer> offering;
     private final Map<ResourceType, Integer> requesting;
+    private TradeStatus status;
 
     public TradeOffer(Player offerer, Player recipient,
                       Map<ResourceType, Integer> offering,
@@ -20,6 +25,11 @@ public class TradeOffer {
         this.recipient = recipient;
         this.offering = offering;
         this.requesting = requesting;
+        this.status = TradeStatus.PENDING;
+    }
+
+    public TradeStatus getStatus() {
+        return status;
     }
 
     private void validateOffererAndRecipient(Player offerer, Player recipient) {
