@@ -140,14 +140,7 @@ public class TurnTest {
         );
     }
 
-//
-//            - **TC13: BuildRoad_RoadIsConnectedToSettlement_NoExceptionThrown** ( :x: )
-//            - State of the system: valid `edgeId`, edge is connected to a vertex with activePlayer's settlement built on it
-//            - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
-//
-//            - **TC14: BuildRoad_RoadIsConnectedToCity_NoExceptionThrown** ( :x: )
-//            - State of the system: valid `edgeId`, edge is connected to a vertex with activePlayer's city built on it
-//            - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
+
 //
 //            - **TC15: BuildRoad_ConnectedToRoadButBlockedByEnemySettlement_ThrowsIllegalStateException** ( :x: )
 //            - State of the system: valid `edgeId`, edge is connected to another edge with activePlayer's road built on it, but edge is connected to a vertex with an enemy settlement on it
@@ -269,6 +262,23 @@ public class TurnTest {
         });
 
         assertEquals(game.getBoard().getEdge(edgeId2).getOwner().orElse(null), p3);
+    }
+
+    @Test
+    public void BuildRoad_ConnectedToRoadButBlockedByEnemySettlement_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int edgeId1 = 11;
+        int edgeId2 = 12;
+
+        game.getBoard().getEdge(edgeId1).setOwner(p3);
+        game.getBoard().getEdge(edgeId1).getEndpoints().get(1).setOwner(p4);
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildRoad(edgeId2);
+        });
     }
 }
 
