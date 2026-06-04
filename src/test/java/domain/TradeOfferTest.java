@@ -83,4 +83,10 @@ public class TradeOfferTest {
         TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
         assertEquals(TradeOffer.TradeStatus.PENDING, offer.getStatus());
     }
+
+    @Test
+    void getOffering_validTradeOffer_returnsMatchingOfferingMap() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        assertEquals(validOffering, offer.getOffering());
+    }
 }

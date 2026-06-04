@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class TradeOffer {
@@ -26,6 +27,10 @@ public class TradeOffer {
         this.offering = offering;
         this.requesting = requesting;
         this.status = TradeStatus.PENDING;
+    }
+
+    public Map<ResourceType, Integer> getOffering() {
+        return Collections.unmodifiableMap(offering);
     }
 
     public TradeStatus getStatus() {
