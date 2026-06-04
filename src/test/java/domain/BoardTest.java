@@ -358,4 +358,9 @@ public class BoardTest {
     void getHarborType_ForNonHarborVertex_ReturnsEmpty() {
         assertTrue(board.getHarborType(board.getVertex(4)).isEmpty());
     }
+
+    @Test
+    void getHarborType_ForGenericHarborVertex_ReturnsGeneric() {
+        assertEquals(HarborType.GENERIC, board.getHarborType(board.getVertex(0)).orElseThrow());
+    }
 }

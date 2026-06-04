@@ -1,8 +1,6 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class BoardInitialization {
     private BoardInitialization() {
@@ -225,5 +223,41 @@ public class BoardInitialization {
 
     public static int[][] getEdgeEndpoints() {
         return EDGE_ENDPOINTS;
+    }
+
+    private static final Map<Integer, HarborType> HARBOR_VERTICES;
+
+    static {
+        HARBOR_VERTICES = new HashMap<>();
+        HARBOR_VERTICES.put(0,  HarborType.GENERIC);
+        HARBOR_VERTICES.put(3,  HarborType.GENERIC);
+
+        HARBOR_VERTICES.put(1,  HarborType.GRAIN);
+        HARBOR_VERTICES.put(5,  HarborType.GRAIN);
+
+        HARBOR_VERTICES.put(10, HarborType.ORE);
+        HARBOR_VERTICES.put(15, HarborType.ORE);
+
+        HARBOR_VERTICES.put(26, HarborType.GENERIC);
+        HARBOR_VERTICES.put(32, HarborType.GENERIC);
+
+        HARBOR_VERTICES.put(42, HarborType.WOOL);
+        HARBOR_VERTICES.put(46, HarborType.WOOL);
+
+        HARBOR_VERTICES.put(49, HarborType.GENERIC);
+        HARBOR_VERTICES.put(52, HarborType.GENERIC);
+
+        HARBOR_VERTICES.put(47, HarborType.GENERIC);
+        HARBOR_VERTICES.put(51, HarborType.GENERIC);
+
+        HARBOR_VERTICES.put(33, HarborType.BRICK);
+        HARBOR_VERTICES.put(38, HarborType.BRICK);
+
+        HARBOR_VERTICES.put(11, HarborType.LUMBER);
+        HARBOR_VERTICES.put(16, HarborType.LUMBER);
+    }
+
+    public static Map<Integer, HarborType> getHarborVertices() {
+        return Collections.unmodifiableMap(HARBOR_VERTICES);
     }
 }

@@ -1,9 +1,6 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public final class Board {
     private final List<Hex> hexes;
@@ -62,6 +59,11 @@ public final class Board {
                 adjacentVertices.add(vertices.get(adjId));
             }
             vertices.get(i).setAdjacentVertices(adjacentVertices);
+        }
+
+        Map<Integer, HarborType> harborVertices = BoardInitialization.getHarborVertices();
+        for (Map.Entry<Integer, HarborType> entry : harborVertices.entrySet()) {
+            vertices.get(entry.getKey()).setHarborType(entry.getValue());
         }
     }
 
