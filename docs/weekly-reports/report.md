@@ -9,8 +9,9 @@
 5. [done] [Chris]: Setup Jacoco (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/30)
 6. [done] [Chris]: Setup Pitest (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/31)
 7. [done] [Chris]: Setup Spotbugs (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/32)
-8. [waiting to be merged] [Ananya]: Implement Player class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/17)
-8. [waiting to be merged] [Ariel]: Implement Hex class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/36)
+8. [done] [Ananya]: Implement Player class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/17)
+9. [done] [Ariel]: Implement Hex class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/36)
+10. [done] [Harry]: Implement Game Class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/37)
 
 
 # Week 7 (05/11/2026–05/17/2026)
