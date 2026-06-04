@@ -2,8 +2,6 @@
 
 ## Method under test: `DevelopmentCard(DevelopmentCardType type)`
 
-**Step 4: Test Cases (Each-Choice)**
-
 - **TC1: Constructor_WithNullType_ThrowsIllegalArgumentException** ( not implemented )
     - State of the system: `type = null`
     - Expected output: `IllegalArgumentException`
@@ -15,3 +13,9 @@
 - **TC3: Constructor_NewCard_IsNotPlayed** ( not implemented )
     - State of the system: `type = KNIGHT`
     - Expected output: `isPlayed()` returns `false`
+
+## Method under test: `getType()`
+
+- **TC4: GetType_ReturnsCorrectType** ( not implemented )
+    - State of the system: `DevelopmentCard(ROAD_BUILDING)`
+    - Expected output: `ROAD_BUILDING`
