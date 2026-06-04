@@ -176,14 +176,18 @@ public class Turn {
     }
 
     public void buildCity(int vertexId) {
+        Board board = game.getBoard();
+        Vertex vertex = board.getVertex(vertexId);
+
         validateCityResources();
 
         if (playerCityCount() == 4) {
             throw new IllegalStateException("Player already has maximum number of cities");
         }
 
-        Board board = game.getBoard();
-        Vertex vertex = board.getVertex(vertexId);
+        if (vertex.isOccupied() && vertex.getOwner().filter(owner -> owner == activePlayer).isEmpty()) {
+            throw new IllegalStateException("Vertex is occupied by enemy settlement or city");
+        }
 
         activePlayer.removeResources(ResourceType.ORE, 3);
         activePlayer.removeResources(ResourceType.GRAIN, 2);

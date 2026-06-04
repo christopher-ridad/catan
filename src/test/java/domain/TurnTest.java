@@ -616,6 +616,33 @@ public class TurnTest {
         assertEquals(p3, game.getBoard().getVertex(vertexId).getOwner().orElse(null));
         assertTrue(game.getBoard().getVertex(vertexId).isCity());
     }
+
+    @Test
+    public void BuildCity_PlayerDoesNotHaveExistingSettlement_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.ORE, 3);
+        p3.addResources(ResourceType.GRAIN, 2);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildCity(vertexId);
+        });
+    }
+
+    @Test
+    public void BuildCity_VertexOccupiedByEnemySettlement_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.ORE, 3);
+        p3.addResources(ResourceType.GRAIN, 2);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+        game.getBoard().getVertex(vertexId).setOwner(p4);
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildCity(vertexId);
+        });
+    }
 }
 
 
