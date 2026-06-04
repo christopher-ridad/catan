@@ -154,4 +154,12 @@ public class TradeOfferTest {
         offer.accept();
         assertEquals(TradeOffer.TradeStatus.ACCEPTED, offer.getStatus());
     }
+
+    @Test
+        // TO-22
+    void accept_statusAlreadyAccepted_throwsIllegalState() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        offer.accept();
+        assertThrows(IllegalStateException.class, offer::accept);
+    }
 }
