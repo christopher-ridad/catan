@@ -353,4 +353,9 @@ public class BoardTest {
         Board testBoard = new Board(hexes, new ArrayList<>(), List.of(nonAdjacentEdge));
         assertFalse(testBoard.isConnectedToPlayer(vertex, player));
     }
+
+    @Test
+    void getHarborType_ForNonHarborVertex_ReturnsEmpty() {
+        assertTrue(board.getHarborType(board.getVertex(4)).isEmpty());
+    }
 }

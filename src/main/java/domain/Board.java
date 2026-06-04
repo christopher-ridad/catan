@@ -3,6 +3,7 @@ package domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public final class Board {
     private final List<Hex> hexes;
@@ -114,5 +115,9 @@ public final class Board {
         return edges.stream()
                 .filter(e -> e.connectsTo(vertex))
                 .anyMatch(e -> e.getOwner().filter(o -> o == player).isPresent());
+    }
+
+    public Optional<HarborType> getHarborType(Vertex vertex) {
+        return vertex.getHarborType();
     }
 }
