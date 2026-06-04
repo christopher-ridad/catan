@@ -33,6 +33,10 @@ public class TradeOffer {
         return Collections.unmodifiableMap(offering);
     }
 
+    public Map<ResourceType, Integer> getRequesting() {
+        return Collections.unmodifiableMap(requesting);
+    }
+
     public TradeStatus getStatus() {
         return status;
     }
