@@ -230,6 +230,8 @@ public class TurnTest {
         assertDoesNotThrow(() -> {
             turn.buildRoad(edgeId2);
         });
+
+        assertEquals(game.getBoard().getEdge(edgeId2).getOwner().orElse(null), p3);
     }
 }
 
