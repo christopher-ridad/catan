@@ -56,6 +56,11 @@ public class TurnTest {
         this.game = new Game(playerList, board);
 
         this.bank = new Bank();
+        bank.deduct(ResourceType.BRICK, 19);
+        bank.deduct(ResourceType.LUMBER, 19);
+        bank.deduct(ResourceType.WOOL, 19);
+        bank.deduct(ResourceType.ORE, 19);
+        bank.deduct(ResourceType.GRAIN, 19);
 
         Random mockRandom = EasyMock.createMock(Random.class);
         EasyMock.replay(mockRandom);

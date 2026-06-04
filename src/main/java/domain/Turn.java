@@ -64,6 +64,8 @@ public class Turn {
 
         activePlayer.removeResources(ResourceType.BRICK, 1);
         activePlayer.removeResources(ResourceType.LUMBER, 1);
+        bank.collect(ResourceType.BRICK, 1);
+        bank.collect(ResourceType.LUMBER, 1);
         edge.setOwner(activePlayer);
     }
 
@@ -125,6 +127,10 @@ public class Turn {
         activePlayer.removeResources(ResourceType.LUMBER, 1);
         activePlayer.removeResources(ResourceType.WOOL, 1);
         activePlayer.removeResources(ResourceType.GRAIN, 1);
+        bank.collect(ResourceType.BRICK, 1);
+        bank.collect(ResourceType.LUMBER, 1);
+        bank.collect(ResourceType.WOOL, 1);
+        bank.collect(ResourceType.GRAIN, 1);
         vertex.setOwner(activePlayer);
     }
 
@@ -184,6 +190,8 @@ public class Turn {
 
         activePlayer.removeResources(ResourceType.ORE, 3);
         activePlayer.removeResources(ResourceType.GRAIN, 2);
+        bank.collect(ResourceType.ORE, 3);
+        bank.collect(ResourceType.GRAIN, 2);
         vertex.upgradeToCity();
     }
 
