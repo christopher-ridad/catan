@@ -40,4 +40,10 @@ public class TradeOfferTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new TradeOffer(offerer, recipient, validOffering, null));
     }
+
+    @Test
+    void tradeOfferConstructor_offeringEmpty_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new TradeOffer(offerer, recipient, Map.of(), validRequesting));
+    }
 }
