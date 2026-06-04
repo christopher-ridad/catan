@@ -101,8 +101,12 @@ public class TurnTest {
     public void BuildRoad_PlayerDoesNotHaveBrick_ThrowsIllegalStateException() {
         p2.addResources(ResourceType.LUMBER, 1);
         Turn turn = new Turn(game, p2, dice, bank);
+
+        int edgeId = 2;
+        game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p2);
+
         assertThrows(IllegalStateException.class, () -> {
-            turn.buildRoad(2);
+            turn.buildRoad(edgeId);
         });
     }
 
@@ -110,8 +114,12 @@ public class TurnTest {
     public void BuildRoad_PlayerDoesNotHaveLumber_ThrowsIllegalStateException() {
         p2.addResources(ResourceType.BRICK, 1);
         Turn turn = new Turn(game, p2, dice, bank);
+
+        int edgeId = 2;
+        game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p2);
+
         assertThrows(IllegalStateException.class, () -> {
-            turn.buildRoad(2);
+            turn.buildRoad(edgeId);
         });
     }
 
@@ -122,6 +130,8 @@ public class TurnTest {
         Turn turn = new Turn(game, p3, dice, bank);
 
         int edgeId = 2;
+        game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p3);
+
         turn.buildRoad(edgeId);
 
         assertAll(
@@ -161,6 +171,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         Turn turn = new Turn(game, p3, dice, bank);
         int edgeId = 4;
+        game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p3);
         board.getEdge(edgeId).setOwner(p4);
         assertThrows(IllegalStateException.class, () -> {
             turn.buildRoad(edgeId);
@@ -172,13 +183,12 @@ public class TurnTest {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
         Turn turn = new Turn(game, p3, dice, bank);
+        int edgeId = 15;
+        game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p3);
 
         for (int i = 1; i < 15; i++) {
             board.getEdge(i).setOwner(p3);
         }
-
-        int edgeId = 15;
-
         assertDoesNotThrow(() -> {
             turn.buildRoad(edgeId);
         });
@@ -195,9 +205,25 @@ public class TurnTest {
         }
 
         int edgeId = 17;
+        game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p3);
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildRoad(edgeId);
+        });
+    }
+
+    @Test
+    public void BuildRoad_EdgeIsNotConnectedToExistingNetwork_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int edgeId = 17;
 
         assertThrows(IllegalStateException.class, () -> {
             turn.buildRoad(edgeId);
         });
     }
 }
+
+

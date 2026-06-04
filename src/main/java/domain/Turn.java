@@ -57,11 +57,33 @@ public class Turn {
         activePlayer.removeResources(ResourceType.BRICK, 1);
         activePlayer.removeResources(ResourceType.LUMBER, 1);
 
-        if (game.getBoard().getEdge(edgeId).hasRoad()) {
+        Board board = game.getBoard();
+        Edge edge = board.getEdge(edgeId);
+        Vertex endpoint1 = edge.getEndpoints().get(0);
+        Vertex endpoint2 = edge.getEndpoints().get(1);
+
+        if (edge.hasRoad()) {
             throw new IllegalStateException("Edge is already occupied by road");
         }
         if (playerRoadCount() == 15) {
             throw new IllegalStateException("Player has already built maximum number of roads");
+        }
+
+        boolean isConnected = false;
+
+        if (endpoint1.getOwner().filter(owner -> owner == activePlayer).isPresent() || endpoint2.getOwner().filter(owner -> owner == activePlayer).isPresent()) {
+            isConnected = true;
+            // add bank collection logic?
+        } else if (board.isConnectedToPlayer(endpoint1, activePlayer) && !endpoint1.isOccupied()) {
+            isConnected = true;
+        } else if (board.isConnectedToPlayer(endpoint2, activePlayer) && !endpoint2.isOccupied()) {
+            isConnected = true;
+        }
+
+        if (!isConnected) {
+            throw new IllegalStateException("Road must be connected to existing network");
+        } else {
+            edge.setOwner(activePlayer);
         }
     }
 
