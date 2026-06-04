@@ -115,4 +115,10 @@ public class TradeOfferTest {
         TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
         assertEquals(offerer, offer.getOfferer());
     }
+
+    @Test
+    void getRecipient_validTradeOffer_returnsCorrectRecipient() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        assertEquals(recipient, offer.getRecipient());
+    }
 }

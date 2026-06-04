@@ -33,6 +33,10 @@ public class TradeOffer {
         return offerer;
     }
 
+    public Player getRecipient() {
+        return recipient;
+    }
+
     public Map<ResourceType, Integer> getOffering() {
         return Collections.unmodifiableMap(offering);
     }
