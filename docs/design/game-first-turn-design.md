@@ -128,7 +128,6 @@ Represents a single development card. Tracks its type and whether it has been pl
 | `getType()`                     | `DevelopmentCardType` | Returns the card type                                                                             |
 | `isPlayed()`                    | `boolean`             | Returns true if the card has been played                                                          |
 | `markAsPlayed()`                | `void`                | Marks the card as played; throws `IllegalStateException` if already played                        |
-| `isVictoryPoint()`              | `boolean`             | Returns true if the card type is `VICTORY_POINT`                                                  |
 
 **Invariants:**
 - Once `markAsPlayed()` is called, `isPlayed()` always returns true
