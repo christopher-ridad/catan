@@ -11,6 +11,8 @@ public class MaritimeTrade {
 
         validateGivingAndReceivingResources(giving, receiving);
 
+        validateGivingAmountNeeded(player, giving, amount);
+
         this.player = player;
         this.giving = giving;
         this.amount = amount;
@@ -20,6 +22,13 @@ public class MaritimeTrade {
     private void validateGivingAndReceivingResources(ResourceType giving, ResourceType receiving) {
         if (giving == receiving) {
             throw new IllegalArgumentException("Giving and receiving resources must be different.");
+        }
+    }
+
+    private void validateGivingAmountNeeded(Player player, ResourceType giving, int amount) {
+        if (player.getResourceCount(giving) < amount) {
+            throw new IllegalArgumentException(
+                    "Player does not have enough " + giving + " to complete this trade.");
         }
     }
 

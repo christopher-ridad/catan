@@ -37,6 +37,19 @@ public class MaritimeTradeTest {
                 new MaritimeTrade(player, ResourceType.BRICK, 4, ResourceType.BRICK, board));
     }
 
+    @Test
+    void maritimeTradeConstructor_playerCannotAffordGiving_noHarbor_throwsIllegalArgument() {
+        Player player = playerWithSettlementAt(4, Map.of(
+                ResourceType.BRICK, 3,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        assertThrows(IllegalArgumentException.class, () ->
+                new MaritimeTrade(player, ResourceType.BRICK, 4, ResourceType.LUMBER, board));
+    }
+
     private Player playerWithSettlementAt(int vertexId, Map<ResourceType, Integer> resources) {
         Player player = new Player("Alice", PlayerColor.RED, resources);
         board.getVertex(vertexId).setOwner(player);
