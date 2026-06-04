@@ -372,6 +372,28 @@ public class TurnTest {
             turn.buildSettlement(vertexId);
         });
     }
+
+    @Test
+    public void BuildSettlement_VertexIsSurroundedByEnemyRoads_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        p3.addResources(ResourceType.WOOL, 1);
+        p3.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 33;
+        int edgeId1 = 39;
+        int edgeId2 = 40;
+        int edgeId3 = 49;
+        game.getBoard().getEdge(edgeId1).setOwner(p4);
+        game.getBoard().getEdge(edgeId2).setOwner(p4);
+        game.getBoard().getEdge(edgeId3).setOwner(p4);
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildSettlement(vertexId);
+        });
+    }
+    
 }
 
 
