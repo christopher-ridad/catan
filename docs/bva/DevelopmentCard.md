@@ -19,3 +19,13 @@
 - **TC4: GetType_ReturnsCorrectType** ( not implemented )
     - State of the system: `DevelopmentCard(ROAD_BUILDING)`
     - Expected output: `ROAD_BUILDING`
+
+## Method under test: `isPlayed()`
+
+- **TC5: IsPlayed_WhenNewCard_ReturnsFalse** ( not implemented )
+    - State of the system: `DevelopmentCard(YEAR_OF_PLENTY)`, `markAsPlayed()` not yet called
+    - Expected output: `false`
+
+- **TC6: IsPlayed_AfterMarkAsPlayed_ReturnsTrue** ( not implemented )
+    - State of the system: `DevelopmentCard(YEAR_OF_PLENTY)`, `markAsPlayed()` called once
+    - Expected output: `true`
