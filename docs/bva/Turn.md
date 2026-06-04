@@ -126,6 +126,48 @@
   - State of the system: valid `vertexId`, player already has one less than the maximum number of settlements
   - Expected output: `getOwner` called on `vertexId` returns `activePlayer`
 
+## Method under test `buildCity(int vertexId)`
+
+- **TC30: BuildCity_PlayerDoesNotHaveEnoughOre_ThrowsIllegalStateException** ( :x: )
+  - State of the system: valid `vertexId`, `activePlayer` does not have the required 3 `ORE`, has 2
+  - Expected output: `IllegalStateException`
+
+- **TC31: BuildCity_PlayerDoesNotHaveEnoughGrain_ThrowsIllegalStateException** ( :x: )
+  - State of the system: valid `vertexId`, `activePlayer` does not have the required 2 `GRAIN`, has 1
+  - Expected output: `IllegalStateException`
+
+- **TC32: BuildCity_PlayerHasExactlyOneOfEachRequiredResource_NoExceptionThrown** ( :x: )
+  - State of the system: valid `vertexId`, `activePlayer` has exactly three `ORE` and two `GRAIN`
+  - Expected output: `getResources` called on `activePlayer` returns 0 for each required resource
+
+- **TC33: BuildCity_PlayerHasFourCities_ThrowsIllegalStateException** ( :x: )
+  - State of the system: valid `vertexId`, player already has the maximum number of cities
+  - Expected output: `IllegalStateException`
+
+- **TC34: BuildCity_PlayerHasThreeCities_NoExceptionThrown** ( :x: )
+  - State of the system: valid `vertexId`, player already has one less than the maximum number of cities
+  - Expected output: `getOwner` called on `vertexId` returns `activePlayer`, `isCity` called on `vertexId` returns True
+
+- **TC35: BuildCity_PlayerDoesNotHaveExistingSettlement_ThrowsIllegalStateException** ( :x: )
+  - State of the system: valid `vertexId`, vertex is empty
+  - Expected output: `IllegalStateException`
+
+- **TC36: BuildCity_VertexOccupiedByEnemySettlement_ThrowsIllegalStateException** ( :x: )
+  - State of the system: valid `vertexId`, vertex is occupied by enemy settlement
+  - Expected output: `IllegalStateException`
+
+- **TC37: BuildCity_VertexOccupiedByEnemyCity_ThrowsIllegalStateException** ( :x: )
+  - State of the system: valid `vertexId`, vertex is occupied by enemy city
+  - Expected output: `IllegalStateException`
+
+- **TC38: BuildCity_VertexOccupiedByOwnCity_ThrowsIllegalStateException** ( :x: )
+  - State of the system: valid `vertexId`, vertex is occupied by player's own city
+  - Expected output: `IllegalStateException`
+
+- **TC39: BuildCity_VertexOccupiedByOwnSettlement_NoExceptionThrown** ( :x: )
+  - State of the system: valid `vertexId`, vertex is occupied by player's own settlement
+  - Expected output: `getOwner` called on `vertexId` returns `activePlayer`, `isCity` called on `vertexId` returns True
+
   
 
 
