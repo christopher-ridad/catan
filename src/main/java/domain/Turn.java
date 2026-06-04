@@ -182,8 +182,12 @@ public class Turn {
             throw new IllegalStateException("Player already has maximum number of cities");
         }
 
+        Board board = game.getBoard();
+        Vertex vertex = board.getVertex(vertexId);
+
         activePlayer.removeResources(ResourceType.ORE, 3);
         activePlayer.removeResources(ResourceType.GRAIN, 2);
+        vertex.upgradeToCity();
     }
 
     private int playerCityCount() {

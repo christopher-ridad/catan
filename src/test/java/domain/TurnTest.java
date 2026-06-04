@@ -594,6 +594,28 @@ public class TurnTest {
             turn.buildCity(vertexId);
         });
     }
+
+    @Test
+    public void BuildCity_PlayerHasThreeCities_NoExceptionThrown() {
+        p3.addResources(ResourceType.ORE, 3);
+        p3.addResources(ResourceType.GRAIN, 2);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        for (int i = 10; i < 13; i++) {
+            game.getBoard().getVertex(i).setOwner(p3);
+            game.getBoard().getVertex(i).upgradeToCity();
+        }
+
+        int vertexId = 2;
+        game.getBoard().getVertex(vertexId).setOwner(p3);
+
+        assertDoesNotThrow(() -> {
+            turn.buildCity(vertexId);
+        });
+
+        assertEquals(p3, game.getBoard().getVertex(vertexId).getOwner().orElse(null));
+        assertTrue(game.getBoard().getVertex(vertexId).isCity());
+    }
 }
 
 
