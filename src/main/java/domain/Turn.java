@@ -180,7 +180,14 @@ public class Turn {
         Vertex vertex = board.getVertex(vertexId);
 
         validateCityResources();
+        validateCityConditions(vertex);
 
+        activePlayer.removeResources(ResourceType.ORE, 3);
+        activePlayer.removeResources(ResourceType.GRAIN, 2);
+        vertex.upgradeToCity();
+    }
+
+    private void validateCityConditions(Vertex vertex) {
         if (playerCityCount() == 4) {
             throw new IllegalStateException("Player already has maximum number of cities");
         }
@@ -192,10 +199,6 @@ public class Turn {
         if (vertex.isOccupied() && vertex.isCity()) {
             throw new IllegalStateException("Vertex is occupied by player's own city");
         }
-
-        activePlayer.removeResources(ResourceType.ORE, 3);
-        activePlayer.removeResources(ResourceType.GRAIN, 2);
-        vertex.upgradeToCity();
     }
 
     private int playerCityCount() {
