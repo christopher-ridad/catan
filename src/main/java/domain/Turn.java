@@ -178,7 +178,24 @@ public class Turn {
     public void buildCity(int vertexId) {
         validateCityResources();
 
+        if (playerCityCount() == 4) {
+            throw new IllegalStateException("Player already has maximum number of cities");
+        }
+
         activePlayer.removeResources(ResourceType.ORE, 3);
         activePlayer.removeResources(ResourceType.GRAIN, 2);
+    }
+
+    private int playerCityCount() {
+        Board board = game.getBoard();
+        List<Vertex> vertexList = board.getVertices();
+
+        int cityCount = 0;
+        for (Vertex vertex : vertexList) {
+            if (vertex.getOwner().map(owner -> owner == activePlayer).orElse(false) && vertex.isCity()) {
+                cityCount += 1;
+            }
+        }
+        return cityCount;
     }
 }
