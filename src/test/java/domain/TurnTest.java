@@ -507,6 +507,29 @@ public class TurnTest {
             turn.buildSettlement(vertexId);
         });
     }
+
+    @Test
+    public void BuildSettlement_PlayerHasFourSettlements_NoExceptionThrown() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        p3.addResources(ResourceType.WOOL, 1);
+        p3.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        for (int i = 10; i < 14; i++) {
+            game.getBoard().getVertex(i).setOwner(p3);
+        }
+
+        int vertexId = 2;
+        int edgeId = 4;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
+
+        assertDoesNotThrow(() -> {
+            turn.buildSettlement(vertexId);
+        });
+
+        assertEquals(p3, game.getBoard().getVertex(vertexId).getOwner().orElse(null));
+    }
 }
 
 
