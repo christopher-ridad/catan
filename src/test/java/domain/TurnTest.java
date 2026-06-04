@@ -140,15 +140,6 @@ public class TurnTest {
         );
     }
 
-
-//
-//            - **TC11: BuildRoad_EdgeIsNotConnectedToExistingNetwork_ThrowsIllegalStateException** ( :x: )
-//            - State of the system: valid `edgeId`, edge is not connected to the player's existing network
-//            - Expected output: `IllegalStateException`
-//
-//            - **TC12: BuildRoad_RoadIsConnectedToRoad_NoExceptionThrown** ( :x: )
-//            - State of the system: valid `edgeId`, edge is connected to another edge with activePlayer's road built on it
-//            - Expected output: `getOwner` called on `edgeId` returns `activePlayer`
 //
 //            - **TC13: BuildRoad_RoadIsConnectedToSettlement_NoExceptionThrown** ( :x: )
 //            - State of the system: valid `edgeId`, edge is connected to a vertex with activePlayer's settlement built on it
@@ -222,6 +213,22 @@ public class TurnTest {
 
         assertThrows(IllegalStateException.class, () -> {
             turn.buildRoad(edgeId);
+        });
+    }
+
+    @Test
+    public void BuildRoad_RoadIsConnectedToRoad_NoExceptionThrown() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int edgeId1 = 11;
+        int edgeId2 = 12;
+
+        game.getBoard().getEdge(edgeId1).setOwner(p3);
+
+        assertDoesNotThrow(() -> {
+            turn.buildRoad(edgeId2);
         });
     }
 }
