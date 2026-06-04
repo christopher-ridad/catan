@@ -10,8 +10,9 @@ public final class Vertex {
 
     private final int id;
     private Player owner = null;
+    private boolean city = false;
     private final List<Hex> adjacentHexes;
-    private final List<Vertex> adjacentVertices;
+    private List<Vertex> adjacentVertices;
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
         validateId(id);
@@ -65,5 +66,20 @@ public final class Vertex {
 
     public List<Vertex> getAdjacentVertices() {
         return new ArrayList<>(adjacentVertices);
+    }
+
+    void setAdjacentVertices(List<Vertex> adjacentVertices) {
+        this.adjacentVertices = new ArrayList<>(adjacentVertices);
+    }
+  
+    public boolean isCity() {
+        return city;
+    }
+
+    public void upgradeToCity() {
+        if (!isOccupied()) {
+            throw new IllegalStateException("Cannot upgrade an unoccupied vertex to a city");
+        }
+        this.city = true;
     }
 }

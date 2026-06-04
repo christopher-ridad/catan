@@ -291,6 +291,25 @@ public class BoardTest {
     }
 
     @Test
+    void SatisfiesDistanceRule_WhenTargetVertexIsOccupied_ReturnsFalse() {
+        Player player = EasyMock.createMock(Player.class);
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        vertex.setOwner(player);
+        assertFalse(board.satisfiesDistanceRule(vertex));
+    }
+
+    @Test
+    void PackagePrivateConstructor_ExternalMutationOfEdgeListDoesNotAffectBoard() {
+        Vertex v1 = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        Vertex v2 = new Vertex(1, new ArrayList<>(), new ArrayList<>());
+        List<Edge> edges = new ArrayList<>();
+        edges.add(new Edge(0, v1, v2));
+        Board testBoard = new Board(hexes, new ArrayList<>(), edges);
+        edges.clear();
+        assertEquals(1, testBoard.getEdges().size());
+    }
+
+    @Test
     void IsConnectedToPlayer_WhenNoAdjacentRoads_ReturnsFalse() {
         Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
         Vertex other = new Vertex(1, new ArrayList<>(), new ArrayList<>());
