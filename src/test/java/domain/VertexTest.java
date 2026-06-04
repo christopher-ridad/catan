@@ -139,4 +139,12 @@ public class VertexTest {
         vertex.setHarborType(HarborType.GENERIC);
         assertEquals(HarborType.GENERIC, vertex.getHarborType().orElseThrow());
     }
+
+    @Test
+    void setHarborType_OverwritesPreviousHarbor() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        vertex.setHarborType(HarborType.GENERIC);
+        vertex.setHarborType(HarborType.WOOL);
+        assertEquals(HarborType.WOOL, vertex.getHarborType().orElseThrow());
+    }
 }
