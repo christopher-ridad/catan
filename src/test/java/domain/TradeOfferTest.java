@@ -182,4 +182,11 @@ public class TradeOfferTest {
         offer.reject();
         assertThrows(IllegalStateException.class, offer::reject);
     }
+
+    @Test
+    void reject_statusAccepted_throwsIllegalState() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        offer.accept();
+        assertThrows(IllegalStateException.class, offer::reject);
+    }
 }
