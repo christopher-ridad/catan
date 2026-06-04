@@ -189,6 +189,10 @@ public class Turn {
             throw new IllegalStateException("Vertex is occupied by enemy settlement or city");
         }
 
+        if (vertex.isOccupied() && vertex.isCity()) {
+            throw new IllegalStateException("Vertex is occupied by player's own city");
+        }
+
         activePlayer.removeResources(ResourceType.ORE, 3);
         activePlayer.removeResources(ResourceType.GRAIN, 2);
         vertex.upgradeToCity();
