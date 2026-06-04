@@ -12,7 +12,7 @@ public final class Vertex {
     private Player owner = null;
     private boolean city = false;
     private final List<Hex> adjacentHexes;
-    private final List<Vertex> adjacentVertices;
+    private List<Vertex> adjacentVertices;
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
         validateId(id);
@@ -68,6 +68,10 @@ public final class Vertex {
         return new ArrayList<>(adjacentVertices);
     }
 
+    void setAdjacentVertices(List<Vertex> adjacentVertices) {
+        this.adjacentVertices = new ArrayList<>(adjacentVertices);
+    }
+  
     public boolean isCity() {
         return city;
     }

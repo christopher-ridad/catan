@@ -46,13 +46,30 @@ public final class Board {
 
     private void initializeVertices() {
         for (int i = 0; i < 54; i++) {
-            vertices.add(new Vertex(i, new ArrayList<>(), new ArrayList<>()));
+            List<Integer> hexIndices = BoardInitialization.getAdjacentHexIndices(i);
+            List<Hex> adjacentHexes = new ArrayList<>();
+            for (int hexIndex : hexIndices) {
+                adjacentHexes.add(hexes.get(hexIndex));
+            }
+            vertices.add(new Vertex(i, adjacentHexes, new ArrayList<>()));
+        }
+
+        for (int i = 0; i < 54; i++) {
+            List<Integer> adjIds = BoardInitialization.getAdjacentVertexIds(i);
+            List<Vertex> adjacentVertices = new ArrayList<>();
+            for (int adjId : adjIds) {
+                adjacentVertices.add(vertices.get(adjId));
+            }
+            vertices.get(i).setAdjacentVertices(adjacentVertices);
         }
     }
 
     private void initializeEdges() {
+        int[][] endpoints = BoardInitialization.getEdgeEndpoints();
         for (int i = 0; i < 72; i++) {
-            edges.add(new Edge(i, vertices.get(0), vertices.get(1)));
+            Vertex v1 = vertices.get(endpoints[i][0]);
+            Vertex v2 = vertices.get(endpoints[i][1]);
+            edges.add(new Edge(i, v1, v2));
         }
     }
 
