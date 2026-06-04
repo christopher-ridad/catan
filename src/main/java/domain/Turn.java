@@ -59,11 +59,19 @@ public class Turn {
         Vertex endpoint1 = edge.getEndpoints().get(0);
         Vertex endpoint2 = edge.getEndpoints().get(1);
 
+        validateRoadResources();
         validateRoadConditions(edge, endpoint1, endpoint2, board);
 
         activePlayer.removeResources(ResourceType.BRICK, 1);
         activePlayer.removeResources(ResourceType.LUMBER, 1);
         edge.setOwner(activePlayer);
+    }
+
+    private void validateRoadResources() {
+        if (activePlayer.getResourceCount(ResourceType.BRICK) < 1 ||
+                activePlayer.getResourceCount(ResourceType.LUMBER) < 1) {
+            throw new IllegalStateException("Player does not have the required resources for a settlement");
+        }
     }
 
     private void validateRoadConditions(Edge edge, Vertex endpoint1, Vertex endpoint2, Board board) {
@@ -109,6 +117,8 @@ public class Turn {
         Board board = game.getBoard();
         Vertex vertex = board.getVertex(vertexId);
 
+        validateSettlementResources();
+
         validateSettlementConditions(board, vertex);
 
         activePlayer.removeResources(ResourceType.BRICK, 1);
@@ -116,6 +126,15 @@ public class Turn {
         activePlayer.removeResources(ResourceType.WOOL, 1);
         activePlayer.removeResources(ResourceType.GRAIN, 1);
         vertex.setOwner(activePlayer);
+    }
+
+    private void validateSettlementResources() {
+        if (activePlayer.getResourceCount(ResourceType.BRICK) < 1 ||
+                activePlayer.getResourceCount(ResourceType.LUMBER) < 1 ||
+                activePlayer.getResourceCount(ResourceType.WOOL) < 1 ||
+                activePlayer.getResourceCount(ResourceType.GRAIN) < 1) {
+            throw new IllegalStateException("Player does not have the required resources for a settlement");
+        }
     }
 
     private int playerSettlementCount() {
