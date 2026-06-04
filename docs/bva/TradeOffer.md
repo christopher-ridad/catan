@@ -54,71 +54,71 @@
 
 ### Method under test: `getRequesting()`
 
-- **TO-13: getRequesting_validTradeOffer_returnsMatchingRequestingMap** ( :x: )
+- **TO-13: getRequesting_validTradeOffer_returnsMatchingRequestingMap** ( :white_check_mark: )
     - **State of the system**: Valid `TradeOffer` constructed
     - **Expected output**: Returns map equal to `requesting` passed to constructor
 
-- **TO-14: getRequesting_validTradeOffer_mutationAttemptThrowsUnsupportedOperation** ( :x: )
+- **TO-14: getRequesting_validTradeOffer_mutationAttemptThrowsUnsupportedOperation** ( :white_check_mark: )
     - **State of the system**: Valid `TradeOffer` constructed
     - **Expected output**: `UnsupportedOperationException` on `put()` attempt
 
 ### Method under test: `getOfferer()`
 
-- **TO-15: getOfferer_validTradeOffer_returnsCorrectOfferer** ( :x: )
+- **TO-15: getOfferer_validTradeOffer_returnsCorrectOfferer** ( :white_check_mark: )
     - **State of the system**: Valid `TradeOffer` constructed
     - **Expected output**: Returns the `Player` passed as `offerer`
 
 
 ### Method under test: `getRecipient()`
 
-- **TO-16: getRecipient_validTradeOffer_returnsCorrectRecipient** ( :x: )
+- **TO-16: getRecipient_validTradeOffer_returnsCorrectRecipient** ( :white_check_mark: )
     - **State of the system**: Valid `TradeOffer` constructed
     - **Expected output**: Returns the `Player` passed as `recipient`
 
 ### Method under test: `getStatus()`
 
-- **TO-17: getStatus_freshlyConstructed_returnsPending** ( :x: )
+- **TO-17: getStatus_freshlyConstructed_returnsPending** ( :white_check_mark: )
     - **State of the system**: Valid `TradeOffer` constructed, no calls to `accept()` or `reject()`
     - **Expected output**: `TradeStatus.PENDING`
 
 ### Method under test: `isPending()`
 
-- **TO-18: isPending_freshlyConstructed_returnsTrue** ( :x: )
+- **TO-18: isPending_freshlyConstructed_returnsTrue** ( :white_check_mark: )
     - **State of the system**: Valid `TradeOffer` constructed, no calls to `accept()` or `reject()`
     - **Expected output**: `true`
 
-- **TO-19: isPending_statusAccepted_returnsFalse** ( :x: )
+- **TO-19: isPending_statusAccepted_returnsFalse** ( :white_check_mark: )
     - **State of the system**: `accept()` previously called
     - **Expected output**: `false`
 
-- **TO-20: isPending_statusRejected_returnsFalse** ( :x: )
+- **TO-20: isPending_statusRejected_returnsFalse** ( :white_check_mark: )
     - **State of the system**: `reject()` previously called
     - **Expected output**: `false`
 
 ### Method under test: `accept()`
 
-- **TO-21: accept_statusPending_statusBecomesAccepted** ( :x: )
+- **TO-21: accept_statusPending_statusBecomesAccepted** ( :white_check_mark: )
     - **State of the system**: Status is `PENDING`
     - **Expected output**: `getStatus()` returns `ACCEPTED`
 
-- **TO-22: accept_statusAlreadyAccepted_throwsIllegalState** ( :x: )
+- **TO-22: accept_statusAlreadyAccepted_throwsIllegalState** ( :white_check_mark: )
     - **State of the system**: `accept()` previously called; status is `ACCEPTED`
     - **Expected output**: `IllegalStateException`
 
-- **TO-23: accept_statusRejected_throwsIllegalState** ( :x: )
+- **TO-23: accept_statusRejected_throwsIllegalState** ( :white_check_mark: )
     - **State of the system**: `reject()` previously called; status is `REJECTED`
     - **Expected output**: `IllegalStateException`
 
 ### Method under test: `reject()`
 
-- **TO-24: reject_statusPending_statusBecomesRejected** ( :x: )
+- **TO-24: reject_statusPending_statusBecomesRejected** ( :white_check_mark: )
     - **State of the system**: Status is `PENDING`
     - **Expected output**: `getStatus()` returns `REJECTED`
 
-- **TO-25: reject_statusAlreadyRejected_throwsIllegalState** ( :x: )
+- **TO-25: reject_statusAlreadyRejected_throwsIllegalState** ( :white_check_mark: )
     - **State of the system**: `reject()` previously called; status is `REJECTED`
     - **Expected output**: `IllegalStateException`
 
-- **TO-26: reject_statusAccepted_throwsIllegalState** ( :x: )
+- **TO-26: reject_statusAccepted_throwsIllegalState** ( :white_check_mark: )
     - **State of the system**: `accept()` previously called; status is `ACCEPTED`
     - **Expected output**: `IllegalStateException`
