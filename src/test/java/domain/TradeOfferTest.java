@@ -168,4 +168,11 @@ public class TradeOfferTest {
         offer.reject();
         assertThrows(IllegalStateException.class, offer::accept);
     }
+
+    @Test
+    void reject_statusPending_statusBecomesRejected() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        offer.reject();
+        assertEquals(TradeOffer.TradeStatus.REJECTED, offer.getStatus());
+    }
 }
