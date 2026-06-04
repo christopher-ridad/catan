@@ -2,43 +2,43 @@
 
 ### Method under test: `TradeOffer(Player, Player, Map<ResourceType, Integer>, Map<ResourceType, Integer>)`
 
-- **TO-01: tradeOfferConstructor_offererEqualsRecipient_throwsIllegalArgument** ( :x: )
+- **TO-01: tradeOfferConstructor_offererEqualsRecipient_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `offerer == recipient`
     - **Expected output**: `IllegalArgumentException`
 
-- **TO-02: tradeOfferConstructor_offeringNull_throwsIllegalArgument** ( :x: )
+- **TO-02: tradeOfferConstructor_offeringNull_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `offerer != recipient`, `offering` is `null`
     - **Expected output**: `IllegalArgumentException`
 
-- **TO-03: tradeOfferConstructor_requestingNull_throwsIllegalArgument** ( :x: )
+- **TO-03: tradeOfferConstructor_requestingNull_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `offerer != recipient`, `requesting` is `null`
     - **Expected output**: `IllegalArgumentException`
 
-- **TO-04: tradeOfferConstructor_offeringEmpty_throwsIllegalArgument** ( :x: )
+- **TO-04: tradeOfferConstructor_offeringEmpty_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `offerer != recipient`, `offering` is an empty map
     - **Expected output**: `IllegalArgumentException`
 
-- **TO-05: tradeOfferConstructor_requestingEmpty_throwsIllegalArgument** ( :x: )
+- **TO-05: tradeOfferConstructor_requestingEmpty_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `offerer != recipient`, `requesting` is an empty map
     - **Expected output**: `IllegalArgumentException`
 
-- **TO-06: tradeOfferConstructor_offeringValueZero_throwsIllegalArgument** ( :x: )
+- **TO-06: tradeOfferConstructor_offeringValueZero_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `offerer != recipient`, `offering` contains a value of `0`
     - **Expected output**: `IllegalArgumentException`
 
-- **TO-07: tradeOfferConstructor_offeringValueNegative_throwsIllegalArgument** ( :x: )
+- **TO-07: tradeOfferConstructor_offeringValueNegative_throwsIllegalArgument** ( :white_check_mark: )
     - **State of the system**: `offerer != recipient`, `offering` contains a value of `-1`
     - **Expected output**: `IllegalArgumentException`
 
-- **TO-08: tradeOfferConstructor_requestingValueZero_throwsIllegalArgument** ( :x: )
+- **TO-08: tradeOfferConstructor_requestingValueZero_throwsIllegalArgument** ( :white_check_mark )
     - **State of the system**: `offerer != recipient`, `requesting` contains a value of `0`
     - **Expected output**: `IllegalArgumentException`
 
-- **TO-09: tradeOfferConstructor_requestingValueNegative_throwsIllegalArgument** ( :x: )
+- **TO-09: tradeOfferConstructor_requestingValueNegative_throwsIllegalArgument** ( :white_check_mark )
     - **State of the system**: `offerer != recipient`, `requesting` contains a value of `-1`
     - **Expected output**: `IllegalArgumentException`
 
-- **TO-10: tradeOfferConstructor_allValuesMinimumValid_objectCreatedWithPendingStatus** ( :x: )
+- **TO-10: tradeOfferConstructor_allValuesMinimumValid_objectCreatedWithPendingStatus** ( :white_check_mark: )
     - **State of the system**: `offerer != recipient`, all values in both maps equal `1`
     - **Expected output**: Object created; `getStatus()` returns `PENDING`
 
