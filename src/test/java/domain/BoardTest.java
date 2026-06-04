@@ -363,4 +363,9 @@ public class BoardTest {
     void getHarborType_ForGenericHarborVertex_ReturnsGeneric() {
         assertEquals(HarborType.GENERIC, board.getHarborType(board.getVertex(0)).orElseThrow());
     }
+
+    @Test
+    void getHarborType_ForGrainHarborVertex_ReturnsGrain() {
+        assertEquals(HarborType.GRAIN, board.getHarborType(board.getVertex(1)).orElseThrow());
+    }
 }
