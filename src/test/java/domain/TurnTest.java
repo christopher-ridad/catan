@@ -643,6 +643,21 @@ public class TurnTest {
             turn.buildCity(vertexId);
         });
     }
+
+    @Test
+    public void BuildCity_VertexOccupiedByEnemyCity_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.ORE, 3);
+        p3.addResources(ResourceType.GRAIN, 2);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+        game.getBoard().getVertex(vertexId).setOwner(p4);
+        game.getBoard().getVertex(vertexId).upgradeToCity();
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildCity(vertexId);
+        });
+    }
 }
 
 
