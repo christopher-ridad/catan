@@ -29,6 +29,10 @@ public class TradeOffer {
         this.status = TradeStatus.PENDING;
     }
 
+    public Player getOfferer() {
+        return offerer;
+    }
+
     public Map<ResourceType, Integer> getOffering() {
         return Collections.unmodifiableMap(offering);
     }

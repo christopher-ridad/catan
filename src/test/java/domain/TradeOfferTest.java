@@ -109,4 +109,10 @@ public class TradeOfferTest {
         assertThrows(UnsupportedOperationException.class, () ->
                 offer.getRequesting().put(ResourceType.ORE, 1));
     }
+
+    @Test
+    void getOfferer_validTradeOffer_returnsCorrectOfferer() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        assertEquals(offerer, offer.getOfferer());
+    }
 }
