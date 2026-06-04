@@ -77,4 +77,38 @@ public class BankTest {
         incomplete.put(ResourceType.BRICK, 5);
         assertThrows(IllegalArgumentException.class, () -> new Bank(incomplete));
     }
+
+    @Test
+    void Collect_WithAmountZero_NoChange() {
+        Bank bank = bankWithBrick(5);
+        bank.collect(ResourceType.BRICK, 0);
+        assertEquals(5, bank.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
+    void Collect_WithAmountOne_NoExceptionThrown() {
+        Bank bank = bankWithBrick(5);
+        bank.collect(ResourceType.BRICK, 1);
+        assertEquals(6, bank.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
+    void Collect_ExactlyBelowMax_AtNineteen() {
+        Bank bank = bankWithBrick(18);
+        bank.collect(ResourceType.BRICK, 1);
+        assertEquals(19, bank.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
+    void Collect_OneMoreThanAvailableSpace_ThrowsIllegalArgumentException() {
+        Bank bank = bankWithBrick(18);
+        assertThrows(IllegalArgumentException.class, () -> bank.collect(ResourceType.BRICK, 2));
+    }
+
+    @Test
+    void Collect_FromZeroToOne_NoExceptionThrown() {
+        Bank bank = bankWithBrick(0);
+        bank.collect(ResourceType.BRICK, 1);
+        assertEquals(1, bank.getResourceCount(ResourceType.BRICK));
+    }
 }

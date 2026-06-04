@@ -154,14 +154,15 @@ Represents a single player's state.
 | `color`     | `PlayerColor`                 | The player's color                     |
 | `resources` | `Map<ResourceType, Integer>`  | Cards in hand; initialized to 0 for each resource type |
 
-| Method                                      | Return Type | Description                                                                                                                       |
-|---------------------------------------------|-------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| `Player(String name, PlayerColor color)`    | —           | Constructor; throws `IllegalArgumentException` if name is blank or null or length is greater than 50 characters, or color is null |
-| `getName()`                                 | `String`    | Returns the player's name                                                                                                         |
-| `getColor()`                                | `PlayerColor`| Returns the player's color                                                                                                        |
-| `getResourceCount(ResourceType)`            | `int`       | Returns how many of that resource the player holds                                                                                |
-| `addResources(ResourceType, int amount)`    | `void`      | Adds the given amount of a resource; throws if amount < 0                                                                         |
-| `getTotalResourceCount()`                   | `int`       | Returns the total number of resource cards in hand                                                                                |
+| Method                                      | Return Type   | Description                                                                                                                       |
+|---------------------------------------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| `Player(String name, PlayerColor color)`    | —             | Constructor; throws `IllegalArgumentException` if name is blank or null or length is greater than 50 characters, or color is null |
+| `getName()`                                 | `String`      | Returns the player's name                                                                                                         |
+| `getColor()`                                | `PlayerColor` | Returns the player's color                                                                                                        |
+| `getResourceCount(ResourceType)`            | `int`         | Returns how many of that resource the player holds                                                                                |
+| `addResources(ResourceType, int amount)`    | `void`        | Adds the given amount of a resource; throws if amount < 0                                                                         |
+| `getTotalResourceCount()`                   | `int`         | Returns the total number of resource cards in hand                                                                                |
+| `removeResources(ResourceType, int amount)` | `void`        | Removes the given amount of a resource, throws if player has less than the given amount, throws if amount < 0                     |
 
 ---
 
