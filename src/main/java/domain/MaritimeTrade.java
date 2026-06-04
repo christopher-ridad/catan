@@ -33,8 +33,13 @@ public class MaritimeTrade {
     public ResourceType getGiving() {
         return giving;
     }
+
     public int getAmount() {
         return amount;
+    }
+
+    public ResourceType getReceiving() {
+        return receiving;
     }
 
     private void validateGivingAndReceivingResources(ResourceType giving, ResourceType receiving) {
