@@ -251,6 +251,25 @@ public class TurnTest {
 
         assertEquals(game.getBoard().getEdge(edgeId2).getOwner().orElse(null), p3);
     }
+
+    @Test
+    public void BuildRoad_RoadIsConnectedToCity_NoExceptionThrown() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int edgeId1 = 3;
+        int edgeId2 = 4;
+
+        game.getBoard().getEdge(edgeId1).getEndpoints().get(1).setOwner(p3);
+        game.getBoard().getEdge(edgeId1).getEndpoints().get(1).upgradeToCity();
+
+        assertDoesNotThrow(() -> {
+            turn.buildRoad(edgeId2);
+        });
+
+        assertEquals(game.getBoard().getEdge(edgeId2).getOwner().orElse(null), p3);
+    }
 }
 
 
