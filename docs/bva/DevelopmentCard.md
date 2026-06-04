@@ -29,3 +29,13 @@
 - **TC6: IsPlayed_AfterMarkAsPlayed_ReturnsTrue** ( not implemented )
     - State of the system: `DevelopmentCard(YEAR_OF_PLENTY)`, `markAsPlayed()` called once
     - Expected output: `true`
+
+## Method under test: `markAsPlayed()`
+
+- **TC7: MarkAsPlayed_OnUnplayedCard_NoExceptionThrown** ( not implemented )
+    - State of the system: `DevelopmentCard(MONOPOLY)`, card not yet played
+    - Expected output: no exception thrown
+
+- **TC8: MarkAsPlayed_OnAlreadyPlayedCard_ThrowsIllegalStateException** ( not implemented )
+    - State of the system: `DevelopmentCard(MONOPOLY)`, `markAsPlayed()` already called once
+    - Expected output: `IllegalStateException`
