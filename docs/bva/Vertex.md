@@ -88,16 +88,16 @@
 
 ## Method under test: `getHarborType()`
 
-- **TC19: getHarborType_WhenNoHarborSet_ReturnsEmpty** ( :x: )
+- **TC19: getHarborType_WhenNoHarborSet_ReturnsEmpty** ( :white_check_mark: )
   - **State of the system**: Vertex constructed, `setHarborType()` never called
   - **Expected output**: `Optional.empty()`
 
-- **TC20: getHarborType_WhenHarborSet_ReturnsHarborType** ( :x: )
+- **TC20: getHarborType_WhenHarborSet_ReturnsHarborType** ( :white_check_mark: )
   - **State of the system**: `setHarborType(HarborType.GENERIC)` called
   - **Expected output**: `Optional` containing `HarborType.GENERIC`
 
 ## Method under test: `setHarborType(HarborType)`
 
-- **TC21: setHarborType_OverwritesPreviousHarbor** ( :x: )
+- **TC21: setHarborType_OverwritesPreviousHarbor** ( :white_check_mark: )
   - **State of the system**: `setHarborType(HarborType.GENERIC)` called, then `setHarborType(HarborType.WOOL)` called
   - **Expected output**: `getHarborType()` returns `Optional` containing `HarborType.WOOL`
