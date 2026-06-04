@@ -54,15 +54,15 @@ public class Turn {
     }
 
     public void buildRoad(int edgeId) {
-        activePlayer.removeResources(ResourceType.BRICK, 1);
-        activePlayer.removeResources(ResourceType.LUMBER, 1);
-
         Board board = game.getBoard();
         Edge edge = board.getEdge(edgeId);
         Vertex endpoint1 = edge.getEndpoints().get(0);
         Vertex endpoint2 = edge.getEndpoints().get(1);
 
         validateRoadConditions(edge, endpoint1, endpoint2, board);
+
+        activePlayer.removeResources(ResourceType.BRICK, 1);
+        activePlayer.removeResources(ResourceType.LUMBER, 1);
         edge.setOwner(activePlayer);
     }
 
@@ -106,16 +106,15 @@ public class Turn {
     }
 
     public void buildSettlement(int vertexId) {
-        activePlayer.removeResources(ResourceType.BRICK, 1);
-        activePlayer.removeResources(ResourceType.LUMBER, 1);
-        activePlayer.removeResources(ResourceType.WOOL, 1);
-        activePlayer.removeResources(ResourceType.GRAIN, 1);
-
         Board board = game.getBoard();
         Vertex vertex = board.getVertex(vertexId);
 
         validateSettlementConditions(board, vertex);
 
+        activePlayer.removeResources(ResourceType.BRICK, 1);
+        activePlayer.removeResources(ResourceType.LUMBER, 1);
+        activePlayer.removeResources(ResourceType.WOOL, 1);
+        activePlayer.removeResources(ResourceType.GRAIN, 1);
         vertex.setOwner(activePlayer);
     }
 
