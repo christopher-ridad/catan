@@ -102,4 +102,11 @@ public class TradeOfferTest {
         TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
         assertEquals(validRequesting, offer.getRequesting());
     }
+
+    @Test
+    void getRequesting_validTradeOffer_mutationAttemptThrowsUnsupportedOperation() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        assertThrows(UnsupportedOperationException.class, () ->
+                offer.getRequesting().put(ResourceType.ORE, 1));
+    }
 }
