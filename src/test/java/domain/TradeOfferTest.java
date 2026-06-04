@@ -156,10 +156,16 @@ public class TradeOfferTest {
     }
 
     @Test
-        // TO-22
     void accept_statusAlreadyAccepted_throwsIllegalState() {
         TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
         offer.accept();
+        assertThrows(IllegalStateException.class, offer::accept);
+    }
+
+    @Test
+    void accept_statusRejected_throwsIllegalState() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        offer.reject();
         assertThrows(IllegalStateException.class, offer::accept);
     }
 }
