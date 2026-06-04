@@ -29,9 +29,15 @@ public class TradeOfferTest {
     }
 
     @Test
-        // TO-02
     void tradeOfferConstructor_offeringNull_throwsIllegalArgument() {
         assertThrows(IllegalArgumentException.class, () ->
                 new TradeOffer(offerer, recipient, null, validRequesting));
+    }
+
+    @Test
+        // TO-03
+    void tradeOfferConstructor_requestingNull_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new TradeOffer(offerer, recipient, validOffering, null));
     }
 }

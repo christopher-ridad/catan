@@ -14,6 +14,7 @@ public class TradeOffer {
 
         validateOffererAndRecipient(offerer, recipient);
         validateOfferIsntEmpty(offering);
+        validateRequestIsntEmpty(requesting);
 
         this.offerer = offerer;
         this.recipient = recipient;
@@ -29,7 +30,13 @@ public class TradeOffer {
 
     private void validateOfferIsntEmpty(Map<ResourceType, Integer> offering) {
         if (offering == null || offering.isEmpty()) {
-            throw new IllegalArgumentException("Offering map must not be null or empty.");
+            throw new IllegalArgumentException("Offering must not be null or empty.");
+        }
+    }
+
+    private void validateRequestIsntEmpty(Map<ResourceType, Integer> requesting) {
+        if (requesting == null || requesting.isEmpty()) {
+            throw new IllegalArgumentException("Requesting must not be null or empty.");
         }
     }
 }
