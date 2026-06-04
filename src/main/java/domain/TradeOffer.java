@@ -43,5 +43,10 @@ public class TradeOffer {
         if (requesting == null || requesting.isEmpty()) {
             throw new IllegalArgumentException("Requesting must not be null or empty.");
         }
+        for (int value : requesting.values()) {
+            if (value <= 0) {
+                throw new IllegalArgumentException("All values in requesting must be greater than 0.");
+            }
+        }
     }
 }
