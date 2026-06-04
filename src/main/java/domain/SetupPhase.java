@@ -6,20 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 public class SetupPhase {
-
-    // =========================================================================
-    // Fields
-    // =========================================================================
-
     private final Game game;
     private final List<Player> placementOrder;
     private int currentPlacementIndex;
     private Vertex lastPlacedSettlement;
     private final Map<Player, List<Vertex>> placedSettlements;
-
-    // =========================================================================
-    // Constructor
-    // =========================================================================
 
     public SetupPhase(Game game) {
         validateGame(game);
@@ -29,10 +20,6 @@ public class SetupPhase {
         this.lastPlacedSettlement = null;
         this.placedSettlements = new HashMap<>();
     }
-
-    // =========================================================================
-    // Public Methods
-    // =========================================================================
 
     public List<Player> getPlacementOrder() {
         return placementOrder;
@@ -106,10 +93,6 @@ public class SetupPhase {
         }
     }
 
-    // =========================================================================
-    // Private helpers — setup
-    // =========================================================================
-
     private void validateGame(Game game) {
         if (game == null) {
             throw new IllegalArgumentException("Game cannot be null");
@@ -134,10 +117,6 @@ public class SetupPhase {
         currentPlacementIndex++;
     }
 
-    // =========================================================================
-    // Private helpers — placeSettlement validation
-    // =========================================================================
-
     private void validateVertexId(int vertexId) {
         if (vertexId < 0 || vertexId > 53) {
             throw new IllegalArgumentException("vertexId must be between 0 and 53");
@@ -160,10 +139,6 @@ public class SetupPhase {
             );
         }
     }
-
-    // =========================================================================
-    // Private helpers — placeRoad validation
-    // =========================================================================
 
     private void validateSettlementPlacedThisTurn() {
         if (lastPlacedSettlement == null) {
@@ -190,10 +165,6 @@ public class SetupPhase {
             );
         }
     }
-
-    // =========================================================================
-    // Private helpers — resource distribution
-    // =========================================================================
 
     private void validatePlayer(Player player) {
         if (player == null) {
