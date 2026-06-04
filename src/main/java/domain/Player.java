@@ -63,7 +63,7 @@ public class Player {
     }
 
     public void addResources(ResourceType resourceType, int amount) {
-        validateAddRemoveArgs(resourceType, amount);
+        ValidateResourceAndAmount(resourceType, amount);
         this.resources.merge(resourceType, amount, Integer::sum);
     }
 
@@ -72,14 +72,14 @@ public class Player {
     }
 
     public void removeResources(ResourceType resourceType, int amount) {
-        validateAddRemoveArgs(resourceType, amount);
+        ValidateResourceAndAmount(resourceType, amount);
         if (getResourceCount(resourceType) < amount) {
             throw new IllegalStateException("Amount cannot be greater than current resource count");
         }
         this.resources.put(resourceType, getResourceCount(resourceType) - amount);
     }
 
-    private void validateAddRemoveArgs(ResourceType resourceType, int amount) {
+    private void ValidateResourceAndAmount(ResourceType resourceType, int amount) {
         if (resourceType == null) {
             throw new IllegalArgumentException("Resource type cannot be null");
         }

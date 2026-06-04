@@ -29,6 +29,39 @@ public class BuildManager {
         edge.setOwner(activePlayer);
     }
 
+    public void buildSettlement(int vertexId) {
+        Board board = game.getBoard();
+        Vertex vertex = board.getVertex(vertexId);
+
+        validateSettlementResources();
+
+        validateSettlementConditions(board, vertex);
+
+        activePlayer.removeResources(ResourceType.BRICK, 1);
+        activePlayer.removeResources(ResourceType.LUMBER, 1);
+        activePlayer.removeResources(ResourceType.WOOL, 1);
+        activePlayer.removeResources(ResourceType.GRAIN, 1);
+        bank.collect(ResourceType.BRICK, 1);
+        bank.collect(ResourceType.LUMBER, 1);
+        bank.collect(ResourceType.WOOL, 1);
+        bank.collect(ResourceType.GRAIN, 1);
+        vertex.setOwner(activePlayer);
+    }
+
+    public void buildCity(int vertexId) {
+        Board board = game.getBoard();
+        Vertex vertex = board.getVertex(vertexId);
+
+        validateCityResources();
+        validateCityConditions(vertex);
+
+        activePlayer.removeResources(ResourceType.ORE, 3);
+        activePlayer.removeResources(ResourceType.GRAIN, 2);
+        bank.collect(ResourceType.ORE, 3);
+        bank.collect(ResourceType.GRAIN, 2);
+        vertex.upgradeToCity();
+    }
+
     private void validateRoadResources() {
         if (activePlayer.getResourceCount(ResourceType.BRICK) < 1 ||
                 activePlayer.getResourceCount(ResourceType.LUMBER) < 1) {
@@ -73,25 +106,6 @@ public class BuildManager {
         }
 
         return connected;
-    }
-
-    public void buildSettlement(int vertexId) {
-        Board board = game.getBoard();
-        Vertex vertex = board.getVertex(vertexId);
-
-        validateSettlementResources();
-
-        validateSettlementConditions(board, vertex);
-
-        activePlayer.removeResources(ResourceType.BRICK, 1);
-        activePlayer.removeResources(ResourceType.LUMBER, 1);
-        activePlayer.removeResources(ResourceType.WOOL, 1);
-        activePlayer.removeResources(ResourceType.GRAIN, 1);
-        bank.collect(ResourceType.BRICK, 1);
-        bank.collect(ResourceType.LUMBER, 1);
-        bank.collect(ResourceType.WOOL, 1);
-        bank.collect(ResourceType.GRAIN, 1);
-        vertex.setOwner(activePlayer);
     }
 
     private void validateSettlementResources() {
@@ -139,20 +153,6 @@ public class BuildManager {
                 activePlayer.getResourceCount(ResourceType.GRAIN) < 2) {
             throw new IllegalStateException("Player does not have the required resources for a city");
         }
-    }
-
-    public void buildCity(int vertexId) {
-        Board board = game.getBoard();
-        Vertex vertex = board.getVertex(vertexId);
-
-        validateCityResources();
-        validateCityConditions(vertex);
-
-        activePlayer.removeResources(ResourceType.ORE, 3);
-        activePlayer.removeResources(ResourceType.GRAIN, 2);
-        bank.collect(ResourceType.ORE, 3);
-        bank.collect(ResourceType.GRAIN, 2);
-        vertex.upgradeToCity();
     }
 
     private void validateCityConditions(Vertex vertex) {

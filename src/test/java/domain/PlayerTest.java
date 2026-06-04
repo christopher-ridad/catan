@@ -234,12 +234,6 @@ public class PlayerTest {
         assertEquals(Integer.MAX_VALUE, playerOne.getTotalResourceCount());
     }
 
-
-
-//            - **TC27: removeResources_lumberType_playerHasEnough_noExceptionThrown** ( not implemented )
-//            - State of the system: removeResources called with 3 as amount integer value, lumber as resourceType input, player has 5 lumber
-//  - Expected output: `getResourceCount` called on player returns 2
-
     @Test
     public void removeResources_nullResourceType_throwsIllegalArgumentException() {
         String playerOneName = "Bob";
