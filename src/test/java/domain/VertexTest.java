@@ -126,4 +126,10 @@ public class VertexTest {
         Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
         assertThrows(IllegalStateException.class, vertex::upgradeToCity);
     }
+
+    @Test
+    void getHarborType_WhenNoHarborSet_ReturnsEmpty() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        assertTrue(vertex.getHarborType().isEmpty());
+    }
 }
