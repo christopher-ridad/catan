@@ -558,6 +558,23 @@ public class TurnTest {
             turn.buildCity(vertexId);
         });
     }
+
+    @Test
+    public void BuildCity_PlayerHasExactAmountOfEachRequiredResource_NoExceptionThrown() {
+        p3.addResources(ResourceType.ORE, 3);
+        p3.addResources(ResourceType.GRAIN, 2);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+        game.getBoard().getVertex(vertexId).setOwner(p3);
+
+        turn.buildCity(vertexId);
+
+        assertAll(
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.ORE)),
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.GRAIN))
+        );
+    }
 }
 
 

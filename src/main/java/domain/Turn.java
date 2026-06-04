@@ -177,5 +177,8 @@ public class Turn {
 
     public void buildCity(int vertexId) {
         validateCityResources();
+
+        activePlayer.removeResources(ResourceType.ORE, 3);
+        activePlayer.removeResources(ResourceType.GRAIN, 2);
     }
 }

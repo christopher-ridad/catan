@@ -136,7 +136,7 @@
   - State of the system: valid `vertexId`, `activePlayer` does not have the required 2 `GRAIN`, has 1
   - Expected output: `IllegalStateException`
 
-- **TC32: BuildCity_PlayerHasExactlyOneOfEachRequiredResource_NoExceptionThrown** ( :x: )
+- **TC32: BuildCity_PlayerHasExactAmountOfEachRequiredResource_NoExceptionThrown** ( :x: )
   - State of the system: valid `vertexId`, `activePlayer` has exactly three `ORE` and two `GRAIN`
   - Expected output: `getResources` called on `activePlayer` returns 0 for each required resource
 
