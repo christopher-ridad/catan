@@ -70,59 +70,59 @@
 
 ## Method under test: `buildSettlement(int vertexId)`
 
-- **TC16: BuildSettlement_PlayerDoesNotHaveBrick_ThrowsIllegalStateException** ( :x: )
+- **TC16: BuildSettlement_PlayerDoesNotHaveBrick_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, `activePlayer` does not have the required 1 `BRICK`
   - Expected output: `IllegalStateException`
 
-- **TC17: BuildSettlement_PlayerDoesNotHaveLumber_ThrowsIllegalStateException** ( :x: )
+- **TC17: BuildSettlement_PlayerDoesNotHaveLumber_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, `activePlayer` does not have the required 1 `LUMBER`
   - Expected output: `IllegalStateException`
 
-- **TC18: BuildSettlement_PlayerDoesNotHaveWool_ThrowsIllegalStateException** ( :x: )
+- **TC18: BuildSettlement_PlayerDoesNotHaveWool_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, `activePlayer` does not have the required 1 `WOOL`
   - Expected output: `IllegalStateException`
 
-- **TC19: BuildSettlement_PlayerDoesNotHaveGrain_ThrowsIllegalStateException** ( :x: )
+- **TC19: BuildSettlement_PlayerDoesNotHaveGrain_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, `activePlayer` does not have the required 1 `GRAIN`
   - Expected output: `IllegalStateException`
 
-- **TC20: BuildSettlement_PlayerHasExactlyOneOfEachRequiredResource_NoExceptionThrown** ( :x: )
+- **TC20: BuildSettlement_PlayerHasExactlyOneOfEachRequiredResource_NoExceptionThrown** ( :white_check_mark: )
   - State of the system: valid `vertexId`, `activePlayer` has exactly one `BRICK`, `LUMBER`, `WOOL`, and `GRAIN`
   - Expected output: `getResources` called on `activePlayer` returns 0 for each required resource
 
-- **TC21: BuildSettlement_VertexIsNotConnectedToExistingRoad_ThrowsIllegalStateException** ( :x: )
+- **TC21: BuildSettlement_VertexIsNotConnectedToExistingRoad_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, vertex is surrounded by empty edges
   - Expected output: `IllegalStateException`
 
-- **TC22: BuildSettlement_VertexIsSurroundedByEnemyRoads_ThrowsIllegalStateException** ( :x: )
+- **TC22: BuildSettlement_VertexIsSurroundedByEnemyRoads_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, vertex is surrounded by enemy roads
   - Expected output: `IllegalStateException`
 
-- **TC23: BuildSettlement_VertexIsConnectedToExistingRoad_NoExceptionThrown** ( :x: )
+- **TC23: BuildSettlement_VertexIsConnectedToExistingRoad_NoExceptionThrown** ( :white_check_mark: )
   - State of the system: valid `vertexId`, vertex is connected to activePlayer's existing road
   - Expected output: `getOwner` called on `vertexId` returns `activePlayer`
 
-- **TC24: BuildSettlement_DoesNotSatisfyDistanceRuleSettlement_ThrowsIllegalStateException** ( :x: )
+- **TC24: BuildSettlement_DoesNotSatisfyDistanceRuleSettlement_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, adjacent vertex already has a settlement
   - Expected output: `IllegalStateException`
 
-- **TC25: BuildSettlement_DoesNotSatisfyDistanceRuleCity_ThrowsIllegalStateException** ( :x: )
+- **TC25: BuildSettlement_DoesNotSatisfyDistanceRuleCity_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, adjacent vertex already has a city
   - Expected output: `IllegalStateException`
 
-- **TC26: BuildSettlement_SatisfiesDistanceRuleSettlement_NoExceptionThrown** ( :x: )
+- **TC26: BuildSettlement_SatisfiesDistanceRuleSettlement_NoExceptionThrown** ( :white_check_mark: )
   - State of the system: valid `vertexId`, satisfies distance rule, adjacent vertices are empty
   - Expected output: `getOwner` called on `vertexId` returns `activePlayer`
 
-- **TC27: BuildSettlement_VertexAlreadyOccupied_ThrowsIllegalStateException** ( :x: )
+- **TC27: BuildSettlement_VertexAlreadyOccupied_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, already has an existing settlement or city 
   - Expected output: `IllegalStateException`
 
-- **TC28: BuildSettlement_PlayerHasFiveSettlements_ThrowsIllegalStateException** ( :x: )
+- **TC28: BuildSettlement_PlayerHasFiveSettlements_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid `vertexId`, player already has the maximum number of settlements
   - Expected output: `IllegalStateException`
 
-- **TC29: BuildSettlement_PlayerHasFourSettlements_NoExceptionThrown** ( :x: )
+- **TC29: BuildSettlement_PlayerHasFourSettlements_NoExceptionThrown** ( :white_check_mark: )
   - State of the system: valid `vertexId`, player already has one less than the maximum number of settlements
   - Expected output: `getOwner` called on `vertexId` returns `activePlayer`
 
