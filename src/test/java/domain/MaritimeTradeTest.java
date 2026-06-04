@@ -193,6 +193,19 @@ public class MaritimeTradeTest {
                 new MaritimeTrade(player, ResourceType.LUMBER, 4, ResourceType.BRICK, board));
     }
 
+    @Test
+    void maritimeTradeConstructor_genericHarborBeatsDefault_usesGenericRate() {
+        Player player = playerWithSettlementAt(0, Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, 3,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        assertDoesNotThrow(() ->
+                new MaritimeTrade(player, ResourceType.LUMBER, 3, ResourceType.BRICK, board));
+    }
+
     private Player playerWithSettlementAt(int vertexId, Map<ResourceType, Integer> resources) {
         Player player = new Player("Alice", PlayerColor.RED, resources);
         board.getVertex(vertexId).setOwner(player);
