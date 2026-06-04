@@ -49,6 +49,10 @@ public class TradeOffer {
         return status;
     }
 
+    public boolean isPending() {
+        return status == TradeStatus.PENDING;
+    }
+
     private void validateOffererAndRecipient(Player offerer, Player recipient) {
         if (offerer.equals(recipient)) {
             throw new IllegalArgumentException("Offerer and recipient must be different players.");
