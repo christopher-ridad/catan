@@ -2,7 +2,7 @@
 1. [wip] [Ariel] Implement Trading ()
 
 # Week 9 (05/25/2026–05/31/2026)
-1. 
+1. [done] [Ariel]: Implement initial placement phase logic (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/54)
 
 # Week 8 (05/18/2026–05/24/2026)
 1. [done] [Chris]: Implement Vertex class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/33)
@@ -14,7 +14,7 @@
 7. [done] [Chris]: Setup Spotbugs (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/32)
 8. [done] [Ananya]: Implement Player class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/17)
 9. [done] [Ariel]: Implement Hex class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/36)
-10. [waiting to be merged] [Harry]: Implement Game Class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/37)
+10. [done] [Harry]: Implement Game Class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/37)
 
 
 # Week 7 (05/11/2026–05/17/2026)
