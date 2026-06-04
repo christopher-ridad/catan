@@ -147,4 +147,11 @@ public class TradeOfferTest {
         offer.reject();
         assertFalse(offer.isPending());
     }
+
+    @Test
+    void accept_statusPending_statusBecomesAccepted() {
+        TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
+        offer.accept();
+        assertEquals(TradeOffer.TradeStatus.ACCEPTED, offer.getStatus());
+    }
 }
