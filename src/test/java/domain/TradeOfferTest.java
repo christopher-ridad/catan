@@ -58,4 +58,10 @@ public class TradeOfferTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new TradeOffer(offerer, recipient, Map.of(ResourceType.BRICK, 0), validRequesting));
     }
+
+    @Test
+    void tradeOfferConstructor_offeringValueNegative_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new TradeOffer(offerer, recipient, Map.of(ResourceType.BRICK, -1), validRequesting));
+    }
 }
