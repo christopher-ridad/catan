@@ -118,6 +118,10 @@ public class Turn {
             throw new IllegalStateException("Settlement is not connected to existing road");
         }
 
+        if (!(board.satisfiesDistanceRule(vertex))) {
+            throw new IllegalStateException("Settlement does not satisfy distance rule");
+        }
+
         vertex.setOwner(activePlayer);
     }
 
