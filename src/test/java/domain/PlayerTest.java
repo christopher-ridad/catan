@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PlayerTests {
+public class PlayerTest {
     @Test
     public void constructor_WithNullName_ThrowsIllegalArgumentException() {
         PlayerColor playerOneColor = PlayerColor.BLUE;
