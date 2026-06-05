@@ -32,16 +32,29 @@ public final class Bank {
     }
 
     public void deduct(ResourceType type, int amount) {
+        validateTypeAndAmount(type, amount);
+        int current = resources.get(type);
+        if (amount > current) {
+            throw new IllegalArgumentException("Insufficient resources in bank");
+        }
+        resources.put(type, current - amount);
+    }
+
+    public void collect(ResourceType type, int amount) {
+        validateTypeAndAmount(type, amount);
+        int current = resources.get(type);
+        if (amount + current > 19) {
+            throw new IllegalArgumentException("Collection exceeded maximum amount (19)");
+        }
+        resources.put(type, amount + current);
+    }
+
+    private void validateTypeAndAmount(ResourceType type, int amount) {
         if (type == null) {
             throw new IllegalArgumentException("Resource type cannot be null");
         }
         if (amount < 0) {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
-        int current = resources.get(type);
-        if (amount > current) {
-            throw new IllegalArgumentException("Insufficient resources in bank");
-        }
-        resources.put(type, current - amount);
     }
 }
