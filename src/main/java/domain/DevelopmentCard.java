@@ -20,4 +20,8 @@ public class DevelopmentCard {
     public DevelopmentCardType getType() {
         return type;
     }
+
+    public void markAsPlayed() {
+        this.played = true;
+    }
 }

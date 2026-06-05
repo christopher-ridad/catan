@@ -27,4 +27,11 @@ public class DevelopmentCardTest {
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
         assertFalse(card.isPlayed());
     }
+
+    @Test
+    void IsPlayed_AfterMarkAsPlayed_ReturnsTrue() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        card.markAsPlayed();
+        assertTrue(card.isPlayed());
+    }
 }
