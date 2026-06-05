@@ -99,3 +99,25 @@
 - **TC22: getTotalResourceCount_MaxPossibleValue** ( implemented )
   - State of the system: getTotalResourceCount called on a player with resources that sum to INT_MAX
   - Expected output: INT_MAX
+
+## Method under test: `removeResources(ResourceType type, int amount)`
+
+- **TC23: removeResources_nullResourceType_throwsIllegalArgumentException** ( implemented )
+  - State of the system: removeResources called with null as ResourceType input
+  - Expected output: `IllegalArgumentException`
+
+- **TC24: removeResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException** ( implemented )
+  - State of the system: removeResources called with -1 as amount integer value, wool as resourceType input
+  - Expected output: `IllegalArgumentException`
+
+- **TC25: removeResources_brickType_amountZero_noExceptionThrown** ( implemented )
+  - State of the system: removeResources called with 0 as amount integer value and brick as ResourceType input
+  - Expected output: no exception thrown
+
+- **TC26: removeResources_grainType_playerDoesNotHaveEnough_ThrowsIllegalStateException** ( implemented )
+  - State of the system: removeResources called with 1 as amount integer value, grain as resourceType input, player has 0 grain
+  - Expected output: `IllegalStateException`
+
+- **TC27: removeResources_lumberType_playerHasEnough_noExceptionThrown** ( implemented )
+  - State of the system: removeResources called with 3 as amount integer value, lumber as resourceType input, player has 5 lumber
+  - Expected output: `getResourceCount` called on player returns 2
