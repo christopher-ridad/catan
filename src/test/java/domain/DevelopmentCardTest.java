@@ -40,4 +40,11 @@ public class DevelopmentCardTest {
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
         assertDoesNotThrow(card::markAsPlayed);
     }
+
+    @Test
+    void MarkAsPlayed_OnAlreadyPlayedCard_ThrowsIllegalStateException() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
+        card.markAsPlayed();
+        assertThrows(IllegalStateException.class, card::markAsPlayed);
+    }
 }

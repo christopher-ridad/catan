@@ -22,6 +22,9 @@ public class DevelopmentCard {
     }
 
     public void markAsPlayed() {
+        if (played) {
+            throw new IllegalStateException("Card has already been played");
+        }
         this.played = true;
     }
 }
