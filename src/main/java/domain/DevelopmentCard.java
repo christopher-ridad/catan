@@ -16,4 +16,8 @@ public class DevelopmentCard {
     public boolean isPlayed() {
         return played;
     }
+
+    public DevelopmentCardType getType() {
+        return type;
+    }
 }

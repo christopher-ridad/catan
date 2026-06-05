@@ -21,4 +21,10 @@ public class DevelopmentCardTest {
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
         assertFalse(card.isPlayed());
     }
+
+    @Test
+    void GetType_ReturnsCorrectType() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.ROAD_BUILDING);
+        assertEquals(DevelopmentCardType.ROAD_BUILDING, card.getType());
+    }
 }
