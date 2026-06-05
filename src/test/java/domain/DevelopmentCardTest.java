@@ -8,7 +8,9 @@ public class DevelopmentCardTest {
 
     @Test
     void Constructor_WithNullType_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new DevelopmentCard(null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new DevelopmentCard(null));
+        assertEquals("DevelopmentCard type cannot be null", exception.getMessage());
     }
 
     @Test
@@ -45,12 +47,16 @@ public class DevelopmentCardTest {
     void MarkAsPlayed_OnAlreadyPlayedCard_ThrowsIllegalStateException() {
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
         card.markAsPlayed();
-        assertThrows(IllegalStateException.class, card::markAsPlayed);
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                card::markAsPlayed);
+        assertEquals("Card has already been played", exception.getMessage());
     }
 
     @Test
     void MarkAsPlayed_OnVictoryPointCard_ThrowsIllegalStateException() {
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
-        assertThrows(IllegalStateException.class, () -> card.markAsPlayed());
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                card::markAsPlayed);
+        assertEquals("Victory Point cards cannot be marked as played", exception.getMessage());
     }
 }
