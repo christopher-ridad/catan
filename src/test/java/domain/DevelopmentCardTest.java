@@ -34,4 +34,10 @@ public class DevelopmentCardTest {
         card.markAsPlayed();
         assertTrue(card.isPlayed());
     }
+
+    @Test
+    void MarkAsPlayed_OnUnplayedCard_NoExceptionThrown() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
+        assertDoesNotThrow(card::markAsPlayed);
+    }
 }
