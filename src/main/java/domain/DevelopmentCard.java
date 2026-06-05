@@ -20,6 +20,9 @@ public final class DevelopmentCard {
     }
 
     public void markAsPlayed() {
+        if (type == DevelopmentCardType.VICTORY_POINT) {
+            throw new IllegalStateException("Victory Point cards cannot be marked as played");
+        }
         if (played) {
             throw new IllegalStateException("Card has already been played");
         }

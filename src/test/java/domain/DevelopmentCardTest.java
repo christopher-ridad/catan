@@ -47,4 +47,10 @@ public class DevelopmentCardTest {
         card.markAsPlayed();
         assertThrows(IllegalStateException.class, card::markAsPlayed);
     }
+
+    @Test
+    void MarkAsPlayed_OnVictoryPointCard_ThrowsIllegalStateException() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
+        assertThrows(IllegalStateException.class, () -> card.markAsPlayed());
+    }
 }

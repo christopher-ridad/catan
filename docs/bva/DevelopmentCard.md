@@ -35,3 +35,7 @@
 - **TC7: MarkAsPlayed_OnAlreadyPlayedCard_ThrowsIllegalStateException** ( implemented )
     - State of the system: `DevelopmentCard(MONOPOLY)`, `markAsPlayed()` already called once
     - Expected output: `IllegalStateException`
+
+- **TC8: MarkAsPlayed_OnVictoryPointCard_ThrowsIllegalStateException** ( implemented )
+  - State of the system: `DevelopmentCard(VICTORY_POINT)`, `markAsPlayed()` called
+  - Expected output: `IllegalStateException`
