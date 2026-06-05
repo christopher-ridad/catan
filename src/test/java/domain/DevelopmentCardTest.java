@@ -17,14 +17,14 @@ public class DevelopmentCardTest {
     }
 
     @Test
-    void Constructor_NewCard_IsNotPlayed() {
-        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-        assertFalse(card.isPlayed());
-    }
-
-    @Test
     void GetType_ReturnsCorrectType() {
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.ROAD_BUILDING);
         assertEquals(DevelopmentCardType.ROAD_BUILDING, card.getType());
+    }
+
+    @Test
+    void IsPlayed_WhenNewCard_ReturnsFalse() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        assertFalse(card.isPlayed());
     }
 }

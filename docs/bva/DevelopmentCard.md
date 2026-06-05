@@ -10,32 +10,28 @@
     - State of the system: `type = KNIGHT`
     - Expected output: no exception thrown
 
-- **TC3: Constructor_NewCard_IsNotPlayed** ( not implemented )
-    - State of the system: `type = KNIGHT`
-    - Expected output: `isPlayed()` returns `false`
-
 ## Method under test: `getType()`
 
-- **TC4: GetType_ReturnsCorrectType** ( not implemented )
+- **TC3: GetType_ReturnsCorrectType** ( not implemented )
     - State of the system: `DevelopmentCard(ROAD_BUILDING)`
     - Expected output: `ROAD_BUILDING`
 
 ## Method under test: `isPlayed()`
 
-- **TC5: IsPlayed_WhenNewCard_ReturnsFalse** ( not implemented )
+- **TC4: IsPlayed_WhenNewCard_ReturnsFalse** ( not implemented )
     - State of the system: `DevelopmentCard(YEAR_OF_PLENTY)`, `markAsPlayed()` not yet called
     - Expected output: `false`
 
-- **TC6: IsPlayed_AfterMarkAsPlayed_ReturnsTrue** ( not implemented )
+- **TC5: IsPlayed_AfterMarkAsPlayed_ReturnsTrue** ( not implemented )
     - State of the system: `DevelopmentCard(YEAR_OF_PLENTY)`, `markAsPlayed()` called once
     - Expected output: `true`
 
 ## Method under test: `markAsPlayed()`
 
-- **TC7: MarkAsPlayed_OnUnplayedCard_NoExceptionThrown** ( not implemented )
+- **TC6: MarkAsPlayed_OnUnplayedCard_NoExceptionThrown** ( not implemented )
     - State of the system: `DevelopmentCard(MONOPOLY)`, card not yet played
     - Expected output: no exception thrown
 
-- **TC8: MarkAsPlayed_OnAlreadyPlayedCard_ThrowsIllegalStateException** ( not implemented )
+- **TC7: MarkAsPlayed_OnAlreadyPlayedCard_ThrowsIllegalStateException** ( not implemented )
     - State of the system: `DevelopmentCard(MONOPOLY)`, `markAsPlayed()` already called once
     - Expected output: `IllegalStateException`
