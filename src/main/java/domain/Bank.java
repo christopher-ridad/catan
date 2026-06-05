@@ -3,7 +3,7 @@ package domain;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class Bank {
+public final class Bank {
 
     private static final int STANDARD_RESOURCE_COUNT = 19;
     private final Map<ResourceType, Integer> resources;
