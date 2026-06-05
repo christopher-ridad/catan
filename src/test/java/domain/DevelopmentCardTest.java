@@ -2,8 +2,7 @@ package domain;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DevelopmentCardTest {
 
@@ -15,5 +14,11 @@ public class DevelopmentCardTest {
     @Test
     void Constructor_WithValidType_NoExceptionThrown() {
         assertDoesNotThrow(() -> new DevelopmentCard(DevelopmentCardType.KNIGHT));
+    }
+
+    @Test
+    void Constructor_NewCard_IsNotPlayed() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        assertFalse(card.isPlayed());
     }
 }
