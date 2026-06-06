@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  */
 
-public class Game {
+public final class Game {
 
     private static final int MIN_PLAYERS = 2;
     private static final int MAX_PLAYERS = 4;
