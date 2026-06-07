@@ -14,14 +14,15 @@ public class MaritimeTrade {
 
         validateGivingAndReceivingResources(giving, receiving);
 
+        this.player = player;
+        this.giving = giving;
+
         this.rate = computeBestRate(player, giving, board);
 
         validateAmountVsRate(rate, amount);
 
         validateGivingAmountNeeded(player, giving, amount);
 
-        this.player = player;
-        this.giving = giving;
         this.amount = amount;
         this.receiving = receiving;
     }
@@ -47,6 +48,12 @@ public class MaritimeTrade {
     }
 
     private void validateGivingAndReceivingResources(ResourceType giving, ResourceType receiving) {
+        if (giving == null) {
+            throw new IllegalArgumentException("Giving resource must not be null.");
+        }
+        if (receiving == null) {
+            throw new IllegalArgumentException("Receiving resource must not be null.");
+        }
         if (giving == receiving) {
             throw new IllegalArgumentException("Giving and receiving resources must be different.");
         }

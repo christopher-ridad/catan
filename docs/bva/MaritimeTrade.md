@@ -62,6 +62,14 @@
     - **State of the system**: Player has both a generic harbor and a special `BRICK` harbor, `giving = BRICK`, player has 2 `BRICK`, `amount = 2`, `receiving = LUMBER`
     - **Expected output**: Object created successfully (special harbor rate 2 used over generic rate 3)
 
+- **TC-23: maritimeTradeConstructor_givingNull_throwsIllegalArgument** ( :white_check_mark: )
+  - **State of the system**: `giving` is `null`, valid player, valid receiving, valid board
+  - **Expected output**: `IllegalArgumentException`
+
+- **TC-24: maritimeTradeConstructor_receivingNull_throwsIllegalArgument** ( :white_check_mark: )
+  - **State of the system**: valid `giving`, `receiving` is `null`, valid player, valid board
+  - **Expected output**: `IllegalArgumentException`
+
 ---
 
 ### Method under test: `getPlayer()`
