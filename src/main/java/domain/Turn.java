@@ -173,6 +173,23 @@ public class Turn {
         return candidates;
     }
 
+    public void advanceToBuild() {
+        if (phase != TurnPhase.TRADE) {
+            throw new IllegalStateException("Can only advance to the build phase from the trade phase");
+        }
+        if (robberPendingMove || robberPendingSteal) {
+            throw new IllegalStateException("Robber must be resolved before advancing to the build phase");
+        }
+        phase = TurnPhase.BUILD;
+    }
+
+    public void endTurn() {
+        if (phase != TurnPhase.BUILD) {
+            throw new IllegalStateException("Can only end the turn from the build phase");
+        }
+        phase = TurnPhase.DONE;
+    }
+
     public void buildRoad(int edgeId) {
         buildManager.buildRoad(edgeId);
     }
