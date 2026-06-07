@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TradeOffer {
@@ -24,8 +25,8 @@ public class TradeOffer {
 
         this.offerer = offerer;
         this.recipient = recipient;
-        this.offering = offering;
-        this.requesting = requesting;
+        this.offering = new HashMap<>(offering);
+        this.requesting = new HashMap<>(requesting);
         this.status = TradeStatus.PENDING;
     }
 
@@ -64,6 +65,12 @@ public class TradeOffer {
     }
 
     private void validateOffererAndRecipient(Player offerer, Player recipient) {
+        if  (offerer == null) {
+            throw new IllegalArgumentException("Offerer must not be null");
+        }
+        if (recipient == null) {
+            throw new IllegalArgumentException("Recipient must not be null");
+        }
         if (offerer.equals(recipient)) {
             throw new IllegalArgumentException("Offerer and recipient must be different players.");
         }
@@ -78,6 +85,11 @@ public class TradeOffer {
                 throw new IllegalArgumentException("All values in offering must be greater than 0.");
             }
         }
+        for (ResourceType key : offering.keySet()) {
+            if (key == null) {
+                throw new IllegalArgumentException("Offering map must not contain null keys.");
+            }
+        }
     }
 
     private void validateRequest(Map<ResourceType, Integer> requesting) {
@@ -87,6 +99,11 @@ public class TradeOffer {
         for (int value : requesting.values()) {
             if (value <= 0) {
                 throw new IllegalArgumentException("All values in requesting must be greater than 0.");
+            }
+        }
+        for (ResourceType key : requesting.keySet()) {
+            if (key == null) {
+                throw new IllegalArgumentException("Requesting map must not contain null keys.");
             }
         }
     }

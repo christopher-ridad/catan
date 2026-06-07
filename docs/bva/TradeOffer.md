@@ -42,6 +42,14 @@
     - **State of the system**: `offerer != recipient`, all values in both maps equal `1`
     - **Expected output**: Object created; `getStatus()` returns `PENDING`
 
+- **TO-27: tradeOfferConstructor_offererNull_throwsIllegalArgument** ( :white_check_mark: )
+  - **State of the system**: `offerer` is `null`
+  - **Expected output**: `IllegalArgumentException`
+
+- **TO-28: tradeOfferConstructor_recipientNull_throwsIllegalArgument** ( :white_check_mark: )
+  - **State of the system**: `offerer` is valid, `recipient` is `null`
+  - **Expected output**: `IllegalArgumentException`
+
 ### Method under test: `getOffering()`
 
 - **TO-11: getOffering_validTradeOffer_returnsMatchingOfferingMap** ( :white_check_mark: )
@@ -77,9 +85,7 @@
 
 ### Method under test: `getStatus()`
 
-- **TO-17: getStatus_freshlyConstructed_returnsPending** ( :white_check_mark: )
-    - **State of the system**: Valid `TradeOffer` constructed, no calls to `accept()` or `reject()`
-    - **Expected output**: `TradeStatus.PENDING`
+- **Tested under TO-10**
 
 ### Method under test: `isPending()`
 
