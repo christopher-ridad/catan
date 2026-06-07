@@ -353,4 +353,39 @@ public class BoardTest {
         Board testBoard = new Board(hexes, new ArrayList<>(), List.of(nonAdjacentEdge));
         assertFalse(testBoard.isConnectedToPlayer(vertex, player));
     }
+
+    @Test
+    void getHarborType_ForNonHarborVertex_ReturnsEmpty() {
+        assertTrue(board.getHarborType(board.getVertex(4)).isEmpty());
+    }
+
+    @Test
+    void getHarborType_ForGenericHarborVertex_ReturnsGeneric() {
+        assertEquals(HarborType.GENERIC, board.getHarborType(board.getVertex(0)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForGrainHarborVertex_ReturnsGrain() {
+        assertEquals(HarborType.GRAIN, board.getHarborType(board.getVertex(1)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForOreHarborVertex_ReturnsOre() {
+        assertEquals(HarborType.ORE, board.getHarborType(board.getVertex(10)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForWoolHarborVertex_ReturnsWool() {
+        assertEquals(HarborType.WOOL, board.getHarborType(board.getVertex(42)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForBrickHarborVertex_ReturnsBrick() {
+        assertEquals(HarborType.BRICK, board.getHarborType(board.getVertex(33)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForLumberHarborVertex_ReturnsLumber() {
+        assertEquals(HarborType.LUMBER, board.getHarborType(board.getVertex(11)).orElseThrow());
+    }
 }
