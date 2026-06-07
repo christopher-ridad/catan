@@ -1,6 +1,8 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +22,9 @@ public class Turn {
     private final BuildManager buildManager;
     private final ResourceProduction resourceProduction;
     private TradeOffer pendingTrade;
+    private final List<DevelopmentCard> developmentDeck;
+    private final Map<Player, List<DevelopmentCard>> playerHands;
+    private final List<DevelopmentCard> cardsPurchasedThisTurn;
 
     Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank) {
         validateGame(game);
@@ -34,6 +39,34 @@ public class Turn {
         this.phase = TurnPhase.PRODUCTION;
         this.buildManager = new BuildManager(game, activePlayer, bank);
         this.resourceProduction = new ResourceProduction();
+        this.developmentDeck = createShuffledDevelopmentDeck();
+        this.playerHands = createEmptyPlayerHands(game);
+        this.cardsPurchasedThisTurn = new ArrayList<>();
+    }
+
+    private List<DevelopmentCard> createShuffledDevelopmentDeck() {
+        List<DevelopmentCard> deck = new ArrayList<>();
+        for (int i = 0; i < 14; i++) {
+            deck.add(new DevelopmentCard(DevelopmentCardType.KNIGHT));
+        }
+        for (int i = 0; i < 2; i++) {
+            deck.add(new DevelopmentCard(DevelopmentCardType.ROAD_BUILDING));
+            deck.add(new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY));
+            deck.add(new DevelopmentCard(DevelopmentCardType.MONOPOLY));
+        }
+        for (int i = 0; i < 5; i++) {
+            deck.add(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+        Collections.shuffle(deck);
+        return deck;
+    }
+
+    private Map<Player, List<DevelopmentCard>> createEmptyPlayerHands(Game game) {
+        Map<Player, List<DevelopmentCard>> hands = new HashMap<>();
+        for (Player player : game.getPlayers()) {
+            hands.put(player, new ArrayList<>());
+        }
+        return hands;
     }
 
     private void validateGame(Game game) {
@@ -299,5 +332,53 @@ public class Turn {
         bank.collect(giving, amount);
         bank.deduct(receiving, 1);
         player.addResources(receiving, 1);
+    }
+
+    public void buyDevelopmentCard() {
+        if (phase != TurnPhase.BUILD) {
+            throw new IllegalStateException("Development cards can only be bought during the build phase");
+        }
+        if (activePlayer.getResourceCount(ResourceType.ORE) < 1
+                || activePlayer.getResourceCount(ResourceType.WOOL) < 1
+                || activePlayer.getResourceCount(ResourceType.GRAIN) < 1) {
+            throw new IllegalStateException("Active player cannot afford a development card");
+        }
+        if (developmentDeck.isEmpty()) {
+            throw new IllegalStateException("No development cards remain in the deck");
+        }
+
+        activePlayer.removeResources(ResourceType.ORE, 1);
+        activePlayer.removeResources(ResourceType.WOOL, 1);
+        activePlayer.removeResources(ResourceType.GRAIN, 1);
+
+        DevelopmentCard card = developmentDeck.remove(developmentDeck.size() - 1);
+        playerHands.get(activePlayer).add(card);
+        cardsPurchasedThisTurn.add(card);
+    }
+
+    public void playDevelopmentCard(Player player, DevelopmentCard card) {
+        if (phase != TurnPhase.TRADE && phase != TurnPhase.BUILD) {
+            throw new IllegalStateException("Development cards can only be played during the trade or build phase");
+        }
+        if (playedDevCardThisTurn) {
+            throw new IllegalStateException("Only one development card can be played per turn");
+        }
+        if (cardsPurchasedThisTurn.contains(card) && card.getType() != DevelopmentCardType.VICTORY_POINT) {
+            throw new IllegalStateException("A development card cannot be played the same turn it was purchased");
+        }
+        if (card.isPlayed()) {
+            throw new IllegalStateException("This development card has already been played");
+        }
+
+        card.markAsPlayed();
+        playedDevCardThisTurn = true;
+    }
+
+    public List<DevelopmentCard> getPlayerHand(Player player) {
+        return Collections.unmodifiableList(playerHands.get(player));
+    }
+
+    public int getRemainingDeckSize() {
+        return developmentDeck.size();
     }
 }
