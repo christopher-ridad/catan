@@ -19,6 +19,7 @@
 1. [done] [Ananya]: Implement road building (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/62)
 2. [done] [Ariel]: Implement initial placement phase logic (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/54)
 3. [done] [Isabella]: Implement Dice Roll (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/57)
+4. [done] [Isabella]: Implement Resource Production (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/58)
 4. [done] [Harry]: Implement Game class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/37)
 
 # Week 8 (05/18/2026–05/24/2026)
