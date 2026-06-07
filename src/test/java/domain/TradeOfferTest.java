@@ -83,6 +83,12 @@ public class TradeOfferTest {
     }
 
     @Test
+    void tradeOfferConstructor_offererNull_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new TradeOffer(null, recipient, validOffering, validRequesting));
+    }
+
+    @Test
     void getOffering_validTradeOffer_returnsMatchingOfferingMap() {
         TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
         assertEquals(validOffering, offer.getOffering());
