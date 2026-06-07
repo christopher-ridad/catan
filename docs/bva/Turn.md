@@ -340,5 +340,65 @@
   - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called)
   - Expected output: `IllegalStateException`
 
+## Method under test: `proposeTrade(Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting)`
+
+- **TC78: ProposeTrade_OutsideTradePhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called)
+  - Expected output: `IllegalStateException`
+
+- **TC79: ProposeTrade_WhenTradeAlreadyPending_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: a prior `proposeTrade()` call already created a `PENDING` offer this turn
+  - Expected output: `IllegalStateException`
+
+- **TC80: ProposeTrade_OffererCannotAffordOffering_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: active player has 0 of a resource type included in `offering` (boundary)
+  - Expected output: `IllegalArgumentException`
+
+- **TC81: ProposeTrade_OffererHasExactlyOfferedAmount_CreatesAndStoresPendingTrade** ( :white_check_mark: )
+  - State of the system: active player has exactly the amount of each resource included in `offering` (boundary)
+  - Expected output: a `PENDING` `TradeOffer` is returned and `getPendingTrade()` returns it
+
+- **TC82: ProposeTrade_AfterPriorOfferResolved_CreatesNewPendingTrade** ( :white_check_mark: )
+  - State of the system: a prior offer was accepted/rejected and `pendingTrade` was cleared
+  - Expected output: a new `PENDING` `TradeOffer` is created and stored as the pending trade
+
+## Method under test: `acceptTrade(TradeOffer offer)`
+
+- **TC83: AcceptTrade_NoMatchingPendingTrade_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: no trade is pending, or the supplied `offer` is not the stored `pendingTrade`
+  - Expected output: `IllegalStateException`
+
+- **TC84: AcceptTrade_OffererCannotAffordOffering_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: offer is pending, but the offerer no longer holds enough of a resource in `offering` (boundary: 0 of a required resource)
+  - Expected output: `IllegalStateException`
+
+- **TC85: AcceptTrade_RecipientCannotAffordRequesting_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: offer is pending, offerer can afford `offering`, but the recipient has 0 of a resource in `requesting` (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC86: AcceptTrade_BothPlayersCanAfford_ExchangesResourcesAndClearsPendingTrade** ( :white_check_mark: )
+  - State of the system: offerer holds exactly the offered amounts, recipient holds exactly the requested amounts (boundary)
+  - Expected output: offerer's and recipient's resource counts reflect the exchange, offer status becomes `ACCEPTED`, and `getPendingTrade()` returns empty
+
+## Method under test: `rejectTrade(TradeOffer offer)`
+
+- **TC87: RejectTrade_NoMatchingPendingTrade_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: no trade is pending, or the supplied `offer` is not the stored `pendingTrade`
+  - Expected output: `IllegalStateException`
+
+- **TC88: RejectTrade_PendingOffer_MarksRejectedAndClearsPendingTrade** ( :white_check_mark: )
+  - State of the system: a `PENDING` offer is the stored `pendingTrade`
+  - Expected output: `offer.getStatus()` becomes `REJECTED` and `getPendingTrade()` returns empty
+
+## Method under test: `getPendingTrade()`
+
+- **TC89: GetPendingTrade_NoOfferProposed_ReturnsEmpty** ( :white_check_mark: )
+  - State of the system: `proposeTrade()` has not been called this turn
+  - Expected output: `Optional.empty()`
+
+- **TC90: GetPendingTrade_AfterProposeTrade_ReturnsTheOffer** ( :white_check_mark: )
+  - State of the system: `proposeTrade()` was just called and returned a `PENDING` offer
+  - Expected output: `Optional` containing that exact `TradeOffer`
+
 
 
