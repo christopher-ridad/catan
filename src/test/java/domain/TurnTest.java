@@ -109,6 +109,13 @@ public class TurnTest {
         return new DiceRoll(mockRandom);
     }
 
+    private Turn newTurnInBuildPhase(Player player) {
+        Turn turn = new Turn(game, player, mockDiceRoll(4, 4), bank);
+        turn.rollDice();
+        turn.advanceToBuild();
+        return turn;
+    }
+
     private Vertex findVertexAdjacentToNumber(int number) {
         for (Vertex vertex : board.getVertices()) {
             for (Hex hex : vertex.getAdjacentHexes()) {
@@ -537,7 +544,7 @@ public class TurnTest {
     @Test
     public void BuildRoad_PlayerDoesNotHaveBrick_ThrowsIllegalStateException() {
         p2.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p2, dice, bank);
+        Turn turn = newTurnInBuildPhase(p2);
 
         int edgeId = 2;
         game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p2);
@@ -550,7 +557,7 @@ public class TurnTest {
     @Test
     public void BuildRoad_PlayerDoesNotHaveLumber_ThrowsIllegalStateException() {
         p2.addResources(ResourceType.BRICK, 1);
-        Turn turn = new Turn(game, p2, dice, bank);
+        Turn turn = newTurnInBuildPhase(p2);
 
         int edgeId = 2;
         game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p2);
@@ -564,7 +571,7 @@ public class TurnTest {
     public void BuildRoad_PlayerHasExactlyOneBrickAndLumber_NoExceptionThrown() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int edgeId = 2;
         game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p3);
@@ -581,7 +588,7 @@ public class TurnTest {
     public void BuildRoad_EdgeIsOccupied_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
         int edgeId = 4;
         game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p3);
         board.getEdge(edgeId).setOwner(p4);
@@ -594,7 +601,7 @@ public class TurnTest {
     public void BuildRoad_PlayerHasFourteenRoads_NoExceptionThrown() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
         int edgeId = 15;
         game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p3);
 
@@ -610,7 +617,7 @@ public class TurnTest {
     public void BuildRoad_PlayerHasFifteenRoads_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         for (int i = 1; i < 16; i++) {
             board.getEdge(i).setOwner(p3);
@@ -628,7 +635,7 @@ public class TurnTest {
     public void BuildRoad_EdgeIsNotConnectedToExistingNetwork_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int edgeId = 17;
 
@@ -641,7 +648,7 @@ public class TurnTest {
     public void BuildRoad_RoadIsConnectedToRoad_NoExceptionThrown() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int edgeId1 = 11;
         int edgeId2 = 12;
@@ -659,7 +666,7 @@ public class TurnTest {
     public void BuildRoad_RoadIsConnectedToSettlement_NoExceptionThrown() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int edgeId1 = 11;
         int edgeId2 = 12;
@@ -677,7 +684,7 @@ public class TurnTest {
     public void BuildRoad_RoadIsConnectedToCity_NoExceptionThrown() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int edgeId1 = 3;
         int edgeId2 = 4;
@@ -696,7 +703,7 @@ public class TurnTest {
     public void BuildRoad_ConnectedToRoadButBlockedByEnemySettlement_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int edgeId1 = 11;
         int edgeId2 = 12;
@@ -729,7 +736,7 @@ public class TurnTest {
         p2.addResources(ResourceType.LUMBER, 1);
         p2.addResources(ResourceType.WOOL, 1);
         p2.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p2, dice, bank);
+        Turn turn = newTurnInBuildPhase(p2);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -745,7 +752,7 @@ public class TurnTest {
         p2.addResources(ResourceType.BRICK, 1);
         p2.addResources(ResourceType.WOOL, 1);
         p2.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p2, dice, bank);
+        Turn turn = newTurnInBuildPhase(p2);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -761,7 +768,7 @@ public class TurnTest {
         p2.addResources(ResourceType.BRICK, 1);
         p2.addResources(ResourceType.LUMBER, 1);
         p2.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p2, dice, bank);
+        Turn turn = newTurnInBuildPhase(p2);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -777,7 +784,7 @@ public class TurnTest {
         p2.addResources(ResourceType.BRICK, 1);
         p2.addResources(ResourceType.LUMBER, 1);
         p2.addResources(ResourceType.WOOL, 1);
-        Turn turn = new Turn(game, p2, dice, bank);
+        Turn turn = newTurnInBuildPhase(p2);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -794,7 +801,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -816,7 +823,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
 
@@ -831,7 +838,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 33;
         int edgeId1 = 39;
@@ -852,7 +859,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -871,7 +878,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -889,7 +896,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -908,7 +915,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -927,7 +934,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         int edgeId = 4;
@@ -945,7 +952,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         for (int i = 10; i < 15; i++) {
             game.getBoard().getVertex(i).setOwner(p3);
@@ -966,7 +973,7 @@ public class TurnTest {
         p3.addResources(ResourceType.LUMBER, 1);
         p3.addResources(ResourceType.WOOL, 1);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         for (int i = 10; i < 14; i++) {
             game.getBoard().getVertex(i).setOwner(p3);
@@ -999,7 +1006,7 @@ public class TurnTest {
     public void BuildCity_PlayerDoesNotHaveEnoughOre_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.ORE, 2);
         p3.addResources(ResourceType.GRAIN, 2);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         game.getBoard().getVertex(vertexId).setOwner(p3);
@@ -1013,7 +1020,7 @@ public class TurnTest {
     public void BuildCity_PlayerDoesNotHaveEnoughGrain_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 1);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         game.getBoard().getVertex(vertexId).setOwner(p3);
@@ -1027,7 +1034,7 @@ public class TurnTest {
     public void BuildCity_PlayerHasExactAmountOfEachRequiredResource_NoExceptionThrown() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 2);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         game.getBoard().getVertex(vertexId).setOwner(p3);
@@ -1044,7 +1051,7 @@ public class TurnTest {
     public void BuildCity_PlayerHasFourCities_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 2);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         for (int i = 10; i < 14; i++) {
             game.getBoard().getVertex(i).setOwner(p3);
@@ -1063,7 +1070,7 @@ public class TurnTest {
     public void BuildCity_PlayerHasThreeCities_NoExceptionThrown() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 2);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         for (int i = 10; i < 13; i++) {
             game.getBoard().getVertex(i).setOwner(p3);
@@ -1085,7 +1092,7 @@ public class TurnTest {
     public void BuildCity_PlayerDoesNotHaveExistingSettlement_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 2);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
 
@@ -1098,7 +1105,7 @@ public class TurnTest {
     public void BuildCity_VertexOccupiedByEnemySettlement_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 2);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         game.getBoard().getVertex(vertexId).setOwner(p4);
@@ -1112,7 +1119,7 @@ public class TurnTest {
     public void BuildCity_VertexOccupiedByEnemyCity_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 2);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         game.getBoard().getVertex(vertexId).setOwner(p4);
@@ -1127,7 +1134,7 @@ public class TurnTest {
     public void BuildCity_VertexOccupiedByOwnCity_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 2);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         game.getBoard().getVertex(vertexId).setOwner(p3);
@@ -1142,7 +1149,7 @@ public class TurnTest {
     public void BuildCity_VertexOccupiedByOwnSettlement_NoExceptionThrown() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 2);
-        Turn turn = new Turn(game, p3, dice, bank);
+        Turn turn = newTurnInBuildPhase(p3);
 
         int vertexId = 2;
         game.getBoard().getVertex(vertexId).setOwner(p3);

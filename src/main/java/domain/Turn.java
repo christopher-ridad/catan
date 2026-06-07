@@ -191,14 +191,23 @@ public class Turn {
     }
 
     public void buildRoad(int edgeId) {
+        validateInBuildPhase();
         buildManager.buildRoad(edgeId);
     }
 
     public void buildSettlement(int vertexId) {
+        validateInBuildPhase();
         buildManager.buildSettlement(vertexId);
     }
 
     public void buildCity(int vertexId) {
+        validateInBuildPhase();
         buildManager.buildCity(vertexId);
+    }
+
+    private void validateInBuildPhase() {
+        if (phase != TurnPhase.BUILD) {
+            throw new IllegalStateException("Build actions are only allowed during the build phase");
+        }
     }
 }
