@@ -278,6 +278,53 @@
   - State of the system: `target` is a valid robbing candidate holding exactly 1 resource card (boundary)
   - Expected output: `target`'s count for that resource becomes `0`; `activePlayer`'s count for that resource becomes `1`
 
+## Method under test: `advanceToBuild()`
+
+- **TC64: AdvanceToBuild_FromTradePhase_SetsPhaseToBuild** ( :white_check_mark: )
+  - State of the system: dice rolled (non-7), turn is in TRADE phase, no robber resolution pending
+  - Expected output: `getPhase()` returns `TurnPhase.BUILD`
+
+- **TC65: AdvanceToBuild_FromProductionPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `rollDice()` not yet called, turn is still in PRODUCTION phase
+  - Expected output: `IllegalStateException`
+
+- **TC66: AdvanceToBuild_FromBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `advanceToBuild()` already called once this turn (boundary: calling it again)
+  - Expected output: `IllegalStateException`
+
+- **TC67: AdvanceToBuild_WithRobberMovePending_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: a 7 was just rolled and `moveRobber()` has not yet been called
+  - Expected output: `IllegalStateException`
+
+- **TC68: AdvanceToBuild_WithStealPending_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: a 7 was rolled, robber moved onto a hex with an eligible candidate, `steal()` not yet called
+  - Expected output: `IllegalStateException`
+
+- **TC69: AdvanceToBuild_AfterRobberFullyResolved_SetsPhaseToBuild** ( :white_check_mark: )
+  - State of the system: a 7 was rolled, robber moved and `steal()` completed (boundary: last required robber step just finished)
+  - Expected output: `getPhase()` returns `TurnPhase.BUILD`
+
+- **TC70: AdvanceToBuild_AfterRobberMovedWithNoCandidates_SetsPhaseToBuild** ( :white_check_mark: )
+  - State of the system: a 7 was rolled, robber moved onto a hex with no adjacent settlements (no steal required)
+  - Expected output: `getPhase()` returns `TurnPhase.BUILD`
+
+## Method under test: `endTurn()`
+
+- **TC71: EndTurn_FromBuildPhase_SetsPhaseToDone** ( :white_check_mark: )
+  - State of the system: turn has advanced to BUILD phase
+  - Expected output: `getPhase()` returns `TurnPhase.DONE`
+
+- **TC72: EndTurn_FromTradePhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: dice rolled, turn is in TRADE phase (boundary: one phase before BUILD)
+  - Expected output: `IllegalStateException`
+
+- **TC73: EndTurn_FromProductionPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `rollDice()` not yet called, turn is still in PRODUCTION phase
+  - Expected output: `IllegalStateException`
+
+- **TC74: EndTurn_CalledTwice_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `endTurn()` already called once this turn, phase is DONE (boundary: calling it again)
+  - Expected output: `IllegalStateException`
 
 
 
