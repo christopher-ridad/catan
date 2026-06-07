@@ -168,7 +168,115 @@
   - State of the system: valid `vertexId`, vertex is occupied by player's own settlement
   - Expected output: `getOwner` called on `vertexId` returns `activePlayer`, `isCity` called on `vertexId` returns True
 
-  
+## Method under test: `rollDice()`
+
+- **TC40: RollDice_ValidCall_ReturnsRollValue** ( :white_check_mark: )
+  - State of the system: `phase = PRODUCTION`, dice mocked to return 8
+  - Expected output: `rollDice()` returns `8`
+
+- **TC41: RollDice_ValidCall_AdvancesPhaseToTrade** ( :white_check_mark: )
+  - State of the system: `phase = PRODUCTION`, valid roll
+  - Expected output: `getPhase()` returns `TRADE`
+
+- **TC42: RollDice_CalledOutsideProductionPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `rollDice()` already called once this turn (phase advanced to `TRADE`)
+  - Expected output: `IllegalStateException`
+
+- **TC43: RollDice_NonSevenRoll_DistributesResourcesToSettlementOwner** ( :white_check_mark: )
+  - State of the system: roll = 8 (non-7, boundary above robber trigger), `activePlayer` owns a settlement adjacent to a producing hex with number token 8
+  - Expected output: `getResourceCount` for the produced resource is greater than 0
+
+- **TC44: RollDice_RollOfSeven_NoResourcesDistributed** ( :white_check_mark: )
+  - State of the system: roll = 7 (boundary), `activePlayer` owns a settlement adjacent to a producing hex
+  - Expected output: `getTotalResourceCount()` returns `0`
+
+## Method under test: `isSevenRolled()`
+
+- **TC45: IsSevenRolled_BeforeRollingDice_ReturnsFalse** ( :white_check_mark: )
+  - State of the system: `rollDice()` not yet called this turn
+  - Expected output: `false`
+
+- **TC46: IsSevenRolled_AfterRollingSeven_ReturnsTrue** ( :white_check_mark: )
+  - State of the system: `rollDice()` called, dice mocked to return 7 (boundary)
+  - Expected output: `true`
+
+- **TC47: IsSevenRolled_AfterRollingNonSeven_ReturnsFalse** ( :white_check_mark: )
+  - State of the system: `rollDice()` called, dice mocked to return 8 (one above the boundary)
+  - Expected output: `false`
+
+## Robber logic — triggered internally by `rollDice()` on a roll of 7
+
+### `enforceDiscard()` (private; exercised through `rollDice()`)
+
+- **TC48: RollDice_RollOfSeven_PlayerWithSevenCards_NoDiscard** ( :white_check_mark: )
+  - State of the system: roll = 7, an opponent holds exactly 7 resource cards (boundary — at the discard threshold but not over)
+  - Expected output: opponent's `getTotalResourceCount()` remains `7`
+
+- **TC49: RollDice_RollOfSeven_PlayerWithEightCards_DiscardsFour** ( :white_check_mark: )
+  - State of the system: roll = 7, an opponent holds exactly 8 resource cards (one above the boundary; `floor(8/2) = 4`)
+  - Expected output: opponent's `getTotalResourceCount()` becomes `4`
+
+- **TC50: RollDice_RollOfSeven_PlayerWithNineCards_DiscardsFour** ( :white_check_mark: )
+  - State of the system: roll = 7, an opponent holds 9 resource cards across two types (`floor(9/2) = 4`)
+  - Expected output: opponent's `getTotalResourceCount()` becomes `5`
+
+### `getRobbingCandidates()`
+
+- **TC51: GetRobbingCandidates_OpponentSettlementAdjacentToRobberHex_IncludesOpponent** ( :white_check_mark: )
+  - State of the system: an opponent owns a settlement on a vertex adjacent to the robber's hex
+  - Expected output: returned list contains the opponent
+
+- **TC52: GetRobbingCandidates_ActivePlayerSettlementAdjacentToRobberHex_ExcludesActivePlayer** ( :white_check_mark: )
+  - State of the system: `activePlayer` owns a settlement on a vertex adjacent to the robber's hex
+  - Expected output: returned list does not contain `activePlayer`
+
+- **TC53: GetRobbingCandidates_NoSettlementsAdjacentToRobberHex_ReturnsEmptyList** ( :white_check_mark: )
+  - State of the system: no vertex adjacent to the robber's hex is occupied
+  - Expected output: returned list is empty
+
+### `moveRobber(int hexId)`
+
+- **TC54: MoveRobber_BeforeSevenRolled_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `rollDice()` not yet called (or last roll was not a 7)
+  - Expected output: `IllegalStateException`
+
+- **TC55: MoveRobber_ToCurrentRobberHex_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: 7 just rolled, `hexId` identifies the hex the robber is already on
+  - Expected output: `IllegalArgumentException`
+
+- **TC56: MoveRobber_WithInvalidHexId_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: 7 just rolled, `hexId = 99` (out of the board's [0, 18] range)
+  - Expected output: `IllegalArgumentException`
+
+- **TC57: MoveRobber_ToValidHex_UpdatesBoardRobberHex** ( :white_check_mark: )
+  - State of the system: 7 just rolled, `hexId` identifies a different, valid hex
+  - Expected output: `board.getRobberHex()` returns the targeted hex
+
+- **TC58: MoveRobber_CalledTwice_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: robber already moved once this turn
+  - Expected output: `IllegalStateException`
+
+### `steal(Player target)`
+
+- **TC59: Steal_BeforeMovingRobber_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: 7 just rolled, robber not yet moved this turn
+  - Expected output: `IllegalStateException`
+
+- **TC60: Steal_WhenNoRobbingCandidates_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: robber moved to a hex with no adjacent settlements
+  - Expected output: `IllegalStateException`
+
+- **TC61: Steal_FromPlayerNotAdjacentToRobberHex_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: robber moved to a hex; `target` does not own a settlement adjacent to it (a different player does)
+  - Expected output: `IllegalArgumentException`
+
+- **TC62: Steal_TargetHasNoResourceCards_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `target` is a valid robbing candidate but holds 0 resource cards (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC63: Steal_FromValidCandidate_TransfersOneResourceCardToActivePlayer** ( :white_check_mark: )
+  - State of the system: `target` is a valid robbing candidate holding exactly 1 resource card (boundary)
+  - Expected output: `target`'s count for that resource becomes `0`; `activePlayer`'s count for that resource becomes `1`
 
 
 
