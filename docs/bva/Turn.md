@@ -400,5 +400,83 @@
   - State of the system: `proposeTrade()` was just called and returned a `PENDING` offer
   - Expected output: `Optional` containing that exact `TradeOffer`
 
+## Method under test: `submitMaritimeTrade(MaritimeTrade trade)`
+
+- **TC91: SubmitMaritimeTrade_OutsideTradePhase_ThrowsIllegalStateException**
+  - State of the system: turn has advanced to the BUILD phase
+  - Expected output: `IllegalStateException`
+
+- **TC92: SubmitMaritimeTrade_BankHasNoneOfReceivingResource_ThrowsIllegalStateException**
+  - State of the system: turn is in TRADE phase, bank holds 0 of the trade's `receiving` resource (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC93: SubmitMaritimeTrade_BankHasExactlyOneOfReceivingResource_ExecutesTrade**
+  - State of the system: turn is in TRADE phase, bank holds exactly 1 of the `receiving` resource (boundary), player holds at least `amount` of `giving`
+  - Expected output: player's `giving` count decreases by `amount` and `receiving` count increases by 1; bank's `giving` count increases by `amount` and `receiving` count decreases by 1
+
+## Method under test: `buyDevelopmentCard()`
+
+- **TC94: BuyDevelopmentCard_OutsideBuildPhase_ThrowsIllegalStateException**
+  - State of the system: turn still in TRADE phase (not yet advanced to BUILD)
+  - Expected output: `IllegalStateException`
+
+- **TC95: BuyDevelopmentCard_PlayerCannotAffordCost_ThrowsIllegalStateException**
+  - State of the system: turn is in BUILD phase, active player has 0 of one required resource (Ore, Wool, or Grain) (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC96: BuyDevelopmentCard_NoCardsRemainInDeck_ThrowsIllegalStateException**
+  - State of the system: turn is in BUILD phase, active player can afford the cost, `getRemainingDeckSize()` is 0 (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC97: BuyDevelopmentCard_PlayerHasExactCostAndOneCardRemains_DeductsCostAndAddsCardToHand**
+  - State of the system: turn is in BUILD phase, active player has exactly 1 Ore + 1 Wool + 1 Grain, exactly 1 card remains in the deck (boundary)
+  - Expected output: player's Ore/Wool/Grain counts become `0`, `getRemainingDeckSize()` becomes `0`, and `getPlayerHand(activePlayer)` grows by one card
+
+## Method under test: `playDevelopmentCard(Player player, DevelopmentCard card)`
+
+- **TC98: PlayDevelopmentCard_OutsideTradeOrBuildPhase_ThrowsIllegalStateException**
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called, boundary: one phase before TRADE)
+  - Expected output: `IllegalStateException`
+
+- **TC99: PlayDevelopmentCard_DevCardAlreadyPlayedThisTurn_ThrowsIllegalStateException**
+  - State of the system: a (different) development card was already played earlier this turn
+  - Expected output: `IllegalStateException`
+
+- **TC100: PlayDevelopmentCard_NonVictoryPointCardPurchasedThisTurn_ThrowsIllegalStateException**
+  - State of the system: card is a non-`VICTORY_POINT` card bought via `buyDevelopmentCard()` earlier in this same turn (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC101: PlayDevelopmentCard_CardAlreadyPlayed_ThrowsIllegalStateException**
+  - State of the system: `card.isPlayed()` is already `true` (acquired and played in a previous turn)
+  - Expected output: `IllegalStateException`
+
+- **TC102: PlayDevelopmentCard_UnplayedCardFromPriorTurn_MarksCardAsPlayed**
+  - State of the system: turn is in TRADE or BUILD phase, `card` is an unplayed non-`VICTORY_POINT` card the player acquired in a previous turn (boundary: minimal valid preconditions)
+  - Expected output: `card.isPlayed()` becomes `true`
+
+## Method under test: `getPlayerHand(Player player)`
+
+- **TC103: GetPlayerHand_PlayerWithNoCards_ReturnsEmptyList**
+  - State of the system: `player` has not purchased any development cards (boundary)
+  - Expected output: empty list
+
+- **TC104: GetPlayerHand_AfterBuyingOneCard_ReturnsListContainingPurchasedCard**
+  - State of the system: `player` purchased exactly one development card via `buyDevelopmentCard()` (boundary)
+  - Expected output: list of size `1` containing that card
+
+- **TC105: GetPlayerHand_ReturnedList_IsUnmodifiable**
+  - State of the system: a hand list obtained via `getPlayerHand()`
+  - Expected output: `UnsupportedOperationException` on attempted mutation
+
+## Method under test: `getRemainingDeckSize()`
+
+- **TC106: GetRemainingDeckSize_NewTurn_Returns25**
+  - State of the system: no cards have been purchased yet this game (boundary: full 14 KNIGHT + 6 Progress + 5 VICTORY_POINT deck)
+  - Expected output: `25`
+
+- **TC107: GetRemainingDeckSize_AfterBuyingOneCard_DecreasesByOne**
+  - State of the system: exactly one card has been purchased via `buyDevelopmentCard()` (boundary)
+  - Expected output: `24`
+
 
 
