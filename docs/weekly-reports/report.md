@@ -1,3 +1,6 @@
+# Week 10 (06/01/2026–05/07/2026)
+1. [wip] [Ariel] Implement Trading ()
+
 # Week 9 (05/25/2026–05/31/2026)
 1. [waiting to be merged] [Ananya]: Implement road building (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/62)
 2. [done] [Ariel]: Implement initial placement phase logic (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/54)
