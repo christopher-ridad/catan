@@ -281,4 +281,23 @@ public class Turn {
             to.addResources(entry.getKey(), entry.getValue());
         }
     }
+
+    public void submitMaritimeTrade(MaritimeTrade trade) {
+        if (phase != TurnPhase.TRADE) {
+            throw new IllegalStateException("Maritime trades can only be submitted during the trade phase");
+        }
+        if (bank.getResourceCount(trade.getReceiving()) < 1) {
+            throw new IllegalStateException("Bank has none of the requested resource");
+        }
+
+        Player player = trade.getPlayer();
+        ResourceType giving = trade.getGiving();
+        ResourceType receiving = trade.getReceiving();
+        int amount = trade.getAmount();
+
+        player.removeResources(giving, amount);
+        bank.collect(giving, amount);
+        bank.deduct(receiving, 1);
+        player.addResources(receiving, 1);
+    }
 }
