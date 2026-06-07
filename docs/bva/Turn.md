@@ -326,6 +326,19 @@
   - State of the system: `endTurn()` already called once this turn, phase is DONE (boundary: calling it again)
   - Expected output: `IllegalStateException`
 
+## Build-phase enforcement: `buildRoad(int)`, `buildSettlement(int)`, `buildCity(int)`
+
+- **TC75: BuildRoad_OutsideBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called, boundary: one phase before BUILD is reachable)
+  - Expected output: `IllegalStateException`
+
+- **TC76: BuildSettlement_OutsideBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called)
+  - Expected output: `IllegalStateException`
+
+- **TC77: BuildCity_OutsideBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called)
+  - Expected output: `IllegalStateException`
 
 
 
