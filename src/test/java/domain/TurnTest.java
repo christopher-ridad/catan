@@ -400,6 +400,129 @@ public class TurnTest {
     }
 
     @Test
+    public void AdvanceToBuild_FromTradePhase_SetsPhaseToBuild() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        turn.advanceToBuild();
+
+        assertEquals(TurnPhase.BUILD, turn.getPhase());
+    }
+
+    @Test
+    public void AdvanceToBuild_FromProductionPhase_ThrowsIllegalStateException() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertThrows(IllegalStateException.class, turn::advanceToBuild);
+    }
+
+    @Test
+    public void AdvanceToBuild_FromBuildPhase_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        turn.advanceToBuild();
+
+        assertThrows(IllegalStateException.class, turn::advanceToBuild);
+    }
+
+    @Test
+    public void AdvanceToBuild_WithRobberMovePending_ThrowsIllegalStateException() {
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+
+        assertThrows(IllegalStateException.class, turn::advanceToBuild);
+    }
+
+    @Test
+    public void AdvanceToBuild_WithStealPending_ThrowsIllegalStateException() {
+        Hex target = findNonDesertHex();
+        Vertex vertex = findVertexAdjacentToHex(target);
+        vertex.setOwner(p2);
+        p2.addResources(ResourceType.ORE, 1);
+
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        turn.moveRobber(board.getHexes().indexOf(target));
+
+        assertThrows(IllegalStateException.class, turn::advanceToBuild);
+    }
+
+    @Test
+    public void AdvanceToBuild_AfterRobberFullyResolved_SetsPhaseToBuild() {
+        Hex target = findNonDesertHex();
+        Vertex vertex = findVertexAdjacentToHex(target);
+        vertex.setOwner(p2);
+        p2.addResources(ResourceType.ORE, 1);
+
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        turn.moveRobber(board.getHexes().indexOf(target));
+        turn.steal(p2);
+
+        turn.advanceToBuild();
+
+        assertEquals(TurnPhase.BUILD, turn.getPhase());
+    }
+
+    @Test
+    public void AdvanceToBuild_AfterRobberMovedWithNoCandidates_SetsPhaseToBuild() {
+        Hex target = findNonDesertHex();
+
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        turn.moveRobber(board.getHexes().indexOf(target));
+
+        turn.advanceToBuild();
+
+        assertEquals(TurnPhase.BUILD, turn.getPhase());
+    }
+
+    @Test
+    public void EndTurn_FromBuildPhase_SetsPhaseToDone() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        turn.advanceToBuild();
+
+        turn.endTurn();
+
+        assertEquals(TurnPhase.DONE, turn.getPhase());
+    }
+
+    @Test
+    public void EndTurn_FromTradePhase_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        assertThrows(IllegalStateException.class, turn::endTurn);
+    }
+
+    @Test
+    public void EndTurn_FromProductionPhase_ThrowsIllegalStateException() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertThrows(IllegalStateException.class, turn::endTurn);
+    }
+
+    @Test
+    public void EndTurn_CalledTwice_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        turn.advanceToBuild();
+        turn.endTurn();
+
+        assertThrows(IllegalStateException.class, turn::endTurn);
+    }
+
+    @Test
     public void BuildRoad_PlayerDoesNotHaveBrick_ThrowsIllegalStateException() {
         p2.addResources(ResourceType.LUMBER, 1);
         Turn turn = new Turn(game, p2, dice, bank);
