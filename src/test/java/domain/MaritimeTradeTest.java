@@ -245,6 +245,19 @@ public class MaritimeTradeTest {
     }
 
     @Test
+    void maritimeTradeConstructor_receivingNull_throwsIllegalArgument() {
+        Player player = playerWithSettlementAt(4, Map.of(
+                ResourceType.BRICK, 4,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        assertThrows(IllegalArgumentException.class, () ->
+                new MaritimeTrade(player, ResourceType.BRICK, 4, null, board));
+    }
+
+    @Test
     void getPlayer_validMaritimeTrade_returnsCorrectPlayer() {
         Player player = playerWithSettlementAt(4, Map.of(
                 ResourceType.BRICK, 4,
