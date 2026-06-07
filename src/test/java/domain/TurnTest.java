@@ -523,6 +523,18 @@ public class TurnTest {
     }
 
     @Test
+    public void BuildRoad_OutsideBuildPhase_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int edgeId = 2;
+        game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p3);
+
+        assertThrows(IllegalStateException.class, () -> turn.buildRoad(edgeId));
+    }
+
+    @Test
     public void BuildRoad_PlayerDoesNotHaveBrick_ThrowsIllegalStateException() {
         p2.addResources(ResourceType.LUMBER, 1);
         Turn turn = new Turn(game, p2, dice, bank);
@@ -695,6 +707,21 @@ public class TurnTest {
         assertThrows(IllegalStateException.class, () -> {
             turn.buildRoad(edgeId2);
         });
+    }
+
+    @Test
+    public void BuildSettlement_OutsideBuildPhase_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        p3.addResources(ResourceType.WOOL, 1);
+        p3.addResources(ResourceType.GRAIN, 1);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+        int edgeId = 4;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
+
+        assertThrows(IllegalStateException.class, () -> turn.buildSettlement(vertexId));
     }
 
     @Test
@@ -954,6 +981,18 @@ public class TurnTest {
         });
 
         assertEquals(p3, game.getBoard().getVertex(vertexId).getOwner().orElse(null));
+    }
+
+    @Test
+    public void BuildCity_OutsideBuildPhase_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.ORE, 3);
+        p3.addResources(ResourceType.GRAIN, 2);
+        Turn turn = new Turn(game, p3, dice, bank);
+
+        int vertexId = 2;
+        game.getBoard().getVertex(vertexId).setOwner(p3);
+
+        assertThrows(IllegalStateException.class, () -> turn.buildCity(vertexId));
     }
 
     @Test
