@@ -2,6 +2,8 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class Turn {
 
@@ -17,6 +19,7 @@ public class Turn {
     private boolean robberPendingSteal;
     private final BuildManager buildManager;
     private final ResourceProduction resourceProduction;
+    private TradeOffer pendingTrade;
 
     Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank) {
         validateGame(game);
@@ -208,6 +211,74 @@ public class Turn {
     private void validateInBuildPhase() {
         if (phase != TurnPhase.BUILD) {
             throw new IllegalStateException("Build actions are only allowed during the build phase");
+        }
+    }
+
+    public TradeOffer proposeTrade(Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting) {
+        if (phase != TurnPhase.TRADE) {
+            throw new IllegalStateException("Trades can only be proposed during the trade phase");
+        }
+        if (pendingTrade != null) {
+            throw new IllegalStateException("A trade offer is already pending");
+        }
+
+        TradeOffer offer = new TradeOffer(activePlayer, recipient, offering, requesting);
+        validateOffererCanAffordOffering(offer.getOffering());
+        pendingTrade = offer;
+        return offer;
+    }
+
+    public void acceptTrade(TradeOffer offer) {
+        validateMatchesPendingTrade(offer);
+
+        Player offerer = offer.getOfferer();
+        Player recipient = offer.getRecipient();
+        validateCanAffordTrade(offerer, offer.getOffering());
+        validateCanAffordTrade(recipient, offer.getRequesting());
+
+        exchange(offerer, recipient, offer.getOffering());
+        exchange(recipient, offerer, offer.getRequesting());
+
+        offer.accept();
+        pendingTrade = null;
+    }
+
+    public void rejectTrade(TradeOffer offer) {
+        validateMatchesPendingTrade(offer);
+        offer.reject();
+        pendingTrade = null;
+    }
+
+    public Optional<TradeOffer> getPendingTrade() {
+        return Optional.ofNullable(pendingTrade);
+    }
+
+    private void validateMatchesPendingTrade(TradeOffer offer) {
+        if (pendingTrade == null || offer != pendingTrade) {
+            throw new IllegalStateException("There is no matching pending trade offer");
+        }
+    }
+
+    private void validateOffererCanAffordOffering(Map<ResourceType, Integer> offering) {
+        for (Map.Entry<ResourceType, Integer> entry : offering.entrySet()) {
+            if (activePlayer.getResourceCount(entry.getKey()) < entry.getValue()) {
+                throw new IllegalArgumentException("Active player cannot afford the offered resources");
+            }
+        }
+    }
+
+    private void validateCanAffordTrade(Player player, Map<ResourceType, Integer> resources) {
+        for (Map.Entry<ResourceType, Integer> entry : resources.entrySet()) {
+            if (player.getResourceCount(entry.getKey()) < entry.getValue()) {
+                throw new IllegalStateException("Player cannot afford this trade");
+            }
+        }
+    }
+
+    private void exchange(Player from, Player to, Map<ResourceType, Integer> resources) {
+        for (Map.Entry<ResourceType, Integer> entry : resources.entrySet()) {
+            from.removeResources(entry.getKey(), entry.getValue());
+            to.addResources(entry.getKey(), entry.getValue());
         }
     }
 }
