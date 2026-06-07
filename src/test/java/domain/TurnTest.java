@@ -1401,6 +1401,171 @@ public class TurnTest {
                 () -> assertEquals(0, bank.getResourceCount(ResourceType.WOOL))
         );
     }
+
+    private void giveDevelopmentCardCost(Player player) {
+        player.addResources(ResourceType.ORE, 1);
+        player.addResources(ResourceType.WOOL, 1);
+        player.addResources(ResourceType.GRAIN, 1);
+    }
+
+    private DevelopmentCard buyUntilNonVictoryPointCard(Turn turn, Player player) {
+        DevelopmentCard card;
+        do {
+            giveDevelopmentCardCost(player);
+            turn.buyDevelopmentCard();
+            List<DevelopmentCard> hand = turn.getPlayerHand(player);
+            card = hand.get(hand.size() - 1);
+        } while (card.getType() == DevelopmentCardType.VICTORY_POINT);
+        return card;
+    }
+
+    @Test
+    public void BuyDevelopmentCard_OutsideBuildPhase_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        assertThrows(IllegalStateException.class, turn::buyDevelopmentCard);
+    }
+
+    @Test
+    public void BuyDevelopmentCard_PlayerCannotAffordCost_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.WOOL, 1);
+        p1.addResources(ResourceType.GRAIN, 1);
+        Turn turn = newTurnInBuildPhase(p1);
+
+        assertThrows(IllegalStateException.class, turn::buyDevelopmentCard);
+    }
+
+    @Test
+    public void BuyDevelopmentCard_NoCardsRemainInDeck_ThrowsIllegalStateException() {
+        Turn turn = newTurnInBuildPhase(p1);
+        int deckSize = turn.getRemainingDeckSize();
+        for (int i = 0; i < deckSize; i++) {
+            giveDevelopmentCardCost(p1);
+            turn.buyDevelopmentCard();
+        }
+
+        assertEquals(0, turn.getRemainingDeckSize());
+        assertThrows(IllegalStateException.class, turn::buyDevelopmentCard);
+    }
+
+    @Test
+    public void BuyDevelopmentCard_PlayerHasExactCostAndOneCardRemains_DeductsCostAndAddsCardToHand() {
+        Turn turn = newTurnInBuildPhase(p1);
+        int deckSize = turn.getRemainingDeckSize();
+        for (int i = 0; i < deckSize - 1; i++) {
+            giveDevelopmentCardCost(p1);
+            turn.buyDevelopmentCard();
+        }
+        assertEquals(1, turn.getRemainingDeckSize());
+        int handSizeBefore = turn.getPlayerHand(p1).size();
+        giveDevelopmentCardCost(p1);
+
+        turn.buyDevelopmentCard();
+
+        assertAll(
+                () -> assertEquals(0, p1.getResourceCount(ResourceType.ORE)),
+                () -> assertEquals(0, p1.getResourceCount(ResourceType.WOOL)),
+                () -> assertEquals(0, p1.getResourceCount(ResourceType.GRAIN)),
+                () -> assertEquals(0, turn.getRemainingDeckSize()),
+                () -> assertEquals(handSizeBefore + 1, turn.getPlayerHand(p1).size())
+        );
+    }
+
+    @Test
+    public void PlayDevelopmentCard_OutsideTradeOrBuildPhase_ThrowsIllegalStateException() {
+        Turn turn = new Turn(game, p1, dice, bank);
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+
+        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
+    }
+
+    @Test
+    public void PlayDevelopmentCard_DevCardAlreadyPlayedThisTurn_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard first = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        DevelopmentCard second = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        turn.playDevelopmentCard(p1, first);
+
+        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, second));
+    }
+
+    @Test
+    public void PlayDevelopmentCard_NonVictoryPointCardPurchasedThisTurn_ThrowsIllegalStateException() {
+        Turn turn = newTurnInBuildPhase(p1);
+        DevelopmentCard purchased = buyUntilNonVictoryPointCard(turn, p1);
+
+        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, purchased));
+    }
+
+    @Test
+    public void PlayDevelopmentCard_CardAlreadyPlayed_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        card.markAsPlayed();
+
+        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
+    }
+
+    @Test
+    public void PlayDevelopmentCard_UnplayedCardFromPriorTurn_MarksCardAsPlayed() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+
+        turn.playDevelopmentCard(p1, card);
+
+        assertTrue(card.isPlayed());
+    }
+
+    @Test
+    public void GetPlayerHand_PlayerWithNoCards_ReturnsEmptyList() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertTrue(turn.getPlayerHand(p1).isEmpty());
+    }
+
+    @Test
+    public void GetPlayerHand_AfterBuyingOneCard_ReturnsListContainingPurchasedCard() {
+        giveDevelopmentCardCost(p1);
+        Turn turn = newTurnInBuildPhase(p1);
+
+        turn.buyDevelopmentCard();
+
+        assertEquals(1, turn.getPlayerHand(p1).size());
+    }
+
+    @Test
+    public void GetPlayerHand_ReturnedList_IsUnmodifiable() {
+        Turn turn = new Turn(game, p1, dice, bank);
+        List<DevelopmentCard> hand = turn.getPlayerHand(p1);
+
+        assertThrows(UnsupportedOperationException.class,
+                () -> hand.add(new DevelopmentCard(DevelopmentCardType.KNIGHT)));
+    }
+
+    @Test
+    public void GetRemainingDeckSize_NewTurn_Returns25() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertEquals(25, turn.getRemainingDeckSize());
+    }
+
+    @Test
+    public void GetRemainingDeckSize_AfterBuyingOneCard_DecreasesByOne() {
+        giveDevelopmentCardCost(p1);
+        Turn turn = newTurnInBuildPhase(p1);
+
+        turn.buyDevelopmentCard();
+
+        assertEquals(24, turn.getRemainingDeckSize());
+    }
 }
 
 
