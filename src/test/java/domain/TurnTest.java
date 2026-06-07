@@ -1361,6 +1361,46 @@ public class TurnTest {
 
         assertEquals(Optional.of(offer), turn.getPendingTrade());
     }
+
+    @Test
+    public void SubmitMaritimeTrade_OutsideTradePhase_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.BRICK, 4);
+        Turn turn = newTurnInBuildPhase(p1);
+        MaritimeTrade trade = new MaritimeTrade(p1, ResourceType.BRICK, 4, ResourceType.WOOL, board);
+
+        assertThrows(IllegalStateException.class, () -> turn.submitMaritimeTrade(trade));
+    }
+
+    @Test
+    public void SubmitMaritimeTrade_BankHasNoneOfReceivingResource_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.BRICK, 4);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        MaritimeTrade trade = new MaritimeTrade(p1, ResourceType.BRICK, 4, ResourceType.WOOL, board);
+
+        assertThrows(IllegalStateException.class, () -> turn.submitMaritimeTrade(trade));
+    }
+
+    @Test
+    public void SubmitMaritimeTrade_BankHasExactlyOneOfReceivingResource_ExecutesTrade() {
+        p1.addResources(ResourceType.BRICK, 4);
+        bank.collect(ResourceType.WOOL, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        int bankBrickBefore = bank.getResourceCount(ResourceType.BRICK);
+        MaritimeTrade trade = new MaritimeTrade(p1, ResourceType.BRICK, 4, ResourceType.WOOL, board);
+
+        turn.submitMaritimeTrade(trade);
+
+        assertAll(
+                () -> assertEquals(0, p1.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(1, p1.getResourceCount(ResourceType.WOOL)),
+                () -> assertEquals(bankBrickBefore + 4, bank.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, bank.getResourceCount(ResourceType.WOOL))
+        );
+    }
 }
 
 
