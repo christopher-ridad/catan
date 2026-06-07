@@ -204,6 +204,201 @@ public class TurnTest {
         assertFalse(turn.isSevenRolled());
     }
 
+    private Vertex findVertexAdjacentToHex(Hex hex) {
+        for (Vertex vertex : board.getVertices()) {
+            if (vertex.getAdjacentHexes().contains(hex)) {
+                return vertex;
+            }
+        }
+        throw new IllegalStateException("No vertex found adjacent to the given hex");
+    }
+
+    private Hex findNonDesertHex() {
+        for (Hex hex : board.getHexes()) {
+            if (!hex.isDesert()) {
+                return hex;
+            }
+        }
+        throw new IllegalStateException("No non-desert hex found");
+    }
+
+    @Test
+    public void RollDice_RollOfSeven_PlayerWithEightCards_DiscardsFour() {
+        p2.addResources(ResourceType.BRICK, 8);
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+
+        turn.rollDice();
+
+        assertEquals(4, p2.getTotalResourceCount());
+    }
+
+    @Test
+    public void RollDice_RollOfSeven_PlayerWithNineCards_DiscardsFour() {
+        p2.addResources(ResourceType.BRICK, 5);
+        p2.addResources(ResourceType.LUMBER, 4);
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+
+        turn.rollDice();
+
+        assertEquals(5, p2.getTotalResourceCount());
+    }
+
+    @Test
+    public void RollDice_RollOfSeven_PlayerWithSevenCards_NoDiscard() {
+        p2.addResources(ResourceType.BRICK, 7);
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+
+        turn.rollDice();
+
+        assertEquals(7, p2.getTotalResourceCount());
+    }
+
+    @Test
+    public void GetRobbingCandidates_OpponentSettlementAdjacentToRobberHex_IncludesOpponent() {
+        Vertex vertex = findVertexAdjacentToHex(board.getRobberHex());
+        vertex.setOwner(p2);
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertTrue(turn.getRobbingCandidates().contains(p2));
+    }
+
+    @Test
+    public void GetRobbingCandidates_ActivePlayerSettlementAdjacentToRobberHex_ExcludesActivePlayer() {
+        Vertex vertex = findVertexAdjacentToHex(board.getRobberHex());
+        vertex.setOwner(p1);
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertFalse(turn.getRobbingCandidates().contains(p1));
+    }
+
+    @Test
+    public void GetRobbingCandidates_NoSettlementsAdjacentToRobberHex_ReturnsEmptyList() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertTrue(turn.getRobbingCandidates().isEmpty());
+    }
+
+    @Test
+    public void MoveRobber_BeforeSevenRolled_ThrowsIllegalStateException() {
+        Turn turn = new Turn(game, p1, dice, bank);
+        Hex target = findNonDesertHex();
+
+        assertThrows(IllegalStateException.class, () -> turn.moveRobber(board.getHexes().indexOf(target)));
+    }
+
+    @Test
+    public void MoveRobber_ToCurrentRobberHex_ThrowsIllegalArgumentException() {
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        int currentRobberHexId = board.getHexes().indexOf(board.getRobberHex());
+
+        assertThrows(IllegalArgumentException.class, () -> turn.moveRobber(currentRobberHexId));
+    }
+
+    @Test
+    public void MoveRobber_WithInvalidHexId_ThrowsIllegalArgumentException() {
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+
+        assertThrows(IllegalArgumentException.class, () -> turn.moveRobber(99));
+    }
+
+    @Test
+    public void MoveRobber_ToValidHex_UpdatesBoardRobberHex() {
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        Hex target = findNonDesertHex();
+
+        turn.moveRobber(board.getHexes().indexOf(target));
+
+        assertEquals(target, board.getRobberHex());
+    }
+
+    @Test
+    public void MoveRobber_CalledTwice_ThrowsIllegalStateException() {
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        Hex firstTarget = findNonDesertHex();
+        turn.moveRobber(board.getHexes().indexOf(firstTarget));
+
+        assertThrows(IllegalStateException.class, () -> turn.moveRobber(99));
+    }
+
+    @Test
+    public void Steal_BeforeMovingRobber_ThrowsIllegalStateException() {
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+
+        assertThrows(IllegalStateException.class, () -> turn.steal(p2));
+    }
+
+    @Test
+    public void Steal_WhenNoRobbingCandidates_ThrowsIllegalStateException() {
+        Hex target = findNonDesertHex();
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        turn.moveRobber(board.getHexes().indexOf(target));
+
+        assertThrows(IllegalStateException.class, () -> turn.steal(p2));
+    }
+
+    @Test
+    public void Steal_FromPlayerNotAdjacentToRobberHex_ThrowsIllegalArgumentException() {
+        Hex target = findNonDesertHex();
+        Vertex vertex = findVertexAdjacentToHex(target);
+        vertex.setOwner(p3);
+
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        turn.moveRobber(board.getHexes().indexOf(target));
+
+        assertThrows(IllegalArgumentException.class, () -> turn.steal(p2));
+    }
+
+    @Test
+    public void Steal_TargetHasNoResourceCards_ThrowsIllegalStateException() {
+        Hex target = findNonDesertHex();
+        Vertex vertex = findVertexAdjacentToHex(target);
+        vertex.setOwner(p2);
+
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        turn.moveRobber(board.getHexes().indexOf(target));
+
+        assertThrows(IllegalStateException.class, () -> turn.steal(p2));
+    }
+
+    @Test
+    public void Steal_FromValidCandidate_TransfersOneResourceCardToActivePlayer() {
+        Hex target = findNonDesertHex();
+        Vertex vertex = findVertexAdjacentToHex(target);
+        vertex.setOwner(p2);
+        p2.addResources(ResourceType.ORE, 1);
+
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+        turn.moveRobber(board.getHexes().indexOf(target));
+
+        turn.steal(p2);
+
+        assertAll(
+                () -> assertEquals(0, p2.getResourceCount(ResourceType.ORE)),
+                () -> assertEquals(1, p1.getResourceCount(ResourceType.ORE))
+        );
+    }
+
     @Test
     public void BuildRoad_PlayerDoesNotHaveBrick_ThrowsIllegalStateException() {
         p2.addResources(ResourceType.LUMBER, 1);

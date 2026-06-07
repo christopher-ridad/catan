@@ -388,4 +388,30 @@ public class BoardTest {
     void getHarborType_ForLumberHarborVertex_ReturnsLumber() {
         assertEquals(HarborType.LUMBER, board.getHarborType(board.getVertex(11)).orElseThrow());
     }
+
+    @Test
+    void getRobberHex_NewBoard_StartsOnDesertHex() {
+        assertEquals(TerrainType.DESERT, board.getRobberHex().getTerrainType());
+    }
+
+    @Test
+    void setRobberHex_WithNull_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> board.setRobberHex(null));
+    }
+
+    @Test
+    void setRobberHex_WithHexNotOnBoard_ThrowsIllegalArgumentException() {
+        Hex foreignHex = new Hex(TerrainType.HILLS, 6);
+
+        assertThrows(IllegalArgumentException.class, () -> board.setRobberHex(foreignHex));
+    }
+
+    @Test
+    void setRobberHex_WithHexOnBoard_UpdatesRobberHex() {
+        Hex target = board.getHexes().get(1);
+
+        board.setRobberHex(target);
+
+        assertEquals(target, board.getRobberHex());
+    }
 }
