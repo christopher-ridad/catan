@@ -1161,6 +1161,206 @@ public class TurnTest {
         assertEquals(p3, game.getBoard().getVertex(vertexId).getOwner().orElse(null));
         assertTrue(game.getBoard().getVertex(vertexId).isCity());
     }
+
+    @Test
+    public void ProposeTrade_OutsideTradePhase_ThrowsIllegalStateException() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+
+        assertThrows(IllegalStateException.class, () -> turn.proposeTrade(p2, offering, requesting));
+    }
+
+    @Test
+    public void ProposeTrade_WhenTradeAlreadyPending_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        turn.proposeTrade(p2, offering, requesting);
+
+        assertThrows(IllegalStateException.class, () -> turn.proposeTrade(p3, offering, requesting));
+    }
+
+    @Test
+    public void ProposeTrade_OffererCannotAffordOffering_ThrowsIllegalArgumentException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+
+        assertThrows(IllegalArgumentException.class, () -> turn.proposeTrade(p2, offering, requesting));
+    }
+
+    @Test
+    public void ProposeTrade_OffererHasExactlyOfferedAmount_CreatesAndStoresPendingTrade() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+
+        TradeOffer offer = turn.proposeTrade(p2, offering, requesting);
+
+        assertAll(
+                () -> assertTrue(offer.isPending()),
+                () -> assertEquals(Optional.of(offer), turn.getPendingTrade())
+        );
+    }
+
+    @Test
+    public void ProposeTrade_AfterPriorOfferResolved_CreatesNewPendingTrade() {
+        p1.addResources(ResourceType.BRICK, 1);
+        p1.addResources(ResourceType.LUMBER, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering1 = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting1 = Map.of(ResourceType.WOOL, 1);
+        TradeOffer first = turn.proposeTrade(p2, offering1, requesting1);
+        turn.rejectTrade(first);
+
+        Map<ResourceType, Integer> offering2 = Map.of(ResourceType.LUMBER, 1);
+        Map<ResourceType, Integer> requesting2 = Map.of(ResourceType.ORE, 1);
+        TradeOffer second = turn.proposeTrade(p3, offering2, requesting2);
+
+        assertAll(
+                () -> assertTrue(second.isPending()),
+                () -> assertEquals(Optional.of(second), turn.getPendingTrade())
+        );
+    }
+
+    @Test
+    public void AcceptTrade_NoMatchingPendingTrade_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer foreignOffer = new TradeOffer(p1, p2, offering, requesting);
+
+        assertThrows(IllegalStateException.class, () -> turn.acceptTrade(foreignOffer));
+    }
+
+    @Test
+    public void AcceptTrade_OffererCannotAffordOffering_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.BRICK, 1);
+        p2.addResources(ResourceType.WOOL, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer offer = turn.proposeTrade(p2, offering, requesting);
+
+        p1.removeResources(ResourceType.BRICK, 1);
+
+        assertThrows(IllegalStateException.class, () -> turn.acceptTrade(offer));
+    }
+
+    @Test
+    public void AcceptTrade_RecipientCannotAffordRequesting_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer offer = turn.proposeTrade(p2, offering, requesting);
+
+        assertThrows(IllegalStateException.class, () -> turn.acceptTrade(offer));
+    }
+
+    @Test
+    public void AcceptTrade_BothPlayersCanAfford_ExchangesResourcesAndClearsPendingTrade() {
+        p1.addResources(ResourceType.BRICK, 1);
+        p2.addResources(ResourceType.WOOL, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer offer = turn.proposeTrade(p2, offering, requesting);
+
+        turn.acceptTrade(offer);
+
+        assertAll(
+                () -> assertEquals(0, p1.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(1, p1.getResourceCount(ResourceType.WOOL)),
+                () -> assertEquals(1, p2.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p2.getResourceCount(ResourceType.WOOL)),
+                () -> assertEquals(TradeOffer.TradeStatus.ACCEPTED, offer.getStatus()),
+                () -> assertEquals(Optional.empty(), turn.getPendingTrade())
+        );
+    }
+
+    @Test
+    public void RejectTrade_NoMatchingPendingTrade_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer foreignOffer = new TradeOffer(p1, p2, offering, requesting);
+
+        assertThrows(IllegalStateException.class, () -> turn.rejectTrade(foreignOffer));
+    }
+
+    @Test
+    public void RejectTrade_PendingOffer_MarksRejectedAndClearsPendingTrade() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer offer = turn.proposeTrade(p2, offering, requesting);
+
+        turn.rejectTrade(offer);
+
+        assertAll(
+                () -> assertEquals(TradeOffer.TradeStatus.REJECTED, offer.getStatus()),
+                () -> assertEquals(Optional.empty(), turn.getPendingTrade())
+        );
+    }
+
+    @Test
+    public void GetPendingTrade_NoOfferProposed_ReturnsEmpty() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertEquals(Optional.empty(), turn.getPendingTrade());
+    }
+
+    @Test
+    public void GetPendingTrade_AfterProposeTrade_ReturnsTheOffer() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer offer = turn.proposeTrade(p2, offering, requesting);
+
+        assertEquals(Optional.of(offer), turn.getPendingTrade());
+    }
 }
 
 
