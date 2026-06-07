@@ -11,7 +11,9 @@ public class Turn {
     private TurnPhase phase;
     private boolean rolledThisTurn;
     private boolean playedDevCardThisTurn;
+    private int lastRoll;
     private final BuildManager buildManager;
+    private final ResourceProduction resourceProduction;
 
     Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank) {
         validateGame(game);
@@ -25,6 +27,7 @@ public class Turn {
         this.bank = bank;
         this.phase = TurnPhase.PRODUCTION;
         this.buildManager = new BuildManager(game, activePlayer, bank);
+        this.resourceProduction = new ResourceProduction();
     }
 
     private void validateGame(Game game) {
@@ -53,6 +56,35 @@ public class Turn {
 
     public TurnPhase getPhase() {
         return this.phase;
+    }
+
+    public int rollDice() {
+        validateCanRoll();
+
+        int roll = dice.roll();
+        rolledThisTurn = true;
+        lastRoll = roll;
+
+        if (roll != 7) {
+            produceResources(roll);
+        }
+
+        phase = TurnPhase.TRADE;
+        return roll;
+    }
+
+    public boolean isSevenRolled() {
+        return rolledThisTurn && lastRoll == 7;
+    }
+
+    private void validateCanRoll() {
+        if (phase != TurnPhase.PRODUCTION || rolledThisTurn) {
+            throw new IllegalStateException("Dice can only be rolled once, at the start of a turn");
+        }
+    }
+
+    private void produceResources(int roll) {
+        resourceProduction.distributeResources(roll, game.getBoard().getVertices(), bank);
     }
 
     public void buildRoad(int edgeId) {

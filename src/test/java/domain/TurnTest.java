@@ -157,7 +157,7 @@ public class TurnTest {
                 .findFirst().get().getTerrainType().getResourceType();
 
         DiceRoll fixedDice = mockDiceRoll(4, 4);
-        Turn turn = new Turn(game, p1, fixedDice, bank);
+        Turn turn = new Turn(game, p1, fixedDice, new Bank());
 
         turn.rollDice();
 
