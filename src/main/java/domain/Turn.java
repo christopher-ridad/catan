@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Turn {
@@ -12,6 +13,8 @@ public class Turn {
     private boolean rolledThisTurn;
     private boolean playedDevCardThisTurn;
     private int lastRoll;
+    private boolean robberPendingMove;
+    private boolean robberPendingSteal;
     private final BuildManager buildManager;
     private final ResourceProduction resourceProduction;
 
@@ -67,6 +70,9 @@ public class Turn {
 
         if (roll != 7) {
             produceResources(roll);
+        } else {
+            enforceDiscard();
+            robberPendingMove = true;
         }
 
         phase = TurnPhase.TRADE;
@@ -85,6 +91,86 @@ public class Turn {
 
     private void produceResources(int roll) {
         resourceProduction.distributeResources(roll, game.getBoard().getVertices(), bank);
+    }
+
+    private void enforceDiscard() {
+        for (Player player : game.getPlayers()) {
+            int total = player.getTotalResourceCount();
+            if (total > 7) {
+                discardHalf(player, total / 2);
+            }
+        }
+    }
+
+    private void discardHalf(Player player, int amount) {
+        int remaining = amount;
+        for (ResourceType type : ResourceType.values()) {
+            int toRemove = Math.min(player.getResourceCount(type), remaining);
+            if (toRemove > 0) {
+                player.removeResources(type, toRemove);
+                bank.collect(type, toRemove);
+                remaining -= toRemove;
+            }
+        }
+    }
+
+    public void moveRobber(int hexId) {
+        if (!robberPendingMove) {
+            throw new IllegalStateException("Robber can only be moved immediately after rolling a 7");
+        }
+
+        Board board = game.getBoard();
+        List<Hex> hexes = board.getHexes();
+        if (hexId < 0 || hexId >= hexes.size()) {
+            throw new IllegalArgumentException("Invalid hex id: " + hexId);
+        }
+
+        Hex target = hexes.get(hexId);
+        if (target == board.getRobberHex()) {
+            throw new IllegalArgumentException("Robber is already on that hex");
+        }
+
+        board.setRobberHex(target);
+        robberPendingMove = false;
+        robberPendingSteal = !getRobbingCandidates().isEmpty();
+    }
+
+    public void steal(Player target) {
+        if (!robberPendingSteal) {
+            throw new IllegalStateException("Stealing is only allowed immediately after moving the robber onto a hex with eligible targets");
+        }
+        if (!getRobbingCandidates().contains(target)) {
+            throw new IllegalArgumentException("Target must have a settlement or city adjacent to the robber's hex");
+        }
+
+        ResourceType stolen = pickResourceToSteal(target);
+        target.removeResources(stolen, 1);
+        activePlayer.addResources(stolen, 1);
+        robberPendingSteal = false;
+    }
+
+    private ResourceType pickResourceToSteal(Player target) {
+        for (ResourceType type : ResourceType.values()) {
+            if (target.getResourceCount(type) > 0) {
+                return type;
+            }
+        }
+        throw new IllegalStateException("Target has no resource cards to steal");
+    }
+
+    public List<Player> getRobbingCandidates() {
+        Hex robberHex = game.getBoard().getRobberHex();
+        List<Player> candidates = new ArrayList<>();
+        for (Vertex vertex : game.getBoard().getVertices()) {
+            vertex.getOwner().ifPresent(owner -> {
+                if (owner != activePlayer
+                        && vertex.getAdjacentHexes().contains(robberHex)
+                        && !candidates.contains(owner)) {
+                    candidates.add(owner);
+                }
+            });
+        }
+        return candidates;
     }
 
     public void buildRoad(int edgeId) {
