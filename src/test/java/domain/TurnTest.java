@@ -102,6 +102,108 @@ public class TurnTest {
         assertEquals(expected, turn.getPhase());
     }
 
+    private DiceRoll mockDiceRoll(int die1Value, int die2Value) {
+        Random mockRandom = EasyMock.createMock(Random.class);
+        EasyMock.expect(mockRandom.nextInt(6)).andReturn(die1Value - 1).andReturn(die2Value - 1);
+        EasyMock.replay(mockRandom);
+        return new DiceRoll(mockRandom);
+    }
+
+    private Vertex findVertexAdjacentToNumber(int number) {
+        for (Vertex vertex : board.getVertices()) {
+            for (Hex hex : vertex.getAdjacentHexes()) {
+                if (hex.getNumberToken() == number && hex.producesResource()) {
+                    return vertex;
+                }
+            }
+        }
+        throw new IllegalStateException("No vertex found adjacent to a hex with number token " + number);
+    }
+
+    @Test
+    public void RollDice_ValidCall_ReturnsRollValue() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+
+        assertEquals(8, turn.rollDice());
+    }
+
+    @Test
+    public void RollDice_ValidCall_AdvancesPhaseToTrade() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+
+        turn.rollDice();
+
+        assertEquals(TurnPhase.TRADE, turn.getPhase());
+    }
+
+    @Test
+    public void RollDice_CalledOutsideProductionPhase_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+
+        turn.rollDice();
+
+        assertThrows(IllegalStateException.class, turn::rollDice);
+    }
+
+    @Test
+    public void RollDice_NonSevenRoll_DistributesResourcesToSettlementOwner() {
+        Vertex vertex = findVertexAdjacentToNumber(8);
+        vertex.setOwner(p1);
+        ResourceType expectedResource = vertex.getAdjacentHexes().stream()
+                .filter(hex -> hex.getNumberToken() == 8 && hex.producesResource())
+                .findFirst().get().getTerrainType().getResourceType();
+
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+
+        turn.rollDice();
+
+        assertTrue(p1.getResourceCount(expectedResource) > 0);
+    }
+
+    @Test
+    public void RollDice_RollOfSeven_NoResourcesDistributed() {
+        Vertex vertex = findVertexAdjacentToNumber(8);
+        vertex.setOwner(p1);
+
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+
+        turn.rollDice();
+
+        assertEquals(0, p1.getTotalResourceCount());
+    }
+
+    @Test
+    public void IsSevenRolled_BeforeRollingDice_ReturnsFalse() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertFalse(turn.isSevenRolled());
+    }
+
+    @Test
+    public void IsSevenRolled_AfterRollingSeven_ReturnsTrue() {
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+
+        turn.rollDice();
+
+        assertTrue(turn.isSevenRolled());
+    }
+
+    @Test
+    public void IsSevenRolled_AfterRollingNonSeven_ReturnsFalse() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+
+        turn.rollDice();
+
+        assertFalse(turn.isSevenRolled());
+    }
+
     @Test
     public void BuildRoad_PlayerDoesNotHaveBrick_ThrowsIllegalStateException() {
         p2.addResources(ResourceType.LUMBER, 1);
