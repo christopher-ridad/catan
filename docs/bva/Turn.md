@@ -190,6 +190,10 @@
   - State of the system: roll = 7 (boundary), `activePlayer` owns a settlement adjacent to a producing hex
   - Expected output: `getTotalResourceCount()` returns `0`
 
+- **TC109: RollDice_NumberMatchesRobberHex_DoesNotProduceFromThatHex** ( :white_check_mark: )
+  - State of the system: roll matches the number token of the hex the robber currently occupies, `activePlayer` owns a settlement adjacent only to that hex for the rolled number
+  - Expected output: `getTotalResourceCount()` returns `0` (the robbed hex produces nothing even on a matching roll)
+
 ## Method under test: `isSevenRolled()`
 
 - **TC45: IsSevenRolled_BeforeRollingDice_ReturnsFalse** ( :white_check_mark: )
@@ -270,9 +274,9 @@
   - State of the system: robber moved to a hex; `target` does not own a settlement adjacent to it (a different player does)
   - Expected output: `IllegalArgumentException`
 
-- **TC62: Steal_TargetHasNoResourceCards_ThrowsIllegalStateException** ( :white_check_mark: )
+- **TC62: Steal_TargetHasNoResourceCards_CompletesWithNoTransferAndResolvesRobber** ( :white_check_mark: )
   - State of the system: `target` is a valid robbing candidate but holds 0 resource cards (boundary)
-  - Expected output: `IllegalStateException`
+  - Expected output: no resource cards change hands, and the robber is fully resolved (`advanceToBuild()` no longer throws — a target with no cards cannot leave the turn permanently stuck)
 
 - **TC63: Steal_FromValidCandidate_TransfersOneResourceCardToActivePlayer** ( :white_check_mark: )
   - State of the system: `target` is a valid robbing candidate holding exactly 1 resource card (boundary)
@@ -307,6 +311,10 @@
 - **TC70: AdvanceToBuild_AfterRobberMovedWithNoCandidates_SetsPhaseToBuild** ( :white_check_mark: )
   - State of the system: a 7 was rolled, robber moved onto a hex with no adjacent settlements (no steal required)
   - Expected output: `getPhase()` returns `TurnPhase.BUILD`
+
+- **TC108: AdvanceToBuild_WithPendingTrade_RejectsAndClearsTheOffer** ( :white_check_mark: )
+  - State of the system: turn is in TRADE phase with a pending trade offer that has not yet been accepted or rejected
+  - Expected output: the offer's status becomes `REJECTED` and `getPendingTrade()` returns empty (a pending offer expires when the active player moves on to the build phase)
 
 ## Method under test: `endTurn()`
 
@@ -448,6 +456,10 @@
 
 - **TC101: PlayDevelopmentCard_CardAlreadyPlayed_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: `card.isPlayed()` is already `true` (acquired and played in a previous turn)
+  - Expected output: `IllegalStateException`
+
+- **TC110: PlayDevelopmentCard_VictoryPointCard_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `card` is a `VICTORY_POINT` card in the active player's hand (boundary: the one card type that can never be played through this method — per the rules it is instead privately revealed to declare victory, which requires whole-game VP tracking that is out of scope for a single turn)
   - Expected output: `IllegalStateException`
 
 - **TC102: PlayDevelopmentCard_UnplayedCardFromPriorTurn_MarksCardAsPlayed** ( :white_check_mark: )

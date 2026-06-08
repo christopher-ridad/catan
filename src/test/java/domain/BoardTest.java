@@ -196,6 +196,21 @@ public class BoardTest {
     }
 
     @Test
+    void Constructor_OnValidBoard_PopulatesAdjacentVerticesForEveryVertex() {
+        List<Vertex> adjacentVertices = board.getVertex(0).getAdjacentVertices();
+        List<Integer> adjacentIds = new ArrayList<>();
+        for (Vertex vertex : adjacentVertices) {
+            adjacentIds.add(vertex.getId());
+        }
+
+        assertAll(
+                () -> assertEquals(2, adjacentVertices.size()),
+                () -> assertTrue(adjacentIds.contains(3)),
+                () -> assertTrue(adjacentIds.contains(4))
+        );
+    }
+
+    @Test
     void GetEdges_OnValidBoard_Returns72Edges() {
         assertEquals(72, board.getEdges().size());
     }

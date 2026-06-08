@@ -14,6 +14,7 @@ public class SetupPhaseTest {
     private Player p1, p2, p3, p4;
     private Game game2Players;
     private Game game4Players;
+    private Bank bank;
     private SetupPhase phase2;
     private SetupPhase phase4;
 
@@ -62,21 +63,29 @@ public class SetupPhaseTest {
 
         game2Players = new Game(players2, board);
         game4Players = new Game(players4, board);
+        bank = new Bank();
 
-        phase2 = new SetupPhase(game2Players);
-        phase4 = new SetupPhase(game4Players);
+        phase2 = new SetupPhase(game2Players, bank);
+        phase4 = new SetupPhase(game4Players, bank);
     }
 
     @Test
     public void constructor_nullGame_throwsIllegalArgument() {
         Game game = null;
 
-        assertThrows(IllegalArgumentException.class, () -> new SetupPhase(game));
+        assertThrows(IllegalArgumentException.class, () -> new SetupPhase(game, bank));
+    }
+
+    @Test
+    public void constructor_nullBank_throwsIllegalArgument() {
+        Bank nullBank = null;
+
+        assertThrows(IllegalArgumentException.class, () -> new SetupPhase(game2Players, nullBank));
     }
 
     @Test
     public void constructor_validGame_2Players_buildsCorrectPlacementOrder() {
-        SetupPhase phase = new SetupPhase(game2Players);
+        SetupPhase phase = new SetupPhase(game2Players, bank);
 
         List<Player> expectedOrder = Arrays.asList(p1, p2, p2, p1);
         assertEquals(expectedOrder, phase.getPlacementOrder());

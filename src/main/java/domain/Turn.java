@@ -2,12 +2,15 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 public class Turn {
+
+    private static final Map<ResourceType, Integer> DEVELOPMENT_CARD_COST = Map.of(
+            ResourceType.ORE, 1, ResourceType.WOOL, 1, ResourceType.GRAIN, 1);
 
     private final Game game;
     private final Player activePlayer;
@@ -19,54 +22,32 @@ public class Turn {
     private int lastRoll;
     private boolean robberPendingMove;
     private boolean robberPendingSteal;
+    private final Random random;
     private final BuildManager buildManager;
     private final ResourceProduction resourceProduction;
     private TradeOffer pendingTrade;
-    private final List<DevelopmentCard> developmentDeck;
-    private final Map<Player, List<DevelopmentCard>> playerHands;
     private final List<DevelopmentCard> cardsPurchasedThisTurn;
 
     Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank) {
+        this(game, activePlayer, dice, bank, new Random());
+    }
+
+    Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank, Random random) {
         validateGame(game);
         validatePlayer(activePlayer);
         validateDice(dice);
         validateBank(bank);
+        validateRandom(random);
 
         this.game = game;
         this.activePlayer = activePlayer;
         this.dice = dice;
         this.bank = bank;
+        this.random = random;
         this.phase = TurnPhase.PRODUCTION;
         this.buildManager = new BuildManager(game, activePlayer, bank);
         this.resourceProduction = new ResourceProduction();
-        this.developmentDeck = createShuffledDevelopmentDeck();
-        this.playerHands = createEmptyPlayerHands(game);
         this.cardsPurchasedThisTurn = new ArrayList<>();
-    }
-
-    private List<DevelopmentCard> createShuffledDevelopmentDeck() {
-        List<DevelopmentCard> deck = new ArrayList<>();
-        for (int i = 0; i < 14; i++) {
-            deck.add(new DevelopmentCard(DevelopmentCardType.KNIGHT));
-        }
-        for (int i = 0; i < 2; i++) {
-            deck.add(new DevelopmentCard(DevelopmentCardType.ROAD_BUILDING));
-            deck.add(new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY));
-            deck.add(new DevelopmentCard(DevelopmentCardType.MONOPOLY));
-        }
-        for (int i = 0; i < 5; i++) {
-            deck.add(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
-        }
-        Collections.shuffle(deck);
-        return deck;
-    }
-
-    private Map<Player, List<DevelopmentCard>> createEmptyPlayerHands(Game game) {
-        Map<Player, List<DevelopmentCard>> hands = new HashMap<>();
-        for (Player player : game.getPlayers()) {
-            hands.put(player, new ArrayList<>());
-        }
-        return hands;
     }
 
     private void validateGame(Game game) {
@@ -90,6 +71,12 @@ public class Turn {
     private void validateBank(Bank bank) {
         if (bank == null) {
             throw new IllegalArgumentException("Bank cannot be null");
+        }
+    }
+
+    private void validateRandom(Random random) {
+        if (random == null) {
+            throw new IllegalArgumentException("Random cannot be null");
         }
     }
 
@@ -126,7 +113,8 @@ public class Turn {
     }
 
     private void produceResources(int roll) {
-        resourceProduction.distributeResources(roll, game.getBoard().getVertices(), bank);
+        Board board = game.getBoard();
+        resourceProduction.distributeResources(roll, board.getVertices(), board.getRobberHex(), bank);
     }
 
     private void enforceDiscard() {
@@ -139,14 +127,12 @@ public class Turn {
     }
 
     private void discardHalf(Player player, int amount) {
-        int remaining = amount;
-        for (ResourceType type : ResourceType.values()) {
-            int toRemove = Math.min(player.getResourceCount(type), remaining);
-            if (toRemove > 0) {
-                player.removeResources(type, toRemove);
-                bank.collect(type, toRemove);
-                remaining -= toRemove;
-            }
+        List<ResourceType> heldCards = expandHeldResources(player);
+        Collections.shuffle(heldCards, random);
+        for (int i = 0; i < amount; i++) {
+            ResourceType type = heldCards.get(i);
+            player.removeResources(type, 1);
+            bank.collect(type, 1);
         }
     }
 
@@ -179,19 +165,27 @@ public class Turn {
             throw new IllegalArgumentException("Target must have a settlement or city adjacent to the robber's hex");
         }
 
-        ResourceType stolen = pickResourceToSteal(target);
-        target.removeResources(stolen, 1);
-        activePlayer.addResources(stolen, 1);
+        if (target.getTotalResourceCount() > 0) {
+            ResourceType stolen = pickResourceToSteal(target);
+            target.removeResources(stolen, 1);
+            activePlayer.addResources(stolen, 1);
+        }
         robberPendingSteal = false;
     }
 
     private ResourceType pickResourceToSteal(Player target) {
+        List<ResourceType> heldCards = expandHeldResources(target);
+        return heldCards.get(random.nextInt(heldCards.size()));
+    }
+
+    private List<ResourceType> expandHeldResources(Player player) {
+        List<ResourceType> cards = new ArrayList<>();
         for (ResourceType type : ResourceType.values()) {
-            if (target.getResourceCount(type) > 0) {
-                return type;
+            for (int i = 0; i < player.getResourceCount(type); i++) {
+                cards.add(type);
             }
         }
-        throw new IllegalStateException("Target has no resource cards to steal");
+        return cards;
     }
 
     public List<Player> getRobbingCandidates() {
@@ -213,10 +207,29 @@ public class Turn {
         if (phase != TurnPhase.TRADE) {
             throw new IllegalStateException("Can only advance to the build phase from the trade phase");
         }
-        if (robberPendingMove || robberPendingSteal) {
-            throw new IllegalStateException("Robber must be resolved before advancing to the build phase");
-        }
+        validateRobberResolved();
+        expirePendingTrade();
         phase = TurnPhase.BUILD;
+    }
+
+    private void expirePendingTrade() {
+        if (pendingTrade != null) {
+            pendingTrade.reject();
+            pendingTrade = null;
+        }
+    }
+
+    private void validateRobberResolved() {
+        if (robberPendingMove || robberPendingSteal) {
+            throw new IllegalStateException("Robber must be resolved before performing this action");
+        }
+    }
+
+    private void validateInTradePhase(String wrongPhaseMessage) {
+        if (phase != TurnPhase.TRADE) {
+            throw new IllegalStateException(wrongPhaseMessage);
+        }
+        validateRobberResolved();
     }
 
     public void endTurn() {
@@ -248,9 +261,8 @@ public class Turn {
     }
 
     public TradeOffer proposeTrade(Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting) {
-        if (phase != TurnPhase.TRADE) {
-            throw new IllegalStateException("Trades can only be proposed during the trade phase");
-        }
+        validateInTradePhase("Trades can only be proposed during the trade phase");
+        validateRecipientInGame(recipient);
         if (pendingTrade != null) {
             throw new IllegalStateException("A trade offer is already pending");
         }
@@ -262,6 +274,7 @@ public class Turn {
     }
 
     public void acceptTrade(TradeOffer offer) {
+        validateInTradePhase("Trades can only be accepted during the trade phase");
         validateMatchesPendingTrade(offer);
 
         Player offerer = offer.getOfferer();
@@ -277,6 +290,7 @@ public class Turn {
     }
 
     public void rejectTrade(TradeOffer offer) {
+        validateInTradePhase("Trades can only be rejected during the trade phase");
         validateMatchesPendingTrade(offer);
         offer.reject();
         pendingTrade = null;
@@ -286,6 +300,12 @@ public class Turn {
         return Optional.ofNullable(pendingTrade);
     }
 
+    private void validateRecipientInGame(Player recipient) {
+        if (recipient == null || !game.getPlayers().contains(recipient)) {
+            throw new IllegalArgumentException("Recipient must be another player in this game");
+        }
+    }
+
     private void validateMatchesPendingTrade(TradeOffer offer) {
         if (pendingTrade == null || offer != pendingTrade) {
             throw new IllegalStateException("There is no matching pending trade offer");
@@ -293,19 +313,24 @@ public class Turn {
     }
 
     private void validateOffererCanAffordOffering(Map<ResourceType, Integer> offering) {
-        for (Map.Entry<ResourceType, Integer> entry : offering.entrySet()) {
-            if (activePlayer.getResourceCount(entry.getKey()) < entry.getValue()) {
-                throw new IllegalArgumentException("Active player cannot afford the offered resources");
-            }
+        if (!canAfford(activePlayer, offering)) {
+            throw new IllegalArgumentException("Active player cannot afford the offered resources");
         }
     }
 
     private void validateCanAffordTrade(Player player, Map<ResourceType, Integer> resources) {
+        if (!canAfford(player, resources)) {
+            throw new IllegalStateException("Player cannot afford this trade");
+        }
+    }
+
+    private boolean canAfford(Player player, Map<ResourceType, Integer> resources) {
         for (Map.Entry<ResourceType, Integer> entry : resources.entrySet()) {
             if (player.getResourceCount(entry.getKey()) < entry.getValue()) {
-                throw new IllegalStateException("Player cannot afford this trade");
+                return false;
             }
         }
+        return true;
     }
 
     private void exchange(Player from, Player to, Map<ResourceType, Integer> resources) {
@@ -316,8 +341,9 @@ public class Turn {
     }
 
     public void submitMaritimeTrade(MaritimeTrade trade) {
-        if (phase != TurnPhase.TRADE) {
-            throw new IllegalStateException("Maritime trades can only be submitted during the trade phase");
+        validateInTradePhase("Maritime trades can only be submitted during the trade phase");
+        if (trade.getPlayer() != activePlayer) {
+            throw new IllegalArgumentException("Maritime trades can only be submitted by the active player");
         }
         if (bank.getResourceCount(trade.getReceiving()) < 1) {
             throw new IllegalStateException("Bank has none of the requested resource");
@@ -335,35 +361,45 @@ public class Turn {
     }
 
     public void buyDevelopmentCard() {
-        if (phase != TurnPhase.BUILD) {
-            throw new IllegalStateException("Development cards can only be bought during the build phase");
-        }
-        if (activePlayer.getResourceCount(ResourceType.ORE) < 1
-                || activePlayer.getResourceCount(ResourceType.WOOL) < 1
-                || activePlayer.getResourceCount(ResourceType.GRAIN) < 1) {
+        validateInBuildPhase();
+        if (!canAfford(activePlayer, DEVELOPMENT_CARD_COST)) {
             throw new IllegalStateException("Active player cannot afford a development card");
         }
-        if (developmentDeck.isEmpty()) {
+        if (game.getRemainingDevelopmentCardCount() == 0) {
             throw new IllegalStateException("No development cards remain in the deck");
         }
 
-        activePlayer.removeResources(ResourceType.ORE, 1);
-        activePlayer.removeResources(ResourceType.WOOL, 1);
-        activePlayer.removeResources(ResourceType.GRAIN, 1);
+        for (Map.Entry<ResourceType, Integer> entry : DEVELOPMENT_CARD_COST.entrySet()) {
+            activePlayer.removeResources(entry.getKey(), entry.getValue());
+            bank.collect(entry.getKey(), entry.getValue());
+        }
 
-        DevelopmentCard card = developmentDeck.remove(developmentDeck.size() - 1);
-        playerHands.get(activePlayer).add(card);
+        DevelopmentCard card = game.drawDevelopmentCard();
+        game.addDevelopmentCardToHand(activePlayer, card);
         cardsPurchasedThisTurn.add(card);
     }
 
     public void playDevelopmentCard(Player player, DevelopmentCard card) {
+        if (card == null) {
+            throw new IllegalArgumentException("Development card cannot be null");
+        }
+        if (player != activePlayer) {
+            throw new IllegalArgumentException("Only the active player can play a development card");
+        }
         if (phase != TurnPhase.TRADE && phase != TurnPhase.BUILD) {
             throw new IllegalStateException("Development cards can only be played during the trade or build phase");
+        }
+        validateRobberResolved();
+        if (card.getType() == DevelopmentCardType.VICTORY_POINT) {
+            throw new IllegalStateException("Victory Point cards cannot be played");
         }
         if (playedDevCardThisTurn) {
             throw new IllegalStateException("Only one development card can be played per turn");
         }
-        if (cardsPurchasedThisTurn.contains(card) && card.getType() != DevelopmentCardType.VICTORY_POINT) {
+        if (!game.getPlayerHand(player).contains(card)) {
+            throw new IllegalArgumentException("Player does not own this development card");
+        }
+        if (cardsPurchasedThisTurn.contains(card)) {
             throw new IllegalStateException("A development card cannot be played the same turn it was purchased");
         }
         if (card.isPlayed()) {
@@ -375,10 +411,10 @@ public class Turn {
     }
 
     public List<DevelopmentCard> getPlayerHand(Player player) {
-        return Collections.unmodifiableList(playerHands.get(player));
+        return game.getPlayerHand(player);
     }
 
     public int getRemainingDeckSize() {
-        return developmentDeck.size();
+        return game.getRemainingDevelopmentCardCount();
     }
 }

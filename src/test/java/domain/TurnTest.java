@@ -127,6 +127,18 @@ public class TurnTest {
         throw new IllegalStateException("No vertex found adjacent to a hex with number token " + number);
     }
 
+    private Vertex findVertexAdjacentToExactlyOneHexWithNumber(int number) {
+        for (Vertex vertex : board.getVertices()) {
+            long matches = vertex.getAdjacentHexes().stream()
+                    .filter(hex -> hex.getNumberToken() == number && hex.producesResource())
+                    .count();
+            if (matches == 1) {
+                return vertex;
+            }
+        }
+        throw new IllegalStateException("No vertex found adjacent to exactly one hex with number token " + number);
+    }
+
     @Test
     public void RollDice_ValidCall_ReturnsRollValue() {
         DiceRoll fixedDice = mockDiceRoll(4, 4);
@@ -178,6 +190,23 @@ public class TurnTest {
 
         DiceRoll sevenDice = mockDiceRoll(3, 4);
         Turn turn = new Turn(game, p1, sevenDice, bank);
+
+        turn.rollDice();
+
+        assertEquals(0, p1.getTotalResourceCount());
+    }
+
+    @Test
+    public void RollDice_NumberMatchesRobberHex_DoesNotProduceFromThatHex() {
+        Vertex vertex = findVertexAdjacentToExactlyOneHexWithNumber(8);
+        vertex.setOwner(p1);
+        Hex robbedHex = vertex.getAdjacentHexes().stream()
+                .filter(hex -> hex.getNumberToken() == 8 && hex.producesResource())
+                .findFirst().get();
+        board.setRobberHex(robbedHex);
+
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, new Bank());
 
         turn.rollDice();
 
@@ -373,7 +402,7 @@ public class TurnTest {
     }
 
     @Test
-    public void Steal_TargetHasNoResourceCards_ThrowsIllegalStateException() {
+    public void Steal_TargetHasNoResourceCards_CompletesWithNoTransferAndResolvesRobber() {
         Hex target = findNonDesertHex();
         Vertex vertex = findVertexAdjacentToHex(target);
         vertex.setOwner(p2);
@@ -383,7 +412,13 @@ public class TurnTest {
         turn.rollDice();
         turn.moveRobber(board.getHexes().indexOf(target));
 
-        assertThrows(IllegalStateException.class, () -> turn.steal(p2));
+        turn.steal(p2);
+
+        assertAll(
+                () -> assertEquals(0, p2.getTotalResourceCount()),
+                () -> assertEquals(0, p1.getTotalResourceCount()),
+                () -> assertDoesNotThrow(turn::advanceToBuild)
+        );
     }
 
     @Test
@@ -488,6 +523,25 @@ public class TurnTest {
         turn.advanceToBuild();
 
         assertEquals(TurnPhase.BUILD, turn.getPhase());
+    }
+
+    @Test
+    public void AdvanceToBuild_WithPendingTrade_RejectsAndClearsTheOffer() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer offer = turn.proposeTrade(p2, offering, requesting);
+
+        turn.advanceToBuild();
+
+        assertAll(
+                () -> assertEquals(TradeOffer.TradeStatus.REJECTED, offer.getStatus()),
+                () -> assertEquals(Optional.empty(), turn.getPendingTrade())
+        );
     }
 
     @Test
@@ -1173,6 +1227,19 @@ public class TurnTest {
     }
 
     @Test
+    public void ProposeTrade_RecipientNotInGame_ThrowsIllegalArgumentException() {
+        Player outsider = new Player("outsider", PlayerColor.RED);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+
+        assertThrows(IllegalArgumentException.class, () -> turn.proposeTrade(outsider, offering, requesting));
+    }
+
+    @Test
     public void ProposeTrade_WhenTradeAlreadyPending_ThrowsIllegalStateException() {
         p1.addResources(ResourceType.BRICK, 1);
         DiceRoll fixedDice = mockDiceRoll(4, 4);
@@ -1408,6 +1475,15 @@ public class TurnTest {
         player.addResources(ResourceType.GRAIN, 1);
     }
 
+    private void cycleDevelopmentCardCostThroughBank(Player player, Bank bank) {
+        bank.deduct(ResourceType.ORE, 1);
+        player.addResources(ResourceType.ORE, 1);
+        bank.deduct(ResourceType.WOOL, 1);
+        player.addResources(ResourceType.WOOL, 1);
+        bank.deduct(ResourceType.GRAIN, 1);
+        player.addResources(ResourceType.GRAIN, 1);
+    }
+
     private DevelopmentCard buyUntilNonVictoryPointCard(Turn turn, Player player) {
         DevelopmentCard card;
         do {
@@ -1439,10 +1515,13 @@ public class TurnTest {
 
     @Test
     public void BuyDevelopmentCard_NoCardsRemainInDeck_ThrowsIllegalStateException() {
-        Turn turn = newTurnInBuildPhase(p1);
+        Bank freshBank = new Bank();
+        Turn turn = new Turn(game, p1, mockDiceRoll(4, 4), freshBank);
+        turn.rollDice();
+        turn.advanceToBuild();
         int deckSize = turn.getRemainingDeckSize();
         for (int i = 0; i < deckSize; i++) {
-            giveDevelopmentCardCost(p1);
+            cycleDevelopmentCardCostThroughBank(p1, freshBank);
             turn.buyDevelopmentCard();
         }
 
@@ -1452,15 +1531,18 @@ public class TurnTest {
 
     @Test
     public void BuyDevelopmentCard_PlayerHasExactCostAndOneCardRemains_DeductsCostAndAddsCardToHand() {
-        Turn turn = newTurnInBuildPhase(p1);
+        Bank freshBank = new Bank();
+        Turn turn = new Turn(game, p1, mockDiceRoll(4, 4), freshBank);
+        turn.rollDice();
+        turn.advanceToBuild();
         int deckSize = turn.getRemainingDeckSize();
         for (int i = 0; i < deckSize - 1; i++) {
-            giveDevelopmentCardCost(p1);
+            cycleDevelopmentCardCostThroughBank(p1, freshBank);
             turn.buyDevelopmentCard();
         }
         assertEquals(1, turn.getRemainingDeckSize());
         int handSizeBefore = turn.getPlayerHand(p1).size();
-        giveDevelopmentCardCost(p1);
+        cycleDevelopmentCardCostThroughBank(p1, freshBank);
 
         turn.buyDevelopmentCard();
 
@@ -1488,6 +1570,8 @@ public class TurnTest {
         turn.rollDice();
         DevelopmentCard first = new DevelopmentCard(DevelopmentCardType.KNIGHT);
         DevelopmentCard second = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        game.addDevelopmentCardToHand(p1, first);
+        game.addDevelopmentCardToHand(p1, second);
         turn.playDevelopmentCard(p1, first);
 
         assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, second));
@@ -1508,6 +1592,18 @@ public class TurnTest {
         turn.rollDice();
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
         card.markAsPlayed();
+        game.addDevelopmentCardToHand(p1, card);
+
+        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
+    }
+
+    @Test
+    public void PlayDevelopmentCard_VictoryPointCard_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
+        game.addDevelopmentCardToHand(p1, card);
 
         assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
     }
@@ -1518,6 +1614,7 @@ public class TurnTest {
         Turn turn = new Turn(game, p1, fixedDice, bank);
         turn.rollDice();
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        game.addDevelopmentCardToHand(p1, card);
 
         turn.playDevelopmentCard(p1, card);
 
