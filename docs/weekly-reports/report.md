@@ -1,9 +1,26 @@
-# Week 10 (06/01/2026–05/07/2026)
-1. [wip] [Ariel] Implement Trading ()
+# Finals Week (6/08/2026-6/10/2026)
+1. 
+
+# Week 10 (06/01/2026–06/07/2026)
+1. [done] [Ariel]: Implement TradeOffer class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/65)
+2. [done] [Ariel]: Implement MaritimeTrade class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/66)
+3. [done] [Isabella]: Add i18n plan to docs (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/67)
+4. [done] [Chris]: Implement Development Cards (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/63) 
+5. [done] [Ariel]: Fix Board Initialization (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/60)
+6. [done] [Harry]: Fix Game Class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/56)
+7. [done] [Harry]: Design Doc for the First Turn of the Game (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/55)
+8. [wip] [Chris]: Code Quality Cleanup (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/68)
+9. [wip] [Harry]: Design doc for multiple turns (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/69)
+10. [wip] [Harry]: Design doc for win condition (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/70)
+11. [wip] [Isabella]: Implement Turn class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/77)
+12. [wip] [Chris]: Integration testing design doc (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/78)
 
 # Week 9 (05/25/2026–05/31/2026)
-1. [waiting to be merged] [Ananya]: Implement road building (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/62)
+1. [done] [Ananya]: Implement road building (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/62)
 2. [done] [Ariel]: Implement initial placement phase logic (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/54)
+3. [done] [Isabella]: Implement Dice Roll (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/57)
+4. [done] [Isabella]: Implement Resource Production (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/58)
+4. [done] [Harry]: Implement Game class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/37)
 
 # Week 8 (05/18/2026–05/24/2026)
 1. [done] [Chris]: Implement Vertex class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/33)
@@ -26,13 +43,6 @@
 **Planning and Progress Tracking**:
 1. [done] [Ariel]: Document Game Setup Phase user story, acceptance criteria, and use cases (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/14)
 2. [done] [Isabella]: Document class/method design for Game Setup Phase in docs/design/ (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/13)
-3. [not started] []: Implement ResourceType enum and Hex class with BVA and TDD
-4. [waiting to be merged] [Chris]: Implement Board class with standard tile distribution
-5. [not started] []: Implement Player class
-6. [not started] []: Implement Game class with player count validation
-7. [not started] []: Implement Initial Placement Phase logic
-8. [done] [Chris]: Implement Vertex class
-9. [done] [Chris]: Implement Edge class
 
 
 # Week 4 (04/20/2026–04/26/2026)
