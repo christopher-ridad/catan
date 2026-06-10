@@ -3,6 +3,7 @@ package domain;
 public final class DevelopmentCard {
     private final DevelopmentCardType type;
     private boolean played = false;
+    private int turnPurchased = 0;
 
     public DevelopmentCard(DevelopmentCardType type) {
         if (type == null) {
@@ -27,5 +28,9 @@ public final class DevelopmentCard {
             throw new IllegalStateException("Card has already been played");
         }
         this.played = true;
+    }
+
+    public int getTurnPurchased() {
+        return turnPurchased;
     }
 }

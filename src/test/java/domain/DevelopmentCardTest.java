@@ -59,4 +59,10 @@ public class DevelopmentCardTest {
                 card::markAsPlayed);
         assertEquals("Victory Point cards cannot be marked as played", exception.getMessage());
     }
+
+    @Test
+    void GetTurnPurchased_OnNewCard_ReturnsZero() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        assertEquals(0, card.getTurnPurchased());
+    }
 }
