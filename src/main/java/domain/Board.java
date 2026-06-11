@@ -6,6 +6,7 @@ public final class Board {
     private final List<Hex> hexes;
     private final List<Vertex> vertices;
     private final List<Edge> edges;
+    private Hex robberHex;
 
     public Board(List<Hex> hexes) {
         validateHexCount(hexes);
@@ -18,6 +19,7 @@ public final class Board {
         this.hexes = new ArrayList<>(hexes);
         this.vertices = new ArrayList<>();
         this.edges = new ArrayList<>();
+        this.robberHex = findDesertHex(this.hexes);
 
         initializeVertices();
         initializeEdges();
@@ -27,6 +29,11 @@ public final class Board {
         this.hexes = new ArrayList<>(hexes);
         this.vertices = new ArrayList<>(vertices);
         this.edges = new ArrayList<>(edges);
+        this.robberHex = findDesertHex(this.hexes);
+    }
+
+    private Hex findDesertHex(List<Hex> hexes) {
+        return hexes.stream().filter(Hex::isDesert).findFirst().orElse(null);
     }
 
     private void validateHexCount(List<Hex> hexes) {
@@ -121,5 +128,19 @@ public final class Board {
 
     public Optional<HarborType> getHarborType(Vertex vertex) {
         return vertex.getHarborType();
+    }
+
+    public Hex getRobberHex() {
+        return robberHex;
+    }
+
+    public void setRobberHex(Hex hex) {
+        if (hex == null) {
+            throw new IllegalArgumentException("Robber hex cannot be null");
+        }
+        if (!hexes.contains(hex)) {
+            throw new IllegalArgumentException("Hex must belong to this board");
+        }
+        this.robberHex = hex;
     }
 }
