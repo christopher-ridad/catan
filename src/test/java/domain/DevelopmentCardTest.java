@@ -87,4 +87,11 @@ public class DevelopmentCardTest {
         card.markAsPlayed();
         assertFalse(card.isPlayableOnTurn(2));
     }
+
+    @Test
+    void IsPlayableOnTurn_WhenVictoryPointCard_ReturnsFalse() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
+        card.setTurnPurchased(1);
+        assertFalse(card.isPlayableOnTurn(2));
+    }
 }
