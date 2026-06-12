@@ -31,7 +31,8 @@ public class DevelopmentDeckTest {
         for (int i = 0; i < 25; i++) {
             deck.draw(1);
         }
-        assertThrows(IllegalStateException.class, () -> deck.draw(1));
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> deck.draw(1));
+        assertEquals("Development deck is empty", exception.getMessage());
     }
 
     @Test
