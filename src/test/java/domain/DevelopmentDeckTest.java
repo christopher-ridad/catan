@@ -2,8 +2,7 @@ package domain;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DevelopmentDeckTest {
     @Test
@@ -24,5 +23,14 @@ public class DevelopmentDeckTest {
         DevelopmentDeck deck = new DevelopmentDeck();
         DevelopmentCard card = deck.draw(3);
         assertEquals(3, card.getTurnPurchased());
+    }
+
+    @Test
+    void Draw_OnEmptyDeck_ThrowsIllegalStateException() {
+        DevelopmentDeck deck = new DevelopmentDeck();
+        for (int i = 0; i < 25; i++) {
+            deck.draw(1);
+        }
+        assertThrows(IllegalStateException.class, () -> deck.draw(1));
     }
 }

@@ -28,6 +28,9 @@ public class DevelopmentDeck {
     }
 
     public DevelopmentCard draw(int currentTurn) {
+        if (cards.isEmpty()) {
+            throw new IllegalStateException("Development deck is empty");
+        }
         DevelopmentCard card = cards.remove(0);
         card.setTurnPurchased(currentTurn);
         return card;
