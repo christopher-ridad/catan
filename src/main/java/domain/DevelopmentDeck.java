@@ -26,4 +26,10 @@ public class DevelopmentDeck {
     public int getRemainingCount() {
         return cards.size();
     }
+
+    public DevelopmentCard draw(int currentTurn) {
+        DevelopmentCard card = cards.remove(0);
+        card.setTurnPurchased(currentTurn);
+        return card;
+    }
 }
