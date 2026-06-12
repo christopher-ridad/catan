@@ -299,7 +299,7 @@
 - **TC83: HasWinner_MultiplePlayersHaveTenVP_ReturnsTrue** ( :x: )
   - State of the system: valid arguments; two players somehow both have exactly 10 VP simultaneously
   - Expected output: `true`
-
+  - 
 ## Method under test: `updateSpecialCards(Game game, Board board, SpecialCardTracker tracker)`
 
 - **TC84: UpdateSpecialCards_WithNullGame_ThrowsIllegalArgumentException** ( :x: )
@@ -314,38 +314,26 @@
   - State of the system: valid `game`, valid `board`, `tracker` is the null pointer
   - Expected output: `IllegalArgumentException`
 
-- **TC87: UpdateSpecialCards_LongestRoadBelowThreshold_NoClaim** ( :x: )
-  - State of the system: valid arguments; the longest continuous road among all players is 4 segments
-  - Expected output: `tracker.updateLongestRoad()` is called with `Optional.empty()`
+- **TC87: UpdateSpecialCards_LongestRoadBelowThreshold_PassesComputedLengths** ( :x: )
+  - State of the system: valid arguments; Player 1 has 4 roads, Player 2 has 2 roads.
+  - Expected output: `tracker.updateLongestRoad(p1, 4)` and `tracker.updateLongestRoad(p2, 2)` are called.
 
-- **TC88: UpdateSpecialCards_LongestRoadAtClaimThreshold_Claimed** ( :x: )
-  - State of the system: valid arguments; no player currently holds the card; Player A has exactly 5 continuous roads, all others have < 5
-  - Expected output: `tracker.updateLongestRoad()` is called with Player A
+- **TC88: UpdateSpecialCards_LongestRoadAtClaimThreshold_PassesComputedLengths** ( :x: )
+  - State of the system: valid arguments; Player 1 has exactly 5 continuous roads, Player 2 has 3.
+  - Expected output: `tracker.updateLongestRoad(p1, 5)` and `tracker.updateLongestRoad(p2, 3)` are called.
 
-- **TC89: UpdateSpecialCards_LongestRoadTie_CurrentHolderRetains** ( :x: )
-  - State of the system: valid arguments; Player A currently holds Longest Road with length 6; Player B newly builds to reach exactly length 6
-  - Expected output: `tracker.updateLongestRoad()` is called with Player A (no change in ownership)
+- **TC89: UpdateSpecialCards_LongestRoadStealThreshold_PassesComputedLengths** ( :x: )
+  - State of the system: valid arguments; Player 1 has 6 roads, Player 2 newly builds to reach exactly 7.
+  - Expected output: `tracker.updateLongestRoad(p1, 6)` and `tracker.updateLongestRoad(p2, 7)` are called. (The tracker itself will handle the ownership transfer).
 
-- **TC90: UpdateSpecialCards_LongestRoadStealThreshold_CardStolen** ( :x: )
-  - State of the system: valid arguments; Player A currently holds Longest Road with length 6; Player B newly builds to reach exactly length 7
-  - Expected output: `tracker.updateLongestRoad()` is called with Player B
+- **TC90: UpdateSpecialCards_LargestArmyBelowThreshold_PassesComputedCounts** ( :x: )
+  - State of the system: valid arguments; Player 1 has 2 played Knights, Player 2 has 0.
+  - Expected output: `tracker.updateLargestArmy(p1, 2)` and `tracker.updateLargestArmy(p2, 0)` are called.
 
-- **TC91: UpdateSpecialCards_LongestRoadBroken_FallsBelowThreshold** ( :x: )
-  - State of the system: valid arguments; Player A held Longest Road with length 6, but an opponent built a settlement that broke the road into two 3-segment paths; no other player has a road ≥ 5
-  - Expected output: `tracker.updateLongestRoad()` is called with `Optional.empty()`
+- **TC91: UpdateSpecialCards_LargestArmyAtClaimThreshold_PassesComputedCounts** ( :x: )
+  - State of the system: valid arguments; Player 1 has exactly 3 played Knight cards, Player 2 has 1.
+  - Expected output: `tracker.updateLargestArmy(p1, 3)` and `tracker.updateLargestArmy(p2, 1)` are called.
 
-- **TC92: UpdateSpecialCards_LargestArmyBelowThreshold_NoClaim** ( :x: )
-  - State of the system: valid arguments; the maximum number of played Knight cards among all players is 2
-  - Expected output: `tracker.updateLargestArmy()` is called with `Optional.empty()`
-
-- **TC93: UpdateSpecialCards_LargestArmyAtClaimThreshold_Claimed** ( :x: )
-  - State of the system: valid arguments; no player currently holds the card; Player A has exactly 3 played Knight cards, all others have < 3
-  - Expected output: `tracker.updateLargestArmy()` is called with Player A
-
-- **TC94: UpdateSpecialCards_LargestArmyTie_CurrentHolderRetains** ( :x: )
-  - State of the system: valid arguments; Player A currently holds Largest Army with 4 played Knights; Player B plays a Knight to reach exactly 4
-  - Expected output: `tracker.updateLargestArmy()` is called with Player A (no change in ownership)
-
-- **TC95: UpdateSpecialCards_LargestArmyStealThreshold_CardStolen** ( :x: )
-  - State of the system: valid arguments; Player A currently holds Largest Army with 4 played Knights; Player B plays a Knight to reach exactly 5
-  - Expected output: `tracker.updateLargestArmy()` is called with Player B
+- **TC92: UpdateSpecialCards_LargestArmyStealThreshold_PassesComputedCounts** ( :x: )
+  - State of the system: valid arguments; Player 1 has 4 played Knights, Player 2 newly reaches 5.
+  - Expected output: `tracker.updateLargestArmy(p1, 4)` and `tracker.updateLargestArmy(p2, 5)` are called.
