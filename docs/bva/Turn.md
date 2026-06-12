@@ -168,9 +168,327 @@
   - State of the system: valid `vertexId`, vertex is occupied by player's own settlement
   - Expected output: `getOwner` called on `vertexId` returns `activePlayer`, `isCity` called on `vertexId` returns True
 
-  
+## Method under test: `rollDice()`
 
+- **TC40: RollDice_ValidCall_ReturnsRollValue** ( :white_check_mark: )
+  - State of the system: `phase = PRODUCTION`, dice mocked to return 8
+  - Expected output: `rollDice()` returns `8`
 
+- **TC41: RollDice_ValidCall_AdvancesPhaseToTrade** ( :white_check_mark: )
+  - State of the system: `phase = PRODUCTION`, valid roll
+  - Expected output: `getPhase()` returns `TRADE`
+
+- **TC42: RollDice_CalledOutsideProductionPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `rollDice()` already called once this turn (phase advanced to `TRADE`)
+  - Expected output: `IllegalStateException`
+
+- **TC43: RollDice_NonSevenRoll_DistributesResourcesToSettlementOwner** ( :white_check_mark: )
+  - State of the system: roll = 8 (non-7, boundary above robber trigger), `activePlayer` owns a settlement adjacent to a producing hex with number token 8
+  - Expected output: `getResourceCount` for the produced resource is greater than 0
+
+- **TC44: RollDice_RollOfSeven_NoResourcesDistributed** ( :white_check_mark: )
+  - State of the system: roll = 7 (boundary), `activePlayer` owns a settlement adjacent to a producing hex
+  - Expected output: `getTotalResourceCount()` returns `0`
+
+- **TC109: RollDice_NumberMatchesRobberHex_DoesNotProduceFromThatHex** ( :white_check_mark: )
+  - State of the system: roll matches the number token of the hex the robber currently occupies, `activePlayer` owns a settlement adjacent only to that hex for the rolled number
+  - Expected output: `getTotalResourceCount()` returns `0` (the robbed hex produces nothing even on a matching roll)
+
+## Method under test: `isSevenRolled()`
+
+- **TC45: IsSevenRolled_BeforeRollingDice_ReturnsFalse** ( :white_check_mark: )
+  - State of the system: `rollDice()` not yet called this turn
+  - Expected output: `false`
+
+- **TC46: IsSevenRolled_AfterRollingSeven_ReturnsTrue** ( :white_check_mark: )
+  - State of the system: `rollDice()` called, dice mocked to return 7 (boundary)
+  - Expected output: `true`
+
+- **TC47: IsSevenRolled_AfterRollingNonSeven_ReturnsFalse** ( :white_check_mark: )
+  - State of the system: `rollDice()` called, dice mocked to return 8 (one above the boundary)
+  - Expected output: `false`
+
+## Robber logic — triggered internally by `rollDice()` on a roll of 7
+
+### `enforceDiscard()` (private; exercised through `rollDice()`)
+
+- **TC48: RollDice_RollOfSeven_PlayerWithSevenCards_NoDiscard** ( :white_check_mark: )
+  - State of the system: roll = 7, an opponent holds exactly 7 resource cards (boundary — at the discard threshold but not over)
+  - Expected output: opponent's `getTotalResourceCount()` remains `7`
+
+- **TC49: RollDice_RollOfSeven_PlayerWithEightCards_DiscardsFour** ( :white_check_mark: )
+  - State of the system: roll = 7, an opponent holds exactly 8 resource cards (one above the boundary; `floor(8/2) = 4`)
+  - Expected output: opponent's `getTotalResourceCount()` becomes `4`
+
+- **TC50: RollDice_RollOfSeven_PlayerWithNineCards_DiscardsFour** ( :white_check_mark: )
+  - State of the system: roll = 7, an opponent holds 9 resource cards across two types (`floor(9/2) = 4`)
+  - Expected output: opponent's `getTotalResourceCount()` becomes `5`
+
+### `getRobbingCandidates()`
+
+- **TC51: GetRobbingCandidates_OpponentSettlementAdjacentToRobberHex_IncludesOpponent** ( :white_check_mark: )
+  - State of the system: an opponent owns a settlement on a vertex adjacent to the robber's hex
+  - Expected output: returned list contains the opponent
+
+- **TC52: GetRobbingCandidates_ActivePlayerSettlementAdjacentToRobberHex_ExcludesActivePlayer** ( :white_check_mark: )
+  - State of the system: `activePlayer` owns a settlement on a vertex adjacent to the robber's hex
+  - Expected output: returned list does not contain `activePlayer`
+
+- **TC53: GetRobbingCandidates_NoSettlementsAdjacentToRobberHex_ReturnsEmptyList** ( :white_check_mark: )
+  - State of the system: no vertex adjacent to the robber's hex is occupied
+  - Expected output: returned list is empty
+
+### `moveRobber(int hexId)`
+
+- **TC54: MoveRobber_BeforeSevenRolled_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `rollDice()` not yet called (or last roll was not a 7)
+  - Expected output: `IllegalStateException`
+
+- **TC55: MoveRobber_ToCurrentRobberHex_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: 7 just rolled, `hexId` identifies the hex the robber is already on
+  - Expected output: `IllegalArgumentException`
+
+- **TC56: MoveRobber_WithInvalidHexId_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: 7 just rolled, `hexId = 99` (out of the board's [0, 18] range)
+  - Expected output: `IllegalArgumentException`
+
+- **TC57: MoveRobber_ToValidHex_UpdatesBoardRobberHex** ( :white_check_mark: )
+  - State of the system: 7 just rolled, `hexId` identifies a different, valid hex
+  - Expected output: `board.getRobberHex()` returns the targeted hex
+
+- **TC58: MoveRobber_CalledTwice_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: robber already moved once this turn
+  - Expected output: `IllegalStateException`
+
+### `steal(Player target)`
+
+- **TC59: Steal_BeforeMovingRobber_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: 7 just rolled, robber not yet moved this turn
+  - Expected output: `IllegalStateException`
+
+- **TC60: Steal_WhenNoRobbingCandidates_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: robber moved to a hex with no adjacent settlements
+  - Expected output: `IllegalStateException`
+
+- **TC61: Steal_FromPlayerNotAdjacentToRobberHex_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: robber moved to a hex; `target` does not own a settlement adjacent to it (a different player does)
+  - Expected output: `IllegalArgumentException`
+
+- **TC62: Steal_TargetHasNoResourceCards_CompletesWithNoTransferAndResolvesRobber** ( :white_check_mark: )
+  - State of the system: `target` is a valid robbing candidate but holds 0 resource cards (boundary)
+  - Expected output: no resource cards change hands, and the robber is fully resolved (`advanceToBuild()` no longer throws — a target with no cards cannot leave the turn permanently stuck)
+
+- **TC63: Steal_FromValidCandidate_TransfersOneResourceCardToActivePlayer** ( :white_check_mark: )
+  - State of the system: `target` is a valid robbing candidate holding exactly 1 resource card (boundary)
+  - Expected output: `target`'s count for that resource becomes `0`; `activePlayer`'s count for that resource becomes `1`
+
+## Method under test: `advanceToBuild()`
+
+- **TC64: AdvanceToBuild_FromTradePhase_SetsPhaseToBuild** ( :white_check_mark: )
+  - State of the system: dice rolled (non-7), turn is in TRADE phase, no robber resolution pending
+  - Expected output: `getPhase()` returns `TurnPhase.BUILD`
+
+- **TC65: AdvanceToBuild_FromProductionPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `rollDice()` not yet called, turn is still in PRODUCTION phase
+  - Expected output: `IllegalStateException`
+
+- **TC66: AdvanceToBuild_FromBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `advanceToBuild()` already called once this turn (boundary: calling it again)
+  - Expected output: `IllegalStateException`
+
+- **TC67: AdvanceToBuild_WithRobberMovePending_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: a 7 was just rolled and `moveRobber()` has not yet been called
+  - Expected output: `IllegalStateException`
+
+- **TC68: AdvanceToBuild_WithStealPending_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: a 7 was rolled, robber moved onto a hex with an eligible candidate, `steal()` not yet called
+  - Expected output: `IllegalStateException`
+
+- **TC69: AdvanceToBuild_AfterRobberFullyResolved_SetsPhaseToBuild** ( :white_check_mark: )
+  - State of the system: a 7 was rolled, robber moved and `steal()` completed (boundary: last required robber step just finished)
+  - Expected output: `getPhase()` returns `TurnPhase.BUILD`
+
+- **TC70: AdvanceToBuild_AfterRobberMovedWithNoCandidates_SetsPhaseToBuild** ( :white_check_mark: )
+  - State of the system: a 7 was rolled, robber moved onto a hex with no adjacent settlements (no steal required)
+  - Expected output: `getPhase()` returns `TurnPhase.BUILD`
+
+- **TC108: AdvanceToBuild_WithPendingTrade_RejectsAndClearsTheOffer** ( :white_check_mark: )
+  - State of the system: turn is in TRADE phase with a pending trade offer that has not yet been accepted or rejected
+  - Expected output: the offer's status becomes `REJECTED` and `getPendingTrade()` returns empty (a pending offer expires when the active player moves on to the build phase)
+
+## Method under test: `endTurn()`
+
+- **TC71: EndTurn_FromBuildPhase_SetsPhaseToDone** ( :white_check_mark: )
+  - State of the system: turn has advanced to BUILD phase
+  - Expected output: `getPhase()` returns `TurnPhase.DONE`
+
+- **TC72: EndTurn_FromTradePhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: dice rolled, turn is in TRADE phase (boundary: one phase before BUILD)
+  - Expected output: `IllegalStateException`
+
+- **TC73: EndTurn_FromProductionPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `rollDice()` not yet called, turn is still in PRODUCTION phase
+  - Expected output: `IllegalStateException`
+
+- **TC74: EndTurn_CalledTwice_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `endTurn()` already called once this turn, phase is DONE (boundary: calling it again)
+  - Expected output: `IllegalStateException`
+
+## Build-phase enforcement: `buildRoad(int)`, `buildSettlement(int)`, `buildCity(int)`
+
+- **TC75: BuildRoad_OutsideBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called, boundary: one phase before BUILD is reachable)
+  - Expected output: `IllegalStateException`
+
+- **TC76: BuildSettlement_OutsideBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called)
+  - Expected output: `IllegalStateException`
+
+- **TC77: BuildCity_OutsideBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called)
+  - Expected output: `IllegalStateException`
+
+## Method under test: `proposeTrade(Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting)`
+
+- **TC78: ProposeTrade_OutsideTradePhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called)
+  - Expected output: `IllegalStateException`
+
+- **TC79: ProposeTrade_WhenTradeAlreadyPending_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: a prior `proposeTrade()` call already created a `PENDING` offer this turn
+  - Expected output: `IllegalStateException`
+
+- **TC80: ProposeTrade_OffererCannotAffordOffering_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: active player has 0 of a resource type included in `offering` (boundary)
+  - Expected output: `IllegalArgumentException`
+
+- **TC81: ProposeTrade_OffererHasExactlyOfferedAmount_CreatesAndStoresPendingTrade** ( :white_check_mark: )
+  - State of the system: active player has exactly the amount of each resource included in `offering` (boundary)
+  - Expected output: a `PENDING` `TradeOffer` is returned and `getPendingTrade()` returns it
+
+- **TC82: ProposeTrade_AfterPriorOfferResolved_CreatesNewPendingTrade** ( :white_check_mark: )
+  - State of the system: a prior offer was accepted/rejected and `pendingTrade` was cleared
+  - Expected output: a new `PENDING` `TradeOffer` is created and stored as the pending trade
+
+## Method under test: `acceptTrade(TradeOffer offer)`
+
+- **TC83: AcceptTrade_NoMatchingPendingTrade_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: no trade is pending, or the supplied `offer` is not the stored `pendingTrade`
+  - Expected output: `IllegalStateException`
+
+- **TC84: AcceptTrade_OffererCannotAffordOffering_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: offer is pending, but the offerer no longer holds enough of a resource in `offering` (boundary: 0 of a required resource)
+  - Expected output: `IllegalStateException`
+
+- **TC85: AcceptTrade_RecipientCannotAffordRequesting_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: offer is pending, offerer can afford `offering`, but the recipient has 0 of a resource in `requesting` (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC86: AcceptTrade_BothPlayersCanAfford_ExchangesResourcesAndClearsPendingTrade** ( :white_check_mark: )
+  - State of the system: offerer holds exactly the offered amounts, recipient holds exactly the requested amounts (boundary)
+  - Expected output: offerer's and recipient's resource counts reflect the exchange, offer status becomes `ACCEPTED`, and `getPendingTrade()` returns empty
+
+## Method under test: `rejectTrade(TradeOffer offer)`
+
+- **TC87: RejectTrade_NoMatchingPendingTrade_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: no trade is pending, or the supplied `offer` is not the stored `pendingTrade`
+  - Expected output: `IllegalStateException`
+
+- **TC88: RejectTrade_PendingOffer_MarksRejectedAndClearsPendingTrade** ( :white_check_mark: )
+  - State of the system: a `PENDING` offer is the stored `pendingTrade`
+  - Expected output: `offer.getStatus()` becomes `REJECTED` and `getPendingTrade()` returns empty
+
+## Method under test: `getPendingTrade()`
+
+- **TC89: GetPendingTrade_NoOfferProposed_ReturnsEmpty** ( :white_check_mark: )
+  - State of the system: `proposeTrade()` has not been called this turn
+  - Expected output: `Optional.empty()`
+
+- **TC90: GetPendingTrade_AfterProposeTrade_ReturnsTheOffer** ( :white_check_mark: )
+  - State of the system: `proposeTrade()` was just called and returned a `PENDING` offer
+  - Expected output: `Optional` containing that exact `TradeOffer`
+
+## Method under test: `submitMaritimeTrade(MaritimeTrade trade)`
+
+- **TC91: SubmitMaritimeTrade_OutsideTradePhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn has advanced to the BUILD phase
+  - Expected output: `IllegalStateException`
+
+- **TC92: SubmitMaritimeTrade_BankHasNoneOfReceivingResource_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn is in TRADE phase, bank holds 0 of the trade's `receiving` resource (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC93: SubmitMaritimeTrade_BankHasExactlyOneOfReceivingResource_ExecutesTrade** ( :white_check_mark: )
+  - State of the system: turn is in TRADE phase, bank holds exactly 1 of the `receiving` resource (boundary), player holds at least `amount` of `giving`
+  - Expected output: player's `giving` count decreases by `amount` and `receiving` count increases by 1; bank's `giving` count increases by `amount` and `receiving` count decreases by 1
+
+## Method under test: `buyDevelopmentCard()`
+
+- **TC94: BuyDevelopmentCard_OutsideBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in TRADE phase (not yet advanced to BUILD)
+  - Expected output: `IllegalStateException`
+
+- **TC95: BuyDevelopmentCard_PlayerCannotAffordCost_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn is in BUILD phase, active player has 0 of one required resource (Ore, Wool, or Grain) (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC96: BuyDevelopmentCard_NoCardsRemainInDeck_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn is in BUILD phase, active player can afford the cost, `getRemainingDeckSize()` is 0 (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC97: BuyDevelopmentCard_PlayerHasExactCostAndOneCardRemains_DeductsCostAndAddsCardToHand** ( :white_check_mark: )
+  - State of the system: turn is in BUILD phase, active player has exactly 1 Ore + 1 Wool + 1 Grain, exactly 1 card remains in the deck (boundary)
+  - Expected output: player's Ore/Wool/Grain counts become `0`, `getRemainingDeckSize()` becomes `0`, and `getPlayerHand(activePlayer)` grows by one card
+
+## Method under test: `playDevelopmentCard(Player player, DevelopmentCard card)`
+
+- **TC98: PlayDevelopmentCard_OutsideTradeOrBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called, boundary: one phase before TRADE)
+  - Expected output: `IllegalStateException`
+
+- **TC99: PlayDevelopmentCard_DevCardAlreadyPlayedThisTurn_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: a (different) development card was already played earlier this turn
+  - Expected output: `IllegalStateException`
+
+- **TC100: PlayDevelopmentCard_NonVictoryPointCardPurchasedThisTurn_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: card is a non-`VICTORY_POINT` card bought via `buyDevelopmentCard()` earlier in this same turn (boundary)
+  - Expected output: `IllegalStateException`
+
+- **TC101: PlayDevelopmentCard_CardAlreadyPlayed_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `card.isPlayed()` is already `true` (acquired and played in a previous turn)
+  - Expected output: `IllegalStateException`
+
+- **TC110: PlayDevelopmentCard_VictoryPointCard_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: `card` is a `VICTORY_POINT` card in the active player's hand (boundary: the one card type that can never be played through this method — per the rules it is instead privately revealed to declare victory, which requires whole-game VP tracking that is out of scope for a single turn)
+  - Expected output: `IllegalStateException`
+
+- **TC102: PlayDevelopmentCard_UnplayedCardFromPriorTurn_MarksCardAsPlayed** ( :white_check_mark: )
+  - State of the system: turn is in TRADE or BUILD phase, `card` is an unplayed non-`VICTORY_POINT` card the player acquired in a previous turn (boundary: minimal valid preconditions)
+  - Expected output: `card.isPlayed()` becomes `true`
+
+## Method under test: `getPlayerHand(Player player)`
+
+- **TC103: GetPlayerHand_PlayerWithNoCards_ReturnsEmptyList** ( :white_check_mark: )
+  - State of the system: `player` has not purchased any development cards (boundary)
+  - Expected output: empty list
+
+- **TC104: GetPlayerHand_AfterBuyingOneCard_ReturnsListContainingPurchasedCard** ( :white_check_mark: )
+  - State of the system: `player` purchased exactly one development card via `buyDevelopmentCard()` (boundary)
+  - Expected output: list of size `1` containing that card
+
+- **TC105: GetPlayerHand_ReturnedList_IsUnmodifiable** ( :white_check_mark: )
+  - State of the system: a hand list obtained via `getPlayerHand()`
+  - Expected output: `UnsupportedOperationException` on attempted mutation
+
+## Method under test: `getRemainingDeckSize()`
+
+- **TC106: GetRemainingDeckSize_NewTurn_Returns25** ( :white_check_mark: )
+  - State of the system: no cards have been purchased yet this game (boundary: full 14 KNIGHT + 6 Progress + 5 VICTORY_POINT deck)
+  - Expected output: `25`
+
+- **TC107: GetRemainingDeckSize_AfterBuyingOneCard_DecreasesByOne** ( :white_check_mark: )
+  - State of the system: exactly one card has been purchased via `buyDevelopmentCard()` (boundary)
+  - Expected output: `24`
 
 
 

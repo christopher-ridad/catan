@@ -22,6 +22,13 @@ TurnManager ───────────────► Game, Bank, DiceRol
 
 ---
 
+### `DevelopmentCardType`
+```
+KNIGHT, ROAD_BUILDING, YEAR_OF_PLENTY, MONOPOLY, VICTORY_POINT
+```
+Represents the type of a development card. There are 25 total: 14 Knight, 6 Progress (Road Building, Year of Plenty, Monopoly), and 5 Victory Point.
+
+
 ## Classes
 
 ---

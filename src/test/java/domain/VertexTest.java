@@ -126,4 +126,25 @@ public class VertexTest {
         Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
         assertThrows(IllegalStateException.class, vertex::upgradeToCity);
     }
+
+    @Test
+    void getHarborType_WhenNoHarborSet_ReturnsEmpty() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        assertTrue(vertex.getHarborType().isEmpty());
+    }
+
+    @Test
+    void getHarborType_WhenHarborSet_ReturnsHarborType() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        vertex.setHarborType(HarborType.GENERIC);
+        assertEquals(HarborType.GENERIC, vertex.getHarborType().orElseThrow());
+    }
+
+    @Test
+    void setHarborType_OverwritesPreviousHarbor() {
+        Vertex vertex = new Vertex(0, new ArrayList<>(), new ArrayList<>());
+        vertex.setHarborType(HarborType.GENERIC);
+        vertex.setHarborType(HarborType.WOOL);
+        assertEquals(HarborType.WOOL, vertex.getHarborType().orElseThrow());
+    }
 }

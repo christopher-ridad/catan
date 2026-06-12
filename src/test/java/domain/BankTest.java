@@ -79,6 +79,18 @@ public class BankTest {
     }
 
     @Test
+    void Collect_WithNullType_ThrowsIllegalArgumentException() {
+        Bank bank = new Bank();
+        assertThrows(IllegalArgumentException.class, () -> bank.collect(null, 1));
+    }
+
+    @Test
+    void Collect_WithNegativeAmount_ThrowsIllegalArgumentException() {
+        Bank bank = new Bank();
+        assertThrows(IllegalArgumentException.class, () -> bank.collect(ResourceType.BRICK, -1));
+    }
+
+    @Test
     void Collect_WithAmountZero_NoChange() {
         Bank bank = bankWithBrick(5);
         bank.collect(ResourceType.BRICK, 0);

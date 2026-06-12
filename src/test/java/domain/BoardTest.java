@@ -196,6 +196,21 @@ public class BoardTest {
     }
 
     @Test
+    void Constructor_OnValidBoard_PopulatesAdjacentVerticesForEveryVertex() {
+        List<Vertex> adjacentVertices = board.getVertex(0).getAdjacentVertices();
+        List<Integer> adjacentIds = new ArrayList<>();
+        for (Vertex vertex : adjacentVertices) {
+            adjacentIds.add(vertex.getId());
+        }
+
+        assertAll(
+                () -> assertEquals(2, adjacentVertices.size()),
+                () -> assertTrue(adjacentIds.contains(3)),
+                () -> assertTrue(adjacentIds.contains(4))
+        );
+    }
+
+    @Test
     void GetEdges_OnValidBoard_Returns72Edges() {
         assertEquals(72, board.getEdges().size());
     }
@@ -352,5 +367,66 @@ public class BoardTest {
         nonAdjacentEdge.setOwner(player);
         Board testBoard = new Board(hexes, new ArrayList<>(), List.of(nonAdjacentEdge));
         assertFalse(testBoard.isConnectedToPlayer(vertex, player));
+    }
+
+    @Test
+    void getHarborType_ForNonHarborVertex_ReturnsEmpty() {
+        assertTrue(board.getHarborType(board.getVertex(4)).isEmpty());
+    }
+
+    @Test
+    void getHarborType_ForGenericHarborVertex_ReturnsGeneric() {
+        assertEquals(HarborType.GENERIC, board.getHarborType(board.getVertex(0)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForGrainHarborVertex_ReturnsGrain() {
+        assertEquals(HarborType.GRAIN, board.getHarborType(board.getVertex(1)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForOreHarborVertex_ReturnsOre() {
+        assertEquals(HarborType.ORE, board.getHarborType(board.getVertex(10)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForWoolHarborVertex_ReturnsWool() {
+        assertEquals(HarborType.WOOL, board.getHarborType(board.getVertex(42)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForBrickHarborVertex_ReturnsBrick() {
+        assertEquals(HarborType.BRICK, board.getHarborType(board.getVertex(33)).orElseThrow());
+    }
+
+    @Test
+    void getHarborType_ForLumberHarborVertex_ReturnsLumber() {
+        assertEquals(HarborType.LUMBER, board.getHarborType(board.getVertex(11)).orElseThrow());
+    }
+
+    @Test
+    void getRobberHex_NewBoard_StartsOnDesertHex() {
+        assertEquals(TerrainType.DESERT, board.getRobberHex().getTerrainType());
+    }
+
+    @Test
+    void setRobberHex_WithNull_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> board.setRobberHex(null));
+    }
+
+    @Test
+    void setRobberHex_WithHexNotOnBoard_ThrowsIllegalArgumentException() {
+        Hex foreignHex = new Hex(TerrainType.HILLS, 6);
+
+        assertThrows(IllegalArgumentException.class, () -> board.setRobberHex(foreignHex));
+    }
+
+    @Test
+    void setRobberHex_WithHexOnBoard_UpdatesRobberHex() {
+        Hex target = board.getHexes().get(1);
+
+        board.setRobberHex(target);
+
+        assertEquals(target, board.getRobberHex());
     }
 }

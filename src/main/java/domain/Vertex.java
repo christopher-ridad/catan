@@ -13,6 +13,7 @@ public final class Vertex {
     private boolean city = false;
     private final List<Hex> adjacentHexes;
     private List<Vertex> adjacentVertices;
+    private HarborType harborType = null;
 
     public Vertex(int id, List<Hex> adjacentHexes, List<Vertex> adjacentVertices) {
         validateId(id);
@@ -81,5 +82,13 @@ public final class Vertex {
             throw new IllegalStateException("Cannot upgrade an unoccupied vertex to a city");
         }
         this.city = true;
+    }
+
+    public Optional<HarborType> getHarborType() {
+        return Optional.ofNullable(harborType);
+    }
+
+    void setHarborType(HarborType harborType) {
+        this.harborType = harborType;
     }
 }
