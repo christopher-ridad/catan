@@ -65,4 +65,11 @@ public class DevelopmentCardTest {
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
         assertEquals(0, card.getTurnPurchased());
     }
+
+    @Test
+    void IsPlayableOnTurn_WhenCurrentTurnGreaterThanPurchased_ReturnsTrue() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        card.setTurnPurchased(1);
+        assertTrue(card.isPlayableOnTurn(2));
+    }
 }

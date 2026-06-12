@@ -33,4 +33,15 @@ public final class DevelopmentCard {
     public int getTurnPurchased() {
         return turnPurchased;
     }
+
+    void setTurnPurchased(int turn) {
+        this.turnPurchased = turn;
+    }
+
+    public boolean isPlayableOnTurn(int currentTurn) {
+        if (type == DevelopmentCardType.VICTORY_POINT) {
+            return false;
+        }
+        return currentTurn > turnPurchased && !played;
+    }
 }
