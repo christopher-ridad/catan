@@ -18,4 +18,11 @@ public class DevelopmentDeckTest {
         DevelopmentCard card = deck.draw(1);
         assertEquals(24, deck.getRemainingCount());
     }
+
+    @Test
+    void Draw_SetsCorrectTurnPurchased() {
+        DevelopmentDeck deck = new DevelopmentDeck();
+        DevelopmentCard card = deck.draw(3);
+        assertEquals(3, card.getTurnPurchased());
+    }
 }
