@@ -8,11 +8,14 @@ Following the project's established pattern, this phase introduces a single comp
 
 The classes introduced here are `VictoryPointCalculator` and `SpecialCardTracker`. `TurnManager` calls into `VictoryPointCalculator` after each turn ends.
 
+> **Prerequisite:** `getDevCardVP()` and `computeKnightCount()` both need to read a player's development card hand, but `Player` does not currently expose this. A small addition to `Player` is required before these two methods can be implemented — see the `Player` revision below.
+
 ---
 
 ## Dependency Graph
 
 ```
+Player (existing, MODIFIED) ► DevelopmentCard
 SpecialCardTracker ─────────► Player
 VictoryPointCalculator ─────► Game, Board, Player, SpecialCardTracker, DevelopmentCard
 ```
@@ -20,6 +23,22 @@ VictoryPointCalculator ─────► Game, Board, Player, SpecialCardTracke
 ---
 
 ## Classes
+
+---
+
+### `Player` (existing class — REVISION)
+
+`Player` needs one additional method to expose the development cards in a player's hand, so `VictoryPointCalculator` can compute VP from Victory Point cards and count played Knights without reaching into private state.
+
+| Method                            | Return Type             | Status   | Description                                                                 |
+|------------------------------------|--------------------------|----------|-------------------------------------------------------------------------------|
+| `getDevelopmentCards()`            | `List<DevelopmentCard>`  | **NEW**  | Returns an unmodifiable view of all development cards currently held by the player, including both played and unplayed cards |
+
+**Invariants:**
+- The returned list always reflects the player's current hand, including cards drawn via `DevelopmentDeck.draw()`; nothing is ever removed from this list — played cards remain with `isPlayed() == true`
+- Order is not significant; `VictoryPointCalculator` filters by `getType()` and `isPlayed()`, not position
+
+**Migration note:** if `Player` already stores development cards in a private list (e.g. as part of `buyDevelopmentCard()` from the First Turn Phase doc), this is a pure accessor addition with no change to existing behavior.
 
 ---
 
@@ -65,9 +84,9 @@ All methods are intended to be called with current game state passed in — this
 | `getTotalVP(Player player, SpecialCardTracker tracker)`           | `int`            | Returns the player's total VP: settlements + cities + Longest Road card (if held) + Largest Army card (if held) + VP dev cards in hand; throws `IllegalArgumentException` if either argument is null |
 | `getSettlementVP(Player player, Board board)`                     | `int`            | Returns 1 VP per vertex on `board` owned by `player` that holds a settlement (not a city)                                                                                                     |
 | `getCityVP(Player player, Board board)`                           | `int`            | Returns 2 VP per vertex on `board` owned by `player` that holds a city                                                                                                                        |
-| `getDevCardVP(Player player)`                                     | `int`            | Returns 1 VP per Victory Point development card in the player's hand (including unplayed ones — VP cards are always counted)                                                                   |
+| `getDevCardVP(Player player)`                                     | `int`            | Returns 1 VP per `DevelopmentCard` in `player.getDevelopmentCards()` with `getType() == VICTORY_POINT` (including unplayed ones — VP cards are always counted)                          |
 | `computeLongestRoad(Player player, Board board)`                  | `int`            | Returns the length of the player's longest continuous road via depth-first graph traversal on edges owned by `player`; branches do not count — only the longest non-branching path            |
-| `computeKnightCount(Player player)`                               | `int`            | Returns the number of Knight development cards the player has marked as played                                                                                                                 |
+| `computeKnightCount(Player player)`                               | `int`            | Returns the count of `DevelopmentCard`s in `player.getDevelopmentCards()` with `getType() == KNIGHT` and `isPlayed() == true`                                                                 |
 | `updateSpecialCards(Game game, Board board, SpecialCardTracker tracker)` | `void`   | Recomputes Longest Road and Largest Army for all players and calls `tracker.updateLongestRoad()` and `tracker.updateLargestArmy()` accordingly; intended to be called by `TurnManager` after every turn |
 | `getWinner(Game game, Board board, SpecialCardTracker tracker)`   | `Optional<Player>` | Returns the player with ≥ 10 VP if one exists, or `Optional.empty()` otherwise; if multiple players somehow reach 10 VP simultaneously, returns the one whose turn it currently is (determined by turn order in `game.getPlayers()`) |
 | `hasWinner(Game game, Board board, SpecialCardTracker tracker)`   | `boolean`        | Returns true if any player has ≥ 10 VP; convenience wrapper around `getWinner()`                                                                                                              |
@@ -107,6 +126,7 @@ All methods are intended to be called with current game state passed in — this
 | `computeLongestRoad()` — road broken by opponent  | Opponent settlement splits a 6-road into two 3-road halves  | Unbroken 6-road counts as 6                                |
 | `updateLongestRoad()` — negative road length      | `roadLength` < 0                                            | `roadLength` == 0                                          |
 | `updateLargestArmy()` — negative knight count     | `knightCount` < 0                                           | `knightCount` == 0                                         |
+| `getDevCardVP()` / `computeKnightCount()` — empty hand | `player.getDevelopmentCards()` returns empty list (both return 0) | Hand contains at least one card of the relevant type |
 
 ---
 
@@ -122,10 +142,10 @@ src/main/java/domain/
 ├── Vertex.java                    (existing)
 ├── Edge.java                      (existing)
 ├── Board.java                     (existing)
-├── Player.java                    (existing)
+├── Player.java                    (existing — MODIFIED)
 ├── Game.java                      (existing)
 ├── SetupPhase.java                (existing)
-├── Dice.java                      (existing)
+├── DiceRoll.java                      (existing)
 ├── Bank.java                      (existing)
 ├── TradeOffer.java                (existing)
 ├── Turn.java                      (existing)
@@ -138,10 +158,10 @@ src/main/java/domain/
 src/test/java/domain/
 ├── HexTest.java                   (existing)
 ├── BoardTest.java                 (existing)
-├── PlayerTest.java                (existing)
+├── PlayerTest.java                (existing — MODIFIED)
 ├── GameTest.java                  (existing)
 ├── SetupPhaseTest.java            (existing)
-├── DiceTest.java                  (existing)
+├── DiceRollTest.java                  (existing)
 ├── BankTest.java                  (existing)
 ├── TradeOfferTest.java            (existing)
 ├── TurnTest.java                  (existing)
@@ -162,4 +182,5 @@ src/test/java/domain/
 - Road-breaking by opponent settlements requires checking, for each edge in the player's road network, whether the connecting vertex is occupied by an opponent. The `Vertex.getOwner()` method already supports this. The DFS should refuse to cross a vertex owned by another player when traversing between edges.
 - VP development cards in a player's hand are always counted toward `getTotalVP()`, even before they are "revealed." The ruleset states they may be revealed on the turn purchased if they push the player to 10+ VP — but since `VictoryPointCalculator` always counts them, this is handled automatically.
 - `getWinner()` is called by `TurnManager.endCurrentTurn()` after `updateSpecialCards()` has already run. The order matters: special cards must be reassigned before VP is totaled, or a player who just earned Longest Road might not be credited correctly.
+- `getDevCardVP()` and `computeKnightCount()` both depend on `Player.getDevelopmentCards()` (new in this revision). This is the only cross-class change required by this doc — implement it on `Player` first, since both `VictoryPointCalculatorTest` and `PlayerTest` will need it.
 - The tie-breaking rule (multiple players at 10+ VP) is theoretically impossible in standard Catan since VP are only checked on the active player's turn. The rule is included defensively and resolves by turn order position in `game.getPlayers()`.
