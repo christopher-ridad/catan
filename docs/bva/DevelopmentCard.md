@@ -42,24 +42,24 @@
 
 ## Method under test: `getTurnPurchased()`
 
-- **TC9: GetTurnPurchased_OnNewCard_ReturnsZero** ( not implemented )
+- **TC9: GetTurnPurchased_OnNewCard_ReturnsZero** ( implemented )
   - State of the system: `DevelopmentCard(KNIGHT)`, no turn set yet
   - Expected output: `0`
 
 ## Method under test: `isPlayableOnTurn(int currentTurn)`
 
-- **TC10: IsPlayableOnTurn_WhenCurrentTurnGreaterThanPurchased_ReturnsTrue** ( not implemented )
+- **TC10: IsPlayableOnTurn_WhenCurrentTurnGreaterThanPurchased_ReturnsTrue** ( implemented )
   - State of the system: `DevelopmentCard(KNIGHT)`, `turnPurchased = 1`, `currentTurn = 2`
   - Expected output: `true`
 
-- **TC11: IsPlayableOnTurn_WhenCurrentTurnEqualsToPurchased_ReturnsFalse** ( not implemented )
+- **TC11: IsPlayableOnTurn_WhenCurrentTurnEqualsToPurchased_ReturnsFalse** ( implemented )
   - State of the system: `DevelopmentCard(KNIGHT)`, `turnPurchased = 1`, `currentTurn = 1`
   - Expected output: `false`
 
-- **TC12: IsPlayableOnTurn_WhenCardAlreadyPlayed_ReturnsFalse** ( not implemented )
+- **TC12: IsPlayableOnTurn_WhenCardAlreadyPlayed_ReturnsFalse** ( implemented )
   - State of the system: `DevelopmentCard(KNIGHT)`, `turnPurchased = 1`, `currentTurn = 2`, `markAsPlayed()` called
   - Expected output: `false`
 
-- **TC13: IsPlayableOnTurn_WhenVictoryPointCard_ReturnsFalse** ( not implemented )
+- **TC13: IsPlayableOnTurn_WhenVictoryPointCard_ReturnsFalse** ( implemented )
   - State of the system: `DevelopmentCard(VICTORY_POINT)`, `turnPurchased = 1`, `currentTurn = 2`
   - Expected output: `false`
