@@ -31,7 +31,6 @@ public class VictoryPointCalculator {
         validatePlayer(player);
         validateBoard(board);
 
-        // Map each vertex to the list of player-owned edges connected to it
         Map<Vertex, List<Edge>> adjacencyList = new HashMap<>();
 
         for (Edge edge : board.getEdges()) {
@@ -59,6 +58,14 @@ public class VictoryPointCalculator {
         }
 
         return maxLength;
+    }
+
+    public int computeKnightCount(Player player) {
+        validatePlayer(player);
+        
+        return (int) player.getDevelopmentCards().stream()
+                .filter(card -> card.getType() == DevelopmentCardType.KNIGHT && card.isPlayed())
+                .count();
     }
 
     private int dfs(Player player, Vertex currentVertex, Map<Vertex, List<Edge>> adjacencyList, Set<Edge> visitedEdges) {
@@ -121,4 +128,6 @@ public class VictoryPointCalculator {
         }
         return cityCount;
     }
+
+
 }

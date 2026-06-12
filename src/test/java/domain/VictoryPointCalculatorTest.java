@@ -470,4 +470,82 @@ public class VictoryPointCalculatorTest {
         int length = calc.computeLongestRoad(p1, board);
         assertEquals(15, length);
     }
+
+    @Test
+    public void ComputeKnightCount_WithNullPlayer_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.computeKnightCount(null);
+        });
+    }
+
+    @Test
+    public void ComputeKnightCount_ZeroKnightsPlayed_ReturnsZero() {
+        int knights = calc.computeKnightCount(p1);
+        assertEquals(0, knights);
+    }
+
+    @Test
+    public void ComputeKnightCount_OneKnightPlayed_ReturnsOne() {
+        DevelopmentCard knight = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        knight.markAsPlayed();
+        p1.addDevelopmentCard(knight);
+
+        int knights = calc.computeKnightCount(p1);
+        assertEquals(1, knights);
+    }
+
+    @Test
+    public void ComputeKnightCount_MultipleKnightsPlayed_ReturnsCount() {
+        for (int i = 0; i < 3; i++) {
+            DevelopmentCard knight = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+            knight.markAsPlayed();
+            p1.addDevelopmentCard(knight);
+        }
+
+        int knights = calc.computeKnightCount(p1);
+        assertEquals(3, knights);
+    }
+
+    @Test
+    public void ComputeKnightCount_MaximumKnightsPlayed_ReturnsMax() {
+        for (int i = 0; i < 14; i++) {
+            DevelopmentCard knight = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+            knight.markAsPlayed();
+            p1.addDevelopmentCard(knight);
+        }
+
+        int knights = calc.computeKnightCount(p1);
+        assertEquals(14, knights);
+    }
+
+    @Test
+    public void ComputeKnightCount_UnplayedKnights_AreNotCounted() {
+        DevelopmentCard playedKnight = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        playedKnight.markAsPlayed();
+        p1.addDevelopmentCard(playedKnight);
+
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.KNIGHT));
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.KNIGHT));
+
+        int knights = calc.computeKnightCount(p1);
+        assertEquals(1, knights);
+    }
+
+    @Test
+    public void ComputeKnightCount_MixedPlayedDevCards_CountsOnlyKnights() {
+        DevelopmentCard knight1 = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        knight1.markAsPlayed();
+        p1.addDevelopmentCard(knight1);
+
+        DevelopmentCard knight2 = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        knight2.markAsPlayed();
+        p1.addDevelopmentCard(knight2);
+
+        DevelopmentCard monopoly = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
+        monopoly.markAsPlayed();
+        p1.addDevelopmentCard(monopoly);
+
+        int knights = calc.computeKnightCount(p1);
+        assertEquals(2, knights);
+    }
 }
