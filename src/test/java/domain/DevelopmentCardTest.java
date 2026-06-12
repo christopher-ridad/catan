@@ -79,4 +79,12 @@ public class DevelopmentCardTest {
         card.setTurnPurchased(1);
         assertFalse(card.isPlayableOnTurn(1));
     }
+
+    @Test
+    void IsPlayableOnTurn_WhenCardAlreadyPlayed_ReturnsFalse() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        card.setTurnPurchased(1);
+        card.markAsPlayed();
+        assertFalse(card.isPlayableOnTurn(2));
+    }
 }
