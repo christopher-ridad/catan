@@ -48,4 +48,10 @@ public class DevelopmentDeckTest {
         }
         assertTrue(deck.isEmpty());
     }
+
+    @Test
+    void GetRemainingCount_OnFullDeck_Returns25() {
+        DevelopmentDeck deck = new DevelopmentDeck();
+        assertEquals(25, deck.getRemainingCount());
+    }
 }
