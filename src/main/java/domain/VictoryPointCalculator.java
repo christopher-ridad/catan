@@ -1,6 +1,6 @@
 package domain;
 
-import java.util.List;
+import java.util.*;
 
 public class VictoryPointCalculator {
     public VictoryPointCalculator() {}
@@ -25,6 +25,65 @@ public class VictoryPointCalculator {
         return (int) player.getDevelopmentCards().stream()
                 .filter(card -> card.getType() == DevelopmentCardType.VICTORY_POINT)
                 .count();
+    }
+
+    public int computeLongestRoad(Player player, Board board) {
+        validatePlayer(player);
+        validateBoard(board);
+
+        // Map each vertex to the list of player-owned edges connected to it
+        Map<Vertex, List<Edge>> adjacencyList = new HashMap<>();
+
+        for (Edge edge : board.getEdges()) {
+            if (edge.getOwner().orElse(null) == player) {
+                List<Vertex> endpoints = edge.getEndpoints();
+                if (endpoints.size() == 2) {
+                    Vertex v1 = endpoints.get(0);
+                    Vertex v2 = endpoints.get(1);
+
+                    adjacencyList.computeIfAbsent(v1, k -> new ArrayList<>()).add(edge);
+                    adjacencyList.computeIfAbsent(v2, k -> new ArrayList<>()).add(edge);
+                }
+            }
+        }
+
+        if (adjacencyList.isEmpty()) {
+            return 0;
+        }
+
+        int maxLength = 0;
+        Set<Edge> visitedEdges = new HashSet<>();
+
+        for (Vertex startVertex : adjacencyList.keySet()) {
+            maxLength = Math.max(maxLength, dfs(player, startVertex, adjacencyList, visitedEdges));
+        }
+
+        return maxLength;
+    }
+
+    private int dfs(Player player, Vertex currentVertex, Map<Vertex, List<Edge>> adjacencyList, Set<Edge> visitedEdges) {
+        int maxPath = visitedEdges.size();
+
+        if (!visitedEdges.isEmpty() && currentVertex.getOwner().isPresent() && currentVertex.getOwner().get() != player) {
+            return maxPath;
+        }
+
+        List<Edge> adjacentEdges = adjacencyList.getOrDefault(currentVertex, Collections.emptyList());
+
+        for (Edge edge : adjacentEdges) {
+            if (!visitedEdges.contains(edge)) {
+                visitedEdges.add(edge);
+
+                List<Vertex> endpoints = edge.getEndpoints();
+                Vertex nextVertex = endpoints.get(0).equals(currentVertex) ? endpoints.get(1) : endpoints.get(0);
+
+                maxPath = Math.max(maxPath, dfs(player, nextVertex, adjacencyList, visitedEdges));
+
+                visitedEdges.remove(edge);
+            }
+        }
+
+        return maxPath;
     }
 
     private void validatePlayer(Player player) {

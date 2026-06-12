@@ -301,4 +301,173 @@ public class VictoryPointCalculatorTest {
         int vp = calc.getDevCardVP(p1);
         assertEquals(2, vp);
     }
+
+    @Test
+    public void ComputeLongestRoad_WithNullPlayer_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.computeLongestRoad(null, board);
+        });
+    }
+
+    @Test
+    public void ComputeLongestRoad_WithNullBoard_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.computeLongestRoad(p1, null);
+        });
+    }
+
+    @Test
+    public void ComputeLongestRoad_ZeroRoadsPlaced_ReturnsZero() {
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(0, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_OneRoadPlaced_ReturnsOne() {
+        board.getEdge(0).setOwner(p1);
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(1, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_RoadBelowClaimThreshold_ReturnsLength() {
+        board.getEdge(0).setOwner(p1);
+        board.getEdge(6).setOwner(p1);
+        board.getEdge(11).setOwner(p1);
+        board.getEdge(19).setOwner(p1);
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(4, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_RoadAtClaimThreshold_ReturnsLength() {
+        board.getEdge(0).setOwner(p1);
+        board.getEdge(6).setOwner(p1);
+        board.getEdge(11).setOwner(p1);
+        board.getEdge(19).setOwner(p1);
+        board.getEdge(25).setOwner(p1);
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(5, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_DisconnectedRoads_ReturnsLongestSegment() {
+        board.getEdge(0).setOwner(p1);
+        board.getEdge(6).setOwner(p1);
+        board.getEdge(11).setOwner(p1);
+        board.getEdge(19).setOwner(p1);
+
+        board.getEdge(45).setOwner(p1);
+        board.getEdge(52).setOwner(p1);
+        board.getEdge(60).setOwner(p1);
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(4, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_BranchingPath_ReturnsLongestBranchOnly() {
+        board.getEdge(0).setOwner(p1);
+        board.getEdge(6).setOwner(p1);
+
+        board.getEdge(10).setOwner(p1);
+        board.getEdge(18).setOwner(p1);
+
+        board.getEdge(11).setOwner(p1);
+        board.getEdge(19).setOwner(p1);
+        board.getEdge(25).setOwner(p1);
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(5, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_CircularPath_EdgesVisitedOnce_ReturnsLength() {
+        board.getEdge(0).setOwner(p1);
+        board.getEdge(6).setOwner(p1);
+        board.getEdge(11).setOwner(p1);
+        board.getEdge(12).setOwner(p1);
+        board.getEdge(7).setOwner(p1);
+        board.getEdge(1).setOwner(p1);
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(6, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_CircularPathWithTail_ReturnsTotalLength() {
+        board.getEdge(0).setOwner(p1);
+        board.getEdge(6).setOwner(p1);
+        board.getEdge(11).setOwner(p1);
+        board.getEdge(12).setOwner(p1);
+        board.getEdge(7).setOwner(p1);
+        board.getEdge(1).setOwner(p1);
+
+        board.getEdge(19).setOwner(p1);
+        board.getEdge(25).setOwner(p1);
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(8, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_PathBrokenByOpponentSettlement_ReturnsLongestHalf() {
+        board.getEdge(0).setOwner(p1);
+        board.getEdge(6).setOwner(p1);
+        board.getEdge(11).setOwner(p1);
+        board.getEdge(19).setOwner(p1);
+        board.getEdge(25).setOwner(p1);
+        board.getEdge(34).setOwner(p1);
+
+        board.getVertex(12).setOwner(p2);
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(3, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_PathNotBrokenByOwnSettlement_ReturnsTotalLength() {
+        board.getEdge(0).setOwner(p1);
+        board.getEdge(6).setOwner(p1);
+        board.getEdge(11).setOwner(p1);
+        board.getEdge(19).setOwner(p1);
+        board.getEdge(25).setOwner(p1);
+        board.getEdge(34).setOwner(p1);
+
+        board.getVertex(12).setOwner(p1);
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(6, length);
+    }
+
+    @Test
+    public void ComputeLongestRoad_MaximumRoadsPlaced_ReturnsMax() {
+        int[] snakeEdges = {
+                0,
+                6,
+                10,
+                18,
+                23,
+                33,
+                39,
+                49,
+                54,
+                62,
+                66,
+                67,
+                63,
+                56,
+                50
+        };
+
+        for (int edgeId : snakeEdges) {
+            board.getEdge(edgeId).setOwner(p1);
+        }
+
+        int length = calc.computeLongestRoad(p1, board);
+        assertEquals(15, length);
+    }
 }
