@@ -1,9 +1,11 @@
 package domain;
 
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,6 +40,28 @@ public class VictoryPointCalculatorTest {
         hexes.add(new Hex(TerrainType.HILLS, 10));
 
         return new Board(hexes);
+    }
+
+    private void buildRoadsPath1(Player player, int count) {
+        int[] path = {0, 6, 11, 19, 25, 34, 40, 49, 54, 62, 66};
+        for (int i = 0; i < count; i++) {
+            board.getEdge(path[i]).setOwner(player);
+        }
+    }
+
+    private void buildRoadsPath2(Player player, int count) {
+        int[] path = {1, 2, 3, 4, 5, 9, 17};
+        for (int i = 0; i < count; i++) {
+            board.getEdge(path[i]).setOwner(player);
+        }
+    }
+
+    private void playKnights(Player player, int count) {
+        for (int i = 0; i < count; i++) {
+            DevelopmentCard knight = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+            knight.markAsPlayed();
+            player.addDevelopmentCard(knight);
+        }
     }
 
     @BeforeEach
