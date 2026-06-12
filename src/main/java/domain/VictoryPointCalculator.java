@@ -19,6 +19,14 @@ public class VictoryPointCalculator {
         return playerCityCount(player, board) * 2;
     }
 
+    public int getDevCardVP(Player player) {
+        validatePlayer(player);
+
+        return (int) player.getDevelopmentCards().stream()
+                .filter(card -> card.getType() == DevelopmentCardType.VICTORY_POINT)
+                .count();
+    }
+
     private void validatePlayer(Player player) {
         if (player == null) {
             throw new IllegalArgumentException("Player cannot be null");

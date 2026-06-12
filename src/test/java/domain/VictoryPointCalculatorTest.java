@@ -227,4 +227,78 @@ public class VictoryPointCalculatorTest {
         int vp = calc.getCityVP(p1, board);
         assertEquals(4, vp);
     }
+
+    @Test
+    public void GetDevCardVP_WithNullPlayer_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.getDevCardVP(null);
+        });
+    }
+
+    @Test
+    public void GetDevCardVP_ZeroVPCards_ReturnsZero() {
+        int vp = calc.getDevCardVP(p1);
+        assertEquals(0, vp);
+    }
+
+    @Test
+    public void GetDevCardVP_OneVPCard_ReturnsOne() {
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+
+        int vp = calc.getDevCardVP(p1);
+        assertEquals(1, vp);
+    }
+
+    @Test
+    public void GetDevCardVP_MultipleVPCards_ReturnsSum() {
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+
+        int vp = calc.getDevCardVP(p1);
+        assertEquals(3, vp);
+    }
+
+    @Test
+    public void GetDevCardVP_MaximumVPCards_ReturnsMax() {
+        for (int i = 0; i < 5; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        int vp = calc.getDevCardVP(p1);
+        assertEquals(5, vp);
+    }
+
+    @Test
+    public void GetDevCardVP_OnlyNonVpDevCards_ReturnsZero() {
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.KNIGHT));
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.KNIGHT));
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.MONOPOLY));
+
+        int vp = calc.getDevCardVP(p1);
+        assertEquals(0, vp);
+    }
+
+    @Test
+    public void GetDevCardVP_MixedDevCards_CountsOnlyVPCards() {
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.KNIGHT));
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.KNIGHT));
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+
+        int vp = calc.getDevCardVP(p1);
+        assertEquals(2, vp);
+    }
+
+    @Test
+    public void GetDevCardVP_CardsAreUnplayed_AreStillCounted() {
+        DevelopmentCard vpCard1 = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
+        DevelopmentCard vpCard2 = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
+
+        p1.addDevelopmentCard(vpCard1);
+        p1.addDevelopmentCard(vpCard2);
+
+        int vp = calc.getDevCardVP(p1);
+        assertEquals(2, vp);
+    }
 }
