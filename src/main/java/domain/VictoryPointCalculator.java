@@ -3,7 +3,7 @@ package domain;
 import java.util.*;
 
 public class VictoryPointCalculator {
-    public VictoryPointCalculator() {}
+    public VictoryPointCalculator() { }
 
     public int getSettlementVP(Player player, Board board) {
         validatePlayer(player);
@@ -31,20 +31,7 @@ public class VictoryPointCalculator {
         validatePlayer(player);
         validateBoard(board);
 
-        Map<Vertex, List<Edge>> adjacencyList = new HashMap<>();
-
-        for (Edge edge : board.getEdges()) {
-            if (edge.getOwner().orElse(null) == player) {
-                List<Vertex> endpoints = edge.getEndpoints();
-                if (endpoints.size() == 2) {
-                    Vertex v1 = endpoints.get(0);
-                    Vertex v2 = endpoints.get(1);
-
-                    adjacencyList.computeIfAbsent(v1, k -> new ArrayList<>()).add(edge);
-                    adjacencyList.computeIfAbsent(v2, k -> new ArrayList<>()).add(edge);
-                }
-            }
-        }
+        Map<Vertex, List<Edge>> adjacencyList = makeAdjacencyList(player, board);
 
         if (adjacencyList.isEmpty()) {
             return 0;
@@ -66,6 +53,25 @@ public class VictoryPointCalculator {
         return (int) player.getDevelopmentCards().stream()
                 .filter(card -> card.getType() == DevelopmentCardType.KNIGHT && card.isPlayed())
                 .count();
+    }
+
+    private Map<Vertex, List<Edge>> makeAdjacencyList(Player player, Board board) {
+        Map<Vertex, List<Edge>> adjacencyList = new HashMap<>();
+
+        for (Edge edge : board.getEdges()) {
+            if (edge.getOwner().orElse(null) == player) {
+                List<Vertex> endpoints = edge.getEndpoints();
+                if (endpoints.size() == 2) {
+                    Vertex v1 = endpoints.get(0);
+                    Vertex v2 = endpoints.get(1);
+
+                    adjacencyList.computeIfAbsent(v1, k -> new ArrayList<>()).add(edge);
+                    adjacencyList.computeIfAbsent(v2, k -> new ArrayList<>()).add(edge);
+                }
+            }
+        }
+
+        return adjacencyList;
     }
 
     private int dfs(Player player, Vertex currentVertex, Map<Vertex, List<Edge>> adjacencyList, Set<Edge> visitedEdges) {
