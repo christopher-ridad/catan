@@ -273,29 +273,79 @@
 ## Method under test: `hasWinner(Game game, Board board, SpecialCardTracker tracker)`
 
 - **TC77: HasWinner_WithNullGame_ThrowsIllegalArgumentException** ( :x: )
-    - State of the system: `game` is the null pointer, valid `board` pointer to a true object, valid `tracker`
-    - Expected output: `IllegalArgumentException`
+  - State of the system: `game` is the null pointer, valid `board` pointer to a true object, valid `tracker`
+  - Expected output: `IllegalArgumentException`
 
 - **TC78: HasWinner_WithNullBoard_ThrowsIllegalArgumentException** ( :x: )
-    - State of the system: valid `game` pointer to a true object, `board` is the null pointer, valid `tracker`
-    - Expected output: `IllegalArgumentException`
+  - State of the system: valid `game` pointer to a true object, `board` is the null pointer, valid `tracker`
+  - Expected output: `IllegalArgumentException`
 
 - **TC79: HasWinner_WithNullTracker_ThrowsIllegalArgumentException** ( :x: )
-    - State of the system: valid `game`, valid `board`, `tracker` is the null pointer
-    - Expected output: `IllegalArgumentException`
+  - State of the system: valid `game`, valid `board`, `tracker` is the null pointer
+  - Expected output: `IllegalArgumentException`
 
 - **TC80: HasWinner_HighestVPIsNine_ReturnsFalse** ( :x: )
-    - State of the system: valid arguments; the highest total VP among all players is exactly 9 
-    - Expected output: `false`
+  - State of the system: valid arguments; the highest total VP among all players is exactly 9 
+  - Expected output: `false`
 
 - **TC81: HasWinner_OnePlayerHasExactlyTenVP_ReturnsTrue** ( :x: )
-    - State of the system: valid arguments; exactly one player has a total VP of exactly 10, all others have < 10 
-    - Expected output: `true`
+  - State of the system: valid arguments; exactly one player has a total VP of exactly 10, all others have < 10 
+  - Expected output: `true`
 
 - **TC82: HasWinner_OnePlayerHasElevenVP_ReturnsTrue** ( :x: )
-    - State of the system: valid arguments; exactly one player has a total VP > 10 (e.g., 11), all others have < 10
-    - Expected output: `true`
+  - State of the system: valid arguments; exactly one player has a total VP > 10 (e.g., 11), all others have < 10
+  - Expected output: `true`
 
 - **TC83: HasWinner_MultiplePlayersHaveTenVP_ReturnsTrue** ( :x: )
-    - State of the system: valid arguments; two players somehow both have exactly 10 VP simultaneously
-    - Expected output: `true`
+  - State of the system: valid arguments; two players somehow both have exactly 10 VP simultaneously
+  - Expected output: `true`
+
+## Method under test: `updateSpecialCards(Game game, Board board, SpecialCardTracker tracker)`
+
+- **TC84: UpdateSpecialCards_WithNullGame_ThrowsIllegalArgumentException** ( :x: )
+  - State of the system: `game` is the null pointer, valid `board`, valid `tracker`
+  - Expected output: `IllegalArgumentException`
+
+- **TC85: UpdateSpecialCards_WithNullBoard_ThrowsIllegalArgumentException** ( :x: )
+  - State of the system: valid `game`, `board` is the null pointer, valid `tracker`
+  - Expected output: `IllegalArgumentException`
+
+- **TC86: UpdateSpecialCards_WithNullTracker_ThrowsIllegalArgumentException** ( :x: )
+  - State of the system: valid `game`, valid `board`, `tracker` is the null pointer
+  - Expected output: `IllegalArgumentException`
+
+- **TC87: UpdateSpecialCards_LongestRoadBelowThreshold_NoClaim** ( :x: )
+  - State of the system: valid arguments; the longest continuous road among all players is 4 segments
+  - Expected output: `tracker.updateLongestRoad()` is called with `Optional.empty()`
+
+- **TC88: UpdateSpecialCards_LongestRoadAtClaimThreshold_Claimed** ( :x: )
+  - State of the system: valid arguments; no player currently holds the card; Player A has exactly 5 continuous roads, all others have < 5
+  - Expected output: `tracker.updateLongestRoad()` is called with Player A
+
+- **TC89: UpdateSpecialCards_LongestRoadTie_CurrentHolderRetains** ( :x: )
+  - State of the system: valid arguments; Player A currently holds Longest Road with length 6; Player B newly builds to reach exactly length 6
+  - Expected output: `tracker.updateLongestRoad()` is called with Player A (no change in ownership)
+
+- **TC90: UpdateSpecialCards_LongestRoadStealThreshold_CardStolen** ( :x: )
+  - State of the system: valid arguments; Player A currently holds Longest Road with length 6; Player B newly builds to reach exactly length 7
+  - Expected output: `tracker.updateLongestRoad()` is called with Player B
+
+- **TC91: UpdateSpecialCards_LongestRoadBroken_FallsBelowThreshold** ( :x: )
+  - State of the system: valid arguments; Player A held Longest Road with length 6, but an opponent built a settlement that broke the road into two 3-segment paths; no other player has a road ≥ 5
+  - Expected output: `tracker.updateLongestRoad()` is called with `Optional.empty()`
+
+- **TC92: UpdateSpecialCards_LargestArmyBelowThreshold_NoClaim** ( :x: )
+  - State of the system: valid arguments; the maximum number of played Knight cards among all players is 2
+  - Expected output: `tracker.updateLargestArmy()` is called with `Optional.empty()`
+
+- **TC93: UpdateSpecialCards_LargestArmyAtClaimThreshold_Claimed** ( :x: )
+  - State of the system: valid arguments; no player currently holds the card; Player A has exactly 3 played Knight cards, all others have < 3
+  - Expected output: `tracker.updateLargestArmy()` is called with Player A
+
+- **TC94: UpdateSpecialCards_LargestArmyTie_CurrentHolderRetains** ( :x: )
+  - State of the system: valid arguments; Player A currently holds Largest Army with 4 played Knights; Player B plays a Knight to reach exactly 4
+  - Expected output: `tracker.updateLargestArmy()` is called with Player A (no change in ownership)
+
+- **TC95: UpdateSpecialCards_LargestArmyStealThreshold_CardStolen** ( :x: )
+  - State of the system: valid arguments; Player A currently holds Largest Army with 4 played Knights; Player B plays a Knight to reach exactly 5
+  - Expected output: `tracker.updateLargestArmy()` is called with Player B

@@ -62,7 +62,7 @@ public class VictoryPointCalculator {
 
     public int computeKnightCount(Player player) {
         validatePlayer(player);
-        
+
         return (int) player.getDevelopmentCards().stream()
                 .filter(card -> card.getType() == DevelopmentCardType.KNIGHT && card.isPlayed())
                 .count();
