@@ -81,6 +81,32 @@ public class ResourceProductionTest {
     }
 
     @Test
+    void DistributeResources_HexHasRobber_NoResourceDistributedFromThatHex() {
+        Player player = new Player("Alice", PlayerColor.RED);
+        Hex hex = new Hex(TerrainType.HILLS, 6);
+        Vertex vertex = settledVertex(0, player, List.of(hex));
+        Bank bank = bankWith(ResourceType.BRICK, 19);
+
+        new ResourceProduction().distributeResources(6, List.of(vertex), hex, bank);
+
+        assertEquals(0, player.getResourceCount(ResourceType.BRICK));
+        assertEquals(19, bank.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
+    void DistributeResources_RobberOnDifferentHex_StillDistributes() {
+        Player player = new Player("Alice", PlayerColor.RED);
+        Hex hex = new Hex(TerrainType.HILLS, 6);
+        Hex robbedHex = new Hex(TerrainType.MOUNTAINS, 6);
+        Vertex vertex = settledVertex(0, player, List.of(hex));
+        Bank bank = bankWith(ResourceType.BRICK, 19);
+
+        new ResourceProduction().distributeResources(6, List.of(vertex), robbedHex, bank);
+
+        assertEquals(1, player.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
     void DistributeResources_BankHas0_NoOneReceives() {
         Player player = new Player("Alice", PlayerColor.RED);
         Hex hex = new Hex(TerrainType.HILLS, 6);
