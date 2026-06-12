@@ -12,6 +12,13 @@ public class VictoryPointCalculator {
         return playerSettlementCount(player, board);
     }
 
+    public int getCityVP(Player player, Board board) {
+        validatePlayer(player);
+        validateBoard(board);
+
+        return playerCityCount(player, board) * 2;
+    }
+
     private void validatePlayer(Player player) {
         if (player == null) {
             throw new IllegalArgumentException("Player cannot be null");
@@ -34,5 +41,17 @@ public class VictoryPointCalculator {
             }
         }
         return settlementCount;
+    }
+
+    private int playerCityCount(Player player, Board board) {
+        List<Vertex> vertexList = board.getVertices();
+
+        int cityCount = 0;
+        for (Vertex vertex : vertexList) {
+            if (vertex.getOwner().map(owner -> owner == player).orElse(false) && vertex.isCity()) {
+                cityCount += 1;
+            }
+        }
+        return cityCount;
     }
 }

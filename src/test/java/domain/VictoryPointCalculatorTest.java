@@ -71,7 +71,7 @@ public class VictoryPointCalculatorTest {
     @Test
     public void GetSettlementVP_PlayerHasZeroSettlements_ReturnsZero() {
         board.getVertex(0).setOwner(p2);
-        board.getVertex(1).setOwner(p2);
+        board.getVertex(2).setOwner(p2);
 
         int vp = calc.getSettlementVP(p1, board);
         assertEquals(0, vp);
@@ -88,8 +88,8 @@ public class VictoryPointCalculatorTest {
     @Test
     public void GetSettlementVP_PlayerHasMultipleSettlements_ReturnsSum() {
         board.getVertex(0).setOwner(p1);
-        board.getVertex(5).setOwner(p1);
-        board.getVertex(10).setOwner(p1);
+        board.getVertex(11).setOwner(p1);
+        board.getVertex(21).setOwner(p1);
 
         int vp = calc.getSettlementVP(p1, board);
         assertEquals(3, vp);
@@ -97,8 +97,9 @@ public class VictoryPointCalculatorTest {
 
     @Test
     public void GetSettlementVP_PlayerHasMaximumSettlements_ReturnsMax() {
-        for (int i = 0; i < 5; i++) {
-            board.getVertex(i).setOwner(p1);
+        int[] safeVertices = {0, 2, 11, 15, 21};
+        for (int id : safeVertices) {
+            board.getVertex(id).setOwner(p1);
         }
 
         int vp = calc.getSettlementVP(p1, board);
@@ -107,14 +108,15 @@ public class VictoryPointCalculatorTest {
 
     @Test
     public void GetSettlementVP_PlayerHasCities_CitiesAreNotCounted() {
+        // Settlements
         board.getVertex(0).setOwner(p1);
-        board.getVertex(1).setOwner(p1);
-
         board.getVertex(2).setOwner(p1);
-        board.getVertex(2).upgradeToCity();
 
-        board.getVertex(3).setOwner(p1);
-        board.getVertex(3).upgradeToCity();
+        // Cities
+        board.getVertex(11).setOwner(p1);
+        board.getVertex(11).upgradeToCity();
+        board.getVertex(15).setOwner(p1);
+        board.getVertex(15).upgradeToCity();
 
         int vp = calc.getSettlementVP(p1, board);
         assertEquals(2, vp);
@@ -123,13 +125,106 @@ public class VictoryPointCalculatorTest {
     @Test
     public void GetSettlementVP_MixedOwnership_CountsOnlyTargetPlayer() {
         board.getVertex(0).setOwner(p1);
-        board.getVertex(1).setOwner(p1);
+        board.getVertex(2).setOwner(p1);
 
-        board.getVertex(2).setOwner(p2);
-        board.getVertex(3).setOwner(p2);
-        board.getVertex(4).setOwner(p2);
+        board.getVertex(11).setOwner(p2);
+        board.getVertex(15).setOwner(p2);
+        board.getVertex(21).setOwner(p2);
 
         int vp = calc.getSettlementVP(p1, board);
         assertEquals(2, vp);
+    }
+
+    @Test
+    public void GetCityVP_WithNullPlayer_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.getCityVP(null, board);
+        });
+    }
+
+    @Test
+    public void GetCityVP_WithNullBoard_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.getCityVP(p1, null);
+        });
+    }
+
+    @Test
+    public void GetCityVP_EmptyBoard_ReturnsZero() {
+        int vp = calc.getCityVP(p1, board);
+        assertEquals(0, vp);
+    }
+
+    @Test
+    public void GetCityVP_PlayerHasZeroCities_ReturnsZero() {
+        board.getVertex(0).setOwner(p2);
+        board.getVertex(0).upgradeToCity();
+
+        int vp = calc.getCityVP(p1, board);
+        assertEquals(0, vp);
+    }
+
+    @Test
+    public void GetCityVP_PlayerHasOneCity_ReturnsTwo() {
+        board.getVertex(0).setOwner(p1);
+        board.getVertex(0).upgradeToCity();
+
+        int vp = calc.getCityVP(p1, board);
+        assertEquals(2, vp);
+    }
+
+    @Test
+    public void GetCityVP_PlayerHasMultipleCities_ReturnsSum() {
+        board.getVertex(0).setOwner(p1);
+        board.getVertex(0).upgradeToCity();
+
+        board.getVertex(11).setOwner(p1);
+        board.getVertex(11).upgradeToCity();
+
+        int vp = calc.getCityVP(p1, board);
+        assertEquals(4, vp);
+    }
+
+    @Test
+    public void GetCityVP_PlayerHasMaximumCities_ReturnsMax() {
+        int[] safeVertices = {0, 2, 11, 15};
+        for (int id : safeVertices) {
+            board.getVertex(id).setOwner(p1);
+            board.getVertex(id).upgradeToCity();
+        }
+
+        int vp = calc.getCityVP(p1, board);
+        assertEquals(8, vp);
+    }
+
+    @Test
+    public void GetCityVP_PlayerHasSettlements_SettlementsAreNotCounted() {
+        // Cities
+        board.getVertex(0).setOwner(p1);
+        board.getVertex(0).upgradeToCity();
+        board.getVertex(2).setOwner(p1);
+        board.getVertex(2).upgradeToCity();
+
+        // Settlements
+        board.getVertex(11).setOwner(p1);
+        board.getVertex(15).setOwner(p1);
+        board.getVertex(21).setOwner(p1);
+
+        int vp = calc.getCityVP(p1, board);
+        assertEquals(4, vp);
+    }
+
+    @Test
+    public void GetCityVP_MixedOwnership_CountsOnlyTargetPlayer() {
+        board.getVertex(0).setOwner(p1);
+        board.getVertex(0).upgradeToCity();
+        board.getVertex(2).setOwner(p1);
+        board.getVertex(2).upgradeToCity();
+
+        board.getVertex(11).setOwner(p2);
+        board.getVertex(11).upgradeToCity();
+
+        int vp = calc.getCityVP(p1, board);
+        assertEquals(4, vp);
     }
 }
