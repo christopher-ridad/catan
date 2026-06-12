@@ -39,4 +39,13 @@ public class DevelopmentDeckTest {
         DevelopmentDeck deck = new DevelopmentDeck();
         assertFalse(deck.isEmpty());
     }
+
+    @Test
+    void IsEmpty_AfterAllCardsDrawn_ReturnsTrue() {
+        DevelopmentDeck deck = new DevelopmentDeck();
+        for (int i = 0; i < 25; i++) {
+            deck.draw(1);
+        }
+        assertTrue(deck.isEmpty());
+    }
 }
