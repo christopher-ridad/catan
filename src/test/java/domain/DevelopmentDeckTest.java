@@ -54,4 +54,11 @@ public class DevelopmentDeckTest {
         DevelopmentDeck deck = new DevelopmentDeck();
         assertEquals(25, deck.getRemainingCount());
     }
+
+    @Test
+    void GetRemainingCount_AfterOneDraw_Returns24() {
+        DevelopmentDeck deck = new DevelopmentDeck();
+        deck.draw(1);
+        assertEquals(24, deck.getRemainingCount());
+    }
 }
