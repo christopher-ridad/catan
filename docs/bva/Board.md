@@ -226,6 +226,25 @@
   - **State of the system**: Valid board constructed, vertex 11 requested
   - **Expected output**: `Optional` containing `HarborType.LUMBER`
 
+## Method under test: `getRobberHex()`
+
+- **TC49: getRobberHex_NewBoard_StartsOnDesertHex** ( :white_check_mark: )
+  - **State of the system**: newly constructed board (robber not yet moved)
+  - **Expected output**: `getRobberHex().getTerrainType()` returns `TerrainType.DESERT`
+
+## Method under test: `setRobberHex(Hex)`
+
+- **TC50: setRobberHex_WithNull_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - **State of the system**: valid board, `null` passed as hex
+  - **Expected output**: `IllegalArgumentException`
+
+- **TC51: setRobberHex_WithHexNotOnBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - **State of the system**: valid board, hex constructed independently of the board's hex list
+  - **Expected output**: `IllegalArgumentException`
+
+- **TC52: setRobberHex_WithHexOnBoard_UpdatesRobberHex** ( :white_check_mark: )
+  - **State of the system**: valid board, hex taken from `getHexes()`
+  - **Expected output**: `getRobberHex()` returns the given hex
 
 
 

@@ -211,4 +211,65 @@ public class GameTest {
         assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob, charlie, diana), board));
     }
 
+    //
+    // Development card deck and player hands
+    //
+
+    @Test
+    void getRemainingDevelopmentCardCount_newGame_returnsTwentyFive() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        assertEquals(25, game.getRemainingDevelopmentCardCount());
+    }
+
+    @Test
+    void drawDevelopmentCard_removesCardFromDeck_decrementsRemainingCount() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        int before = game.getRemainingDevelopmentCardCount();
+
+        DevelopmentCard card = game.drawDevelopmentCard();
+
+        assertNotNull(card);
+        assertEquals(before - 1, game.getRemainingDevelopmentCardCount());
+    }
+
+    @Test
+    void drawDevelopmentCard_emptyDeck_throwsIllegalState() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        for (int i = 0; i < 25; i++) {
+            game.drawDevelopmentCard();
+        }
+
+        assertThrows(IllegalStateException.class, game::drawDevelopmentCard);
+    }
+
+    @Test
+    void getPlayerHand_newGame_returnsEmptyHand() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        assertTrue(game.getPlayerHand(alice).isEmpty());
+    }
+
+    @Test
+    void getPlayerHand_playerNotInGame_throwsIllegalArgument() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        assertThrows(IllegalArgumentException.class, () -> game.getPlayerHand(charlie));
+    }
+
+    @Test
+    void addDevelopmentCardToHand_addsCardToPlayersHand() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        DevelopmentCard card = game.drawDevelopmentCard();
+
+        game.addDevelopmentCardToHand(alice, card);
+
+        assertEquals(List.of(card), game.getPlayerHand(alice));
+    }
+
+    @Test
+    void addDevelopmentCardToHand_playerNotInGame_throwsIllegalArgument() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        DevelopmentCard card = game.drawDevelopmentCard();
+
+        assertThrows(IllegalArgumentException.class, () -> game.addDevelopmentCardToHand(charlie, card));
+    }
+
 }

@@ -4,14 +4,17 @@ import java.util.*;
 
 public class SetupPhase {
     private final Game game;
+    private final Bank bank;
     private final List<Player> placementOrder;
     private int currentPlacementIndex;
     private Vertex lastPlacedSettlement;
     private final Map<Player, List<Vertex>> placedSettlements;
 
-    public SetupPhase(Game game) {
+    public SetupPhase(Game game, Bank bank) {
         validateGame(game);
+        validateBank(bank);
         this.game = game;
+        this.bank = bank;
         this.placementOrder = buildPlacementOrder();
         this.currentPlacementIndex = 0;
         this.lastPlacedSettlement = null;
@@ -85,7 +88,10 @@ public class SetupPhase {
         for (Hex hex : adjacentHexes) {
             if (hex.producesResource()) {
                 ResourceType resource = getResourceFromTerrain(hex.getTerrainType());
-                player.addResources(resource, 1);
+                if (bank.getResourceCount(resource) > 0) {
+                    bank.deduct(resource, 1);
+                    player.addResources(resource, 1);
+                }
             }
         }
     }
@@ -93,6 +99,12 @@ public class SetupPhase {
     private void validateGame(Game game) {
         if (game == null) {
             throw new IllegalArgumentException("Game cannot be null");
+        }
+    }
+
+    private void validateBank(Bank bank) {
+        if (bank == null) {
+            throw new IllegalArgumentException("Bank cannot be null");
         }
     }
 

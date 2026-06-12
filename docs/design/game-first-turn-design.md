@@ -181,12 +181,13 @@ Orchestrates a single player's turn through its three phases. Enforces phase ord
 | `rolledThisTurn`        | `boolean`                            | True once `rollDice()` has been called                                 |
 | `playedDevCardThisTurn` | `boolean`                            | True if a development card has already been played this turn           |
 | `pendingTrade`          | `TradeOffer`                         | The active domestic trade offer, if any; null when no offer is pending |
-| `developmentDeck`       | `List<DevelopmentCard>`              | The shuffled deck of development cards available to buy                |
-| `playerHands`           | `Map<Player, List<DevelopmentCard>>` | Each player's hand of development cards                                |
+| `cardsPurchasedThisTurn`| `List<DevelopmentCard>`              | Cards bought via `buyDevelopmentCard()` this turn (cannot be played the same turn they were purchased) |
+
+The development card deck (`developmentDeck`) and player hands (`playerHands`) are owned by `Game`, not `Turn` — they persist across turns, so `Turn` delegates to `game.drawDevelopmentCard()`, `game.addDevelopmentCardToHand()`, `game.getPlayerHand()`, and `game.getRemainingDevelopmentCardCount()` rather than holding its own copies.
 
 | Method                                                                                                       | Return Type             | Description                                                                                                                                                                                                                                                            |
 |--------------------------------------------------------------------------------------------------------------|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank)`                                             | —                       | Constructor; validates no argument is null, sets `phase` to `PRODUCTION`, initializes developmentDeck with 25 shuffled cards (14 KNIGHT, 6 Progress, 5 VICTORY_POINT) and empty hands for all players in the game                                                      |
+| `Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank)`                                             | —                       | Constructor; validates no argument is null, sets `phase` to `PRODUCTION`                                                                                                                                                                                               |
 | `getActivePlayer()`                                                                                          | `Player`                | Returns the player whose turn this is                                                                                                                                                                                                                                  |
 | `getPhase()`                                                                                                 | `TurnPhase`             | Returns the current phase                                                                                                                                                                                                                                              |
 | `rollDice()`                                                                                                 | `int`                   | Calls `dice.roll()`, advances to `TRADE` phase, triggers production or robber logic; throws `IllegalStateException` if called outside `PRODUCTION` phase or called twice                                                                                               |
@@ -217,7 +218,7 @@ Orchestrates a single player's turn through its three phases. Enforces phase ord
 |-------------------------|----------------|------------------------------------------------------------------------------------------------------------------------------------|
 | `enforceDiscard()`      | `void`         | For each player holding > 7 cards, removes `floor(count / 2)` cards at random and returns them to the bank; called internally     |
 | `moveRobber(int hexId)` | `void`         | Moves the robber to the given hex; throws `IllegalArgumentException` if hex is current robber location or id is invalid            |
-| `steal(Player target)`  | `void`         | Steals 1 random resource from `target`; throws if target has no cards or no settlement adjacent to the robber's new hex            |
+| `steal(Player target)`  | `void`         | Steals 1 random resource from `target`; no-op if target holds no resource cards (so the turn cannot get stuck on an empty-handed candidate); throws if `target` has no settlement or city adjacent to the robber's new hex |
 | `getRobbingCandidates()`| `List<Player>` | Returns all players (excluding active player) with a settlement or city adjacent to the hex the robber was just moved to           |
 
 **Phase transition rules:**
@@ -243,7 +244,7 @@ PRODUCTION ──[rollDice()]──► TRADE ──[advanceToBuild()]──► B
 | Settlement placement (road connection)        | Vertex not connected to any player road                               | Vertex at end of at least one player road                 |
 | City upgrade                                  | Vertex not owned by player; vertex has a city already                 | Vertex with player's existing settlement                  |
 | `moveRobber()` target                         | Current robber hex id                                                 | Any other valid hex id                                    |
-| `steal()` target                              | Player with 0 resource cards                                          | Player with 1 resource card                               |
+| `steal()` target resource count               | Player with 0 resource cards (no-op, robber resolves with no transfer)| Player with 1 resource card (transfers that card)         |
 | Build action outside `BUILD` phase            | Any build call during `PRODUCTION` or `TRADE`                         | Any build call during `BUILD`                             |
 | Domestic trade — offerer affords offering     | Offerer has 0 of a resource they're offering                          | Offerer has exactly the amount they're offering           |
 | Domestic trade — recipient affords request    | Recipient has 0 of a resource being requested                         | Recipient has exactly the amount being requested          |

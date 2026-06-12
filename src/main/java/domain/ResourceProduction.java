@@ -8,6 +8,10 @@ import java.util.Map;
 public class ResourceProduction {
 
     public void distributeResources(int roll, List<Vertex> vertices, Bank bank) {
+        distributeResources(roll, vertices, null, bank);
+    }
+
+    public void distributeResources(int roll, List<Vertex> vertices, Hex robberHex, Bank bank) {
         if (vertices == null) {
             throw new IllegalArgumentException("Vertices cannot be null");
         }
@@ -19,11 +23,11 @@ public class ResourceProduction {
         }
         Map<ResourceType, Integer> totalNeeded = new EnumMap<>(ResourceType.class);
         Map<Player, Map<ResourceType, Integer>> playerGains = new LinkedHashMap<>();
-        collectGains(roll, vertices, totalNeeded, playerGains);
+        collectGains(roll, vertices, robberHex, totalNeeded, playerGains);
         distributeToPlayers(totalNeeded, playerGains, bank);
     }
 
-    private void collectGains(int roll, List<Vertex> vertices,
+    private void collectGains(int roll, List<Vertex> vertices, Hex robberHex,
             Map<ResourceType, Integer> totalNeeded,
             Map<Player, Map<ResourceType, Integer>> playerGains) {
         for (Vertex vertex : vertices) {
@@ -33,7 +37,7 @@ public class ResourceProduction {
             Player owner = vertex.getOwner().get();
             int amount = vertex.isCity() ? 2 : 1;
             for (Hex hex : vertex.getAdjacentHexes()) {
-                if (hex.getNumberToken() == roll && hex.producesResource()) {
+                if (hex != robberHex && hex.getNumberToken() == roll && hex.producesResource()) {
                     ResourceType resource = hex.getTerrainType().getResourceType();
                     totalNeeded.merge(resource, amount, Integer::sum);
                     playerGains
