@@ -35,4 +35,8 @@ public class DevelopmentDeck {
         card.setTurnPurchased(currentTurn);
         return card;
     }
+
+    public boolean isEmpty() {
+        return cards.isEmpty();
+    }
 }

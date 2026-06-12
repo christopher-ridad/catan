@@ -33,4 +33,10 @@ public class DevelopmentDeckTest {
         }
         assertThrows(IllegalStateException.class, () -> deck.draw(1));
     }
+
+    @Test
+    void IsEmpty_OnFullDeck_ReturnsFalse() {
+        DevelopmentDeck deck = new DevelopmentDeck();
+        assertFalse(deck.isEmpty());
+    }
 }
