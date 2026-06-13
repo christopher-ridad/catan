@@ -81,3 +81,7 @@
 - **TC18: EndCurrentTurn_WhenTurnAlreadyDone_DoesNotThrow** ( implemented )
     - State of the system: a turn has been started, advanced to `BUILD`, and `Turn.endTurn()` called directly so the phase is already `DONE`
     - Expected output: `endCurrentTurn()` does not throw
+
+- **TC19: EndCurrentTurn_AdvancesToNextPlayer** ( implemented )
+    - State of the system: p1's turn has been started and ended via `endCurrentTurn()`
+    - Expected output: `getCurrentPlayer()` returns p2

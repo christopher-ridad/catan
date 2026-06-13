@@ -232,4 +232,14 @@ public class TurnManagerTest {
 
         assertDoesNotThrow(turnManager::endCurrentTurn);
     }
+
+    @Test
+    public void EndCurrentTurn_AdvancesToNextPlayer() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertEquals(p2, turnManager.getCurrentPlayer());
+    }
 }
