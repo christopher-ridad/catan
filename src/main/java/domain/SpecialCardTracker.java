@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class SpecialCardTracker {
@@ -33,6 +34,7 @@ public class SpecialCardTracker {
     }
 
     public void updateLongestRoad(Player candidate, int roadLength) {
+        Objects.requireNonNull(candidate, "Candidate cannot be null");
         if (roadLength < 0) {
             throw new IllegalArgumentException("Road length cannot be negative");
         }
@@ -40,6 +42,13 @@ public class SpecialCardTracker {
             if (roadLength >= 5) {
                 this.longestRoadHolder = candidate;
                 this.longestRoadLength = roadLength;
+            }
+        } else if (this.longestRoadHolder.equals(candidate)) {
+            if (roadLength >= 5) {
+                this.longestRoadLength = roadLength;
+            } else {
+                this.longestRoadHolder = null;
+                this.longestRoadLength = 0;
             }
         } else if (roadLength > this.longestRoadLength) {
             this.longestRoadHolder = candidate;
@@ -52,6 +61,7 @@ public class SpecialCardTracker {
     }
 
     public void updateLargestArmy(Player candidate, int knightCount) {
+        Objects.requireNonNull(candidate, "Candidate cannot be null");
         if (knightCount < 0) {
             throw new IllegalArgumentException("Knight count cannot be negative");
         }

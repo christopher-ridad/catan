@@ -97,6 +97,33 @@ public class SpecialCardTrackerTest {
     }
 
     @Test
+    void UpdateLongestRoad_WhenHolderRoadShrinksButStillQualifies_UpdatesLength() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player holder = new Player("Alice", PlayerColor.RED);
+        tracker.updateLongestRoad(holder, 7);
+        tracker.updateLongestRoad(holder, 5);
+        assertEquals(holder, tracker.getLongestRoadHolder().orElseThrow());
+        assertEquals(5, tracker.getLongestRoadLength());
+    }
+
+    @Test
+    void UpdateLongestRoad_WhenHolderRoadShrinksBelowClaimThreshold_RelinquishesCard() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player holder = new Player("Alice", PlayerColor.RED);
+        tracker.updateLongestRoad(holder, 7);
+        tracker.updateLongestRoad(holder, 4);
+        assertTrue(tracker.getLongestRoadHolder().isEmpty());
+        assertEquals(0, tracker.getLongestRoadLength());
+        assertFalse(tracker.holdsLongestRoad(holder));
+    }
+
+    @Test
+    void UpdateLongestRoad_WithNullCandidate_ThrowsNullPointerException() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        assertThrows(NullPointerException.class, () -> tracker.updateLongestRoad(null, 5));
+    }
+
+    @Test
     void HoldsLongestRoad_BeforeClaim_ReturnsFalse() {
         SpecialCardTracker tracker = new SpecialCardTracker();
         Player player = new Player("Alice", PlayerColor.RED);
@@ -111,6 +138,12 @@ public class SpecialCardTrackerTest {
         tracker.updateLongestRoad(holder, 5);
         assertTrue(tracker.holdsLongestRoad(holder));
         assertFalse(tracker.holdsLongestRoad(other));
+    }
+
+    @Test
+    void UpdateLargestArmy_WithNullCandidate_ThrowsNullPointerException() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        assertThrows(NullPointerException.class, () -> tracker.updateLargestArmy(null, 3));
     }
 
     @Test

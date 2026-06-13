@@ -48,6 +48,18 @@
     - State of the system: `holder` claimed Longest Road with length `5`; `updateLongestRoad(holder, 7)` called
     - Expected output: `holder` remains the Longest Road holder; `getLongestRoadLength()` returns `7`
 
+- **TC23: UpdateLongestRoad_WhenHolderRoadShrinksButStillQualifies_UpdatesLength** ( :white_check_mark: )
+    - State of the system: `holder` claimed Longest Road with length `7`; `updateLongestRoad(holder, 5)` called
+    - Expected output: `holder` remains the Longest Road holder; `getLongestRoadLength()` returns `5`
+
+- **TC24: UpdateLongestRoad_WhenHolderRoadShrinksBelowClaimThreshold_RelinquishesCard** ( :white_check_mark: )
+    - State of the system: `holder` claimed Longest Road with length `7`; `updateLongestRoad(holder, 4)` called
+    - Expected output: Longest Road becomes unclaimed (`getLongestRoadHolder()` empty, `getLongestRoadLength()` returns `0`); `holdsLongestRoad(holder)` returns `false`
+
+- **TC25: UpdateLongestRoad_WithNullCandidate_ThrowsNullPointerException** ( :white_check_mark: )
+    - State of the system: `updateLongestRoad(null, 5)` called on a fresh tracker
+    - Expected output: `NullPointerException`
+
 ## Method under test: `holdsLongestRoad(Player player)`
 
 - **TC12: HoldsLongestRoad_BeforeClaim_ReturnsFalse** ( :white_check_mark: )
@@ -87,6 +99,10 @@
 - **TC20: UpdateLargestArmy_WhenSameHolderIncreasesKnightCount_UpdatesCount** ( :white_check_mark: )
     - State of the system: `holder` claimed Largest Army with count `3`; `updateLargestArmy(holder, 5)` called
     - Expected output: `holder` remains the Largest Army holder; `getLargestArmySize()` returns `5`
+
+- **TC26: UpdateLargestArmy_WithNullCandidate_ThrowsNullPointerException** ( :white_check_mark: )
+    - State of the system: `updateLargestArmy(null, 3)` called on a fresh tracker
+    - Expected output: `NullPointerException`
 
 ## Method under test: `holdsLargestArmy(Player player)`
 
