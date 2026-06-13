@@ -2,43 +2,43 @@
 
 ## Method under test: `getTotalVP(Player player, SpecialCardTracker tracker)`
 
-- **TC1: GetTotalVP_WithNullPlayer_ThrowsIllegalArgumentException** ( :x: )
+- **TC1: GetTotalVP_WithNullPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `player` is the null pointer, valid `tracker` pointer to a true object
   - Expected output: `IllegalArgumentException`
 
-- **TC2: GetTotalVP_WithNullTracker_ThrowsIllegalArgumentException** ( :x: )
+- **TC2: GetTotalVP_WithNullTracker_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid `player` pointer to a true object, `tracker` is the null pointer
   - Expected output: `IllegalArgumentException`
 
-- **TC3: GetTotalVP_NoVpSources_ReturnsZero** ( :x: )
+- **TC3: GetTotalVP_NoVpSources_ReturnsZero** ( :white_check_mark: )
   - State of the system: valid `player` and `tracker`; player's VP source counts are 0 (0 settlements, 0 cities, 0 VP dev cards), and boolean checks for Longest Road and Largest Army are false
   - Expected output: `0`
 
-- **TC4: GetTotalVP_OnlySettlements_ReturnsSum** ( :x: )
+- **TC4: GetTotalVP_OnlySettlements_ReturnsSum** ( :white_check_mark: )
   - State of the system: valid `player` and `tracker`; player has a count >1 for settlements (e.g., 4), but a count of 0 for all other VP sources
   - Expected output: `4`
 
-- **TC5: GetTotalVP_OnlyCities_ReturnsSum** ( :x: )
+- **TC5: GetTotalVP_OnlyCities_ReturnsSum** ( :white_check_mark: )
   - State of the system: valid `player` and `tracker`; player has a count >1 for cities (e.g., 3), but a count of 0 for all other VP sources
   - Expected output: `6`
 
-- **TC6: GetTotalVP_OnlySpecialCards_ReturnsSum** ( :x: )
+- **TC6: GetTotalVP_OnlySpecialCards_ReturnsSum** ( :white_check_mark: )
   - State of the system: valid `player` and `tracker`; tracker boolean values indicate the player holds Longest Road (true) and Largest Army (true), with a count of 0 for all other VP sources
   - Expected output: `4`
 
-- **TC7: GetTotalVP_OnlyVpDevCards_ReturnsSum** ( :x: )
+- **TC7: GetTotalVP_OnlyVpDevCards_ReturnsSum** ( :white_check_mark: )
   - State of the system: valid `player` and `tracker`; player has a count >1 for VP dev cards (e.g., 3), with a count of 0 for all other VP sources
   - Expected output: `3`
 
-- **TC8: GetTotalVP_WinThresholdJustBelow_ReturnsNine** ( :x: )
+- **TC8: GetTotalVP_WinThresholdJustBelow_ReturnsNine** ( :white_check_mark: )
   - State of the system: valid `player` and `tracker`; combinations of sources sum exactly to 9 VP (e.g., 3 settlements = 3 VP, 2 cities = 4 VP, Longest Road = 2 VP)
   - Expected output: `9`
 
-- **TC9: GetTotalVP_WinThresholdExact_ReturnsTen** ( :x: )
+- **TC9: GetTotalVP_WinThresholdExact_ReturnsTen** ( :white_check_mark: )
   - State of the system: valid `player` and `tracker`; combinations of sources sum exactly to the win condition of 10 VP (e.g., 2 settlements = 2 VP, 2 cities = 4 VP, Largest Army = 2 VP, 2 VP dev cards = 2 VP)
   - Expected output: `10`
 
-- **TC10: GetTotalVP_MaximumPossibleVP_ReturnsTheoreticalMax** ( :x: )
+- **TC10: GetTotalVP_MaximumPossibleVP_ReturnsTheoreticalMax** ( :white_check_mark: )
   - State of the system: valid `player` and `tracker`; player has the maximum possible value for all VP counts simultaneously: 5 settlements (5 VP), 4 cities (8 VP), 5 VP dev cards (5 VP), Longest Road (2 VP), and Largest Army (2 VP)
   - Expected output: `22`
 
