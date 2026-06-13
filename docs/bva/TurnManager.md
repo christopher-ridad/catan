@@ -97,3 +97,7 @@
 - **TC22: EndCurrentTurn_IncrementsActivePlayersTurnCount** ( implemented )
     - State of the system: p1's turn has been started and ended via `endCurrentTurn()`
     - Expected output: `getPlayerTurnCount(p1)` returns `1`; `getPlayerTurnCount(p2)` returns `0`
+
+- **TC23: EndCurrentTurn_ClearsCurrentTurn** ( implemented )
+    - State of the system: a full turn has been completed via `endCurrentTurn()`
+    - Expected output: `getCurrentTurn()` returns `Optional.empty()`

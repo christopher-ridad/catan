@@ -274,4 +274,15 @@ public class TurnManagerTest {
         assertEquals(1, turnManager.getPlayerTurnCount(p1));
         assertEquals(0, turnManager.getPlayerTurnCount(p2));
     }
+
+    @Test
+    public void EndCurrentTurn_ClearsCurrentTurn() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.getCurrentTurn().isEmpty());
+    }
+
 }
