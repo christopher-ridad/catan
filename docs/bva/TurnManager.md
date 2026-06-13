@@ -9,3 +9,7 @@
 - **TC2: Constructor_WithNullBank_ThrowsIllegalArgumentException** ( implemented )
     - State of the system: valid `Game` provided, `null` passed as the `bank` argument, valid `DiceRoll` provided
     - Expected output: `IllegalArgumentException`
+
+- **TC3: Constructor_WithNullDice_ThrowsIllegalArgumentException** ( implemented )
+    - State of the system: valid `Game` and `Bank` provided, `null` passed as the `dice` argument
+    - Expected output: `IllegalArgumentException`
