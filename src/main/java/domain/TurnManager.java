@@ -97,7 +97,7 @@ public class TurnManager {
      * if called between turns.
      */
     public Player getCurrentPlayer() {
-        return null;
+        return game.getPlayers().get(currentPlayerIndex);
     }
 
     /**
