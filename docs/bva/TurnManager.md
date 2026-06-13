@@ -42,3 +42,7 @@
 - **TC9: StartNextTurn_ReturnsTurnForCurrentPlayer** ( implemented )
     - State of the system: `TurnManager` freshly constructed, no previous turn in progress
     - Expected output: returned `Turn` is non-null and its phase is `PRODUCTION`
+
+- **TC10: StartNextTurn_StoresTurnAsCurrentTurn** ( implemented )
+    - State of the system: `TurnManager` freshly constructed, no previous turn in progress
+    - Expected output: `getCurrentTurn()` is present and returns the same `Turn` object that was returned by `startNextTurn()`

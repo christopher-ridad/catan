@@ -148,4 +148,12 @@ public class TurnManagerTest {
         assertEquals(TurnPhase.PRODUCTION, turn.getPhase());
     }
 
+    @Test
+    public void StartNextTurn_StoresTurnAsCurrentTurn() {
+        Turn turn = turnManager.startNextTurn();
+
+        assertTrue(turnManager.getCurrentTurn().isPresent());
+        assertSame(turn, turnManager.getCurrentTurn().get());
+    }
+
 }
