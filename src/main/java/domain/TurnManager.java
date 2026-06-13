@@ -69,7 +69,16 @@ public class TurnManager {
      *                                winner has already been found
      */
     public Turn startNextTurn() {
-        return null;
+        if (winner != null) {
+            throw new IllegalStateException("Cannot start a new turn: the game is already over");
+        }
+        if (currentTurn != null && currentTurn.getPhase() != TurnPhase.DONE) {
+            throw new IllegalStateException("Cannot start a new turn until the previous turn is complete");
+        }
+
+        Player activePlayer = getCurrentPlayer();
+        currentTurn = new Turn(game, activePlayer, dice, bank);
+        return currentTurn;
     }
 
     /**
