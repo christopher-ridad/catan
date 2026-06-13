@@ -242,4 +242,15 @@ public class TurnManagerTest {
 
         assertEquals(p2, turnManager.getCurrentPlayer());
     }
+
+    @Test
+    public void EndCurrentTurn_WrapsAroundToFirstPlayerAfterLastPlayer() {
+        for (int i = 0; i < playerList.size(); i++) {
+            Turn turn = turnManager.startNextTurn();
+            advanceToBuild(turn);
+            turnManager.endCurrentTurn();
+        }
+
+        assertEquals(p1, turnManager.getCurrentPlayer());
+    }
 }

@@ -85,3 +85,7 @@
 - **TC19: EndCurrentTurn_AdvancesToNextPlayer** ( implemented )
     - State of the system: p1's turn has been started and ended via `endCurrentTurn()`
     - Expected output: `getCurrentPlayer()` returns p2
+
+- **TC20: EndCurrentTurn_WrapsAroundToFirstPlayerAfterLastPlayer** ( implemented )
+    - State of the system: all 4 players have each completed exactly one turn
+    - Expected output: `getCurrentPlayer()` returns p1 (back to the first player)
