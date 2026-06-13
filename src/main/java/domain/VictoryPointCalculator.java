@@ -75,6 +75,20 @@ public class VictoryPointCalculator {
                 .count();
     }
 
+    public Optional<Player> getWinner(Game game, Board board, SpecialCardTracker tracker) {
+        validateGame(game);
+        validateBoard(board);
+        validateTracker(tracker);
+
+        for (Player player : game.getPlayers()) {
+            if (getTotalVP(player, board, tracker) >= 10) {
+                return Optional.of(player);
+            }
+        }
+
+        return Optional.empty();
+    }
+
     private Map<Vertex, List<Edge>> makeAdjacencyList(Player player, Board board) {
         Map<Vertex, List<Edge>> adjacencyList = new HashMap<>();
 
@@ -134,6 +148,12 @@ public class VictoryPointCalculator {
     private void validateTracker(SpecialCardTracker tracker) {
         if (tracker == null) {
             throw new IllegalArgumentException("Tracker cannot be null");
+        }
+    }
+
+    private void validateGame(Game game) {
+        if (game == null) {
+            throw new IllegalArgumentException("Game cannot be null");
         }
     }
 

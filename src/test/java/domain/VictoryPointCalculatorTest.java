@@ -709,4 +709,18 @@ public class VictoryPointCalculatorTest {
         int knights = calc.computeKnightCount(p1);
         assertEquals(2, knights);
     }
+
+    @Test
+    public void GetWinner_WithNullGame_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.getWinner(null, board, tracker);
+        });
+    }
+
+    @Test
+    public void GetWinner_WithNullBoard_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.getWinner(game, null, tracker);
+        });
+    }
 }
