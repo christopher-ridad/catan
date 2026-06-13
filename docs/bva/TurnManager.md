@@ -21,3 +21,7 @@
 - **TC5: Constructor_InitializesTurnNumberToZero** ( implemented )
     - State of the system: `TurnManager` constructed with a valid `Game`, no turns started
     - Expected output: `getCurrentTurnNumber()` returns `0`
+
+- **TC6: Constructor_DoesNotStartFirstTurnAutomatically** ( implemented )
+    - State of the system: `TurnManager` constructed with a valid `Game`, no call to `startNextTurn()` made
+    - Expected output: `getCurrentTurn()` returns `Optional.empty()`

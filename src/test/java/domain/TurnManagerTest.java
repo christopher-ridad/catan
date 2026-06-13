@@ -9,8 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TurnManagerTest {
     private Board board;
@@ -118,4 +117,10 @@ public class TurnManagerTest {
     public void Constructor_InitializesTurnNumberToZero() {
         assertEquals(0, turnManager.getCurrentTurnNumber());
     }
+
+    @Test
+    public void Constructor_DoesNotStartFirstTurnAutomatically() {
+        assertTrue(turnManager.getCurrentTurn().isEmpty());
+    }
+
 }
