@@ -97,4 +97,9 @@ public class TurnManagerTest {
     public void Constructor_WithNullGame_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new TurnManager(null, bank, dice));
     }
+
+    @Test
+    public void Constructor_WithNullBank_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new TurnManager(game, null, dice));
+    }
 }
