@@ -52,10 +52,21 @@ public class SpecialCardTracker {
     }
 
     public void updateLargestArmy(Player candidate, int knightCount) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (knightCount < 0) {
+            throw new IllegalArgumentException("Knight count cannot be negative");
+        }
+        if (this.largestArmyHolder == null) {
+            if (knightCount >= 3) {
+                this.largestArmyHolder = candidate;
+                this.largestArmySize = knightCount;
+            }
+        } else if (knightCount > this.largestArmySize) {
+            this.largestArmyHolder = candidate;
+            this.largestArmySize = knightCount;
+        }
     }
 
     public boolean holdsLargestArmy(Player player) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.largestArmyHolder != null && this.largestArmyHolder.equals(player);
     }
 }
