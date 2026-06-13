@@ -131,7 +131,7 @@ public class TurnManager {
      * Returns how many turns have been completed so far.
      */
     public int getCurrentTurnNumber() {
-        return 0;
+        return currentTurnNumber;
     }
 
     /**
@@ -154,7 +154,7 @@ public class TurnManager {
      * is still ongoing.
      */
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return Optional.ofNullable(winner);
     }
 
     /**
@@ -164,23 +164,35 @@ public class TurnManager {
      *                                   this game
      */
     public int getPlayerTurnCount(Player player) {
-        return 0;
+        Integer count = playerTurnCounts.get(player);
+        if (count == null) {
+            throw new IllegalArgumentException("Player is not part of this game");
+        }
+        return count;
     }
 
     private void recordCompletedTurn() {
-        return;
+        Player activePlayer = getCurrentPlayer();
+        playerTurnCounts.merge(activePlayer, 1, Integer::sum);
+        currentTurnNumber++;
     }
 
     private void advanceToNextPlayer() {
-        return;
+        currentPlayerIndex = (currentPlayerIndex + 1) % game.getPlayerCount();
     }
 
     private void checkForWinner() {
-        return;
+        Board board = game.getBoard();
+//        victoryPointCalculator.updateSpecialCards(game, board, specialCardTracker);
+//        winner = victoryPointCalculator.getWinner(game, board, specialCardTracker);
     }
 
     private Map<Player, Integer> initializeTurnCounts(Game game) {
-        return null;
+        Map<Player, Integer> counts = new HashMap<>();
+        for (Player player : game.getPlayers()) {
+            counts.put(player, 0);
+        }
+        return counts;
     }
 
     private void validateGame(Game game) {
