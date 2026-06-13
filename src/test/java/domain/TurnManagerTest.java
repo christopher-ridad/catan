@@ -353,4 +353,17 @@ public class TurnManagerTest {
         assertThrows(IllegalArgumentException.class, () -> turnManager.getPlayerTurnCount(outsider));
     }
 
+    @Test
+    public void GetPlayerTurnCount_AfterFullRoundOfTurns_IsOneForEveryPlayer() {
+        for (int i = 0; i < playerList.size(); i++) {
+            Turn turn = turnManager.startNextTurn();
+            advanceToBuild(turn);
+            turnManager.endCurrentTurn();
+        }
+
+        for (Player player : playerList) {
+            assertEquals(1, turnManager.getPlayerTurnCount(player));
+        }
+    }
+
 }

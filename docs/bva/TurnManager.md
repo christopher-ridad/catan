@@ -106,11 +106,11 @@
     - State of the system: a full turn has been completed; no player has reached 10 VP
     - Expected output: `isGameOver()` returns `false` and `getWinner()` returns `Optional.empty()`
 
-- **TC25: EndCurrentTurn_WhenActivePlayerReachesTenVP_DeclaresThemWinner** ( not implemented )
+- **TC25: EndCurrentTurn_WhenActivePlayerReachesTenVP_DeclaresThemWinner** ( NOT implemented )
     - State of the system: p1 has been given exactly 10 VP (4 settlements + 3 cities); p1's turn is then started and ended
     - Expected output: `isGameOver()` returns `true` and `getWinner()` returns `Optional.of(p1)`
 
-- **TC26: EndCurrentTurn_WhenAnotherPlayerReachesTenVP_DeclaresThemWinner** ( not implemented )
+- **TC26: EndCurrentTurn_WhenAnotherPlayerReachesTenVP_DeclaresThemWinner** ( NOT implemented )
     - State of the system: p2 has been given exactly 10 VP (4 settlements + 3 cities); p1's turn is started and ended
     - Expected output: `isGameOver()` returns `true` and `getWinner()` returns `Optional.of(p2)`
 
@@ -129,3 +129,7 @@
 - **TC28: GetPlayerTurnCount_ForPlayerNotInGame_ThrowsIllegalArgumentException** ( implemented )
     - State of the system: a `Player` object that was not passed to the `Game` constructor is given as the argument
     - Expected output: `IllegalArgumentException`
+
+- **TC29: GetPlayerTurnCount_AfterFullRoundOfTurns_IsOneForEveryPlayer** ( implemented )
+    - State of the system: all 4 players have each completed exactly one turn
+    - Expected output: `getPlayerTurnCount(player)` returns `1` for every player in the game
