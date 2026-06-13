@@ -50,4 +50,12 @@ public class SpecialCardTracker {
     public boolean holdsLongestRoad(Player player) {
         return this.longestRoadHolder != null && this.longestRoadHolder.equals(player);
     }
+
+    public void updateLargestArmy(Player candidate, int knightCount) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public boolean holdsLargestArmy(Player player) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }

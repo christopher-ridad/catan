@@ -112,4 +112,87 @@ public class SpecialCardTrackerTest {
         assertTrue(tracker.holdsLongestRoad(holder));
         assertFalse(tracker.holdsLongestRoad(other));
     }
+
+    @Test
+    void UpdateLargestArmy_WithNegativeKnightCount_ThrowsIllegalArgumentException() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player player = new Player("Alice", PlayerColor.RED);
+        assertThrows(IllegalArgumentException.class, () -> tracker.updateLargestArmy(player, -1));
+    }
+
+    @Test
+    void UpdateLargestArmy_WithZeroKnightCount_RemainsUnclaimed() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player player = new Player("Alice", PlayerColor.RED);
+        assertDoesNotThrow(() -> tracker.updateLargestArmy(player, 0));
+        assertTrue(tracker.getLargestArmyHolder().isEmpty());
+        assertEquals(0, tracker.getLargestArmySize());
+    }
+
+    @Test
+    void UpdateLargestArmy_WithKnightCountBelowClaimThreshold_RemainsUnclaimed() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player player = new Player("Alice", PlayerColor.RED);
+        tracker.updateLargestArmy(player, 2);
+        assertTrue(tracker.getLargestArmyHolder().isEmpty());
+        assertEquals(0, tracker.getLargestArmySize());
+    }
+
+    @Test
+    void UpdateLargestArmy_WithKnightCountAtClaimThreshold_ClaimsCard() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player player = new Player("Alice", PlayerColor.RED);
+        tracker.updateLargestArmy(player, 3);
+        assertEquals(player, tracker.getLargestArmyHolder().orElseThrow());
+        assertEquals(3, tracker.getLargestArmySize());
+    }
+
+    @Test
+    void UpdateLargestArmy_WhenCandidateTiesCurrentHolder_DoesNotSteal() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player holder = new Player("Alice", PlayerColor.RED);
+        Player challenger = new Player("Bob", PlayerColor.BLUE);
+        tracker.updateLargestArmy(holder, 4);
+        tracker.updateLargestArmy(challenger, 4);
+        assertEquals(holder, tracker.getLargestArmyHolder().orElseThrow());
+        assertEquals(4, tracker.getLargestArmySize());
+    }
+
+    @Test
+    void UpdateLargestArmy_WhenCandidateExceedsCurrentHolderByOne_StealsCard() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player holder = new Player("Alice", PlayerColor.RED);
+        Player challenger = new Player("Bob", PlayerColor.BLUE);
+        tracker.updateLargestArmy(holder, 3);
+        tracker.updateLargestArmy(challenger, 4);
+        assertEquals(challenger, tracker.getLargestArmyHolder().orElseThrow());
+        assertEquals(4, tracker.getLargestArmySize());
+    }
+
+    @Test
+    void UpdateLargestArmy_WhenSameHolderIncreasesKnightCount_UpdatesCount() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player holder = new Player("Alice", PlayerColor.RED);
+        tracker.updateLargestArmy(holder, 3);
+        tracker.updateLargestArmy(holder, 5);
+        assertEquals(holder, tracker.getLargestArmyHolder().orElseThrow());
+        assertEquals(5, tracker.getLargestArmySize());
+    }
+
+    @Test
+    void HoldsLargestArmy_BeforeClaim_ReturnsFalse() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player player = new Player("Alice", PlayerColor.RED);
+        assertFalse(tracker.holdsLargestArmy(player));
+    }
+
+    @Test
+    void HoldsLargestArmy_AfterClaim_ReturnsTrueForHolderAndFalseForOthers() {
+        SpecialCardTracker tracker = new SpecialCardTracker();
+        Player holder = new Player("Alice", PlayerColor.RED);
+        Player other = new Player("Bob", PlayerColor.BLUE);
+        tracker.updateLargestArmy(holder, 3);
+        assertTrue(tracker.holdsLargestArmy(holder));
+        assertFalse(tracker.holdsLargestArmy(other));
+    }
 }
