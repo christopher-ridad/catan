@@ -89,6 +89,10 @@ public class VictoryPointCalculator {
         return Optional.empty();
     }
 
+    public boolean hasWinner(Game game, Board board, SpecialCardTracker tracker) {
+        return getWinner(game, board, tracker).isPresent();
+    }
+
     private Map<Vertex, List<Edge>> makeAdjacencyList(Player player, Board board) {
         Map<Vertex, List<Edge>> adjacencyList = new HashMap<>();
 
