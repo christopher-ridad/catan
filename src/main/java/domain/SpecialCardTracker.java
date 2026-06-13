@@ -31,4 +31,12 @@ public class SpecialCardTracker {
     public int getLargestArmySize() {
         return this.largestArmySize;
     }
+
+    public void updateLongestRoad(Player candidate, int roadLength) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public boolean holdsLongestRoad(Player player) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }
