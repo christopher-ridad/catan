@@ -847,4 +847,71 @@ public class VictoryPointCalculatorTest {
             calc.updateSpecialCards(game, board, null);
         });
     }
+
+    @Test
+    public void UpdateSpecialCards_LongestRoadBelowThreshold_PassesComputedLengths() {
+        buildRoadsPath1(p1, 4);
+        buildRoadsPath2(p2, 2);
+
+        calc.updateSpecialCards(game, board, tracker);
+
+        assertTrue(tracker.getLongestRoadHolder().isEmpty());
+    }
+
+    @Test
+    public void UpdateSpecialCards_LongestRoadAtClaimThreshold_PassesComputedLengths() {
+        buildRoadsPath1(p1, 5);
+        buildRoadsPath2(p2, 3);
+
+        calc.updateSpecialCards(game, board, tracker);
+
+        assertTrue(tracker.getLongestRoadHolder().isPresent());
+        assertEquals(p1, tracker.getLongestRoadHolder().get());
+        assertEquals(5, tracker.getLongestRoadLength());
+    }
+
+    @Test
+    public void UpdateSpecialCards_LongestRoadStealThreshold_PassesComputedLengths() {
+        buildRoadsPath1(p1, 6);
+        buildRoadsPath2(p2, 7);
+
+        calc.updateSpecialCards(game, board, tracker);
+
+        assertTrue(tracker.getLongestRoadHolder().isPresent());
+        assertEquals(p2, tracker.getLongestRoadHolder().get());
+        assertEquals(7, tracker.getLongestRoadLength());
+    }
+
+    @Test
+    public void UpdateSpecialCards_LargestArmyBelowThreshold_PassesComputedCounts() {
+        playKnights(p1, 2);
+
+        calc.updateSpecialCards(game, board, tracker);
+
+        assertTrue(tracker.getLargestArmyHolder().isEmpty());
+    }
+
+    @Test
+    public void UpdateSpecialCards_LargestArmyAtClaimThreshold_PassesComputedCounts() {
+        playKnights(p1, 3);
+        playKnights(p2, 1);
+
+        calc.updateSpecialCards(game, board, tracker);
+
+        assertTrue(tracker.getLargestArmyHolder().isPresent());
+        assertEquals(p1, tracker.getLargestArmyHolder().get());
+        assertEquals(3, tracker.getLargestArmySize());
+    }
+
+    @Test
+    public void UpdateSpecialCards_LargestArmyStealThreshold_PassesComputedCounts() {
+        playKnights(p1, 4);
+        playKnights(p2, 5);
+
+        calc.updateSpecialCards(game, board, tracker);
+
+        assertTrue(tracker.getLargestArmyHolder().isPresent());
+        assertEquals(p2, tracker.getLargestArmyHolder().get());
+        assertEquals(5, tracker.getLargestArmySize());
+    }
 }
