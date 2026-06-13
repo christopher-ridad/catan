@@ -44,195 +44,195 @@
 
 ## Method under test: `getSettlementVP(Player player, Board board)`
 
-- **TC11: GetSettlementVP_WithNullPlayer_ThrowsIllegalArgumentException** ( :x: )
+- **TC11: GetSettlementVP_WithNullPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `player` is the null pointer, valid `board` pointer to a true object
   - Expected output: `IllegalArgumentException`
 
-- **TC12: GetSettlementVP_WithNullBoard_ThrowsIllegalArgumentException** ( :x: )
+- **TC12: GetSettlementVP_WithNullBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid `player` pointer to a true object, `board` is the null pointer
   - Expected output: `IllegalArgumentException`
 
-- **TC13: GetSettlementVP_EmptyBoard_ReturnsZero** ( :x: )
+- **TC13: GetSettlementVP_EmptyBoard_ReturnsZero** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; no vertices on the board contain any buildings
   - Expected output: `0`
 
-- **TC14: GetSettlementVP_PlayerHasZeroSettlements_ReturnsZero** ( :x: )
+- **TC14: GetSettlementVP_PlayerHasZeroSettlements_ReturnsZero** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; board has settlements, but none are owned by `player`
   - Expected output: `0`
 
-- **TC15: GetSettlementVP_PlayerHasOneSettlement_ReturnsOne** ( :x: )
+- **TC15: GetSettlementVP_PlayerHasOneSettlement_ReturnsOne** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns exactly 1 settlement on the board
   - Expected output: `1`
 
-- **TC16: GetSettlementVP_PlayerHasMultipleSettlements_ReturnsSum** ( :x: )
+- **TC16: GetSettlementVP_PlayerHasMultipleSettlements_ReturnsSum** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns >1 settlements (e.g., 3) on the board
   - Expected output: `3`
 
-- **TC17: GetSettlementVP_PlayerHasMaximumSettlements_ReturnsMax** ( :x: )
+- **TC17: GetSettlementVP_PlayerHasMaximumSettlements_ReturnsMax** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns the maximum possible number of settlements allowed by the rules (e.g., 5)
   - Expected output: `5`
 
-- **TC18: GetSettlementVP_PlayerHasCities_CitiesAreNotCounted** ( :x: )
+- **TC18: GetSettlementVP_PlayerHasCities_CitiesAreNotCounted** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns 2 settlements and 2 cities on the board
   - Expected output: `2`
 
-- **TC19: GetSettlementVP_MixedOwnership_CountsOnlyTargetPlayer** ( :x: )
+- **TC19: GetSettlementVP_MixedOwnership_CountsOnlyTargetPlayer** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns 2 settlements, another player owns 3 settlements on the board
   - Expected output: `2`
 
 ## Method under test: `getCityVP(Player player, Board board)`
 
-- **TC20: GetCityVP_WithNullPlayer_ThrowsIllegalArgumentException** ( :x: )
+- **TC20: GetCityVP_WithNullPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `player` is the null pointer, valid `board` pointer to a true object
   - Expected output: `IllegalArgumentException`
 
-- **TC21: GetCityVP_WithNullBoard_ThrowsIllegalArgumentException** ( :x: )
+- **TC21: GetCityVP_WithNullBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid `player` pointer to a true object, `board` is the null pointer
   - Expected output: `IllegalArgumentException`
 
-- **TC22: GetCityVP_EmptyBoard_ReturnsZero** ( :x: )
+- **TC22: GetCityVP_EmptyBoard_ReturnsZero** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; no vertices on the board contain any buildings
   - Expected output: `0`
 
-- **TC23: GetCityVP_PlayerHasZeroCities_ReturnsZero** ( :x: )
+- **TC23: GetCityVP_PlayerHasZeroCities_ReturnsZero** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; board has cities, but none are owned by `player`
   - Expected output: `0`
 
-- **TC24: GetCityVP_PlayerHasOneCity_ReturnsTwo** ( :x: )
+- **TC24: GetCityVP_PlayerHasOneCity_ReturnsTwo** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns exactly 1 city on the board
   - Expected output: `2`
 
-- **TC25: GetCityVP_PlayerHasMultipleCities_ReturnsSum** ( :x: )
+- **TC25: GetCityVP_PlayerHasMultipleCities_ReturnsSum** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns >1 cities (e.g., 2) on the board
   - Expected output: `4`
 
-- **TC26: GetCityVP_PlayerHasMaximumCities_ReturnsMax** ( :x: )
+- **TC26: GetCityVP_PlayerHasMaximumCities_ReturnsMax** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns the maximum possible number of cities allowed by the rules (e.g., 4) 
   - Expected output: `8`
 
-- **TC27: GetCityVP_PlayerHasSettlements_SettlementsAreNotCounted** ( :x: )
+- **TC27: GetCityVP_PlayerHasSettlements_SettlementsAreNotCounted** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns 2 cities and 3 settlements on the board
   - Expected output: `4`
 
-- **TC28: GetCityVP_MixedOwnership_CountsOnlyTargetPlayer** ( :x: )
+- **TC28: GetCityVP_MixedOwnership_CountsOnlyTargetPlayer** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` owns 2 cities, another player owns 1 city on the board
   - Expected output: `4`
 
 ## Method under test: `getDevCardVP(Player player)`
 
-- **TC29: GetDevCardVP_WithNullPlayer_ThrowsIllegalArgumentException** ( :x: )
+- **TC29: GetDevCardVP_WithNullPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `player` is the null pointer
   - Expected output: `IllegalArgumentException`
 
-- **TC30: GetDevCardVP_ZeroVPCards_ReturnsZero** ( :x: )
+- **TC30: GetDevCardVP_ZeroVPCards_ReturnsZero** ( :white_check_mark: )
   - State of the system: valid `player` pointer to a true object; player's hand contains 0 VP development cards
   - Expected output: `0`
 
-- **TC31: GetDevCardVP_OneVPCard_ReturnsOne** ( :x: )
+- **TC31: GetDevCardVP_OneVPCard_ReturnsOne** ( :white_check_mark: )
   - State of the system: valid `player`; player's hand contains exactly 1 VP development card
   - Expected output: `1`
 
-- **TC32: GetDevCardVP_MultipleVPCards_ReturnsSum** ( :x: )
+- **TC32: GetDevCardVP_MultipleVPCards_ReturnsSum** ( :white_check_mark: )
   - State of the system: valid `player`; player's hand contains >1 VP development cards (e.g., 3)
   - Expected output: `3`
 
-- **TC33: GetDevCardVP_MaximumVPCards_ReturnsMax** ( :x: )
+- **TC33: GetDevCardVP_MaximumVPCards_ReturnsMax** ( :white_check_mark: )
   - State of the system: valid `player`; player's hand contains the maximum possible number of VP development cards available in the game (typically 5)
   - Expected output: `5`
 
-- **TC34: GetDevCardVP_OnlyNonVpDevCards_ReturnsZero** ( :x: )
+- **TC34: GetDevCardVP_OnlyNonVpDevCards_ReturnsZero** ( :white_check_mark: )
   - State of the system: valid `player`; player's hand contains development cards, but they are all non-VP cards (e.g., 2 Knights, 1 Monopoly)
   - Expected output: `0`
 
-- **TC35: GetDevCardVP_MixedDevCards_CountsOnlyVPCards** ( :x: )
+- **TC35: GetDevCardVP_MixedDevCards_CountsOnlyVPCards** ( :white_check_mark: )
   - State of the system: valid `player`; player's hand contains a mix of card types (e.g., 2 Knights, 2 VP cards)
   - Expected output: `2`
 
-- **TC36: GetDevCardVP_CardsAreUnplayed_AreStillCounted** ( :x: )
+- **TC36: GetDevCardVP_CardsAreUnplayed_AreStillCounted** ( :white_check_mark: )
   - State of the system: valid `player`; player has 2 VP cards that are marked as strictly "unplayed" or unrevealed
   - Expected output: `2`
 
 ## Method under test: `computeLongestRoad(Player player, Board board)`
 
-- **TC37: ComputeLongestRoad_WithNullPlayer_ThrowsIllegalArgumentException** ( :x: )
+- **TC37: ComputeLongestRoad_WithNullPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `player` is the null pointer, valid `board` pointer to a true object
   - Expected output: `IllegalArgumentException`
 
-- **TC38: ComputeLongestRoad_WithNullBoard_ThrowsIllegalArgumentException** ( :x: )
+- **TC38: ComputeLongestRoad_WithNullBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid `player` pointer to a true object, `board` is the null pointer
   - Expected output: `IllegalArgumentException`
 
-- **TC39: ComputeLongestRoad_ZeroRoadsPlaced_ReturnsZero** ( :x: )
+- **TC39: ComputeLongestRoad_ZeroRoadsPlaced_ReturnsZero** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has 0 roads placed on the board
   - Expected output: `0`
 
-- **TC40: ComputeLongestRoad_OneRoadPlaced_ReturnsOne** ( :x: )
+- **TC40: ComputeLongestRoad_OneRoadPlaced_ReturnsOne** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has exactly 1 road placed
   - Expected output: `1`
 
-- **TC41: ComputeLongestRoad_RoadBelowClaimThreshold_ReturnsLength** ( :x: )
+- **TC41: ComputeLongestRoad_RoadBelowClaimThreshold_ReturnsLength** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has a continuous unbroken path of 4 roads
   - Expected output: `4`
 
-- **TC42: ComputeLongestRoad_RoadAtClaimThreshold_ReturnsLength** ( :x: )
+- **TC42: ComputeLongestRoad_RoadAtClaimThreshold_ReturnsLength** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has a continuous unbroken path of exactly 5 roads
   - Expected output: `5`
 
-- **TC43: ComputeLongestRoad_DisconnectedRoads_ReturnsLongestSegment** ( :x: )
+- **TC43: ComputeLongestRoad_DisconnectedRoads_ReturnsLongestSegment** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has two disconnected road segments (e.g., one of length 3, one of length 4)
   - Expected output: `4`
 
-- **TC44: ComputeLongestRoad_BranchingPath_ReturnsLongestBranchOnly** ( :x: )
+- **TC44: ComputeLongestRoad_BranchingPath_ReturnsLongestBranchOnly** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has a Y-shaped road network with a common base of 2 roads, branching into one path of 2 roads and another of 3 roads
   - Expected output: `5` (base of 2 + longest branch of 3)
 
-- **TC45: ComputeLongestRoad_CircularPath_EdgesVisitedOnce_ReturnsLength** ( :x: )
+- **TC45: ComputeLongestRoad_CircularPath_EdgesVisitedOnce_ReturnsLength** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has a closed hexagon loop of 6 roads with no branches
   - Expected output: `6`
 
-- **TC46: ComputeLongestRoad_CircularPathWithTail_ReturnsTotalLength** ( :x: )
+- **TC46: ComputeLongestRoad_CircularPathWithTail_ReturnsTotalLength** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has a closed hexagon loop of 6 roads with a 2-road tail extending from one vertex
   - Expected output: `8`
 
-- **TC47: ComputeLongestRoad_PathBrokenByOpponentSettlement_ReturnsLongestHalf** ( :x: )
+- **TC47: ComputeLongestRoad_PathBrokenByOpponentSettlement_ReturnsLongestHalf** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has a continuous line of 6 roads, but an opponent's settlement is placed at the middle vertex, splitting it into two 3-road segments
   - Expected output: `3`
 
-- **TC48: ComputeLongestRoad_PathNotBrokenByOwnSettlement_ReturnsTotalLength** ( :x: )
+- **TC48: ComputeLongestRoad_PathNotBrokenByOwnSettlement_ReturnsTotalLength** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has a continuous line of 6 roads, with their own settlement placed at the middle vertex
   - Expected output: `6`
 
-- **TC49: ComputeLongestRoad_MaximumRoadsPlaced_ReturnsMax** ( :x: )
+- **TC49: ComputeLongestRoad_MaximumRoadsPlaced_ReturnsMax** ( :white_check_mark: )
   - State of the system: valid `player` and `board`; `player` has all 15 available roads placed in a single, continuous, unbroken, non-branching line
   - Expected output: `15`
 
 ## Method under test: `computeKnightCount(Player player)`
 
-- **TC50: ComputeKnightCount_WithNullPlayer_ThrowsIllegalArgumentException** ( :x: )
+- **TC50: ComputeKnightCount_WithNullPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `player` is the null pointer
   - Expected output: `IllegalArgumentException`
 
-- **TC51: ComputeKnightCount_ZeroKnightsPlayed_ReturnsZero** ( :x: )
+- **TC51: ComputeKnightCount_ZeroKnightsPlayed_ReturnsZero** ( :white_check_mark: )
   - State of the system: valid `player` pointer to a true object; `player` has 0 Knight cards marked as played
   - Expected output: `0`
 
-- **TC52: ComputeKnightCount_OneKnightPlayed_ReturnsOne** ( :x: )
+- **TC52: ComputeKnightCount_OneKnightPlayed_ReturnsOne** ( :white_check_mark: )
   - State of the system: valid `player`; `player` has exactly 1 Knight card marked as played 
   - Expected output: `1`
 
-- **TC53: ComputeKnightCount_MultipleKnightsPlayed_ReturnsCount** ( :x: )
+- **TC53: ComputeKnightCount_MultipleKnightsPlayed_ReturnsCount** ( :white_check_mark: )
   - State of the system: valid `player`; `player` has >1 Knight cards marked as played (e.g., 3)
   - Expected output: `3`
 
-- **TC54: ComputeKnightCount_MaximumKnightsPlayed_ReturnsMax** ( :x: )
+- **TC54: ComputeKnightCount_MaximumKnightsPlayed_ReturnsMax** ( :white_check_mark: )
   - State of the system: valid `player`; `player` has the maximum possible number of Knight cards in the standard deck marked as played (14)
   - Expected output: `14`
 
-- **TC55: ComputeKnightCount_UnplayedKnights_AreNotCounted** ( :x: )
+- **TC55: ComputeKnightCount_UnplayedKnights_AreNotCounted** ( :white_check_mark: )
   - State of the system: valid `player`; `player` holds 3 Knight cards, but only 1 is marked as played and 2 remain unplayed
   - Expected output: `1`
 
-- **TC56: ComputeKnightCount_MixedPlayedDevCards_CountsOnlyKnights** ( :x: )
+- **TC56: ComputeKnightCount_MixedPlayedDevCards_CountsOnlyKnights** ( :white_check_mark: )
   - State of the system: valid `player`; `player` has 2 Knight cards marked as played, and 1 other non-knight development card (e.g., Monopoly) marked as played
   - Expected output: `2`
 
