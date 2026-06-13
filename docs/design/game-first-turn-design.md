@@ -1,12 +1,14 @@
-# Multi-Turn Game Loop — Class & Method Design
+# First Turn Phase — Class & Method Design
 
 ## Overview
 
-This document covers the classes and methods needed to sequence multiple turns across all players for a full game of Catan. It picks up where the First Turn Phase doc leaves off: `SetupPhase` is complete, the first `Turn` has been executed, and the game now needs an orchestrator to advance play from player to player until a win condition is detected.
+This document covers the classes and public methods needed to execute a single player's turn in Catan. A turn has three mandatory phases in order: **Resource Production** (dice roll), **Trade** (optional), and **Build** (optional). This design doc covers the full first-turn implementation, beginning from the moment `SetupPhase` is complete and the first player rolls.
 
 The classes introduced here are `DiceRoll`, `Bank`, `TradeOffer`, `TurnPhase` (enum), and `Turn`. They depend on the domain objects already implemented in the Setup Phase (`Game`, `Board`, `Hex`, `Vertex`, `Edge`, `Player`, `ResourceType`).
 
-The classes introduced here are `DevelopmentDeck` and `TurnManager`, plus a revision to the existing `DevelopmentCard` class. All depend on domain objects established in prior phases.
+---
+
+## Dependency Graph
 
 ```
 TurnPhase (enum)
@@ -18,13 +20,13 @@ Turn ──────────────────────► Game,
 
 ---
 
-## Dependency Graph
+## Enums
 
+### `TurnPhase`
 ```
-DevelopmentCard (existing, MODIFIED) ─► DevelopmentCardType
-DevelopmentDeck ───────────► DevelopmentCard
-TurnManager ───────────────► Game, Bank, DiceRoll, Turn, DevelopmentDeck
+PRODUCTION, TRADE, BUILD, DONE
 ```
+Represents the current phase within an active turn. Phases advance in order and may not be skipped or reversed.
 
 ---
 
@@ -61,52 +63,87 @@ Simulates rolling two dice and returns their sum.
 
 ### `Bank`
 
-This class already exists from the First Turn Phase implementation, with `DevelopmentCardType`, `markAsPlayed()`, and `isPlayed()`. The multi-turn rule ("a development card cannot be played the same turn it was purchased") requires one additional field — `turnPurchased` — and one additional method — `isPlayableOnTurn()`. The merged definition below is the **single source of truth** going forward; it combines both sets of fields and standardizes on the `markAsPlayed()` naming already in use.
+Represents the shared resource supply. Enforces supply limits and handles card distribution and collection.
 
-| Field            | Type                  | Status   | Description                                                           |
-|------------------|------------------------|----------|-------------------------------------------------------------------------|
-| `type`           | `DevelopmentCardType`  | existing | The kind of card (Knight, Progress variant, or Victory Point)         |
-| `played`         | `boolean`              | existing | True if this card has already been played                             |
-| `turnPurchased`  | `int`                  | **NEW**  | The turn number on which this card was drawn; used to block same-turn play |
+| Field    | Type                         | Description                                                   |
+|----------|------------------------------|---------------------------------------------------------------|
+| `supply` | `Map<ResourceType, Integer>` | Current card count per resource type; initialized to 19 each |
 
-| Method                                          | Return Type           | Status   | Description                                                                                                  |
-|--------------------------------------------------|------------------------|----------|------------------------------------------------------------------------------------------------------------|
-| `DevelopmentCard(DevelopmentCardType type, int turnPurchased)` | —      | **MODIFIED** | Constructor now takes `turnPurchased` in addition to `type`; `turnPurchased` must be `-1` (undrawn placeholder) or `>= 1`; throws `IllegalArgumentException` for any other value (e.g. 0) |
-| `getType()`                                      | `DevelopmentCardType`  | existing | Returns the card's type                                                                                       |
-| `getTurnPurchased()`                             | `int`                  | **NEW**  | Returns the turn on which this card was purchased, or `-1` if not yet drawn                                  |
-| `isPlayed()`                                     | `boolean`              | existing | Returns true if this card has been played                                                                    |
-| `markAsPlayed()`                                 | `void`                 | existing | Marks the card as played; throws `IllegalStateException` if already played                                  |
-| `isPlayableOnTurn(int currentTurn)`              | `boolean`              | **NEW**  | Returns false if `turnPurchased == -1` (not yet drawn); otherwise true if `currentTurn > turnPurchased` and `isPlayed()` is false |
+| Method                                               | Return Type | Description                                                                                                                              |
+|------------------------------------------------------|-------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| `Bank()`                                             | —           | Constructor; initializes each of the 5 resource types to 19 cards                                                                       |
+| `getSupply(ResourceType)`                            | `int`       | Returns how many cards of the given type remain in the bank                                                                              |
+| `canDistribute(ResourceType, int amount)`            | `boolean`   | Returns true if the bank has at least `amount` cards of the given type                                                                   |
+| `distribute(ResourceType, int amount)`               | `void`      | Removes `amount` cards from supply; throws `IllegalStateException` if supply is insufficient, `IllegalArgumentException` if amount <= 0  |
+| `collect(ResourceType, int amount)`                  | `void`      | Returns `amount` cards to supply; throws `IllegalArgumentException` if amount <= 0 or if collection would exceed 19                      |
+| `hasEnoughForProduction(Map<ResourceType, Integer>)` | `boolean`   | Returns true if the bank can fulfill every entry in the given production map (used by `Turn` to determine partial-distribution edge case) |
 
 **Invariants:**
-- A card may only be played on a turn strictly after the one it was purchased on
-- A card with `turnPurchased == -1` is never playable
-- Once `markAsPlayed()` is called, `isPlayed()` is permanently true
-
-**Migration note:** existing call sites constructing `new DevelopmentCard(type)` need to be updated to pass `turnPurchased` as well. Since cards are only ever constructed via `DevelopmentDeck.draw(currentTurn)` (below), this should be a small, contained change.
+- Each resource type is always in the range [0, 19]
+- Total cards across all types never exceed 95 (5 × 19)
 
 ---
 
-### `DevelopmentDeck`
+### `TradeOffer`
 
-Represents the face-down stack of 25 development cards (14 Knight, 6 Progress, 5 Victory Point per the ruleset breakdown). Tracks the draw order and remaining count, and assigns each card's `turnPurchased` at draw time.
+Represents a proposal from the active player to one other player during the `TRADE` phase. Holds what is being offered and what is being requested, and tracks whether the offer has been responded to.
 
-| Field    | Type                    | Description                             |
-|----------|-------------------------|-------------------------------------------|
-| `cards`  | `List<DevelopmentCard>` | The remaining cards in draw order, with `type` assigned and `turnPurchased` unset (placeholder) |
+| Field        | Type                         | Description                                                           |
+|--------------|------------------------------|-----------------------------------------------------------------------|
+| `offerer`    | `Player`                     | The player making the offer (always the active player)                |
+| `recipient`  | `Player`                     | The player being asked to trade                                       |
+| `offering`   | `Map<ResourceType, Integer>` | Resources the offerer will give                                       |
+| `requesting` | `Map<ResourceType, Integer>` | Resources the offerer wants in return                                 |
+| `status`     | `TradeStatus`                | Current state of the offer: `PENDING`, `ACCEPTED`, `REJECTED`        |
 
-| Method                              | Return Type       | Description                                                                                                      |
-|-------------------------------------|-------------------|------------------------------------------------------------------------------------------------------------------|
-| `DevelopmentDeck()`                 | —                 | Constructor; initializes all 25 cards with their `type` values, shuffled; `turnPurchased` is set to a placeholder of `-1` until drawn |
-| `draw(int currentTurn)`             | `DevelopmentCard` | Removes and returns the top card, setting its `turnPurchased` to `currentTurn`; throws `IllegalStateException` if the deck is empty |
-| `isEmpty()`                         | `boolean`         | Returns true if no cards remain                                                                                  |
-| `getRemainingCount()`               | `int`             | Returns the number of cards left in the deck                                                                     |
-| `getRemainingCount(DevelopmentCardType)` | `int`        | Returns the number of cards of the given type left in the deck                                                  |
+#### `TradeStatus` (nested enum)
+```
+PENDING, ACCEPTED, REJECTED
+```
+
+| Method                                                                                                                     | Return Type                  | Description                                                                                                                                                     |
+|----------------------------------------------------------------------------------------------------------------------------|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `TradeOffer(Player offerer, Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting)` | —                            | Constructor; throws `IllegalArgumentException` if offerer equals recipient, if either map is null or empty, or if any value in either map is <= 0              |
+| `getOfferer()`                                                                                                             | `Player`                     | Returns the player who made the offer                                                                                                                           |
+| `getRecipient()`                                                                                                           | `Player`                     | Returns the player who received the offer                                                                                                                       |
+| `getOffering()`                                                                                                            | `Map<ResourceType, Integer>` | Returns an unmodifiable view of what the offerer is giving                                                                                                      |
+| `getRequesting()`                                                                                                          | `Map<ResourceType, Integer>` | Returns an unmodifiable view of what the offerer wants                                                                                                          |
+| `getStatus()`                                                                                                              | `TradeStatus`                | Returns the current status of the offer                                                                                                                         |
+| `accept()`                                                                                                                 | `void`                       | Sets status to `ACCEPTED`; throws `IllegalStateException` if status is not `PENDING`                                                                            |
+| `reject()`                                                                                                                 | `void`                       | Sets status to `REJECTED`; throws `IllegalStateException` if status is not `PENDING`                                                                            |
+| `isPending()`                                                                                                              | `boolean`                    | Returns true if status is `PENDING`                                                                                                                             |
 
 **Invariants:**
-- Total cards across all players' hands plus deck always equals 25
-- `draw()` on an empty deck always throws
-- A card's `turnPurchased` is `-1` (placeholder, not yet drawn) until `draw()` is called on it
+- `offerer` and `recipient` are never the same player
+- All values in `offering` and `requesting` are > 0
+- Once `accept()` or `reject()` is called, the status is final
+
+---
+
+### `MaritimeTrade`
+
+Represents a validated trade between the active player and the bank. Encapsulates the giving resource, the amount, and the receiving resource, and validates the amount against the player's best available harbor rate at construction time.
+
+| Field       | Type           | Description                                          |
+|-------------|----------------|------------------------------------------------------|
+| `player`    | `Player`       | The player making the trade                          |
+| `giving`    | `ResourceType` | The resource being given to the bank                 |
+| `amount`    | `int`          | Number of cards given (2, 3, or 4)                   |
+| `receiving` | `ResourceType` | The resource received from the bank                  |
+
+| Method                                                        | Return Type    | Description                                                                                                                                                                                   |
+|---------------------------------------------------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `MaritimeTrade(Player, ResourceType giving, int amount, ResourceType receiving, Board)` | — | Constructor; throws `IllegalArgumentException` if `giving == receiving`, if `amount` does not match the player's best available rate for `giving` on the given board, or if player cannot afford `amount` of `giving` |
+| `getPlayer()`                                                 | `Player`       | Returns the trading player                                                                                                                                                                    |
+| `getGiving()`                                                 | `ResourceType` | Returns the resource being given to the bank                                                                                                                                                  |
+| `getAmount()`                                                 | `int`          | Returns the number of cards being given                                                                                                                                                       |
+| `getReceiving()`                                              | `ResourceType` | Returns the resource being received from the bank                                                                                                                                             |
+| `getRate()`                                                   | `int`          | Returns the rate used for this trade (2, 3, or 4); determined at construction time from board harbor data                                                                                     |
+
+**Invariants:**
+- `giving` and `receiving` are never the same resource
+- `amount` always equals the player's best available rate for `giving`
+- `player` always has at least `amount` cards of `giving` at construction time
 
 ---
 
@@ -183,28 +220,40 @@ Orchestrates a single player's turn through its three phases. Enforces phase ord
 **Phase transition rules:**
 
 ```
-[between turns] ──[startNextTurn()]──► PRODUCTION ──[rollDice()]──► TRADE
-                                                                        │
-                                                              [advanceToBuild()]
-                                                                        │
-                                                                      BUILD ──[endCurrentTurn()]──► [between turns / game over]
+PRODUCTION ──[rollDice()]──► TRADE ──[advanceToBuild()]──► BUILD ──[endTurn()]──► DONE
 ```
+
+- Build actions (`buildRoad`, `buildSettlement`, `buildCity`, `buyDevelopmentCard`) are only valid in `BUILD` phase.
+- When a 7 is rolled, `moveRobber()` and `steal()` must be called before `advanceToBuild()` is permitted.
 
 ---
 
 ## Key Validation Rules (BVA Targets)
 
-| Rule                                           | Invalid (boundary)                                        | Valid (boundary)                                      |
-|------------------------------------------------|-----------------------------------------------------------|-------------------------------------------------------|
-| `startNextTurn()` before previous turn ends    | Called while `currentTurn.getPhase()` is not `DONE`       | Called after `endCurrentTurn()` completes             |
-| `endCurrentTurn()` too early                   | Called while phase is `PRODUCTION` or `TRADE`             | Called while phase is `BUILD`                         |
-| `startNextTurn()` after game over              | Called when `winner` is set                               | Called when `winner` is null                          |
-| Dev card purchase — deck empty                 | `devDeck.isEmpty()` is true                               | At least 1 card remains                               |
-| Dev card play — same-turn purchase             | `isPlayableOnTurn(currentTurn)` is false                  | Card purchased on any earlier turn                    |
-| Dev card play — already played                 | `isPlayed()` is true                                      | `isPlayed()` is false                                 |
-| Dev card play — more than one per turn         | Second `markAsPlayed()` call in the same turn             | First and only `markAsPlayed()` call in a turn        |
-| Dev card construction — placeholder vs invalid | `turnPurchased == 0`                                       | `turnPurchased == -1` (placeholder) or `>= 1`         |
-| Player turn count                              | `getPlayerTurnCount(player)` for a player not in the game | Any valid player reference                            |
+| Rule                                          | Invalid (boundary)                                                    | Valid (boundary)                                          |
+|-----------------------------------------------|-----------------------------------------------------------------------|-----------------------------------------------------------|
+| `rollDice()` call order                       | Called twice in one turn; called outside `PRODUCTION`                 | Called exactly once at start of turn                      |
+| Bank supply during production                 | Requested amount > remaining supply                                   | Requested amount == remaining supply                      |
+| Discard threshold                             | 7 cards (no discard), 9 cards (discard 4)                             | 8 cards (discard 4)                                       |
+| Road placement                                | Edge already has a road; edge not connected to player's network       | First valid connected, empty edge                         |
+| Settlement placement (Distance Rule)          | Vertex with any occupied neighbor                                     | Vertex with all neighbors empty                           |
+| Settlement placement (road connection)        | Vertex not connected to any player road                               | Vertex at end of at least one player road                 |
+| City upgrade                                  | Vertex not owned by player; vertex has a city already                 | Vertex with player's existing settlement                  |
+| `moveRobber()` target                         | Current robber hex id                                                 | Any other valid hex id                                    |
+| `steal()` target resource count               | Player with 0 resource cards (no-op, robber resolves with no transfer)| Player with 1 resource card (transfers that card)         |
+| Build action outside `BUILD` phase            | Any build call during `PRODUCTION` or `TRADE`                         | Any build call during `BUILD`                             |
+| Domestic trade — offerer affords offering     | Offerer has 0 of a resource they're offering                          | Offerer has exactly the amount they're offering           |
+| Domestic trade — recipient affords request    | Recipient has 0 of a resource being requested                         | Recipient has exactly the amount being requested          |
+| Domestic trade — self-trade                   | `offerer` == `recipient`                                              | Any two distinct players                                  |
+| Domestic trade — offer map values             | Any value <= 0 in offering or requesting                              | All values >= 1                                           |
+| Trade proposed when one already pending       | Second `proposeTrade()` before prior offer resolves                   | `proposeTrade()` after prior offer accepted/rejected      |
+| Maritime trade — giving equals receiving      | `giving == receiving`                                                 | Any two distinct resource types                           |
+| Maritime trade — default rate                 | Fewer than 4 identical cards (no harbor)                              | Exactly 4 identical cards                                 |
+| Maritime trade — generic harbor rate          | Fewer than 3 identical cards                                          | Exactly 3 identical cards                                 |
+| Maritime trade — special harbor rate          | Fewer than 2 of the matching resource                                 | Exactly 2 of the matching resource                        |
+| Maritime trade — player affords giving        | Player has fewer cards than the required rate                         | Player has exactly the required rate amount               |
+| `submitMaritimeTrade()` outside `TRADE` phase | `submitMaritimeTrade()` called during `BUILD`                         | `submitMaritimeTrade()` called during `TRADE`             |
+| `submitMaritimeTrade()` bank supply           | Bank has 0 of the requested receiving resource                        | Bank has exactly 1 of the requested receiving resource    |
 
 ---
 
@@ -215,7 +264,7 @@ src/main/java/domain/
 ├── ResourceType.java          (enum — existing)
 ├── TerrainType.java           (enum — existing)
 ├── PlayerColor.java           (enum — existing)
-├── TurnPhase.java             (enum — existing)
+├── TurnPhase.java             (enum — NEW)
 ├── Hex.java                   (existing)
 ├── Vertex.java                (existing)
 ├── Edge.java                  (existing)
@@ -223,13 +272,13 @@ src/main/java/domain/
 ├── Player.java                (existing)
 ├── Game.java                  (existing)
 ├── SetupPhase.java            (existing)
-├── DiceRoll.java                  (existing)
-├── Bank.java                  (existing)
-├── TradeOffer.java            (existing)
-├── Turn.java                  (existing)
-├── DevelopmentCard.java       (existing — MODIFIED)
-├── DevelopmentDeck.java       (NEW)
-└── TurnManager.java           (NEW)
+├── DiceRoll.java              (NEW)
+├── Bank.java                  (NEW)
+├── TradeOffer.java            (NEW)
+├── MaritimeTrade.java         (NEW)
+├── Turn.java                  (NEW)
+├── DevelopmentCardType.java   (enum — NEW)
+└── DevelopmentCard.java       (NEW)
 
 src/test/java/domain/
 ├── HexTest.java               (existing)
@@ -237,22 +286,24 @@ src/test/java/domain/
 ├── PlayerTest.java            (existing)
 ├── GameTest.java              (existing)
 ├── SetupPhaseTest.java        (existing)
-├── DiceRollTest.java              (existing)
-├── BankTest.java              (existing)
-├── TradeOfferTest.java        (existing)
-├── TurnTest.java              (existing)
-├── DevelopmentCardTest.java   (existing — MODIFIED)
-├── DevelopmentDeckTest.java   (NEW)
-└── TurnManagerTest.java       (NEW)
+├── DiceRollTest.java          (NEW)
+├── BankTest.java              (NEW)
+├── TradeOfferTest.java        (NEW)
+├── MaritimeTradeTest.java     (NEW)
+├── TurnTest.java              (NEW)
+└── DevelopmentCardTest.java   (NEW)
 ```
 
 ---
 
 ## Implementation Notes
 
-- `TurnManager` is the direct successor to `SetupPhase` in the game lifecycle. Once `SetupPhase.isComplete()` returns true, the caller constructs a `TurnManager` with the same `Game`, `Bank`, and `DiceRoll` instances.
-- `TurnManager` does not own win-condition logic — it only calls `VictoryPointCalculator.getWinner(game)` (defined in the Win Conditions doc) after each turn ends. This keeps the two concerns separately testable.
-- `DevelopmentCard` gains `turnPurchased` and `isPlayableOnTurn()` on top of its existing `type`/`markAsPlayed()`/`isPlayed()`. All card-effect logic (what Knight/Progress/VP cards actually *do*) remains deferred to a later phase — this revision only adds the multi-turn sequencing fields.
-- `DevelopmentDeck` sets `turnPurchased` at draw time (not at construction), so all 25 cards start with the placeholder value `-1`. This avoids a chicken-and-egg problem where the deck doesn't yet know what turn it will be drawn on, while keeping `0` (and any other non-positive value) as a genuinely invalid input that the constructor rejects.
-- `TurnManager` passes the same `DiceRoll` instance to every `Turn`, preserving roll history if needed for debugging or replay. If your team prefers fresh dice each turn, construct a new `DiceRoll()` inside `startNextTurn()` instead.
-- `getPlayerTurnCount()` can be derived from `currentTurnNumber` and `currentPlayerIndex` rather than maintained in a separate map, but either approach is valid. The simpler formula is: `completedTurns / playerCount` for players who have gone first, adjusted by index for others.
+- `Turn` depends on `Game` for board topology and player list, but should not modify `Game` state directly. All state mutations (resource counts, vertex/edge ownership) go through `Player`, `Vertex`, and `Edge` methods already defined in the Setup Phase design.
+- `Bank` is a standalone class, not embedded in `Game`, so it can be mocked independently in `TurnTest`.
+- `DiceRoll` has no domain dependencies and should be straightforward to test by injecting a seeded or mocked `Random` for deterministic rolls.
+- `TradeOffer` is a pure data/state class with no dependency on `Turn` — test it in isolation in `TradeOfferTest` before wiring it into `TurnTest`.
+- `MaritimeTrade` receives a `Board` in its constructor to perform harbor rate lookup at construction time. The resolved rate is stored and exposed via `getRate()`, so `Turn` does not need to re-derive it. This requires `Board` to expose a `getHarborAt(Vertex)` or equivalent query.
+- `submitMaritimeTrade()` on `Turn` trusts that the `MaritimeTrade` passed to it is already valid (rate and affordability checked at construction); `Turn` is only responsible for phase enforcement and bank supply at execution time.
+- Only one domestic trade offer may be pending at a time. `Turn` must clear `pendingTrade` (set to null) as soon as an offer is accepted or rejected, before another `proposeTrade()` call is permitted.
+- Other players cannot trade among themselves during another player's turn; `proposeTrade()` enforces this by requiring `offerer == activePlayer`.
+- The robber's current hex should be tracked on `Board` (a `getRobberHex()` / `setRobberHex(Hex)` pair may need to be added to `Board` as a small extension of the existing class).
