@@ -98,7 +98,25 @@ public class TurnManager {
      *                                {@link TurnPhase#DONE}
      */
     public void endCurrentTurn() {
-        return;
+        if (currentTurn == null) {
+            throw new IllegalStateException("No turn is currently in progress");
+        }
+
+        TurnPhase phase = currentTurn.getPhase();
+        if (phase != TurnPhase.BUILD && phase != TurnPhase.DONE) {
+            throw new IllegalStateException(
+                    "Cannot end the current turn while in the " + phase + " phase");
+        }
+
+        if (phase == TurnPhase.BUILD) {
+            currentTurn.endTurn();
+        }
+
+        recordCompletedTurn();
+        advanceToNextPlayer();
+        checkForWinner();
+
+        currentTurn = null;
     }
 
     /**
