@@ -10,8 +10,8 @@ plugins {
 // Add new classes here as they are implemented and tested.
 pitest {
     junit5PluginVersion = "1.2.1"
-    targetClasses = setOf("domain.Board", "domain.Edge", "domain.Vertex", "domain.DiceRoll", "domain.TerrainType", "domain.Bank", "domain.ResourceProduction", "domain.DevelopmentCard")
-    targetTests = setOf("domain.BoardTest", "domain.EdgeTest", "domain.VertexTest", "domain.DiceRollTest", "domain.TerrainTypeTest", "domain.BankTest", "domain.ResourceProductionTest", "domain.DevelopmentCardTest")
+    targetClasses = setOf("domain.Board", "domain.Edge", "domain.Vertex", "domain.DiceRoll", "domain.TerrainType", "domain.Bank", "domain.ResourceProduction", "domain.DevelopmentCard", "domain.SpecialCardTracker")
+    targetTests = setOf("domain.BoardTest", "domain.EdgeTest", "domain.VertexTest", "domain.DiceRollTest", "domain.TerrainTypeTest", "domain.BankTest", "domain.ResourceProductionTest", "domain.DevelopmentCardTest", "domain.SpecialCardTrackerTest")
     outputFormats = setOf("HTML")
     mutationThreshold = 100
 }

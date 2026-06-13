@@ -4,7 +4,7 @@
 
 This document covers the classes and public methods needed to execute a single player's turn in Catan. A turn has three mandatory phases in order: **Resource Production** (dice roll), **Trade** (optional), and **Build** (optional). This design doc covers the full first-turn implementation, beginning from the moment `SetupPhase` is complete and the first player rolls.
 
-The classes introduced here are `DiceRoll`, `Bank`, `TradeOffer`, `MaritimeTrade`, `TurnPhase` (enum), and `Turn`. They depend on the domain objects already implemented in the Setup Phase (`Game`, `Board`, `Hex`, `Vertex`, `Edge`, `Player`, `ResourceType`).
+The classes introduced here are `DiceRoll`, `Bank`, `TradeOffer`, `TurnPhase` (enum), and `Turn`. They depend on the domain objects already implemented in the Setup Phase (`Game`, `Board`, `Hex`, `Vertex`, `Edge`, `Player`, `ResourceType`).
 
 ---
 
@@ -12,11 +12,10 @@ The classes introduced here are `DiceRoll`, `Bank`, `TradeOffer`, `MaritimeTrade
 
 ```
 TurnPhase (enum)
-DiceRoll ──────────────────► (no domain dependencies; pure randomness)
+DiceRoll ──────────────────────► (no domain dependencies; pure randomness)
 Bank ──────────────────────► ResourceType
 TradeOffer ────────────────► Player, ResourceType
-MaritimeTrade ─────────────► Player, ResourceType, Board
-Turn ──────────────────────► Game, DiceRoll, Bank, TradeOffer, MaritimeTrade, Vertex, Edge, TurnPhase, DevelopmentCard
+Turn ──────────────────────► Game, DiceRoll, Bank, TradeOffer, Vertex, Edge, TurnPhase
 ```
 
 ---
@@ -44,12 +43,18 @@ Represents the type of a development card. There are 25 total: 14 Knight, 6 Prog
 
 ### `DiceRoll`
 
+Simulates rolling two dice. Keeps the most recent individual die values so callers can detect a 7 and inspect each die separately.
+
 Simulates rolling two dice and returns their sum.
 
-| Method             | Return Type | Description                                                  |
-|--------------------|-------------|--------------------------------------------------------------|
-| `DiceRoll(Random)` | —           | Constructor; throws `NullPointerException` if random is null |
-| `roll()`           | `int`       | Rolls both dice and returns their sum (2–12)                 |
+| Method         | Return Type | Description                                                                                 |
+|----------------|-------------|---------------------------------------------------------------------------------------------|
+| `DiceRoll()`       | —           | Default constructor; initializes both dice to 0 (no roll yet)                               |
+| `roll()`       | `int`       | Rolls both dice, stores results in `die1` and `die2`, returns their sum (2–12)              |
+| `getTotal()`   | `int`       | Returns the sum of the last roll; throws `IllegalStateException` if `roll()` has not been called |
+| `getDie1()`    | `int`       | Returns the value of the first die from the last roll                                       |
+| `getDie2()`    | `int`       | Returns the value of the second die from the last roll                                      |
+| `isSevenRolled()` | `boolean` | Returns true if the last roll summed to 7                                                  |
 
 **Invariants:**
 - Every value returned by `roll()` is in [2, 12]
@@ -167,43 +172,38 @@ Represents a single development card. Tracks its type and whether it has been pl
 ### `Turn`
 Orchestrates a single player's turn through its three phases. Enforces phase order, handles the robber on a 7, and delegates building cost validation to the existing domain objects.
 
-| Field                   | Type                                 | Description                                                            |
-|-------------------------|--------------------------------------|------------------------------------------------------------------------|
-| `game`                  | `Game`                               | The current game state                                                 |
-| `activePlayer`          | `Player`                             | The player taking this turn                                            |
-| `dice`                  | `DiceRoll`                           | The dice used for resource production                                  |
-| `bank`                  | `Bank`                               | The shared resource bank                                               |
-| `phase`                 | `TurnPhase`                          | The current phase of this turn                                         |
-| `rolledThisTurn`        | `boolean`                            | True once `rollDice()` has been called                                 |
-| `playedDevCardThisTurn` | `boolean`                            | True if a development card has already been played this turn           |
-| `pendingTrade`          | `TradeOffer`                         | The active domestic trade offer, if any; null when no offer is pending |
-| `cardsPurchasedThisTurn`| `List<DevelopmentCard>`              | Cards bought via `buyDevelopmentCard()` this turn (cannot be played the same turn they were purchased) |
+| Field                  | Type          | Description                                                                    |
+|------------------------|---------------|--------------------------------------------------------------------------------|
+| `game`                 | `Game`        | The current game state                                                         |
+| `activePlayer`         | `Player`      | The player taking this turn                                                    |
+| `dice`                 | `DiceRoll`        | The dice used for resource production                                          |
+| `bank`                 | `Bank`        | The shared resource bank                                                       |
+| `phase`                | `TurnPhase`   | The current phase of this turn                                                 |
+| `rolledThisTurn`       | `boolean`     | True once `rollDice()` has been called                                         |
+| `playedDevCardThisTurn`| `boolean`     | True if a development card has already been played this turn                   |
+| `pendingTrade`         | `TradeOffer`  | The active domestic trade offer, if any; null when no offer is pending         |
 
-The development card deck (`developmentDeck`) and player hands (`playerHands`) are owned by `Game`, not `Turn` — they persist across turns, so `Turn` delegates to `game.drawDevelopmentCard()`, `game.addDevelopmentCardToHand()`, `game.getPlayerHand()`, and `game.getRemainingDevelopmentCardCount()` rather than holding its own copies.
-
-| Method                                                                                                       | Return Type             | Description                                                                                                                                                                                                                                                            |
-|--------------------------------------------------------------------------------------------------------------|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank)`                                             | —                       | Constructor; validates no argument is null, sets `phase` to `PRODUCTION`                                                                                                                                                                                               |
-| `getActivePlayer()`                                                                                          | `Player`                | Returns the player whose turn this is                                                                                                                                                                                                                                  |
-| `getPhase()`                                                                                                 | `TurnPhase`             | Returns the current phase                                                                                                                                                                                                                                              |
-| `rollDice()`                                                                                                 | `int`                   | Calls `dice.roll()`, advances to `TRADE` phase, triggers production or robber logic; throws `IllegalStateException` if called outside `PRODUCTION` phase or called twice                                                                                               |
-| `produceResources(int roll)`                                                                                 | `void`                  | Distributes resources to all players for the rolled number per settlement/city adjacency; respects bank supply limits and the robber's blocked hex; called internally by `rollDice()`                                                                                  |
-| `advanceToTrade()`                                                                                           | `void`                  | Internal; sets `phase` to `TRADE` after production resolves                                                                                                                                                                                                            |
-| `advanceToBuild()`                                                                                           | `void`                  | Called by the active player when done trading; sets `phase` to `BUILD`; throws `IllegalStateException` if not in `TRADE` phase                                                                                                                                         |
-| `endTurn()`                                                                                                  | `void`                  | Sets `phase` to `DONE`; throws `IllegalStateException` if not in `BUILD` phase                                                                                                                                                                                         |
-| `buildRoad(int edgeId)`                                                                                      | `void`                  | Validates player can afford a road (1 Brick + 1 Lumber), that the edge is unoccupied and connected to their network, deducts cost; throws if invalid                                                                                                                   |
-| `buildSettlement(int vertexId)`                                                                              | `void`                  | Validates player can afford a settlement (1 Brick + 1 Lumber + 1 Wool + 1 Grain), Distance Rule, and road connection; deducts cost; throws if invalid                                                                                                                  |
-| `buildCity(int vertexId)`                                                                                    | `void`                  | Validates player can afford a city (3 Ore + 2 Grain) and that the vertex has an existing settlement owned by the player; replaces settlement; throws if invalid                                                                                                        |
-| `buyDevelopmentCard()`                                                                                       | `void`                  | Validates player can afford (1 Ore + 1 Wool + 1 Grain) and that development cards remain; deducts cost; throws if invalid                                                                                                                                              |
-| `isSevenRolled()`                                                                                            | `boolean`               | Returns true if the roll this turn was a 7                                                                                                                                                                                                                             |
-| `proposeTrade(Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting)` | `TradeOffer`            | Creates and stores a `TradeOffer`; throws `IllegalStateException` if not in `TRADE` phase or if a trade is already pending; throws `IllegalArgumentException` if the active player cannot afford the offering                                                          |
-| `acceptTrade(TradeOffer offer)`                                                                              | `void`                  | Called by the recipient to accept; validates the recipient can afford `requesting`, then executes the exchange between both players via their `addResources` / resource deduction; throws if offer is not pending or either player lacks cards                         |
-| `rejectTrade(TradeOffer offer)`                                                                              | `void`                  | Called by the recipient to reject; marks the offer as `REJECTED` and clears `pendingTrade`; throws if offer is not pending                                                                                                                                             |
-| `submitMaritimeTrade(MaritimeTrade trade)`                                                                                | `void`                 | Executes a pre-validated `MaritimeTrade` — deducts `giving` from player, distributes `receiving` from bank; throws `IllegalStateException` if not in `TRADE` phase or bank cannot fulfill                                                                  |
-| `getPendingTrade()`                                                                                          | `Optional<TradeOffer>`  | Returns the current pending trade offer, or `Optional.empty()` if none                                                                                                                                                                                                 |
-| `playDevelopmentCard(Player player, DevelopmentCard card)`                                                   | `void`                  | Plays a development card for the active player; throws `IllegalStateException` if not in `TRADE` or `BUILD` phase, if a dev card has already been played this turn, if the card was purchased this turn (except Victory Point cards), or if the card is already played |
-| `getPlayerHand(Player player)`                                                                               | `List<DevelopmentCard>` | Returns an unmodifiable view of the player's development card hand                                                                                                                                                                                                     |
-| `getRemainingDeckSize()`                                                                                     | `int`                   | Returns the number of development cards remaining in the deck                                                                                                                                                                                                          |
+| Method                                                      | Return Type | Description                                                                                                                                                              |
+|-------------------------------------------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank)`| —           | Constructor; validates no argument is null, sets `phase` to `PRODUCTION`                                                                                                |
+| `getActivePlayer()`                                         | `Player`    | Returns the player whose turn this is                                                                                                                                    |
+| `getPhase()`                                               | `TurnPhase` | Returns the current phase                                                                                                                                                |
+| `rollDice()`                                               | `int`       | Calls `dice.roll()`, advances to `TRADE` phase, triggers production or robber logic; throws `IllegalStateException` if called outside `PRODUCTION` phase or called twice |
+| `produceResources(int roll)`                               | `void`      | Distributes resources to all players for the rolled number per settlement/city adjacency; respects bank supply limits and the robber's blocked hex; called internally by `rollDice()` |
+| `advanceToTrade()`                                         | `void`      | Internal; sets `phase` to `TRADE` after production resolves                                                                                                             |
+| `advanceToBuild()`                                         | `void`      | Called by the active player when done trading; sets `phase` to `BUILD`; throws `IllegalStateException` if not in `TRADE` phase                                          |
+| `endTurn()`                                               | `void`      | Sets `phase` to `DONE`; throws `IllegalStateException` if not in `BUILD` phase                                                                                          |
+| `buildRoad(int edgeId)`                                   | `void`      | Validates player can afford a road (1 Brick + 1 Lumber), that the edge is unoccupied and connected to their network, deducts cost; throws if invalid                   |
+| `buildSettlement(int vertexId)`                           | `void`      | Validates player can afford a settlement (1 Brick + 1 Lumber + 1 Wool + 1 Grain), Distance Rule, and road connection; deducts cost; throws if invalid                  |
+| `buildCity(int vertexId)`                                 | `void`      | Validates player can afford a city (3 Ore + 2 Grain) and that the vertex has an existing settlement owned by the player; replaces settlement; throws if invalid         |
+| `buyDevelopmentCard()`                                    | `void`      | Validates player can afford (1 Ore + 1 Wool + 1 Grain) and that development cards remain; deducts cost; throws if invalid                                               |
+| `isSevenRolled()`                                         | `boolean`   | Returns true if the roll this turn was a 7                                                                                                                               |
+| `proposeTrade(Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting)` | `TradeOffer` | Creates and stores a `TradeOffer`; throws `IllegalStateException` if not in `TRADE` phase or if a trade is already pending; throws `IllegalArgumentException` if the active player cannot afford the offering |
+| `acceptTrade(TradeOffer offer)`                           | `void`      | Called by the recipient to accept; validates the recipient can afford `requesting`, then executes the exchange between both players via their `addResources` / resource deduction; throws if offer is not pending or either player lacks cards |
+| `rejectTrade(TradeOffer offer)`                           | `void`      | Called by the recipient to reject; marks the offer as `REJECTED` and clears `pendingTrade`; throws if offer is not pending                                              |
+| `executeMaritimeTrade(ResourceType giving, int amount, ResourceType receiving)` | `void` | Performs a maritime trade at the active player's best available rate (4:1 default, 3:1 with a generic harbor, 2:1 with a matching special harbor); validates rate and bank supply; throws if not in `TRADE` phase or player cannot afford it |
+| `getMaritimeRate(ResourceType)`                           | `int`       | Returns the best maritime trade rate available to the active player for the given resource (2, 3, or 4), based on adjacent harbor vertices                              |
+| `getPendingTrade()`                                       | `Optional<TradeOffer>` | Returns the current pending trade offer, or `Optional.empty()` if none                                                                                    |
 
 **Robber logic (triggered internally when `rollDice()` returns 7):**
 1. No resources are produced.
