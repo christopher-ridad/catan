@@ -101,3 +101,7 @@
 - **TC23: EndCurrentTurn_ClearsCurrentTurn** ( implemented )
     - State of the system: a full turn has been completed via `endCurrentTurn()`
     - Expected output: `getCurrentTurn()` returns `Optional.empty()`
+
+- **TC24: EndCurrentTurn_WithNoWinner_GameRemainsOngoing** ( implemented )
+    - State of the system: a full turn has been completed; no player has reached 10 VP
+    - Expected output: `isGameOver()` returns `false` and `getWinner()` returns `Optional.empty()`

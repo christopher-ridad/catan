@@ -285,4 +285,15 @@ public class TurnManagerTest {
         assertTrue(turnManager.getCurrentTurn().isEmpty());
     }
 
+    @Test
+    public void EndCurrentTurn_WithNoWinner_GameRemainsOngoing() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertFalse(turnManager.isGameOver());
+        assertTrue(turnManager.getWinner().isEmpty());
+    }
+
 }
