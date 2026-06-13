@@ -17,3 +17,7 @@
 - **TC4: Constructor_InitializesCurrentPlayerToFirstPlayer** ( implemented )
     - State of the system: `TurnManager` constructed with a valid 4-player `Game`, no turns started
     - Expected output: `getCurrentPlayer()` returns the first player in the game's player list
+
+- **TC5: Constructor_InitializesTurnNumberToZero** ( implemented )
+    - State of the system: `TurnManager` constructed with a valid `Game`, no turns started
+    - Expected output: `getCurrentTurnNumber()` returns `0`

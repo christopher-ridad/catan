@@ -113,4 +113,9 @@ public class TurnManagerTest {
     public void Constructor_InitializesCurrentPlayerToFirstPlayer() {
         assertEquals(p1, turnManager.getCurrentPlayer());
     }
+
+    @Test
+    public void Constructor_InitializesTurnNumberToZero() {
+        assertEquals(0, turnManager.getCurrentTurnNumber());
+    }
 }
