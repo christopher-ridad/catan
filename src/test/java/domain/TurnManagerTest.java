@@ -224,5 +224,12 @@ public class TurnManagerTest {
         assertEquals(TurnPhase.DONE, turn.getPhase());
     }
 
+    @Test
+    public void EndCurrentTurn_WhenTurnAlreadyDone_DoesNotThrow() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+        turn.endTurn();
 
+        assertDoesNotThrow(turnManager::endCurrentTurn);
+    }
 }

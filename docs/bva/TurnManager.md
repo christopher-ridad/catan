@@ -77,3 +77,7 @@
 - **TC17: EndCurrentTurn_DuringBuildPhase_CompletesTheTurn** ( implemented )
     - State of the system: a turn has been started and advanced to `BUILD` phase via `rollDice()` then `advanceToBuild()`
     - Expected output: `endCurrentTurn()` does not throw; the turn's phase transitions to `DONE`
+
+- **TC18: EndCurrentTurn_WhenTurnAlreadyDone_DoesNotThrow** ( implemented )
+    - State of the system: a turn has been started, advanced to `BUILD`, and `Turn.endTurn()` called directly so the phase is already `DONE`
+    - Expected output: `endCurrentTurn()` does not throw
