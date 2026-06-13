@@ -89,6 +89,13 @@ public class VictoryPointCalculatorTest {
     }
 
     @Test
+    public void GetTotalVP_WithNullTracker_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.getTotalVP(p1, board, null);
+        });
+    }
+
+    @Test
     public void GetSettlementVP_WithNullPlayer_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
             calc.getSettlementVP(null, board);
