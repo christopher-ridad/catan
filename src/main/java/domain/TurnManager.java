@@ -23,7 +23,6 @@ public class TurnManager {
     private final Bank bank;
     private final DiceRoll dice;
     //private final VictoryPointCalculator victoryPointCalculator;
-    private final SpecialCardTracker specialCardTracker;
     private final Map<Player, Integer> playerTurnCounts;
 
     private int currentTurnNumber;
@@ -49,7 +48,7 @@ public class TurnManager {
         this.bank = bank;
         this.dice = dice;
         //this.victoryPointCalculator = new VictoryPointCalculator();
-        this.specialCardTracker = new SpecialCardTracker();
+        //this.specialCardTracker = new SpecialCardTracker();
         this.playerTurnCounts = initializeTurnCounts(game);
 
         this.currentTurnNumber = 0;
