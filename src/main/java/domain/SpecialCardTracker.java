@@ -33,10 +33,21 @@ public class SpecialCardTracker {
     }
 
     public void updateLongestRoad(Player candidate, int roadLength) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (roadLength < 0) {
+            throw new IllegalArgumentException("Road length cannot be negative");
+        }
+        if (this.longestRoadHolder == null) {
+            if (roadLength >= 5) {
+                this.longestRoadHolder = candidate;
+                this.longestRoadLength = roadLength;
+            }
+        } else if (roadLength > this.longestRoadLength) {
+            this.longestRoadHolder = candidate;
+            this.longestRoadLength = roadLength;
+        }
     }
 
     public boolean holdsLongestRoad(Player player) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.longestRoadHolder != null && this.longestRoadHolder.equals(player);
     }
 }
