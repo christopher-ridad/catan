@@ -121,4 +121,11 @@
 - **TC27: GetCurrentPlayer_BetweenTurns_ReturnsNextPlayerToAct** ( implemented )
     - State of the system: p1's turn has been completed and `getCurrentTurn()` is empty (between turns)
     - Expected output: `getCurrentPlayer()` returns p2
+
 ---
+
+## Method under test: `getPlayerTurnCount(Player player)`
+
+- **TC28: GetPlayerTurnCount_ForPlayerNotInGame_ThrowsIllegalArgumentException** ( implemented )
+    - State of the system: a `Player` object that was not passed to the `Game` constructor is given as the argument
+    - Expected output: `IllegalArgumentException`

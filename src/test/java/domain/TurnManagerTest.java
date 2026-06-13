@@ -342,4 +342,15 @@ public class TurnManagerTest {
         assertEquals(p2, turnManager.getCurrentPlayer());
     }
 
+    // ------------------------------------------------------------------
+    // getPlayerTurnCount
+    // ------------------------------------------------------------------
+
+    @Test
+    public void GetPlayerTurnCount_ForPlayerNotInGame_ThrowsIllegalArgumentException() {
+        Player outsider = new Player("outsider", PlayerColor.RED);
+
+        assertThrows(IllegalArgumentException.class, () -> turnManager.getPlayerTurnCount(outsider));
+    }
+
 }
