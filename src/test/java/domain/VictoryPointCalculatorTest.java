@@ -783,4 +783,54 @@ public class VictoryPointCalculatorTest {
         });
     }
 
+    @Test
+    public void HasWinner_WithNullBoard_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.hasWinner(game, null, tracker);
+        });
+    }
+
+    @Test
+    public void HasWinner_WithNullTracker_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.hasWinner(game, board, null);
+        });
+    }
+
+    @Test
+    public void HasWinner_HighestVPIsNine_ReturnsFalse() {
+        for (int i = 0; i < 9; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        assertFalse(calc.hasWinner(game, board, tracker));
+    }
+
+    @Test
+    public void HasWinner_OnePlayerHasExactlyTenVP_ReturnsTrue() {
+        for (int i = 0; i < 10; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        assertTrue(calc.hasWinner(game, board, tracker));
+    }
+
+    @Test
+    public void HasWinner_OnePlayerHasElevenVP_ReturnsTrue() {
+        for (int i = 0; i < 11; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        assertTrue(calc.hasWinner(game, board, tracker));
+    }
+
+    @Test
+    public void HasWinner_MultiplePlayersHaveTenVP_ReturnsTrue() {
+        for (int i = 0; i < 10; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+            p2.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        assertTrue(calc.hasWinner(game, board, tracker));
+    }
 }
