@@ -46,3 +46,7 @@
 - **TC10: StartNextTurn_StoresTurnAsCurrentTurn** ( implemented )
     - State of the system: `TurnManager` freshly constructed, no previous turn in progress
     - Expected output: `getCurrentTurn()` is present and returns the same `Turn` object that was returned by `startNextTurn()`
+
+- **TC11: StartNextTurn_WhilePreviousTurnIncomplete_ThrowsIllegalStateException** ( implemented )
+    - State of the system: a turn has been started but not yet ended (still in `PRODUCTION` phase)
+    - Expected output: `IllegalStateException`

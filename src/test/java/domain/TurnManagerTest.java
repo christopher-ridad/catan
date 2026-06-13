@@ -156,4 +156,11 @@ public class TurnManagerTest {
         assertSame(turn, turnManager.getCurrentTurn().get());
     }
 
+    @Test
+    public void StartNextTurn_WhilePreviousTurnIncomplete_ThrowsIllegalStateException() {
+        turnManager.startNextTurn();
+
+        assertThrows(IllegalStateException.class, turnManager::startNextTurn);
+    }
+
 }
