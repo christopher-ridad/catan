@@ -73,3 +73,7 @@
 - **TC16: EndCurrentTurn_DuringTradePhase_ThrowsIllegalStateException** ( implemented )
     - State of the system: a turn has been started and dice rolled (phase is `TRADE`), but `advanceToBuild()` has not been called
     - Expected output: `IllegalStateException`
+
+- **TC17: EndCurrentTurn_DuringBuildPhase_CompletesTheTurn** ( implemented )
+    - State of the system: a turn has been started and advanced to `BUILD` phase via `rollDice()` then `advanceToBuild()`
+    - Expected output: `endCurrentTurn()` does not throw; the turn's phase transitions to `DONE`

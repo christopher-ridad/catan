@@ -214,4 +214,15 @@ public class TurnManagerTest {
         assertThrows(IllegalStateException.class, turnManager::endCurrentTurn);
     }
 
+    @Test
+    public void EndCurrentTurn_DuringBuildPhase_CompletesTheTurn() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertEquals(TurnPhase.DONE, turn.getPhase());
+    }
+
+
 }
