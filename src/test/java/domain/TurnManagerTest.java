@@ -163,4 +163,16 @@ public class TurnManagerTest {
         assertThrows(IllegalStateException.class, turnManager::startNextTurn);
     }
 
+    @Test
+    public void StartNextTurn_AfterPreviousTurnCompleted_Succeeds() {
+        Turn first = turnManager.startNextTurn();
+        advanceToBuild(first);
+        turnManager.endCurrentTurn();
+
+        Turn second = turnManager.startNextTurn();
+
+        assertNotNull(second);
+        assertNotSame(first, second);
+    }
+
 }

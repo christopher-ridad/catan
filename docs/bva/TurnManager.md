@@ -50,3 +50,7 @@
 - **TC11: StartNextTurn_WhilePreviousTurnIncomplete_ThrowsIllegalStateException** ( implemented )
     - State of the system: a turn has been started but not yet ended (still in `PRODUCTION` phase)
     - Expected output: `IllegalStateException`
+
+- **TC12: StartNextTurn_AfterPreviousTurnCompleted_Succeeds** ( implemented )
+    - State of the system: a full turn has been started, advanced to `BUILD`, and ended via `endCurrentTurn()`
+    - Expected output: a new non-null `Turn` is returned, distinct from the previous one
