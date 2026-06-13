@@ -89,3 +89,7 @@
 - **TC20: EndCurrentTurn_WrapsAroundToFirstPlayerAfterLastPlayer** ( implemented )
     - State of the system: all 4 players have each completed exactly one turn
     - Expected output: `getCurrentPlayer()` returns p1 (back to the first player)
+
+- **TC21: EndCurrentTurn_IncrementsCurrentTurnNumber** ( implemented )
+    - State of the system: one full turn has been completed via `endCurrentTurn()`
+    - Expected output: `getCurrentTurnNumber()` returns `1`

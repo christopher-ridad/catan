@@ -253,4 +253,14 @@ public class TurnManagerTest {
 
         assertEquals(p1, turnManager.getCurrentPlayer());
     }
+
+    @Test
+    public void EndCurrentTurn_IncrementsCurrentTurnNumber() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertEquals(1, turnManager.getCurrentTurnNumber());
+    }
 }
