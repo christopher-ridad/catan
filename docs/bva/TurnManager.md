@@ -30,3 +30,7 @@
 - **TC7: Constructor_GameIsNotOverInitially** ( implemented )
     - State of the system: `TurnManager` constructed with a valid `Game`, no turns taken
     - Expected output: `isGameOver()` returns `false` and `getWinner()` returns `Optional.empty()`
+
+- **TC8: Constructor_InitializesPlayerTurnCountsToZero** ( implemented )
+    - State of the system: `TurnManager` constructed with a valid 4-player `Game`, no turns taken
+    - Expected output: `getPlayerTurnCount(player)` returns `0` for every player in the game

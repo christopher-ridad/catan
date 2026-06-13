@@ -129,4 +129,11 @@ public class TurnManagerTest {
         assertTrue(turnManager.getWinner().isEmpty());
     }
 
+    @Test
+    public void Constructor_InitializesPlayerTurnCountsToZero() {
+        for (Player player : playerList) {
+            assertEquals(0, turnManager.getPlayerTurnCount(player));
+        }
+    }
+
 }
