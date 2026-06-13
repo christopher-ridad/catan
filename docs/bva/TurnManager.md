@@ -133,3 +133,7 @@
 - **TC29: GetPlayerTurnCount_AfterFullRoundOfTurns_IsOneForEveryPlayer** ( implemented )
     - State of the system: all 4 players have each completed exactly one turn
     - Expected output: `getPlayerTurnCount(player)` returns `1` for every player in the game
+
+- **TC30: GetPlayerTurnCount_AfterMultipleRoundsForSamePlayer_AccumulatesCorrectly** ( implemented )
+    - State of the system: all 4 players have each completed exactly two turns (8 total turns)
+    - Expected output: `getPlayerTurnCount(p1)` returns `2` and `getPlayerTurnCount(p3)` returns `2`

@@ -366,4 +366,15 @@ public class TurnManagerTest {
         }
     }
 
+    @Test
+    public void GetPlayerTurnCount_AfterMultipleRoundsForSamePlayer_AccumulatesCorrectly() {
+        for (int i = 0; i < playerList.size() * 2; i++) {
+            Turn turn = turnManager.startNextTurn();
+            advanceToBuild(turn);
+            turnManager.endCurrentTurn();
+        }
+
+        assertEquals(2, turnManager.getPlayerTurnCount(p1));
+        assertEquals(2, turnManager.getPlayerTurnCount(p3));
+    }
 }
