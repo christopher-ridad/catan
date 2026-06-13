@@ -175,4 +175,16 @@ public class TurnManagerTest {
         assertNotSame(first, second);
     }
 
+    @Test
+    public void StartNextTurn_AfterWinnerFound_ThrowsIllegalStateException() {
+        giveTenVictoryPoints(p1);
+
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.isGameOver());
+        assertThrows(IllegalStateException.class, turnManager::startNextTurn);
+    }
+
 }
