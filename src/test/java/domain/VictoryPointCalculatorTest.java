@@ -753,4 +753,15 @@ public class VictoryPointCalculatorTest {
         assertEquals(p1, winner.get());
     }
 
+    @Test
+    public void GetWinner_OnePlayerHasElevenVP_ReturnsPlayer() {
+        for (int i = 0; i < 11; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        Optional<Player> winner = calc.getWinner(game, board, tracker);
+        assertTrue(winner.isPresent());
+        assertEquals(p1, winner.get());
+    }
+
 }
