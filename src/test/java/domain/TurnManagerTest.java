@@ -136,4 +136,16 @@ public class TurnManagerTest {
         }
     }
 
+    // ------------------------------------------------------------------
+    // startNextTurn
+    // ------------------------------------------------------------------
+
+    @Test
+    public void StartNextTurn_ReturnsTurnForCurrentPlayer() {
+        Turn turn = turnManager.startNextTurn();
+
+        assertNotNull(turn);
+        assertEquals(TurnPhase.PRODUCTION, turn.getPhase());
+    }
+
 }

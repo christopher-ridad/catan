@@ -34,3 +34,11 @@
 - **TC8: Constructor_InitializesPlayerTurnCountsToZero** ( implemented )
     - State of the system: `TurnManager` constructed with a valid 4-player `Game`, no turns taken
     - Expected output: `getPlayerTurnCount(player)` returns `0` for every player in the game
+
+---
+
+## Method under test: `startNextTurn()`
+
+- **TC9: StartNextTurn_ReturnsTurnForCurrentPlayer** ( implemented )
+    - State of the system: `TurnManager` freshly constructed, no previous turn in progress
+    - Expected output: returned `Turn` is non-null and its phase is `PRODUCTION`
