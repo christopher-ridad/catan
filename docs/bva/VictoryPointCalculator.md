@@ -238,75 +238,75 @@
 
 ## Method under test: `getWinner(Game game, Board board, SpecialCardTracker tracker)`
 
-- **TC69: GetWinner_WithNullGame_ThrowsIllegalArgumentException** ( :x: )
+- **TC69: GetWinner_WithNullGame_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `game` is the null pointer, valid `board`, valid `tracker`
   - Expected output: `IllegalArgumentException`
 
-- **TC70: GetWinner_WithNullBoard_ThrowsIllegalArgumentException** ( :x: )
+- **TC70: GetWinner_WithNullBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid `game`, `board` is the null pointer, valid `tracker`
   - Expected output: `IllegalArgumentException`
 
-- **TC71: GetWinner_WithNullTracker_ThrowsIllegalArgumentException** ( :x: )
+- **TC71: GetWinner_WithNullTracker_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid `game`, valid `board`, `tracker` is the null pointer
   - Expected output: `IllegalArgumentException`
 
-- **TC72: GetWinner_HighestVPIsNine_ReturnsEmpty** ( :x: )
+- **TC72: GetWinner_HighestVPIsNine_ReturnsEmpty** ( :white_check_mark: )
   - State of the system: valid arguments; the highest total VP among all players is exactly 9 (Just below threshold)
   - Expected output: `Optional.empty()`
 
-- **TC73: GetWinner_OnePlayerHasExactlyTenVP_ReturnsPlayer** ( :x: )
+- **TC73: GetWinner_OnePlayerHasExactlyTenVP_ReturnsPlayer** ( :white_check_mark: )
   - State of the system: valid arguments; exactly one player has a total VP of exactly 10, all others have < 10 (Exact threshold)
   - Expected output: `Optional.of(player)` containing the player with 10 VP
 
-- **TC74: GetWinner_OnePlayerHasElevenVP_ReturnsPlayer** ( :x: )
+- **TC74: GetWinner_OnePlayerHasElevenVP_ReturnsPlayer** ( :white_check_mark: )
   - State of the system: valid arguments; exactly one player has a total VP > 10 (e.g., 11), all others have < 10
   - Expected output: `Optional.of(player)` containing the player with 11 VP
 
-- **TC75: GetWinner_MultiplePlayersHaveTenVP_ActivePlayerWins** ( :x: )
+- **TC75: GetWinner_MultiplePlayersHaveTenVP_ActivePlayerWins** ( :white_check_mark: )
   - State of the system: valid arguments; Player A and Player B both have exactly 10 VP; according to `game.getPlayers()` turn order, it is currently Player B's turn
   - Expected output: `Optional.of(Player B)`
 
-- **TC76: GetWinner_MultiplePlayersHaveTenVP_NeitherIsActivePlayer_ReturnsFirstInOrder** ( :x: )
+- **TC76: GetWinner_MultiplePlayersHaveTenVP_NeitherIsActivePlayer_ReturnsFirstInOrder** ( :white_check_mark: )
   - State of the system: valid arguments; Player A and Player B both have exactly 10 VP; according to `game.getPlayers()` turn order, it is Player C's turn (who has < 10 VP)
   - Expected output: `Optional.of(Player A)` (assuming Player A precedes Player B in standard turn order, serving as a fallback tiebreaker)
 
 ## Method under test: `hasWinner(Game game, Board board, SpecialCardTracker tracker)`
 
-- **TC77: HasWinner_WithNullGame_ThrowsIllegalArgumentException** ( :x: )
+- **TC77: HasWinner_WithNullGame_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `game` is the null pointer, valid `board` pointer to a true object, valid `tracker`
   - Expected output: `IllegalArgumentException`
 
-- **TC78: HasWinner_WithNullBoard_ThrowsIllegalArgumentException** ( :x: )
+- **TC78: HasWinner_WithNullBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid `game` pointer to a true object, `board` is the null pointer, valid `tracker`
   - Expected output: `IllegalArgumentException`
 
-- **TC79: HasWinner_WithNullTracker_ThrowsIllegalArgumentException** ( :x: )
+- **TC79: HasWinner_WithNullTracker_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid `game`, valid `board`, `tracker` is the null pointer
   - Expected output: `IllegalArgumentException`
 
-- **TC80: HasWinner_HighestVPIsNine_ReturnsFalse** ( :x: )
+- **TC80: HasWinner_HighestVPIsNine_ReturnsFalse** ( :white_check_mark: )
   - State of the system: valid arguments; the highest total VP among all players is exactly 9 
   - Expected output: `false`
 
-- **TC81: HasWinner_OnePlayerHasExactlyTenVP_ReturnsTrue** ( :x: )
+- **TC81: HasWinner_OnePlayerHasExactlyTenVP_ReturnsTrue** ( :white_check_mark: )
   - State of the system: valid arguments; exactly one player has a total VP of exactly 10, all others have < 10 
   - Expected output: `true`
 
-- **TC82: HasWinner_OnePlayerHasElevenVP_ReturnsTrue** ( :x: )
+- **TC82: HasWinner_OnePlayerHasElevenVP_ReturnsTrue** ( :white_check_mark: )
   - State of the system: valid arguments; exactly one player has a total VP > 10 (e.g., 11), all others have < 10
   - Expected output: `true`
 
-- **TC83: HasWinner_MultiplePlayersHaveTenVP_ReturnsTrue** ( :x: )
+- **TC83: HasWinner_MultiplePlayersHaveTenVP_ReturnsTrue** ( :white_check_mark: )
   - State of the system: valid arguments; two players somehow both have exactly 10 VP simultaneously
   - Expected output: `true`
   - 
 ## Method under test: `updateSpecialCards(Game game, Board board, SpecialCardTracker tracker)`
 
-- **TC84: UpdateSpecialCards_WithNullGame_ThrowsIllegalArgumentException** ( :x: )
+- **TC84: UpdateSpecialCards_WithNullGame_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `game` is the null pointer, valid `board`, valid `tracker`
   - Expected output: `IllegalArgumentException`
 
-- **TC85: UpdateSpecialCards_WithNullBoard_ThrowsIllegalArgumentException** ( :x: )
+- **TC85: UpdateSpecialCards_WithNullBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid `game`, `board` is the null pointer, valid `tracker`
   - Expected output: `IllegalArgumentException`
 
