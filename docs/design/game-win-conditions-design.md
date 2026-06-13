@@ -30,9 +30,9 @@ VictoryPointCalculator ─────► Game, Board, Player, SpecialCardTracke
 
 `Player` needs one additional method to expose the development cards in a player's hand, so `VictoryPointCalculator` can compute VP from Victory Point cards and count played Knights without reaching into private state.
 
-| Method                            | Return Type             | Status   | Description                                                                 |
-|------------------------------------|--------------------------|----------|-------------------------------------------------------------------------------|
-| `getDevelopmentCards()`            | `List<DevelopmentCard>`  | **NEW**  | Returns an unmodifiable view of all development cards currently held by the player, including both played and unplayed cards |
+| Method                  | Return Type             | Status  | Description                                                                                                                  |
+|-------------------------|-------------------------|---------|------------------------------------------------------------------------------------------------------------------------------|
+| `getDevelopmentCards()` | `List<DevelopmentCard>` | **NEW** | Returns an unmodifiable view of all development cards currently held by the player, including both played and unplayed cards |
 
 **Invariants:**
 - The returned list always reflects the player's current hand, including cards drawn via `DevelopmentDeck.draw()`; nothing is ever removed from this list — played cards remain with `isPlayed() == true`
@@ -46,24 +46,24 @@ VictoryPointCalculator ─────► Game, Board, Player, SpecialCardTracke
 
 Tracks the current holders of the two special cards — Longest Road and Largest Army — and the qualifying thresholds needed to claim or steal each. Both cards are worth 2 VP to whoever holds them. This class is the single source of truth for which player currently holds each card; `VictoryPointCalculator` reads from it to compute total VP.
 
-| Field                    | Type     | Description                                                                              |
-|--------------------------|----------|------------------------------------------------------------------------------------------|
-| `longestRoadHolder`      | `Player` | The player currently holding the Longest Road card; null if unclaimed                   |
-| `longestRoadLength`      | `int`    | The road length of the current holder; 0 if unclaimed                                   |
-| `largestArmyHolder`      | `Player` | The player currently holding the Largest Army card; null if unclaimed                   |
-| `largestArmySize`        | `int`    | The knight count of the current holder; 0 if unclaimed                                  |
+| Field               | Type     | Description                                                           |
+|---------------------|----------|-----------------------------------------------------------------------|
+| `longestRoadHolder` | `Player` | The player currently holding the Longest Road card; null if unclaimed |
+| `longestRoadLength` | `int`    | The road length of the current holder; 0 if unclaimed                 |
+| `largestArmyHolder` | `Player` | The player currently holding the Largest Army card; null if unclaimed |
+| `largestArmySize`   | `int`    | The knight count of the current holder; 0 if unclaimed                |
 
-| Method                                                   | Return Type      | Description                                                                                                                                                          |
-|----------------------------------------------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SpecialCardTracker()`                                   | —                | Constructor; initializes all fields to null/0                                                                                                                        |
-| `getLongestRoadHolder()`                                 | `Optional<Player>` | Returns the current Longest Road holder, or `Optional.empty()` if unclaimed                                                                                        |
-| `getLongestRoadLength()`                                 | `int`            | Returns the current qualifying road length (0 if unclaimed)                                                                                                          |
-| `getLargestArmyHolder()`                                 | `Optional<Player>` | Returns the current Largest Army holder, or `Optional.empty()` if unclaimed                                                                                        |
-| `getLargestArmySize()`                                   | `int`            | Returns the current qualifying knight count (0 if unclaimed)                                                                                                         |
-| `updateLongestRoad(Player candidate, int roadLength)`    | `void`           | Awards the Longest Road card to `candidate` if their `roadLength` meets the threshold (≥ 5 to claim from unclaimed; > current holder's length to steal); no-op otherwise; throws `IllegalArgumentException` if `roadLength` < 0 |
-| `updateLargestArmy(Player candidate, int knightCount)`   | `void`           | Awards the Largest Army card to `candidate` if their `knightCount` meets the threshold (≥ 3 to claim from unclaimed; > current holder's count to steal); no-op otherwise; throws `IllegalArgumentException` if `knightCount` < 0 |
-| `holdsLongestRoad(Player)`                               | `boolean`        | Returns true if the given player currently holds the Longest Road card                                                                                               |
-| `holdsLargestArmy(Player)`                               | `boolean`        | Returns true if the given player currently holds the Largest Army card                                                                                               |
+| Method                                                 | Return Type        | Description                                                                                                                                                                                                                      |
+|--------------------------------------------------------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `SpecialCardTracker()`                                 | —                  | Constructor; initializes all fields to null/0                                                                                                                                                                                    |
+| `getLongestRoadHolder()`                               | `Optional<Player>` | Returns the current Longest Road holder, or `Optional.empty()` if unclaimed                                                                                                                                                      |
+| `getLongestRoadLength()`                               | `int`              | Returns the current qualifying road length (0 if unclaimed)                                                                                                                                                                      |
+| `getLargestArmyHolder()`                               | `Optional<Player>` | Returns the current Largest Army holder, or `Optional.empty()` if unclaimed                                                                                                                                                      |
+| `getLargestArmySize()`                                 | `int`              | Returns the current qualifying knight count (0 if unclaimed)                                                                                                                                                                     |
+| `updateLongestRoad(Player candidate, int roadLength)`  | `void`             | Awards the Longest Road card to `candidate` if their `roadLength` meets the threshold (≥ 5 to claim from unclaimed; > current holder's length to steal); no-op otherwise; throws `IllegalArgumentException` if `roadLength` < 0  |
+| `updateLargestArmy(Player candidate, int knightCount)` | `void`             | Awards the Largest Army card to `candidate` if their `knightCount` meets the threshold (≥ 3 to claim from unclaimed; > current holder's count to steal); no-op otherwise; throws `IllegalArgumentException` if `knightCount` < 0 |
+| `holdsLongestRoad(Player)`                             | `boolean`          | Returns true if the given player currently holds the Longest Road card                                                                                                                                                           |
+| `holdsLargestArmy(Player)`                             | `boolean`          | Returns true if the given player currently holds the Largest Army card                                                                                                                                                           |
 
 **Invariants:**
 - `longestRoadLength` is always ≥ 5 when `longestRoadHolder` is non-null, and 0 when null
@@ -101,32 +101,32 @@ All methods are intended to be called with current game state passed in — this
 **VP source summary (used in `getTotalVP`):**
 
 | Source                        | VP per unit | Notes                                      |
-|-------------------------------|-------------|---------------------------------------------|
-| Settlement on board           | 1           | Read from `board.getVertices()`             |
-| City on board                 | 2           | Read from `board.getVertices()`             |
-| Longest Road card             | 2           | Read from `SpecialCardTracker`              |
-| Largest Army card             | 2           | Read from `SpecialCardTracker`              |
+|-------------------------------|-------------|--------------------------------------------|
+| Settlement on board           | 1           | Read from `board.getVertices()`            |
+| City on board                 | 2           | Read from `board.getVertices()`            |
+| Longest Road card             | 2           | Read from `SpecialCardTracker`             |
+| Largest Army card             | 2           | Read from `SpecialCardTracker`             |
 | VP development card (in hand) | 1           | Always counted, even if not yet "revealed" |
 
 ---
 
 ## Key Validation Rules (BVA Targets)
 
-| Rule                                              | Invalid (boundary)                                          | Valid (boundary)                                           |
-|---------------------------------------------------|-------------------------------------------------------------|------------------------------------------------------------|
-| Longest Road — claim threshold                    | Road of length 4 (not enough to claim)                      | Road of exactly length 5 (first claim)                     |
-| Longest Road — steal threshold                    | Matching the current holder's length (tie; no steal)         | Exceeding the holder's length by 1                         |
-| Largest Army — claim threshold                    | 2 knights played (not enough to claim)                      | Exactly 3 knights played (first claim)                     |
-| Largest Army — steal threshold                    | Matching the current holder's count (tie; no steal)          | Exceeding the holder's count by 1                          |
-| Win condition — VP threshold                      | 9 VP (no win)                                               | Exactly 10 VP (win)                                        |
-| Win condition — VP counted on own turn only       | Player reaches 10 VP mid-turn (win still triggered at turn end) | Player reaches 10 VP and `endCurrentTurn()` is called  |
-| `getTotalVP()` — null player                      | `player` is null                                            | Any valid `Player` instance                                |
-| `getTotalVP()` — null tracker                     | `tracker` is null                                           | Any valid `SpecialCardTracker` instance                    |
-| `computeLongestRoad()` — no roads placed          | Player has 0 roads; result should be 0                      | Player has at least 1 road; result is ≥ 1                  |
-| `computeLongestRoad()` — road broken by opponent  | Opponent settlement splits a 6-road into two 3-road halves  | Unbroken 6-road counts as 6                                |
-| `updateLongestRoad()` — negative road length      | `roadLength` < 0                                            | `roadLength` == 0                                          |
-| `updateLargestArmy()` — negative knight count     | `knightCount` < 0                                           | `knightCount` == 0                                         |
-| `getDevCardVP()` / `computeKnightCount()` — empty hand | `player.getDevelopmentCards()` returns empty list (both return 0) | Hand contains at least one card of the relevant type |
+| Rule                                                   | Invalid (boundary)                                                | Valid (boundary)                                      |
+|--------------------------------------------------------|-------------------------------------------------------------------|-------------------------------------------------------|
+| Longest Road — claim threshold                         | Road of length 4 (not enough to claim)                            | Road of exactly length 5 (first claim)                |
+| Longest Road — steal threshold                         | Matching the current holder's length (tie; no steal)              | Exceeding the holder's length by 1                    |
+| Largest Army — claim threshold                         | 2 knights played (not enough to claim)                            | Exactly 3 knights played (first claim)                |
+| Largest Army — steal threshold                         | Matching the current holder's count (tie; no steal)               | Exceeding the holder's count by 1                     |
+| Win condition — VP threshold                           | 9 VP (no win)                                                     | Exactly 10 VP (win)                                   |
+| Win condition — VP counted on own turn only            | Player reaches 10 VP mid-turn (win still triggered at turn end)   | Player reaches 10 VP and `endCurrentTurn()` is called |
+| `getTotalVP()` — null player                           | `player` is null                                                  | Any valid `Player` instance                           |
+| `getTotalVP()` — null tracker                          | `tracker` is null                                                 | Any valid `SpecialCardTracker` instance               |
+| `computeLongestRoad()` — no roads placed               | Player has 0 roads; result should be 0                            | Player has at least 1 road; result is ≥ 1             |
+| `computeLongestRoad()` — road broken by opponent       | Opponent settlement splits a 6-road into two 3-road halves        | Unbroken 6-road counts as 6                           |
+| `updateLongestRoad()` — negative road length           | `roadLength` < 0                                                  | `roadLength` == 0                                     |
+| `updateLargestArmy()` — negative knight count          | `knightCount` < 0                                                 | `knightCount` == 0                                    |
+| `getDevCardVP()` / `computeKnightCount()` — empty hand | `player.getDevelopmentCards()` returns empty list (both return 0) | Hand contains at least one card of the relevant type  |
 
 ---
 
