@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -729,5 +730,15 @@ public class VictoryPointCalculatorTest {
         assertThrows(IllegalArgumentException.class, () -> {
             calc.getWinner(game, board, null);
         });
+    }
+
+    @Test
+    public void GetWinner_HighestVPIsNine_ReturnsEmpty() {
+        for (int i = 0; i < 9; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        Optional<Player> winner = calc.getWinner(game, board, tracker);
+        assertTrue(winner.isEmpty());
     }
 }
