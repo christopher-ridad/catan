@@ -163,6 +163,29 @@ public class VictoryPointCalculatorTest {
     }
 
     @Test
+    public void GetTotalVP_WinThresholdExact_ReturnsTen() {
+        int[] settlementVertices = {0, 2};
+        for (int id : settlementVertices) {
+            board.getVertex(id).setOwner(p1);
+        }
+
+        int[] cityVertices = {11, 15};
+        for (int id : cityVertices) {
+            board.getVertex(id).setOwner(p1);
+            board.getVertex(id).upgradeToCity();
+        }
+
+        tracker.updateLargestArmy(p1, 3);
+
+        for (int i = 0; i < 2; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        int vp = calc.getTotalVP(p1, board, tracker);
+        assertEquals(10, vp);
+    }
+
+    @Test
     public void GetSettlementVP_WithNullPlayer_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
             calc.getSettlementVP(null, board);
