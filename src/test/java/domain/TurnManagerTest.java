@@ -2,11 +2,14 @@ package domain;
 
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TurnManagerTest {
     private Board board;
@@ -84,5 +87,14 @@ public class TurnManagerTest {
             vertex.setOwner(player);
             vertex.upgradeToCity();
         }
+    }
+
+    // ------------------------------------------------------------------
+    // Constructor
+    // ------------------------------------------------------------------
+
+    @Test
+    public void Constructor_WithNullGame_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new TurnManager(null, bank, dice));
     }
 }
