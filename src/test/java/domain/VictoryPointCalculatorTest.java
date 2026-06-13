@@ -125,6 +125,15 @@ public class VictoryPointCalculatorTest {
     }
 
     @Test
+    public void GetTotalVP_OnlySpecialCards_ReturnsSum() {
+        tracker.updateLongestRoad(p1, 5);
+        tracker.updateLargestArmy(p1, 3);
+
+        int vp = calc.getTotalVP(p1, board, tracker);
+        assertEquals(4, vp);
+    }
+
+    @Test
     public void GetSettlementVP_WithNullPlayer_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
             calc.getSettlementVP(null, board);
