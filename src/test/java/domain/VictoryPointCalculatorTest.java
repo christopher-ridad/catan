@@ -144,6 +144,25 @@ public class VictoryPointCalculatorTest {
     }
 
     @Test
+    public void GetTotalVP_WinThresholdJustBelow_ReturnsNine() {
+        int[] settlementVertices = {0, 2, 11};
+        for (int id : settlementVertices) {
+            board.getVertex(id).setOwner(p1);
+        }
+
+        int[] cityVertices = {15, 21};
+        for (int id : cityVertices) {
+            board.getVertex(id).setOwner(p1);
+            board.getVertex(id).upgradeToCity();
+        }
+
+        tracker.updateLongestRoad(p1, 5);
+
+        int vp = calc.getTotalVP(p1, board, tracker);
+        assertEquals(9, vp);
+    }
+
+    @Test
     public void GetSettlementVP_WithNullPlayer_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
             calc.getSettlementVP(null, board);
