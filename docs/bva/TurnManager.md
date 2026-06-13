@@ -69,3 +69,7 @@
 - **TC15: EndCurrentTurn_DuringProductionPhase_ThrowsIllegalStateException** ( implemented )
     - State of the system: a turn has been started but dice have not been rolled (phase is `PRODUCTION`)
     - Expected output: `IllegalStateException`
+
+- **TC16: EndCurrentTurn_DuringTradePhase_ThrowsIllegalStateException** ( implemented )
+    - State of the system: a turn has been started and dice rolled (phase is `TRADE`), but `advanceToBuild()` has not been called
+    - Expected output: `IllegalStateException`

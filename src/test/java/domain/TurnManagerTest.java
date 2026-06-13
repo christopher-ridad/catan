@@ -206,4 +206,12 @@ public class TurnManagerTest {
         assertThrows(IllegalStateException.class, turnManager::endCurrentTurn);
     }
 
+    @Test
+    public void EndCurrentTurn_DuringTradePhase_ThrowsIllegalStateException() {
+        Turn turn = turnManager.startNextTurn();
+        turn.rollDice();
+
+        assertThrows(IllegalStateException.class, turnManager::endCurrentTurn);
+    }
+
 }
