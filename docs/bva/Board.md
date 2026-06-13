@@ -175,6 +175,10 @@
   - State of the system: valid board, one adjacent vertex is occupied
   - Expected output: `false`
 
+- **TC42: SatisfiesDistanceRule_WhenTargetVertexIsOccupied_ReturnsFalse** ( :white_check_mark: )
+  - State of the system: valid board, the target vertex itself already has a settlement (no neighbors occupied)
+  - Expected output: `false` (cannot place a second settlement on an already-occupied vertex)
+
 ## Method under test: `isConnectedToPlayer(Vertex, Player)`
 - **TC38: IsConnectedToPlayer_WhenNoAdjacentRoads_ReturnsFalse** ( implemented )
   - State of the system: valid board, no edges adjacent to vertex have roads
@@ -192,6 +196,55 @@
   - State of the system: valid board, edge connects two other vertices (not the target vertex) but has a road owned by the player
   - Expected output: `false`
 
+## Method under test: `getHarborType(Vertex)`
+
+- **TC42: getHarborType_ForNonHarborVertex_ReturnsEmpty** ( implemented )
+  - **State of the system**: Valid board constructed, vertex 4 requested (non-harbor inner vertex)
+  - **Expected output**: `Optional.empty()`
+
+- **TC43: getHarborType_ForGenericHarborVertex_ReturnsGeneric** ( implemented )
+  - **State of the system**: Valid board constructed, vertex 0 requested
+  - **Expected output**: `Optional` containing `HarborType.GENERIC`
+
+- **TC44: getHarborType_ForGrainHarborVertex_ReturnsGrain** ( implemented )
+  - **State of the system**: Valid board constructed, vertex 1 requested
+  - **Expected output**: `Optional` containing `HarborType.GRAIN`
+
+- **TC45: getHarborType_ForOreHarborVertex_ReturnsOre** ( implemented )
+  - **State of the system**: Valid board constructed, vertex 10 requested
+  - **Expected output**: `Optional` containing `HarborType.ORE`
+
+- **TC46: getHarborType_ForWoolHarborVertex_ReturnsWool** ( implemented )
+  - **State of the system**: Valid board constructed, vertex 42 requested
+  - **Expected output**: `Optional` containing `HarborType.WOOL`
+
+- **TC47: getHarborType_ForBrickHarborVertex_ReturnsBrick** ( implemented )
+  - **State of the system**: Valid board constructed, vertex 33 requested
+  - **Expected output**: `Optional` containing `HarborType.BRICK`
+
+- **TC48: getHarborType_ForLumberHarborVertex_ReturnsLumber** ( implemented )
+  - **State of the system**: Valid board constructed, vertex 11 requested
+  - **Expected output**: `Optional` containing `HarborType.LUMBER`
+
+## Method under test: `getRobberHex()`
+
+- **TC49: getRobberHex_NewBoard_StartsOnDesertHex** ( :white_check_mark: )
+  - **State of the system**: newly constructed board (robber not yet moved)
+  - **Expected output**: `getRobberHex().getTerrainType()` returns `TerrainType.DESERT`
+
+## Method under test: `setRobberHex(Hex)`
+
+- **TC50: setRobberHex_WithNull_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - **State of the system**: valid board, `null` passed as hex
+  - **Expected output**: `IllegalArgumentException`
+
+- **TC51: setRobberHex_WithHexNotOnBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - **State of the system**: valid board, hex constructed independently of the board's hex list
+  - **Expected output**: `IllegalArgumentException`
+
+- **TC52: setRobberHex_WithHexOnBoard_UpdatesRobberHex** ( :white_check_mark: )
+  - **State of the system**: valid board, hex taken from `getHexes()`
+  - **Expected output**: `getRobberHex()` returns the given hex
 
 
 

@@ -30,6 +30,13 @@ Represents the current phase within an active turn. Phases advance in order and 
 
 ---
 
+### `DevelopmentCardType`
+```
+KNIGHT, ROAD_BUILDING, YEAR_OF_PLENTY, MONOPOLY, VICTORY_POINT
+```
+Represents the type of a development card. There are 25 total: 14 Knight, 6 Progress (Road Building, Year of Plenty, Monopoly), and 5 Victory Point.
+
+
 ## Classes
 
 ---
@@ -38,10 +45,7 @@ Represents the current phase within an active turn. Phases advance in order and 
 
 Simulates rolling two dice. Keeps the most recent individual die values so callers can detect a 7 and inspect each die separately.
 
-| Field     | Type  | Description                              |
-|-----------|-------|------------------------------------------|
-| `die1`    | `int` | Result of the first die (last roll)      |
-| `die2`    | `int` | Result of the second die (last roll)     |
+Simulates rolling two dice and returns their sum.
 
 | Method         | Return Type | Description                                                                                 |
 |----------------|-------------|---------------------------------------------------------------------------------------------|
@@ -53,8 +57,7 @@ Simulates rolling two dice. Keeps the most recent individual die values so calle
 | `isSevenRolled()` | `boolean` | Returns true if the last roll summed to 7                                                  |
 
 **Invariants:**
-- `die1` and `die2` are each in {1, 2, 3, 4, 5, 6} after any `roll()` call
-- `getTotal()` == `die1` + `die2` always holds after a roll
+- Every value returned by `roll()` is in [2, 12]
 
 ---
 
@@ -62,18 +65,18 @@ Simulates rolling two dice. Keeps the most recent individual die values so calle
 
 Represents the shared resource supply. Enforces supply limits and handles card distribution and collection.
 
-| Field       | Type                         | Description                                                        |
-|-------------|------------------------------|--------------------------------------------------------------------|
-| `supply`    | `Map<ResourceType, Integer>` | Current card count per resource type; initialized to 19 each      |
+| Field    | Type                         | Description                                                   |
+|----------|------------------------------|---------------------------------------------------------------|
+| `supply` | `Map<ResourceType, Integer>` | Current card count per resource type; initialized to 19 each |
 
-| Method                                              | Return Type | Description                                                                                                                             |
-|-----------------------------------------------------|-------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| `Bank()`                                            | —           | Constructor; initializes each of the 5 resource types to 19 cards                                                                      |
-| `getSupply(ResourceType)`                           | `int`       | Returns how many cards of the given type remain in the bank                                                                             |
-| `canDistribute(ResourceType, int amount)`           | `boolean`   | Returns true if the bank has at least `amount` cards of the given type                                                                  |
-| `distribute(ResourceType, int amount)`              | `void`      | Removes `amount` cards from supply; throws `IllegalStateException` if supply is insufficient, `IllegalArgumentException` if amount <= 0 |
-| `collect(ResourceType, int amount)`                 | `void`      | Returns `amount` cards to supply; throws `IllegalArgumentException` if amount <= 0 or if collection would exceed 19                     |
-| `hasEnoughForProduction(Map<ResourceType, Integer>)` | `boolean`  | Returns true if the bank can fulfill every entry in the given production map (used by `Turn` to determine partial-distribution edge case) |
+| Method                                               | Return Type | Description                                                                                                                              |
+|------------------------------------------------------|-------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| `Bank()`                                             | —           | Constructor; initializes each of the 5 resource types to 19 cards                                                                       |
+| `getSupply(ResourceType)`                            | `int`       | Returns how many cards of the given type remain in the bank                                                                              |
+| `canDistribute(ResourceType, int amount)`            | `boolean`   | Returns true if the bank has at least `amount` cards of the given type                                                                   |
+| `distribute(ResourceType, int amount)`               | `void`      | Removes `amount` cards from supply; throws `IllegalStateException` if supply is insufficient, `IllegalArgumentException` if amount <= 0  |
+| `collect(ResourceType, int amount)`                  | `void`      | Returns `amount` cards to supply; throws `IllegalArgumentException` if amount <= 0 or if collection would exceed 19                      |
+| `hasEnoughForProduction(Map<ResourceType, Integer>)` | `boolean`   | Returns true if the bank can fulfill every entry in the given production map (used by `Turn` to determine partial-distribution edge case) |
 
 **Invariants:**
 - Each resource type is always in the range [0, 19]
@@ -85,30 +88,30 @@ Represents the shared resource supply. Enforces supply limits and handles card d
 
 Represents a proposal from the active player to one other player during the `TRADE` phase. Holds what is being offered and what is being requested, and tracks whether the offer has been responded to.
 
-| Field          | Type                          | Description                                              |
-|----------------|-------------------------------|----------------------------------------------------------|
-| `offerer`      | `Player`                      | The player making the offer (always the active player)   |
-| `recipient`    | `Player`                      | The player being asked to trade                          |
-| `offering`     | `Map<ResourceType, Integer>`  | Resources the offerer will give                          |
-| `requesting`   | `Map<ResourceType, Integer>`  | Resources the offerer wants in return                    |
-| `status`       | `TradeStatus`                 | Current state of the offer: `PENDING`, `ACCEPTED`, `REJECTED` |
+| Field        | Type                         | Description                                                           |
+|--------------|------------------------------|-----------------------------------------------------------------------|
+| `offerer`    | `Player`                     | The player making the offer (always the active player)                |
+| `recipient`  | `Player`                     | The player being asked to trade                                       |
+| `offering`   | `Map<ResourceType, Integer>` | Resources the offerer will give                                       |
+| `requesting` | `Map<ResourceType, Integer>` | Resources the offerer wants in return                                 |
+| `status`     | `TradeStatus`                | Current state of the offer: `PENDING`, `ACCEPTED`, `REJECTED`        |
 
 #### `TradeStatus` (nested enum)
 ```
 PENDING, ACCEPTED, REJECTED
 ```
 
-| Method                                                                              | Return Type   | Description                                                                                                                                                    |
-|-------------------------------------------------------------------------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `TradeOffer(Player offerer, Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting)` | — | Constructor; throws `IllegalArgumentException` if offerer equals recipient, if either map is null or empty, or if any value in either map is <= 0 |
-| `getOfferer()`                                                                      | `Player`      | Returns the player who made the offer                                                                                                                          |
-| `getRecipient()`                                                                    | `Player`      | Returns the player who received the offer                                                                                                                      |
-| `getOffering()`                                                                     | `Map<ResourceType, Integer>` | Returns an unmodifiable view of what the offerer is giving                                                                              |
-| `getRequesting()`                                                                   | `Map<ResourceType, Integer>` | Returns an unmodifiable view of what the offerer wants                                                                                  |
-| `getStatus()`                                                                       | `TradeStatus` | Returns the current status of the offer                                                                                                                        |
-| `accept()`                                                                          | `void`        | Sets status to `ACCEPTED`; throws `IllegalStateException` if status is not `PENDING`                                                                           |
-| `reject()`                                                                          | `void`        | Sets status to `REJECTED`; throws `IllegalStateException` if status is not `PENDING`                                                                           |
-| `isPending()`                                                                       | `boolean`     | Returns true if status is `PENDING`                                                                                                                            |
+| Method                                                                                                                     | Return Type                  | Description                                                                                                                                                     |
+|----------------------------------------------------------------------------------------------------------------------------|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `TradeOffer(Player offerer, Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting)` | —                            | Constructor; throws `IllegalArgumentException` if offerer equals recipient, if either map is null or empty, or if any value in either map is <= 0              |
+| `getOfferer()`                                                                                                             | `Player`                     | Returns the player who made the offer                                                                                                                           |
+| `getRecipient()`                                                                                                           | `Player`                     | Returns the player who received the offer                                                                                                                       |
+| `getOffering()`                                                                                                            | `Map<ResourceType, Integer>` | Returns an unmodifiable view of what the offerer is giving                                                                                                      |
+| `getRequesting()`                                                                                                          | `Map<ResourceType, Integer>` | Returns an unmodifiable view of what the offerer wants                                                                                                          |
+| `getStatus()`                                                                                                              | `TradeStatus`                | Returns the current status of the offer                                                                                                                         |
+| `accept()`                                                                                                                 | `void`                       | Sets status to `ACCEPTED`; throws `IllegalStateException` if status is not `PENDING`                                                                            |
+| `reject()`                                                                                                                 | `void`                       | Sets status to `REJECTED`; throws `IllegalStateException` if status is not `PENDING`                                                                            |
+| `isPending()`                                                                                                              | `boolean`                    | Returns true if status is `PENDING`                                                                                                                             |
 
 **Invariants:**
 - `offerer` and `recipient` are never the same player
@@ -117,8 +120,56 @@ PENDING, ACCEPTED, REJECTED
 
 ---
 
-### `Turn`
+### `MaritimeTrade`
 
+Represents a validated trade between the active player and the bank. Encapsulates the giving resource, the amount, and the receiving resource, and validates the amount against the player's best available harbor rate at construction time.
+
+| Field       | Type           | Description                                          |
+|-------------|----------------|------------------------------------------------------|
+| `player`    | `Player`       | The player making the trade                          |
+| `giving`    | `ResourceType` | The resource being given to the bank                 |
+| `amount`    | `int`          | Number of cards given (2, 3, or 4)                   |
+| `receiving` | `ResourceType` | The resource received from the bank                  |
+
+| Method                                                        | Return Type    | Description                                                                                                                                                                                   |
+|---------------------------------------------------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `MaritimeTrade(Player, ResourceType giving, int amount, ResourceType receiving, Board)` | — | Constructor; throws `IllegalArgumentException` if `giving == receiving`, if `amount` does not match the player's best available rate for `giving` on the given board, or if player cannot afford `amount` of `giving` |
+| `getPlayer()`                                                 | `Player`       | Returns the trading player                                                                                                                                                                    |
+| `getGiving()`                                                 | `ResourceType` | Returns the resource being given to the bank                                                                                                                                                  |
+| `getAmount()`                                                 | `int`          | Returns the number of cards being given                                                                                                                                                       |
+| `getReceiving()`                                              | `ResourceType` | Returns the resource being received from the bank                                                                                                                                             |
+| `getRate()`                                                   | `int`          | Returns the rate used for this trade (2, 3, or 4); determined at construction time from board harbor data                                                                                     |
+
+**Invariants:**
+- `giving` and `receiving` are never the same resource
+- `amount` always equals the player's best available rate for `giving`
+- `player` always has at least `amount` cards of `giving` at construction time
+
+---
+
+### `Turn`
+### `DevelopmentCard`
+Represents a single development card. Tracks its type and whether it has been played.
+
+| Field        | Type                  | Description                                      |
+|--------------|-----------------------|--------------------------------------------------|
+| `type`       | `DevelopmentCardType` | The type of this card                            |
+| `played`     | `boolean`             | True if this card has already been played        |
+
+| Method                          | Return Type           | Description                                                                                       |
+|---------------------------------|-----------------------|---------------------------------------------------------------------------------------------------|
+| `DevelopmentCard(DevelopmentCardType type)` | —       | Constructor; throws `IllegalArgumentException` if type is null                                    |
+| `getType()`                     | `DevelopmentCardType` | Returns the card type                                                                             |
+| `isPlayed()`                    | `boolean`             | Returns true if the card has been played                                                          |
+| `markAsPlayed()`                | `void`                | Marks the card as played; throws `IllegalStateException` if already played                        |
+
+**Invariants:**
+- Once `markAsPlayed()` is called, `isPlayed()` always returns true
+- Victory Point cards are never marked as played until the player declares victory
+
+---
+
+### `Turn`
 Orchestrates a single player's turn through its three phases. Enforces phase order, handles the robber on a 7, and delegates building cost validation to the existing domain objects.
 
 | Field                  | Type          | Description                                                                    |
@@ -159,12 +210,12 @@ Orchestrates a single player's turn through its three phases. Enforces phase ord
 2. Any player holding more than 7 resource cards must discard half (rounded down) — handled by `enforceDiscard()`.
 3. The active player must then call `moveRobber(int hexId)` and `steal(Player target)` before `advanceToBuild()` is allowed.
 
-| Method                              | Return Type    | Description                                                                                                                       |
-|-------------------------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| `enforceDiscard()`                  | `void`         | For each player holding > 7 cards, removes `floor(count / 2)` cards at random and returns them to the bank; called internally    |
-| `moveRobber(int hexId)`             | `void`         | Moves the robber to the given hex; throws `IllegalArgumentException` if hex is current robber location or id is invalid           |
-| `steal(Player target)`              | `void`         | Steals 1 random resource from `target`; throws if target has no cards or no settlement adjacent to the robber's new hex           |
-| `getRobbingCandidates()`            | `List<Player>` | Returns all players (excluding active player) with a settlement or city adjacent to the hex the robber was just moved to          |
+| Method                  | Return Type    | Description                                                                                                                        |
+|-------------------------|----------------|------------------------------------------------------------------------------------------------------------------------------------|
+| `enforceDiscard()`      | `void`         | For each player holding > 7 cards, removes `floor(count / 2)` cards at random and returns them to the bank; called internally     |
+| `moveRobber(int hexId)` | `void`         | Moves the robber to the given hex; throws `IllegalArgumentException` if hex is current robber location or id is invalid            |
+| `steal(Player target)`  | `void`         | Steals 1 random resource from `target`; no-op if target holds no resource cards (so the turn cannot get stuck on an empty-handed candidate); throws if `target` has no settlement or city adjacent to the robber's new hex |
+| `getRobbingCandidates()`| `List<Player>` | Returns all players (excluding active player) with a settlement or city adjacent to the hex the robber was just moved to           |
 
 **Phase transition rules:**
 
@@ -179,27 +230,30 @@ PRODUCTION ──[rollDice()]──► TRADE ──[advanceToBuild()]──► B
 
 ## Key Validation Rules (BVA Targets)
 
-| Rule                                        | Invalid (boundary)                                   | Valid (boundary)                                 |
-|---------------------------------------------|------------------------------------------------------|--------------------------------------------------|
-| `rollDice()` call order                     | Called twice in one turn; called outside `PRODUCTION`| Called exactly once at start of turn             |
-| Bank supply during production               | Requested amount > remaining supply                  | Requested amount == remaining supply             |
-| Discard threshold                           | 7 cards (no discard), 9 cards (discard 4)            | 8 cards (discard 4)                              |
-| Road placement                              | Edge already has a road; edge not connected to player's network | First valid connected, empty edge      |
-| Settlement placement (Distance Rule)        | Vertex with any occupied neighbor                    | Vertex with all neighbors empty                  |
-| Settlement placement (road connection)      | Vertex not connected to any player road              | Vertex at end of at least one player road        |
-| City upgrade                                | Vertex not owned by player; vertex has a city already| Vertex with player's existing settlement         |
-| `moveRobber()` target                       | Current robber hex id                                | Any other valid hex id                           |
-| `steal()` target                            | Player with 0 resource cards                         | Player with 1 resource card                      |
-| Build action outside `BUILD` phase          | Any build call during `PRODUCTION` or `TRADE`        | Any build call during `BUILD`                    |
-| Domestic trade — offerer affords offering   | Offerer has 0 of a resource they're offering         | Offerer has exactly the amount they're offering  |
-| Domestic trade — recipient affords request  | Recipient has 0 of a resource being requested        | Recipient has exactly the amount being requested |
-| Domestic trade — self-trade                 | `offerer` == `recipient`                             | Any two distinct players                         |
-| Domestic trade — offer map values           | Any value <= 0 in offering or requesting             | All values >= 1                                  |
-| Trade proposed when one already pending     | Second `proposeTrade()` before prior offer resolves  | `proposeTrade()` after prior offer accepted/rejected |
-| Maritime trade — default rate               | Fewer than 4 identical cards (no harbor)             | Exactly 4 identical cards                        |
-| Maritime trade — generic harbor rate        | Fewer than 3 identical cards                         | Exactly 3 identical cards                        |
-| Maritime trade — special harbor rate        | Fewer than 2 of the matching resource                | Exactly 2 of the matching resource               |
-| Maritime trade action outside `TRADE` phase | `executeMaritimeTrade()` called during `BUILD`        | `executeMaritimeTrade()` called during `TRADE`   |
+| Rule                                          | Invalid (boundary)                                                    | Valid (boundary)                                          |
+|-----------------------------------------------|-----------------------------------------------------------------------|-----------------------------------------------------------|
+| `rollDice()` call order                       | Called twice in one turn; called outside `PRODUCTION`                 | Called exactly once at start of turn                      |
+| Bank supply during production                 | Requested amount > remaining supply                                   | Requested amount == remaining supply                      |
+| Discard threshold                             | 7 cards (no discard), 9 cards (discard 4)                             | 8 cards (discard 4)                                       |
+| Road placement                                | Edge already has a road; edge not connected to player's network       | First valid connected, empty edge                         |
+| Settlement placement (Distance Rule)          | Vertex with any occupied neighbor                                     | Vertex with all neighbors empty                           |
+| Settlement placement (road connection)        | Vertex not connected to any player road                               | Vertex at end of at least one player road                 |
+| City upgrade                                  | Vertex not owned by player; vertex has a city already                 | Vertex with player's existing settlement                  |
+| `moveRobber()` target                         | Current robber hex id                                                 | Any other valid hex id                                    |
+| `steal()` target resource count               | Player with 0 resource cards (no-op, robber resolves with no transfer)| Player with 1 resource card (transfers that card)         |
+| Build action outside `BUILD` phase            | Any build call during `PRODUCTION` or `TRADE`                         | Any build call during `BUILD`                             |
+| Domestic trade — offerer affords offering     | Offerer has 0 of a resource they're offering                          | Offerer has exactly the amount they're offering           |
+| Domestic trade — recipient affords request    | Recipient has 0 of a resource being requested                         | Recipient has exactly the amount being requested          |
+| Domestic trade — self-trade                   | `offerer` == `recipient`                                              | Any two distinct players                                  |
+| Domestic trade — offer map values             | Any value <= 0 in offering or requesting                              | All values >= 1                                           |
+| Trade proposed when one already pending       | Second `proposeTrade()` before prior offer resolves                   | `proposeTrade()` after prior offer accepted/rejected      |
+| Maritime trade — giving equals receiving      | `giving == receiving`                                                 | Any two distinct resource types                           |
+| Maritime trade — default rate                 | Fewer than 4 identical cards (no harbor)                              | Exactly 4 identical cards                                 |
+| Maritime trade — generic harbor rate          | Fewer than 3 identical cards                                          | Exactly 3 identical cards                                 |
+| Maritime trade — special harbor rate          | Fewer than 2 of the matching resource                                 | Exactly 2 of the matching resource                        |
+| Maritime trade — player affords giving        | Player has fewer cards than the required rate                         | Player has exactly the required rate amount               |
+| `submitMaritimeTrade()` outside `TRADE` phase | `submitMaritimeTrade()` called during `BUILD`                         | `submitMaritimeTrade()` called during `TRADE`             |
+| `submitMaritimeTrade()` bank supply           | Bank has 0 of the requested receiving resource                        | Bank has exactly 1 of the requested receiving resource    |
 
 ---
 
@@ -218,10 +272,13 @@ src/main/java/domain/
 ├── Player.java                (existing)
 ├── Game.java                  (existing)
 ├── SetupPhase.java            (existing)
-├── DiceRoll.java                  (NEW)
+├── DiceRoll.java              (NEW)
 ├── Bank.java                  (NEW)
 ├── TradeOffer.java            (NEW)
-└── Turn.java                  (NEW)
+├── MaritimeTrade.java         (NEW)
+├── Turn.java                  (NEW)
+├── DevelopmentCardType.java   (enum — NEW)
+└── DevelopmentCard.java       (NEW)
 
 src/test/java/domain/
 ├── HexTest.java               (existing)
@@ -229,10 +286,12 @@ src/test/java/domain/
 ├── PlayerTest.java            (existing)
 ├── GameTest.java              (existing)
 ├── SetupPhaseTest.java        (existing)
-├── DiceRollTest.java              (NEW)
+├── DiceRollTest.java          (NEW)
 ├── BankTest.java              (NEW)
 ├── TradeOfferTest.java        (NEW)
-└── TurnTest.java              (NEW)
+├── MaritimeTradeTest.java     (NEW)
+├── TurnTest.java              (NEW)
+└── DevelopmentCardTest.java   (NEW)
 ```
 
 ---
@@ -241,9 +300,10 @@ src/test/java/domain/
 
 - `Turn` depends on `Game` for board topology and player list, but should not modify `Game` state directly. All state mutations (resource counts, vertex/edge ownership) go through `Player`, `Vertex`, and `Edge` methods already defined in the Setup Phase design.
 - `Bank` is a standalone class, not embedded in `Game`, so it can be mocked independently in `TurnTest`.
-- `DiceRoll` has no domain dependencies and should be straightforward to test with a fixed-seed or mock subclass for deterministic rolls.
+- `DiceRoll` has no domain dependencies and should be straightforward to test by injecting a seeded or mocked `Random` for deterministic rolls.
 - `TradeOffer` is a pure data/state class with no dependency on `Turn` — test it in isolation in `TradeOfferTest` before wiring it into `TurnTest`.
+- `MaritimeTrade` receives a `Board` in its constructor to perform harbor rate lookup at construction time. The resolved rate is stored and exposed via `getRate()`, so `Turn` does not need to re-derive it. This requires `Board` to expose a `getHarborAt(Vertex)` or equivalent query.
+- `submitMaritimeTrade()` on `Turn` trusts that the `MaritimeTrade` passed to it is already valid (rate and affordability checked at construction); `Turn` is only responsible for phase enforcement and bank supply at execution time.
 - Only one domestic trade offer may be pending at a time. `Turn` must clear `pendingTrade` (set to null) as soon as an offer is accepted or rejected, before another `proposeTrade()` call is permitted.
-- Maritime trade rate lookup in `getMaritimeRate()` requires checking which vertices the active player has settlements or cities on, then inspecting the harbor type at each. This will likely require a `getHarborAt(Vertex)` or similar query on `Board` — that may be a small extension needed there.
 - Other players cannot trade among themselves during another player's turn; `proposeTrade()` enforces this by requiring `offerer == activePlayer`.
 - The robber's current hex should be tracked on `Board` (a `getRobberHex()` / `setRobberHex(Hex)` pair may need to be added to `Board` as a small extension of the existing class).

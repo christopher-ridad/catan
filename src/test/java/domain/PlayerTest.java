@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PlayerTests {
+public class PlayerTest {
     @Test
     public void constructor_WithNullName_ThrowsIllegalArgumentException() {
         PlayerColor playerOneColor = PlayerColor.BLUE;
@@ -232,5 +232,65 @@ public class PlayerTests {
 
         Player playerOne = new Player(playerOneName, playerOneColor, maxResourcesMap);
         assertEquals(Integer.MAX_VALUE, playerOne.getTotalResourceCount());
+    }
+
+    @Test
+    public void removeResources_nullResourceType_throwsIllegalArgumentException() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertThrows(IllegalArgumentException.class, () -> {
+            playerOne.removeResources(null, 2);
+        });
+    }
+
+    @Test
+    public void removeResources_woolType_amountLessThanZero_ThrowsIllegalArgumentException() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertThrows(IllegalArgumentException.class, () -> {
+            playerOne.removeResources(ResourceType.WOOL, -1);
+        });
+    }
+
+    @Test
+    public void removeResources_brickType_amountZero_noExceptionThrown() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.RED;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        playerOne.addResources(ResourceType.BRICK, 1);
+        assertDoesNotThrow(() -> {
+            playerOne.removeResources(ResourceType.BRICK, 0);
+        });
+
+        assertEquals(1, playerOne.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
+    public void removeResources_grainType_playerDoesNotHaveEnough_ThrowsIllegalStateException() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.ORANGE;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        playerOne.addResources(ResourceType.GRAIN, 1);
+        assertThrows(IllegalStateException.class, () -> {
+            playerOne.removeResources(ResourceType.GRAIN, 3);
+        });
+    }
+
+    @Test
+    public void removeResources_lumberType_playerHasEnough_noExceptionThrown() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.ORANGE;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        playerOne.addResources(ResourceType.LUMBER, 5);
+        playerOne.removeResources(ResourceType.LUMBER, 3);
+
+        assertEquals(2, playerOne.getResourceCount(ResourceType.LUMBER));
     }
 }

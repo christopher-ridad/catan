@@ -2,7 +2,9 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -10,25 +12,24 @@ import java.util.Objects;
  *
  * Adresses issue #9: Implement Game setup with player count validation.
  *
- * NOTE: Player is typed as Object temporarily until PR #17 (domain/Player) gets merged.
  */
 
-public class Game {
-
-    // NOTE: All instances of 'Object' should be reverted to type 'Player' after PR #17 is merged
+public final class Game {
 
     private static final int MIN_PLAYERS = 2;
     private static final int MAX_PLAYERS = 4;
 
-    private final List<Object> players; // Change type to <Player> once PR #17 gets merged
+    private final List<Player> players; // Change type to <Player> once PR #17 gets merged
     private final Board board;
+    private final List<DevelopmentCard> developmentDeck;
+    private final Map<Player, List<DevelopmentCard>> playerHands;
 
     // Creates a new Game with the given ordered list of players.
     // Throws NullPointerException if {@code players} is null or contains a null entry
     // Throws IllegalArgumentException if the player count is outside [2, 4]
     // Throws IllegalArgumentException if any two players share the same color
 
-    public Game(List<Object> players, Board board) {
+    public Game(List<Player> players, Board board) {
         Objects.requireNonNull(players, "Player list must not be null");
         Objects.requireNonNull(board, "Board must not be null");
         validatePlayerCount(players.size());
@@ -37,10 +38,64 @@ public class Game {
 
         this.players = Collections.unmodifiableList(new ArrayList<>(players));
         this.board = board;
+        this.developmentDeck = createShuffledDevelopmentDeck();
+        this.playerHands = createEmptyPlayerHands(this.players);
     }
 
-    public List<Object> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
+    }
+
+    public int getRemainingDevelopmentCardCount() {
+        return developmentDeck.size();
+    }
+
+    DevelopmentCard drawDevelopmentCard() {
+        if (developmentDeck.isEmpty()) {
+            throw new IllegalStateException("No development cards remain in the deck");
+        }
+        return developmentDeck.remove(developmentDeck.size() - 1);
+    }
+
+    public List<DevelopmentCard> getPlayerHand(Player player) {
+        List<DevelopmentCard> hand = playerHands.get(player);
+        if (hand == null) {
+            throw new IllegalArgumentException("Player is not part of this game");
+        }
+        return Collections.unmodifiableList(hand);
+    }
+
+    void addDevelopmentCardToHand(Player player, DevelopmentCard card) {
+        List<DevelopmentCard> hand = playerHands.get(player);
+        if (hand == null) {
+            throw new IllegalArgumentException("Player is not part of this game");
+        }
+        hand.add(card);
+    }
+
+    private List<DevelopmentCard> createShuffledDevelopmentDeck() {
+        List<DevelopmentCard> deck = new ArrayList<>();
+        for (int i = 0; i < 14; i++) {
+            deck.add(new DevelopmentCard(DevelopmentCardType.KNIGHT));
+        }
+        for (int i = 0; i < 2; i++) {
+            deck.add(new DevelopmentCard(DevelopmentCardType.ROAD_BUILDING));
+            deck.add(new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY));
+            deck.add(new DevelopmentCard(DevelopmentCardType.MONOPOLY));
+        }
+        for (int i = 0; i < 5; i++) {
+            deck.add(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+        Collections.shuffle(deck);
+        return deck;
+    }
+
+    private Map<Player, List<DevelopmentCard>> createEmptyPlayerHands(List<Player> players) {
+        Map<Player, List<DevelopmentCard>> hands = new HashMap<>();
+        for (Player player : players) {
+            hands.put(player, new ArrayList<>());
+        }
+        return hands;
     }
 
     public int getPlayerCount() {
@@ -51,7 +106,7 @@ public class Game {
         return board;
     }
 
-    public Object getPlayer(int index) {
+    public Player getPlayer(int index) {
         return players.get(index);
     }
 
@@ -65,25 +120,18 @@ public class Game {
         }
     }
 
-    private void validateNoNullPlayers(List<Object> players) {
-        for (Object p : players) {
+    private void validateNoNullPlayers(List<Player> players) {
+        for (Player p : players) {
             Objects.requireNonNull(p, "Player list must not contain null entries");
         }
     }
 
-    private void validateUniqueColors(List<Object> players) {
-        java.util.Set<Object> seen = new java.util.HashSet<>();
-        for (Object p : players) {
-            try {
-                Object color = p.getClass().getMethod("getColor").invoke(p);
-                if (!seen.add(color)) {
-                    throw new IllegalArgumentException(
-                            "All players must have unique colors, but found duplicate: " + color);
-                }
-            } catch (IllegalArgumentException e) {
-                throw e;
-            } catch (Exception e) {
-                throw new RuntimeException("Player object must have a getColor() method", e);
+    private void validateUniqueColors(List<Player> players) {
+        java.util.Set<PlayerColor> seen = new java.util.HashSet<>();
+        for (Player p : players) {
+            if (!seen.add(p.getColor())) {
+                throw new IllegalArgumentException(
+                        "All players must have unique colors, but found duplicate: " + p.getColor());
             }
         }
     }

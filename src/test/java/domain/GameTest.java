@@ -24,25 +24,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
-    // Stub — remove once PR #17 (wip/player-class) is merged
-    static class Player {
-        private final String name;
-        private final PlayerColor color;
-
-        Player(String name, PlayerColor color) {
-            this.name = name;
-            this.color = color;
-        }
-
-        public String getName()       {
-            return name;
-        }
-
-        public PlayerColor getColor() {
-            return color;
-        }
-    }
-    // End stub
+//    // Stub — remove once PR #17 (wip/player-class) is merged
+//    static class Player {
+//        private final String name;
+//        private final PlayerColor color;
+//
+//        Player(String name, PlayerColor color) {
+//            this.name = name;
+//            this.color = color;
+//        }
+//
+//        public String getName()       {
+//            return name;
+//        }
+//
+//        public PlayerColor getColor() {
+//            return color;
+//        }
+//    }
+//    // End stub
 
     private Board board;
     private Player alice;
@@ -132,9 +132,9 @@ public class GameTest {
 
     @Test
     void getPlayers_returnsPlayersInOriginalOrder() {
-        List<Object> input = Arrays.asList(alice, bob, charlie);
+        List<Player> input = Arrays.asList(alice, bob, charlie);
         Game game = new Game(input, board);
-        List<Object> result = game.getPlayers();
+        List<Player> result = game.getPlayers();
         assertEquals(input.size(), result.size());
         for (int i = 0; i < input.size(); i++) {
             assertSame(input.get(i), result.get(i));
@@ -209,6 +209,67 @@ public class GameTest {
     @Test
     void gameConstructor_withAllUniqueColors_doesNotThrow() {
         assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob, charlie, diana), board));
+    }
+
+    //
+    // Development card deck and player hands
+    //
+
+    @Test
+    void getRemainingDevelopmentCardCount_newGame_returnsTwentyFive() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        assertEquals(25, game.getRemainingDevelopmentCardCount());
+    }
+
+    @Test
+    void drawDevelopmentCard_removesCardFromDeck_decrementsRemainingCount() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        int before = game.getRemainingDevelopmentCardCount();
+
+        DevelopmentCard card = game.drawDevelopmentCard();
+
+        assertNotNull(card);
+        assertEquals(before - 1, game.getRemainingDevelopmentCardCount());
+    }
+
+    @Test
+    void drawDevelopmentCard_emptyDeck_throwsIllegalState() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        for (int i = 0; i < 25; i++) {
+            game.drawDevelopmentCard();
+        }
+
+        assertThrows(IllegalStateException.class, game::drawDevelopmentCard);
+    }
+
+    @Test
+    void getPlayerHand_newGame_returnsEmptyHand() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        assertTrue(game.getPlayerHand(alice).isEmpty());
+    }
+
+    @Test
+    void getPlayerHand_playerNotInGame_throwsIllegalArgument() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        assertThrows(IllegalArgumentException.class, () -> game.getPlayerHand(charlie));
+    }
+
+    @Test
+    void addDevelopmentCardToHand_addsCardToPlayersHand() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        DevelopmentCard card = game.drawDevelopmentCard();
+
+        game.addDevelopmentCardToHand(alice, card);
+
+        assertEquals(List.of(card), game.getPlayerHand(alice));
+    }
+
+    @Test
+    void addDevelopmentCardToHand_playerNotInGame_throwsIllegalArgument() {
+        Game game = new Game(Arrays.asList(alice, bob), board);
+        DevelopmentCard card = game.drawDevelopmentCard();
+
+        assertThrows(IllegalArgumentException.class, () -> game.addDevelopmentCardToHand(charlie, card));
     }
 
 }
