@@ -13,6 +13,8 @@ public class VictoryPointCalculatorTest {
     private Board board;
     private Player p1, p2;
     private VictoryPointCalculator calc;
+    private Game game;
+    private SpecialCardTracker tracker;
 
     private Board createBoard() {
         List<Hex> hexes = new ArrayList<>();
@@ -68,6 +70,15 @@ public class VictoryPointCalculatorTest {
         this.p1 = new Player("first", PlayerColor.RED);
         this.p2 = new Player("second", PlayerColor.BLUE);
         this.calc = new VictoryPointCalculator();
+        this.tracker = new SpecialCardTracker();
+        this.game = new Game(List.of(p1, p2), board);
+    }
+
+    @Test
+    public void GetTotalVP_WithNullPlayer_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.getTotalVP(null, board, tracker);
+        });
     }
 
     @Test

@@ -5,6 +5,26 @@ import java.util.*;
 public class VictoryPointCalculator {
     public VictoryPointCalculator() { }
 
+    public int getTotalVP(Player player, Board board, SpecialCardTracker specialCardTracker) {
+        validatePlayer(player);
+        validateBoard(board);
+        validateTracker(specialCardTracker);
+
+        int totalVP = 0;
+        totalVP += getSettlementVP(player, board);
+        totalVP += getCityVP(player, board);
+        totalVP += getDevCardVP(player);
+
+        if (specialCardTracker.holdsLongestRoad(player)) {
+            totalVP += 2;
+        }
+        if (specialCardTracker.holdsLargestArmy(player)) {
+            totalVP += 2;
+        }
+
+        return totalVP;
+    }
+
     public int getSettlementVP(Player player, Board board) {
         validatePlayer(player);
         validateBoard(board);
@@ -108,6 +128,12 @@ public class VictoryPointCalculator {
     private void validateBoard(Board board) {
         if (board == null) {
             throw new IllegalArgumentException(("Board cannot be null"));
+        }
+    }
+
+    private void validateTracker(SpecialCardTracker tracker) {
+        if (tracker == null) {
+            throw new IllegalArgumentException("Tracker cannot be null");
         }
     }
 
