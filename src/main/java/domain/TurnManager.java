@@ -121,7 +121,7 @@ public class TurnManager {
      * between turns.
      */
     public Optional<Turn> getCurrentTurn() {
-        return Optional.empty();
+        return Optional.ofNullable(currentTurn);
     }
 
     /**
