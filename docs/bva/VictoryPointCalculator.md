@@ -236,18 +236,22 @@
   - State of the system: valid `player`; `player` has 2 Knight cards marked as played, and 1 other non-knight development card (e.g., Monopoly) marked as played
   - Expected output: `2`
 
-## Method under test: `getWinner(Game game, Board board, SpecialCardTracker tracker)`
+## Method under test: `getWinner(Game game, Board board, SpecialCardTracker tracker, Player currentPlayer)`
 
 - **TC69: GetWinner_WithNullGame_ThrowsIllegalArgumentException** ( :white_check_mark: )
-  - State of the system: `game` is the null pointer, valid `board`, valid `tracker`
+  - State of the system: `game` is the null pointer, valid `board`, valid `tracker`, valid `player`
   - Expected output: `IllegalArgumentException`
 
 - **TC70: GetWinner_WithNullBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
-  - State of the system: valid `game`, `board` is the null pointer, valid `tracker`
+  - State of the system: valid `game`, `board` is the null pointer, valid `tracker`, valid `player`
   - Expected output: `IllegalArgumentException`
 
 - **TC71: GetWinner_WithNullTracker_ThrowsIllegalArgumentException** ( :white_check_mark: )
-  - State of the system: valid `game`, valid `board`, `tracker` is the null pointer
+  - State of the system: valid `game`, valid `board`, `tracker` is the null pointer, valid `player`
+  - Expected output: `IllegalArgumentException`
+
+- **TC93: GetWinner_WithNullPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: valid `game`, valid `board`, valid `tracker`, `player` is the null pointer
   - Expected output: `IllegalArgumentException`
 
 - **TC72: GetWinner_HighestVPIsNine_ReturnsEmpty** ( :white_check_mark: )
