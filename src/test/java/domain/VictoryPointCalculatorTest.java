@@ -134,6 +134,16 @@ public class VictoryPointCalculatorTest {
     }
 
     @Test
+    public void GetTotalVP_OnlyVpDevCards_ReturnsSum() {
+        for (int i = 0; i < 3; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        int vp = calc.getTotalVP(p1, board, tracker);
+        assertEquals(3, vp);
+    }
+
+    @Test
     public void GetSettlementVP_WithNullPlayer_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
             calc.getSettlementVP(null, board);
