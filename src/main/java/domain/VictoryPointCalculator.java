@@ -93,6 +93,20 @@ public class VictoryPointCalculator {
         return getWinner(game, board, tracker).isPresent();
     }
 
+    public void updateSpecialCards(Game game, Board board, SpecialCardTracker tracker) {
+        validateGame(game);
+        validateBoard(board);
+        validateTracker(tracker);
+
+        for (Player player : game.getPlayers()) {
+            int roadLength = computeLongestRoad(player, board);
+            int knightCount = computeKnightCount(player);
+
+            tracker.updateLongestRoad(player, roadLength);
+            tracker.updateLargestArmy(player, knightCount);
+        }
+    }
+
     private Map<Vertex, List<Edge>> makeAdjacencyList(Player player, Board board) {
         Map<Vertex, List<Edge>> adjacencyList = new HashMap<>();
 
@@ -184,6 +198,4 @@ public class VictoryPointCalculator {
         }
         return cityCount;
     }
-
-
 }

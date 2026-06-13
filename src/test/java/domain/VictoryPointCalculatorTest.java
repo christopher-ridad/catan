@@ -833,4 +833,18 @@ public class VictoryPointCalculatorTest {
 
         assertTrue(calc.hasWinner(game, board, tracker));
     }
+
+    @Test
+    public void UpdateSpecialCards_WithNullBoard_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.updateSpecialCards(game, null, tracker);
+        });
+    }
+
+    @Test
+    public void UpdateSpecialCards_WithNullTracker_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.updateSpecialCards(game, board, null);
+        });
+    }
 }
