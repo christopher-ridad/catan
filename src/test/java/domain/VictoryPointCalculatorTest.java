@@ -764,4 +764,16 @@ public class VictoryPointCalculatorTest {
         assertEquals(p1, winner.get());
     }
 
+    @Test
+    public void GetWinner_MultiplePlayersHaveTenVP_NeitherIsActivePlayer_ReturnsFirstInOrder() {
+        for (int i = 0; i < 10; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+            p2.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        Optional<Player> winner = calc.getWinner(game, board, tracker);
+        assertTrue(winner.isPresent());
+        assertEquals(p1, winner.get());
+    }
+
 }
