@@ -26,7 +26,6 @@
     - State of the system: `TurnManager` constructed with a valid `Game`, no call to `startNextTurn()` made
     - Expected output: `getCurrentTurn()` returns `Optional.empty()`
 
-
 - **TC7: Constructor_GameIsNotOverInitially** ( implemented )
     - State of the system: `TurnManager` constructed with a valid `Game`, no turns taken
     - Expected output: `isGameOver()` returns `false` and `getWinner()` returns `Optional.empty()`
@@ -59,8 +58,14 @@
     - State of the system: the active player has been given 10 VP, a full turn has been completed triggering `isGameOver() == true`
     - Expected output: `IllegalStateException`
 
+---
+
 ## Method under test: `endCurrentTurn()`
 
 - **TC14: EndCurrentTurn_WithNoTurnInProgress_ThrowsIllegalStateException** ( implemented )
     - State of the system: `TurnManager` freshly constructed, `startNextTurn()` has not been called
+    - Expected output: `IllegalStateException`
+
+- **TC15: EndCurrentTurn_DuringProductionPhase_ThrowsIllegalStateException** ( implemented )
+    - State of the system: a turn has been started but dice have not been rolled (phase is `PRODUCTION`)
     - Expected output: `IllegalStateException`

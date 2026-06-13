@@ -199,4 +199,11 @@ public class TurnManagerTest {
         assertThrows(IllegalStateException.class, turnManager::endCurrentTurn);
     }
 
+    @Test
+    public void EndCurrentTurn_DuringProductionPhase_ThrowsIllegalStateException() {
+        turnManager.startNextTurn();
+
+        assertThrows(IllegalStateException.class, turnManager::endCurrentTurn);
+    }
+
 }
