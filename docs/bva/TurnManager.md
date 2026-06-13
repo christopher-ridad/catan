@@ -109,3 +109,16 @@
 - **TC25: EndCurrentTurn_WhenActivePlayerReachesTenVP_DeclaresThemWinner** ( not implemented )
     - State of the system: p1 has been given exactly 10 VP (4 settlements + 3 cities); p1's turn is then started and ended
     - Expected output: `isGameOver()` returns `true` and `getWinner()` returns `Optional.of(p1)`
+
+- **TC26: EndCurrentTurn_WhenAnotherPlayerReachesTenVP_DeclaresThemWinner** ( not implemented )
+    - State of the system: p2 has been given exactly 10 VP (4 settlements + 3 cities); p1's turn is started and ended
+    - Expected output: `isGameOver()` returns `true` and `getWinner()` returns `Optional.of(p2)`
+
+---
+
+## Method under test: `getCurrentPlayer()`
+
+- **TC27: GetCurrentPlayer_BetweenTurns_ReturnsNextPlayerToAct** ( implemented )
+    - State of the system: p1's turn has been completed and `getCurrentTurn()` is empty (between turns)
+    - Expected output: `getCurrentPlayer()` returns p2
+---
