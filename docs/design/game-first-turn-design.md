@@ -4,11 +4,17 @@
 
 This document covers the classes and methods needed to sequence multiple turns across all players for a full game of Catan. It picks up where the First Turn Phase doc leaves off: `SetupPhase` is complete, the first `Turn` has been executed, and the game now needs an orchestrator to advance play from player to player until a win condition is detected.
 
-Following the pattern established by `SetupPhase`, this phase introduces a single new orchestrator class: `TurnManager`. It also extends the existing `DevelopmentCard` class (introduced in the First Turn Phase doc) with the fields needed for the one-card-per-turn rule, and introduces a new `DevelopmentDeck` to manage the draw pile.
+The classes introduced here are `DiceRoll`, `Bank`, `TradeOffer`, `TurnPhase` (enum), and `Turn`. They depend on the domain objects already implemented in the Setup Phase (`Game`, `Board`, `Hex`, `Vertex`, `Edge`, `Player`, `ResourceType`).
 
 The classes introduced here are `DevelopmentDeck` and `TurnManager`, plus a revision to the existing `DevelopmentCard` class. All depend on domain objects established in prior phases.
 
-> **Reconciliation note:** An earlier draft of this doc independently re-specified `DevelopmentCard` with a different field set (`turnPurchased`, `markPlayed()`, `isPlayableOnTurn()`) than the version already implemented from the First Turn Phase doc (`DevelopmentCardType`, `markAsPlayed()`, `isPlayed()`). The section below merges both into a single definition. **The implemented class should be updated to match this merged definition before TurnManager work begins.**
+```
+TurnPhase (enum)
+DiceRoll ──────────────────────► (no domain dependencies; pure randomness)
+Bank ──────────────────────► ResourceType
+TradeOffer ────────────────► Player, ResourceType
+Turn ──────────────────────► Game, DiceRoll, Bank, TradeOffer, Vertex, Edge, TurnPhase
+```
 
 ---
 
@@ -33,7 +39,27 @@ Represents the type of a development card. There are 25 total: 14 Knight, 6 Prog
 
 ---
 
-### `DevelopmentCard` (existing class — REVISION)
+### `DiceRoll`
+
+Simulates rolling two dice. Keeps the most recent individual die values so callers can detect a 7 and inspect each die separately.
+
+Simulates rolling two dice and returns their sum.
+
+| Method         | Return Type | Description                                                                                 |
+|----------------|-------------|---------------------------------------------------------------------------------------------|
+| `DiceRoll()`       | —           | Default constructor; initializes both dice to 0 (no roll yet)                               |
+| `roll()`       | `int`       | Rolls both dice, stores results in `die1` and `die2`, returns their sum (2–12)              |
+| `getTotal()`   | `int`       | Returns the sum of the last roll; throws `IllegalStateException` if `roll()` has not been called |
+| `getDie1()`    | `int`       | Returns the value of the first die from the last roll                                       |
+| `getDie2()`    | `int`       | Returns the value of the second die from the last roll                                      |
+| `isSevenRolled()` | `boolean` | Returns true if the last roll summed to 7                                                  |
+
+**Invariants:**
+- Every value returned by `roll()` is in [2, 12]
+
+---
+
+### `Bank`
 
 This class already exists from the First Turn Phase implementation, with `DevelopmentCardType`, `markAsPlayed()`, and `isPlayed()`. The multi-turn rule ("a development card cannot be played the same turn it was purchased") requires one additional field — `turnPurchased` — and one additional method — `isPlayableOnTurn()`. The merged definition below is the **single source of truth** going forward; it combines both sets of fields and standardizes on the `markAsPlayed()` naming already in use.
 
@@ -84,42 +110,77 @@ Represents the face-down stack of 25 development cards (14 Knight, 6 Progress, 5
 
 ---
 
-### `TurnManager`
+### `Turn`
+### `DevelopmentCard`
+Represents a single development card. Tracks its type and whether it has been played.
 
-Orchestrates the full turn sequence across all players for the duration of the game. Mirrors the structure of `SetupPhase`: it owns the current-player cursor, creates and completes `Turn` objects, and exposes clean state-query methods. It does not make game decisions — that responsibility belongs to callers.
+| Field        | Type                  | Description                                      |
+|--------------|-----------------------|--------------------------------------------------|
+| `type`       | `DevelopmentCardType` | The type of this card                            |
+| `played`     | `boolean`             | True if this card has already been played        |
 
-`TurnManager` checks for a winner at the end of every turn by delegating to `VictoryPointCalculator` (defined in the Win Conditions doc). If a winner is found, `TurnManager` stops advancing and exposes the winner.
+| Method                          | Return Type           | Description                                                                                       |
+|---------------------------------|-----------------------|---------------------------------------------------------------------------------------------------|
+| `DevelopmentCard(DevelopmentCardType type)` | —       | Constructor; throws `IllegalArgumentException` if type is null                                    |
+| `getType()`                     | `DevelopmentCardType` | Returns the card type                                                                             |
+| `isPlayed()`                    | `boolean`             | Returns true if the card has been played                                                          |
+| `markAsPlayed()`                | `void`                | Marks the card as played; throws `IllegalStateException` if already played                        |
 
-| Field                | Type               | Description                                                                              |
-|----------------------|--------------------|------------------------------------------------------------------------------------------|
-| `game`               | `Game`             | The current game state                                                                   |
-| `bank`               | `Bank`             | The shared resource bank, passed through to each `Turn`                                  |
-| `dice`               | `DiceRoll`             | The shared dice instance, passed through to each `Turn`                                  |
-| `devDeck`            | `DevelopmentDeck`  | The shared development card deck                                                         |
-| `currentTurnNumber`  | `int`              | How many turns have been completed; starts at 0, increments after each `endCurrentTurn()` |
-| `currentPlayerIndex` | `int`              | Index into `game.getPlayers()` for the active player; advances modulo player count       |
-| `currentTurn`        | `Turn`             | The `Turn` object for the player currently acting; null between turns                    |
-| `winner`             | `Player`           | The winning player once 10 VP are reached; null while game is ongoing                   |
+**Invariants:**
+- Once `markAsPlayed()` is called, `isPlayed()` always returns true
+- Victory Point cards are never marked as played until the player declares victory
 
-| Method                                                                    | Return Type      | Description                                                                                                                                                       |
-|---------------------------------------------------------------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `TurnManager(Game game, Bank bank, DiceRoll dice, DevelopmentDeck devDeck)`   | —                | Constructor; validates no argument is null; sets `currentPlayerIndex` to 0, `currentTurnNumber` to 0; does not start the first turn automatically                 |
-| `startNextTurn()`                                                         | `Turn`           | Creates a new `Turn` for the current player, stores it in `currentTurn`, returns it; throws `IllegalStateException` if the previous turn is not yet complete or if `winner` is set |
-| `endCurrentTurn()`                                                        | `void`           | Calls `currentTurn.endTurn()`, increments `currentTurnNumber`, advances `currentPlayerIndex`, then checks for a winner via `VictoryPointCalculator`; throws `IllegalStateException` if `currentTurn` is not in `BUILD` or `DONE` phase |
-| `getCurrentPlayer()`                                                      | `Player`         | Returns the player whose turn it currently is (or whose turn is next if between turns)                                                                            |
-| `getCurrentTurnNumber()`                                                  | `int`            | Returns how many turns have been completed                                                                                                                        |
-| `getCurrentTurn()`                                                        | `Optional<Turn>` | Returns the active `Turn`, or `Optional.empty()` if between turns                                                                                                 |
-| `isGameOver()`                                                            | `boolean`        | Returns true if a winner has been found                                                                                                                           |
-| `getWinner()`                                                             | `Optional<Player>` | Returns the winning player, or `Optional.empty()` if the game is still ongoing                                                                                  |
-| `getPlayerTurnCount(Player)`                                              | `int`            | Returns how many turns the given player has completed; throws `IllegalArgumentException` if player is not in the game                                             |
+---
 
-**Turn sequencing rules:**
-- Players take turns in the order returned by `game.getPlayers()`, cycling indefinitely until a winner is found.
-- `currentPlayerIndex` advances as `(currentPlayerIndex + 1) % game.getPlayerCount()` after each completed turn.
-- A turn is only completable if `currentTurn.getPhase()` is `BUILD` or `DONE`. Calling `endCurrentTurn()` while still in `PRODUCTION` or `TRADE` throws.
-- Once `winner` is set, `startNextTurn()` throws, freezing the game state.
+### `Turn`
+Orchestrates a single player's turn through its three phases. Enforces phase order, handles the robber on a 7, and delegates building cost validation to the existing domain objects.
 
-**Turn lifecycle (mirrors SetupPhase's placement lifecycle):**
+| Field                  | Type          | Description                                                                    |
+|------------------------|---------------|--------------------------------------------------------------------------------|
+| `game`                 | `Game`        | The current game state                                                         |
+| `activePlayer`         | `Player`      | The player taking this turn                                                    |
+| `dice`                 | `DiceRoll`        | The dice used for resource production                                          |
+| `bank`                 | `Bank`        | The shared resource bank                                                       |
+| `phase`                | `TurnPhase`   | The current phase of this turn                                                 |
+| `rolledThisTurn`       | `boolean`     | True once `rollDice()` has been called                                         |
+| `playedDevCardThisTurn`| `boolean`     | True if a development card has already been played this turn                   |
+| `pendingTrade`         | `TradeOffer`  | The active domestic trade offer, if any; null when no offer is pending         |
+
+| Method                                                      | Return Type | Description                                                                                                                                                              |
+|-------------------------------------------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank)`| —           | Constructor; validates no argument is null, sets `phase` to `PRODUCTION`                                                                                                |
+| `getActivePlayer()`                                         | `Player`    | Returns the player whose turn this is                                                                                                                                    |
+| `getPhase()`                                               | `TurnPhase` | Returns the current phase                                                                                                                                                |
+| `rollDice()`                                               | `int`       | Calls `dice.roll()`, advances to `TRADE` phase, triggers production or robber logic; throws `IllegalStateException` if called outside `PRODUCTION` phase or called twice |
+| `produceResources(int roll)`                               | `void`      | Distributes resources to all players for the rolled number per settlement/city adjacency; respects bank supply limits and the robber's blocked hex; called internally by `rollDice()` |
+| `advanceToTrade()`                                         | `void`      | Internal; sets `phase` to `TRADE` after production resolves                                                                                                             |
+| `advanceToBuild()`                                         | `void`      | Called by the active player when done trading; sets `phase` to `BUILD`; throws `IllegalStateException` if not in `TRADE` phase                                          |
+| `endTurn()`                                               | `void`      | Sets `phase` to `DONE`; throws `IllegalStateException` if not in `BUILD` phase                                                                                          |
+| `buildRoad(int edgeId)`                                   | `void`      | Validates player can afford a road (1 Brick + 1 Lumber), that the edge is unoccupied and connected to their network, deducts cost; throws if invalid                   |
+| `buildSettlement(int vertexId)`                           | `void`      | Validates player can afford a settlement (1 Brick + 1 Lumber + 1 Wool + 1 Grain), Distance Rule, and road connection; deducts cost; throws if invalid                  |
+| `buildCity(int vertexId)`                                 | `void`      | Validates player can afford a city (3 Ore + 2 Grain) and that the vertex has an existing settlement owned by the player; replaces settlement; throws if invalid         |
+| `buyDevelopmentCard()`                                    | `void`      | Validates player can afford (1 Ore + 1 Wool + 1 Grain) and that development cards remain; deducts cost; throws if invalid                                               |
+| `isSevenRolled()`                                         | `boolean`   | Returns true if the roll this turn was a 7                                                                                                                               |
+| `proposeTrade(Player recipient, Map<ResourceType, Integer> offering, Map<ResourceType, Integer> requesting)` | `TradeOffer` | Creates and stores a `TradeOffer`; throws `IllegalStateException` if not in `TRADE` phase or if a trade is already pending; throws `IllegalArgumentException` if the active player cannot afford the offering |
+| `acceptTrade(TradeOffer offer)`                           | `void`      | Called by the recipient to accept; validates the recipient can afford `requesting`, then executes the exchange between both players via their `addResources` / resource deduction; throws if offer is not pending or either player lacks cards |
+| `rejectTrade(TradeOffer offer)`                           | `void`      | Called by the recipient to reject; marks the offer as `REJECTED` and clears `pendingTrade`; throws if offer is not pending                                              |
+| `executeMaritimeTrade(ResourceType giving, int amount, ResourceType receiving)` | `void` | Performs a maritime trade at the active player's best available rate (4:1 default, 3:1 with a generic harbor, 2:1 with a matching special harbor); validates rate and bank supply; throws if not in `TRADE` phase or player cannot afford it |
+| `getMaritimeRate(ResourceType)`                           | `int`       | Returns the best maritime trade rate available to the active player for the given resource (2, 3, or 4), based on adjacent harbor vertices                              |
+| `getPendingTrade()`                                       | `Optional<TradeOffer>` | Returns the current pending trade offer, or `Optional.empty()` if none                                                                                    |
+
+**Robber logic (triggered internally when `rollDice()` returns 7):**
+1. No resources are produced.
+2. Any player holding more than 7 resource cards must discard half (rounded down) — handled by `enforceDiscard()`.
+3. The active player must then call `moveRobber(int hexId)` and `steal(Player target)` before `advanceToBuild()` is allowed.
+
+| Method                  | Return Type    | Description                                                                                                                        |
+|-------------------------|----------------|------------------------------------------------------------------------------------------------------------------------------------|
+| `enforceDiscard()`      | `void`         | For each player holding > 7 cards, removes `floor(count / 2)` cards at random and returns them to the bank; called internally     |
+| `moveRobber(int hexId)` | `void`         | Moves the robber to the given hex; throws `IllegalArgumentException` if hex is current robber location or id is invalid            |
+| `steal(Player target)`  | `void`         | Steals 1 random resource from `target`; no-op if target holds no resource cards (so the turn cannot get stuck on an empty-handed candidate); throws if `target` has no settlement or city adjacent to the robber's new hex |
+| `getRobbingCandidates()`| `List<Player>` | Returns all players (excluding active player) with a settlement or city adjacent to the hex the robber was just moved to           |
+
+**Phase transition rules:**
 
 ```
 [between turns] ──[startNextTurn()]──► PRODUCTION ──[rollDice()]──► TRADE
