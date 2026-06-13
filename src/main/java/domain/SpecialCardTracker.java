@@ -4,23 +4,31 @@ import java.util.Optional;
 
 public class SpecialCardTracker {
 
+    private Player longestRoadHolder;
+    private int longestRoadLength;
+    private Player largestArmyHolder;
+    private int largestArmySize;
+
     public SpecialCardTracker() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.longestRoadHolder = null;
+        this.longestRoadLength = 0;
+        this.largestArmyHolder = null;
+        this.largestArmySize = 0;
     }
 
     public Optional<Player> getLongestRoadHolder() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return Optional.ofNullable(this.longestRoadHolder);
     }
 
     public int getLongestRoadLength() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.longestRoadLength;
     }
 
     public Optional<Player> getLargestArmyHolder() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return Optional.ofNullable(this.largestArmyHolder);
     }
 
     public int getLargestArmySize() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.largestArmySize;
     }
 }
