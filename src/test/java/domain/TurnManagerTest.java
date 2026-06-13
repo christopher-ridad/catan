@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TurnManagerTest {
@@ -106,5 +107,10 @@ public class TurnManagerTest {
     @Test
     public void Constructor_WithNullDice_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new TurnManager(game, bank, null));
+    }
+
+    @Test
+    public void Constructor_InitializesCurrentPlayerToFirstPlayer() {
+        assertEquals(p1, turnManager.getCurrentPlayer());
     }
 }

@@ -13,3 +13,7 @@
 - **TC3: Constructor_WithNullDice_ThrowsIllegalArgumentException** ( implemented )
     - State of the system: valid `Game` and `Bank` provided, `null` passed as the `dice` argument
     - Expected output: `IllegalArgumentException`
+
+- **TC4: Constructor_InitializesCurrentPlayerToFirstPlayer** ( implemented )
+    - State of the system: `TurnManager` constructed with a valid 4-player `Game`, no turns started
+    - Expected output: `getCurrentPlayer()` returns the first player in the game's player list
