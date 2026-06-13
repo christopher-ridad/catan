@@ -123,4 +123,10 @@ public class TurnManagerTest {
         assertTrue(turnManager.getCurrentTurn().isEmpty());
     }
 
+    @Test
+    public void Constructor_GameIsNotOverInitially() {
+        assertFalse(turnManager.isGameOver());
+        assertTrue(turnManager.getWinner().isEmpty());
+    }
+
 }

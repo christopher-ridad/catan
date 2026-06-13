@@ -25,3 +25,8 @@
 - **TC6: Constructor_DoesNotStartFirstTurnAutomatically** ( implemented )
     - State of the system: `TurnManager` constructed with a valid `Game`, no call to `startNextTurn()` made
     - Expected output: `getCurrentTurn()` returns `Optional.empty()`
+
+
+- **TC7: Constructor_GameIsNotOverInitially** ( implemented )
+    - State of the system: `TurnManager` constructed with a valid `Game`, no turns taken
+    - Expected output: `isGameOver()` returns `false` and `getWinner()` returns `Optional.empty()`
