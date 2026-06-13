@@ -714,21 +714,28 @@ public class VictoryPointCalculatorTest {
     @Test
     public void GetWinner_WithNullGame_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            calc.getWinner(null, board, tracker);
+            calc.getWinner(null, board, tracker, p1);
         });
     }
 
     @Test
     public void GetWinner_WithNullBoard_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            calc.getWinner(game, null, tracker);
+            calc.getWinner(game, null, tracker, p1);
         });
     }
 
     @Test
     public void GetWinner_WithNullTracker_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            calc.getWinner(game, board, null);
+            calc.getWinner(game, board, null, p1);
+        });
+    }
+
+    @Test
+    public void GetWinner_WithNullPlayer_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.getWinner(game, board, tracker, null);
         });
     }
 
@@ -738,7 +745,7 @@ public class VictoryPointCalculatorTest {
             p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
         }
 
-        Optional<Player> winner = calc.getWinner(game, board, tracker);
+        Optional<Player> winner = calc.getWinner(game, board, tracker, p1);
         assertTrue(winner.isEmpty());
     }
 
@@ -748,7 +755,7 @@ public class VictoryPointCalculatorTest {
             p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
         }
 
-        Optional<Player> winner = calc.getWinner(game, board, tracker);
+        Optional<Player> winner = calc.getWinner(game, board, tracker, p1);
         assertTrue(winner.isPresent());
         assertEquals(p1, winner.get());
     }
@@ -759,9 +766,24 @@ public class VictoryPointCalculatorTest {
             p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
         }
 
-        Optional<Player> winner = calc.getWinner(game, board, tracker);
+        Optional<Player> winner = calc.getWinner(game, board, tracker, p1);
         assertTrue(winner.isPresent());
         assertEquals(p1, winner.get());
+    }
+
+    @Test
+    public void GetWinner_MultiplePlayersHaveTenVP_ActivePlayerWins() {
+        Player p3 = new Player("third", PlayerColor.ORANGE);
+        Game threePlayerGame = new Game(List.of(p1, p2, p3), board);
+
+        for (int i = 0; i < 10; i++) {
+            p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+            p2.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
+        }
+
+        Optional<Player> winner = calc.getWinner(threePlayerGame, board, tracker, p2);
+        assertTrue(winner.isPresent());
+        assertEquals(p2, winner.get());
     }
 
     @Test
@@ -771,7 +793,7 @@ public class VictoryPointCalculatorTest {
             p2.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
         }
 
-        Optional<Player> winner = calc.getWinner(game, board, tracker);
+        Optional<Player> winner = calc.getWinner(game, board, tracker, p1);
         assertTrue(winner.isPresent());
         assertEquals(p1, winner.get());
     }
@@ -779,21 +801,28 @@ public class VictoryPointCalculatorTest {
     @Test
     public void HasWinner_WithNullGame_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            calc.hasWinner(null, board, tracker);
+            calc.hasWinner(null, board, tracker, p1);
         });
     }
 
     @Test
     public void HasWinner_WithNullBoard_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            calc.hasWinner(game, null, tracker);
+            calc.hasWinner(game, null, tracker, p1);
         });
     }
 
     @Test
     public void HasWinner_WithNullTracker_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            calc.hasWinner(game, board, null);
+            calc.hasWinner(game, board, null, p1);
+        });
+    }
+
+    @Test
+    public void HasWinner_WithNullPlayer_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.hasWinner(game, board, tracker, null);
         });
     }
 
@@ -803,7 +832,7 @@ public class VictoryPointCalculatorTest {
             p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
         }
 
-        assertFalse(calc.hasWinner(game, board, tracker));
+        assertFalse(calc.hasWinner(game, board, tracker, p1));
     }
 
     @Test
@@ -812,7 +841,7 @@ public class VictoryPointCalculatorTest {
             p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
         }
 
-        assertTrue(calc.hasWinner(game, board, tracker));
+        assertTrue(calc.hasWinner(game, board, tracker, p1));
     }
 
     @Test
@@ -821,7 +850,7 @@ public class VictoryPointCalculatorTest {
             p1.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
         }
 
-        assertTrue(calc.hasWinner(game, board, tracker));
+        assertTrue(calc.hasWinner(game, board, tracker, p1));
     }
 
     @Test
@@ -831,7 +860,7 @@ public class VictoryPointCalculatorTest {
             p2.addDevelopmentCard(new DevelopmentCard(DevelopmentCardType.VICTORY_POINT));
         }
 
-        assertTrue(calc.hasWinner(game, board, tracker));
+        assertTrue(calc.hasWinner(game, board, tracker, p1));
     }
 
     @Test

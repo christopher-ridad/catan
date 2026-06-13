@@ -75,10 +75,15 @@ public class VictoryPointCalculator {
                 .count();
     }
 
-    public Optional<Player> getWinner(Game game, Board board, SpecialCardTracker tracker) {
+    public Optional<Player> getWinner(Game game, Board board, SpecialCardTracker tracker, Player currentPlayer) {
         validateGame(game);
         validateBoard(board);
         validateTracker(tracker);
+        validatePlayer(currentPlayer);
+
+        if (getTotalVP(currentPlayer, board, tracker) >= 10) {
+            return Optional.of(currentPlayer);
+        }
 
         for (Player player : game.getPlayers()) {
             if (getTotalVP(player, board, tracker) >= 10) {
@@ -89,8 +94,8 @@ public class VictoryPointCalculator {
         return Optional.empty();
     }
 
-    public boolean hasWinner(Game game, Board board, SpecialCardTracker tracker) {
-        return getWinner(game, board, tracker).isPresent();
+    public boolean hasWinner(Game game, Board board, SpecialCardTracker tracker,  Player currentPlayer) {
+        return getWinner(game, board, tracker, currentPlayer).isPresent();
     }
 
     public void updateSpecialCards(Game game, Board board, SpecialCardTracker tracker) {

@@ -277,15 +277,19 @@
 ## Method under test: `hasWinner(Game game, Board board, SpecialCardTracker tracker)`
 
 - **TC77: HasWinner_WithNullGame_ThrowsIllegalArgumentException** ( :white_check_mark: )
-  - State of the system: `game` is the null pointer, valid `board` pointer to a true object, valid `tracker`
+  - State of the system: `game` is the null pointer, valid `board` pointer to a true object, valid `tracker`, valid `player`
   - Expected output: `IllegalArgumentException`
 
 - **TC78: HasWinner_WithNullBoard_ThrowsIllegalArgumentException** ( :white_check_mark: )
-  - State of the system: valid `game` pointer to a true object, `board` is the null pointer, valid `tracker`
+  - State of the system: valid `game` pointer to a true object, `board` is the null pointer, valid `tracker`, valid `player`
   - Expected output: `IllegalArgumentException`
 
 - **TC79: HasWinner_WithNullTracker_ThrowsIllegalArgumentException** ( :white_check_mark: )
-  - State of the system: valid `game`, valid `board`, `tracker` is the null pointer
+  - State of the system: valid `game`, valid `board`, `tracker` is the null pointer, valid `player`
+  - Expected output: `IllegalArgumentException`
+
+- **TC94: HasWinner_WithNullPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: valid `game`, valid `board`, valid `tracker`, `player` is the null pointer
   - Expected output: `IllegalArgumentException`
 
 - **TC80: HasWinner_HighestVPIsNine_ReturnsFalse** ( :white_check_mark: )
