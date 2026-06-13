@@ -723,4 +723,11 @@ public class VictoryPointCalculatorTest {
             calc.getWinner(game, null, tracker);
         });
     }
+
+    @Test
+    public void GetWinner_WithNullTracker_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calc.getWinner(game, board, null);
+        });
+    }
 }
