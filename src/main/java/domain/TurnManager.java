@@ -157,14 +157,20 @@ public class TurnManager {
     }
 
     private void validateGame(Game game) {
-        return;
+        if (game == null) {
+            throw new IllegalArgumentException("Game cannot be null");
+        }
     }
 
     private void validateBank(Bank bank) {
-        return;
+        if (bank == null) {
+            throw new IllegalArgumentException("Bank cannot be null");
+        }
     }
 
     private void validateDice(DiceRoll dice) {
-        return;
+        if (dice == null) {
+            throw new IllegalArgumentException("Dice cannot be null");
+        }
     }
 }
