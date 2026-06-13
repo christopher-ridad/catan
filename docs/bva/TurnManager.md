@@ -55,6 +55,12 @@
     - State of the system: a full turn has been started, advanced to `BUILD`, and ended via `endCurrentTurn()`
     - Expected output: a new non-null `Turn` is returned, distinct from the previous one
 
-- **TC13: StartNextTurn_AfterWinnerFound_ThrowsIllegalStateException** ( implemented )
+- **TC13: StartNextTurn_AfterWinnerFound_ThrowsIllegalStateException** ( NOT implemented )
     - State of the system: the active player has been given 10 VP, a full turn has been completed triggering `isGameOver() == true`
+    - Expected output: `IllegalStateException`
+
+## Method under test: `endCurrentTurn()`
+
+- **TC14: EndCurrentTurn_WithNoTurnInProgress_ThrowsIllegalStateException** ( implemented )
+    - State of the system: `TurnManager` freshly constructed, `startNextTurn()` has not been called
     - Expected output: `IllegalStateException`

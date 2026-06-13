@@ -146,7 +146,7 @@ public class TurnManager {
      * Returns true if a winner has been found.
      */
     public boolean isGameOver() {
-        return false;
+        return winner != null;
     }
 
     /**
