@@ -296,4 +296,16 @@ public class TurnManagerTest {
         assertTrue(turnManager.getWinner().isEmpty());
     }
 
+    @Test
+    public void EndCurrentTurn_WhenActivePlayerReachesTenVP_DeclaresThemWinner() {
+        giveTenVictoryPoints(p1);
+
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.isGameOver());
+        assertEquals(p1, turnManager.getWinner().orElse(null));
+    }
 }

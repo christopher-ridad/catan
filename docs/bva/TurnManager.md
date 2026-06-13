@@ -105,3 +105,7 @@
 - **TC24: EndCurrentTurn_WithNoWinner_GameRemainsOngoing** ( implemented )
     - State of the system: a full turn has been completed; no player has reached 10 VP
     - Expected output: `isGameOver()` returns `false` and `getWinner()` returns `Optional.empty()`
+
+- **TC25: EndCurrentTurn_WhenActivePlayerReachesTenVP_DeclaresThemWinner** ( not implemented )
+    - State of the system: p1 has been given exactly 10 VP (4 settlements + 3 cities); p1's turn is then started and ended
+    - Expected output: `isGameOver()` returns `true` and `getWinner()` returns `Optional.of(p1)`
