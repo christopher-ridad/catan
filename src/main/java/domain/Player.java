@@ -1,6 +1,8 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Player {
@@ -8,6 +10,7 @@ public class Player {
     private final PlayerColor color;
     private final String name;
     private Map<ResourceType, Integer> resources;
+    private final List<DevelopmentCard> developmentCards;
 
     public Player(String name, PlayerColor color) {
         validateName(name);
@@ -21,6 +24,7 @@ public class Player {
                 ResourceType.GRAIN, 0,
                 ResourceType.WOOL, 0
         ));
+        this.developmentCards = new ArrayList<>();
     }
 
     private void validateName(String name) {
@@ -86,5 +90,16 @@ public class Player {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
+    }
+
+    public List<DevelopmentCard> getDevelopmentCards() {
+        return java.util.Collections.unmodifiableList(developmentCards);
+    }
+
+    void addDevelopmentCard(DevelopmentCard card) {
+        if (card == null) {
+            throw new IllegalArgumentException("Development card cannot be null");
+        }
+        this.developmentCards.add(card);
     }
 }
