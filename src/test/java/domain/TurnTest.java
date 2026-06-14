@@ -1556,72 +1556,6 @@ public class TurnTest {
     }
 
     @Test
-    public void PlayDevelopmentCard_OutsideTradeOrBuildPhase_ThrowsIllegalStateException() {
-        Turn turn = new Turn(game, p1, dice, bank);
-        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_DevCardAlreadyPlayedThisTurn_ThrowsIllegalStateException() {
-        DiceRoll fixedDice = mockDiceRoll(4, 4);
-        Turn turn = new Turn(game, p1, fixedDice, bank);
-        turn.rollDice();
-        DevelopmentCard first = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-        DevelopmentCard second = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-        game.addDevelopmentCardToHand(p1, first);
-        game.addDevelopmentCardToHand(p1, second);
-        turn.playDevelopmentCard(p1, first);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, second));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_NonVictoryPointCardPurchasedThisTurn_ThrowsIllegalStateException() {
-        Turn turn = newTurnInBuildPhase(p1);
-        DevelopmentCard purchased = buyUntilNonVictoryPointCard(turn, p1);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, purchased));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_CardAlreadyPlayed_ThrowsIllegalStateException() {
-        DiceRoll fixedDice = mockDiceRoll(4, 4);
-        Turn turn = new Turn(game, p1, fixedDice, bank);
-        turn.rollDice();
-        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-        card.markAsPlayed();
-        game.addDevelopmentCardToHand(p1, card);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_VictoryPointCard_ThrowsIllegalStateException() {
-        DiceRoll fixedDice = mockDiceRoll(4, 4);
-        Turn turn = new Turn(game, p1, fixedDice, bank);
-        turn.rollDice();
-        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
-        game.addDevelopmentCardToHand(p1, card);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_UnplayedCardFromPriorTurn_MarksCardAsPlayed() {
-        DiceRoll fixedDice = mockDiceRoll(4, 4);
-        Turn turn = new Turn(game, p1, fixedDice, bank);
-        turn.rollDice();
-        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-        game.addDevelopmentCardToHand(p1, card);
-
-        turn.playDevelopmentCard(p1, card);
-
-        assertTrue(card.isPlayed());
-    }
-
-    @Test
     public void GetPlayerHand_PlayerWithNoCards_ReturnsEmptyList() {
         Turn turn = new Turn(game, p1, dice, bank);
 
@@ -1662,6 +1596,15 @@ public class TurnTest {
         turn.buyDevelopmentCard();
 
         assertEquals(24, turn.getRemainingDeckSize());
+    }
+
+    @Test
+    void playKnightCard_NullCard_ThrowsIllegalArgumentException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        assertThrows(IllegalArgumentException.class, () -> turn.playKnightCard(p1, null));
     }
 }
 

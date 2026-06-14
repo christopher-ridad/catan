@@ -379,42 +379,17 @@ public class Turn {
         cardsPurchasedThisTurn.add(card);
     }
 
-    public void playDevelopmentCard(Player player, DevelopmentCard card) {
-        if (card == null) {
-            throw new IllegalArgumentException("Development card cannot be null");
-        }
-        if (player != activePlayer) {
-            throw new IllegalArgumentException("Only the active player can play a development card");
-        }
-        if (phase != TurnPhase.TRADE && phase != TurnPhase.BUILD) {
-            throw new IllegalStateException("Development cards can only be played during the trade or build phase");
-        }
-        validateRobberResolved();
-        if (card.getType() == DevelopmentCardType.VICTORY_POINT) {
-            throw new IllegalStateException("Victory Point cards cannot be played");
-        }
-        if (playedDevCardThisTurn) {
-            throw new IllegalStateException("Only one development card can be played per turn");
-        }
-        if (!game.getPlayerHand(player).contains(card)) {
-            throw new IllegalArgumentException("Player does not own this development card");
-        }
-        if (cardsPurchasedThisTurn.contains(card)) {
-            throw new IllegalStateException("A development card cannot be played the same turn it was purchased");
-        }
-        if (card.isPlayed()) {
-            throw new IllegalStateException("This development card has already been played");
-        }
-
-        card.markAsPlayed();
-        playedDevCardThisTurn = true;
-    }
-
     public List<DevelopmentCard> getPlayerHand(Player player) {
         return game.getPlayerHand(player);
     }
 
     public int getRemainingDeckSize() {
         return game.getRemainingDevelopmentCardCount();
+    }
+
+    public void playKnightCard(Player player, DevelopmentCard card) {
+        if (card == null) {
+            throw new IllegalArgumentException("Development card cannot be null");
+        }
     }
 }
