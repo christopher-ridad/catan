@@ -10,6 +10,7 @@ import domain.TurnManager;
 import domain.TurnPhase;
 import domain.VictoryPointCalculator;
 import domain.SpecialCardTracker;
+import domain.DevelopmentCard;
 import domain.DevelopmentCardType;
 
 import javax.swing.BorderFactory;
@@ -91,6 +92,7 @@ public class TurnPhasePanel extends JPanel {
     private JButton buildCityButton;
     private JButton buildRoadButton;
     private JButton buyDevCardButton;
+    private JButton playCardButton;
     private JButton endTurnButton;
 
     private final DevCardHandView devCardHandView = new DevCardHandView();
@@ -100,8 +102,13 @@ public class TurnPhasePanel extends JPanel {
     // State
     // -------------------------------------------------------------------------
 
-    private enum BoardClickMode { NONE, PLACE_SETTLEMENT, PLACE_CITY, PLACE_ROAD, MOVE_ROBBER }
-    private BoardClickMode clickMode = BoardClickMode.NONE;
+    private enum BoardClickMode {
+        NONE, PLACE_SETTLEMENT, PLACE_CITY, PLACE_ROAD, MOVE_ROBBER,
+        PLACE_FREE_ROAD_1, PLACE_FREE_ROAD_2
+    }
+    private BoardClickMode clickMode   = BoardClickMode.NONE;
+    private int freeRoadEdge1          = -1;
+    private DevelopmentCard selectedCard = null;
 
     // -------------------------------------------------------------------------
     // Constructor
@@ -188,6 +195,7 @@ public class TurnPhasePanel extends JPanel {
         buildCityButton       = buildButton(Messages.get("turn_build_city"));
         buildRoadButton       = buildButton(Messages.get("turn_build_road"));
         buyDevCardButton      = buildButton(Messages.get("dev_card_buy"));
+        playCardButton        = buildButton(Messages.get("play_card_title"));
         endTurnButton         = buildButton(Messages.get("turn_end_turn"));
     }
 
@@ -200,6 +208,7 @@ public class TurnPhasePanel extends JPanel {
         buildCityButton.addActionListener(e -> onBuildCity());
         buildRoadButton.addActionListener(e -> onBuildRoad());
         buyDevCardButton.addActionListener(e -> onBuyDevCard());
+        playCardButton.addActionListener(e -> onPlayCard());
         endTurnButton.addActionListener(e -> onEndTurn());
     }
 
@@ -219,6 +228,8 @@ public class TurnPhasePanel extends JPanel {
         panel.add(buildRoadButton);
         panel.add(Box.createVerticalStrut(GAP_SMALL));
         panel.add(buyDevCardButton);
+        panel.add(Box.createVerticalStrut(GAP_SMALL));
+        panel.add(playCardButton);
         panel.add(Box.createVerticalStrut(GAP_SMALL));
         panel.add(endTurnButton);
     }
@@ -301,6 +312,37 @@ public class TurnPhasePanel extends JPanel {
         refreshUI();
     }
 
+    private void onPlayCard() {
+        Player activePlayer = turnManager.getCurrentPlayer();
+        int turnNumber = turnManager.getCurrentTurnNumber();
+        PlayCardDialog dialog = new PlayCardDialog(mainWindow, currentTurn, activePlayer, turnNumber);
+        dialog.setVisible(true);
+        handlePlayCardResult(dialog);
+        refreshUI();
+    }
+
+    private void handlePlayCardResult(PlayCardDialog dialog) {
+        switch (dialog.getResultType()) {
+            case KNIGHT:
+                selectedCard = dialog.getPlayedCard();
+                clickMode = BoardClickMode.MOVE_ROBBER;
+                showStatus(Messages.get("play_card_knight_prompt"), COLOR_PHASE);
+                break;
+            case ROAD_BUILDING:
+                selectedCard = dialog.getPlayedCard();
+                freeRoadEdge1 = -1;
+                clickMode = BoardClickMode.PLACE_FREE_ROAD_1;
+                showStatus(Messages.get("play_card_road1_prompt"), COLOR_PHASE);
+                break;
+            case YEAR_OF_PLENTY:
+            case MONOPOLY:
+                showStatus(Messages.get("play_card_success"), COLOR_SUCCESS);
+                break;
+            default:
+                break;
+        }
+    }
+
     private void onBuyDevCard() {
         try {
             currentTurn.buyDevelopmentCard();
@@ -340,7 +382,34 @@ public class TurnPhasePanel extends JPanel {
     private void onEdgeClicked(int edgeId) {
         if (clickMode == BoardClickMode.PLACE_ROAD) {
             tryBuildRoad(edgeId);
+        } else if (clickMode == BoardClickMode.PLACE_FREE_ROAD_1) {
+            placeFreeRoad1(edgeId);
+        } else if (clickMode == BoardClickMode.PLACE_FREE_ROAD_2) {
+            placeFreeRoad2(edgeId);
         }
+    }
+
+    private void placeFreeRoad1(int edgeId) {
+        freeRoadEdge1 = edgeId;
+        clickMode = BoardClickMode.PLACE_FREE_ROAD_2;
+        showStatus(Messages.get("play_card_road2_prompt"), COLOR_PHASE);
+    }
+
+    private void placeFreeRoad2(int edgeId) {
+        try {
+            turn_playRoadBuilding(freeRoadEdge1, edgeId);
+            clickMode = BoardClickMode.NONE;
+            showStatus(Messages.get("play_card_success"), COLOR_SUCCESS);
+            boardPanel.repaint();
+            refreshUI();
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            showStatus(Messages.get("build_invalid_location"), COLOR_ERROR);
+        }
+    }
+
+    private void turn_playRoadBuilding(int edgeId1, int edgeId2) {
+        currentTurn.playRoadBuildingCard(
+                turnManager.getCurrentPlayer(), selectedCard, edgeId1, edgeId2);
     }
 
     private void onHexClicked(int hexId) {
@@ -492,6 +561,8 @@ public class TurnPhasePanel extends JPanel {
         buyDevCardButton.setEnabled(phase == TurnPhase.BUILD
                 && canAffordDevCard(player)
                 && currentTurn.getRemainingDeckSize() > 0);
+        playCardButton.setEnabled(hasPlayableCard(player)
+                && (phase == TurnPhase.TRADE || phase == TurnPhase.BUILD));
         endTurnButton.setEnabled(phase == TurnPhase.BUILD);
     }
 
@@ -510,6 +581,12 @@ public class TurnPhasePanel extends JPanel {
     private boolean canAffordCity(Player player) {
         return player.getResourceCount(ResourceType.ORE)   >= 3
                 && player.getResourceCount(ResourceType.GRAIN) >= 2;
+    }
+
+    private boolean hasPlayableCard(Player player) {
+        int turn = turnManager.getCurrentTurnNumber();
+        return player.getDevelopmentCards().stream()
+                .anyMatch(c -> c.isPlayableOnTurn(turn));
     }
 
     private boolean canAffordDevCard(Player player) {
