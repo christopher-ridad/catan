@@ -1697,6 +1697,23 @@ public class TurnTest {
                 () -> turn.playMonopoly(p1, card, ResourceType.BRICK));
         assertEquals("Victory Point cards cannot be played", exception.getMessage());
     }
+
+    @Test
+    void playKnightCard_ValidCard_SetsRobberPendingMove() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        game.addDevelopmentCardToHand(p1, card);
+
+        turn.playKnightCard(p1, card);
+
+        assertAll(
+                () -> assertTrue(card.isPlayed()),
+                () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p1, new DevelopmentCard(DevelopmentCardType.KNIGHT))),
+                () -> assertDoesNotThrow(() -> turn.moveRobber(1))
+        );
+    }
 }
 
 

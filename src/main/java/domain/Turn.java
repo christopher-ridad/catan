@@ -414,9 +414,15 @@ public class Turn {
         }
     }
 
+    private void executeDevCardPlay(DevelopmentCard card) {
+        card.markAsPlayed();
+        playedDevCardThisTurn = true;
+    }
+
     public void playKnightCard(Player player, DevelopmentCard card) {
         validateDevCardPlay(player, card);
-        playedDevCardThisTurn = true;
+        executeDevCardPlay(card);
+        robberPendingMove = true;
     }
 
     public void playRoadBuildingCard(Player player, DevelopmentCard card, int edgeId1, int edgeId2) {
