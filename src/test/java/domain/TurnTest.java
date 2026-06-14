@@ -1739,6 +1739,32 @@ public class TurnTest {
                 () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p3, new DevelopmentCard(DevelopmentCardType.KNIGHT)))
         );
     }
+
+    @Test
+    void playYearOfPlenty_ValidCard_GivesTwoResources() {
+        Bank freshBank = new Bank();
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, freshBank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        game.addDevelopmentCardToHand(p1, card);
+
+        int brickBefore = p1.getResourceCount(ResourceType.BRICK);
+        int woolBefore = p1.getResourceCount(ResourceType.WOOL);
+        int bankBrickBefore = freshBank.getResourceCount(ResourceType.BRICK);
+        int bankWoolBefore = freshBank.getResourceCount(ResourceType.WOOL);
+
+        turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL);
+
+        assertAll(
+                () -> assertTrue(card.isPlayed()),
+                () -> assertEquals(brickBefore + 1, p1.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(woolBefore + 1, p1.getResourceCount(ResourceType.WOOL)),
+                () -> assertEquals(bankBrickBefore - 1, freshBank.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(bankWoolBefore - 1, freshBank.getResourceCount(ResourceType.WOOL)),
+                () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p1, new DevelopmentCard(DevelopmentCardType.KNIGHT)))
+        );
+    }
 }
 
 

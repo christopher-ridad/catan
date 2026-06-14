@@ -434,6 +434,11 @@ public class Turn {
 
     public void playYearOfPlenty(Player player, DevelopmentCard card, ResourceType r1, ResourceType r2) {
         validateDevCardPlay(player, card);
+        executeDevCardPlay(card);
+        bank.deduct(r1, 1);
+        bank.deduct(r2, 1);
+        activePlayer.addResources(r1, 1);
+        activePlayer.addResources(r2, 1);
     }
 
     public void playMonopoly(Player player, DevelopmentCard card, ResourceType resource) {
