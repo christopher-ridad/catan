@@ -406,6 +406,9 @@ public class Turn {
         if (cardsPurchasedThisTurn.contains(card)) {
             throw new IllegalStateException("A development card cannot be played the same turn it was purchased");
         }
+        if (card.isPlayed()) {
+            throw new IllegalStateException("This development card has already been played");
+        }
     }
 
     public void playKnightCard(Player player, DevelopmentCard card) {

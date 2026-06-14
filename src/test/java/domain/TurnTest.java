@@ -1670,6 +1670,20 @@ public class TurnTest {
                 () -> turn.playRoadBuildingCard(p1, purchased, 0, 1));
         assertEquals("A development card cannot be played the same turn it was purchased", exception.getMessage());
     }
+
+    @Test
+    void playYearOfPlenty_CardAlreadyPlayed_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        card.markAsPlayed();
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL));
+        assertEquals("This development card has already been played", exception.getMessage());
+    }
 }
 
 
