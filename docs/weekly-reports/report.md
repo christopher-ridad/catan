@@ -1,6 +1,8 @@
 # Finals Week (6/08/2026-6/10/2026)
 1. [done] [Isabella]: Implement Special Card Tracker (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/84)
 2. [done] [Ananya] Implement Victory Point Calculator (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/81/)
+3. [done] [Harry] Implement TurnManager (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/86)
+4. [done] [Chris] Implement DevelopmentDeck (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/80)
 
 # Week 10 (06/01/2026–06/07/2026)
 1. [done] [Ariel]: Implement TradeOffer class (https://github.com/nu-cs-sqe/course-project-20252603-team-16-20252603/pull/65)
