@@ -34,7 +34,7 @@ A stub representing a single development card. Tracks only what is needed for th
 | `played`         | `boolean` | True if this card has already been played                             |
 
 | Method                          | Return Type | Description                                                                                                  |
-|---------------------------------|-------------|----------------------------------------------------------------------------------------------------------------------|
+|---------------------------------|-------------|--------------------------------------------------------------------------------------------------------------|
 | `DevelopmentCard(int turnPurchased)` | —      | Constructor; throws `IllegalArgumentException` if `turnPurchased` < 1                                        |
 | `getTurnPurchased()`            | `int`       | Returns the turn on which this card was purchased                                                            |
 | `isPlayed()`                    | `boolean`   | Returns true if this card has been played                                                                    |
@@ -56,7 +56,7 @@ Represents the face-down stack of 25 development cards. Tracks the draw order an
 | `cards`  | `List<DevelopmentCard>` | The remaining cards in draw order       |
 
 | Method                              | Return Type       | Description                                                                                                      |
-|--------------------------------------|-------------------|------------------------------------------------------------------------------------------------------------------|
+|-------------------------------------|-------------------|------------------------------------------------------------------------------------------------------------------|
 | `DevelopmentDeck()`                 | —                 | Constructor; initializes all 25 cards shuffled; `turnPurchased` is set to 0 as a placeholder until drawn        |
 | `draw(int currentTurn)`             | `DevelopmentCard` | Removes and returns the top card, setting its `turnPurchased` to `currentTurn`; throws `IllegalStateException` if the deck is empty |
 | `isEmpty()`                         | `boolean`         | Returns true if no cards remain                                                                                  |
@@ -86,7 +86,7 @@ Orchestrates the full turn sequence across all players for the duration of the g
 | `winner`             | `Player`           | The winning player once 10 VP are reached; null while game is ongoing                   |
 
 | Method                                                                    | Return Type      | Description                                                                                                                                                       |
-|-----------------------------------------------------------------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|---------------------------------------------------------------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `TurnManager(Game game, Bank bank, Dice dice, DevelopmentDeck devDeck)`   | —                | Constructor; validates no argument is null; sets `currentPlayerIndex` to 0, `currentTurnNumber` to 0; does not start the first turn automatically                 |
 | `startNextTurn()`                                                         | `Turn`           | Creates a new `Turn` for the current player, stores it in `currentTurn`, returns it; throws `IllegalStateException` if the previous turn is not yet complete or if `winner` is set |
 | `endCurrentTurn()`                                                        | `void`           | Calls `currentTurn.endTurn()`, increments `currentTurnNumber`, advances `currentPlayerIndex`, then checks for a winner via `VictoryPointCalculator`; throws `IllegalStateException` if `currentTurn` is not in `BUILD` or `DONE` phase |
@@ -118,7 +118,7 @@ Orchestrates the full turn sequence across all players for the duration of the g
 ## Key Validation Rules (BVA Targets)
 
 | Rule                                           | Invalid (boundary)                                        | Valid (boundary)                                      |
-|------------------------------------------------|-------------------------------------------------------------|---------------------------------------------------------|
+|------------------------------------------------|-----------------------------------------------------------|-------------------------------------------------------|
 | `startNextTurn()` before previous turn ends    | Called while `currentTurn.getPhase()` is not `DONE`       | Called after `endCurrentTurn()` completes             |
 | `endCurrentTurn()` too early                   | Called while phase is `PRODUCTION` or `TRADE`             | Called while phase is `BUILD`                         |
 | `startNextTurn()` after game over              | Called when `winner` is set                               | Called when `winner` is null                          |
@@ -151,7 +151,7 @@ src/main/java/domain/
 ├── Turn.java                  (existing)
 ├── DevelopmentCard.java       (NEW)
 ├── DevelopmentDeck.java       (NEW)
-└── TurnManager.java            (NEW)
+└── TurnManager.java           (NEW)
 
 src/test/java/domain/
 ├── HexTest.java               (existing)
