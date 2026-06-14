@@ -39,3 +39,27 @@
 - **TC8: MarkAsPlayed_OnVictoryPointCard_ThrowsIllegalStateException** ( implemented )
   - State of the system: `DevelopmentCard(VICTORY_POINT)`, `markAsPlayed()` called
   - Expected output: `IllegalStateException`
+
+## Method under test: `getTurnPurchased()`
+
+- **TC9: GetTurnPurchased_OnNewCard_ReturnsZero** ( implemented )
+  - State of the system: `DevelopmentCard(KNIGHT)`, no turn set yet
+  - Expected output: `0`
+
+## Method under test: `isPlayableOnTurn(int currentTurn)`
+
+- **TC10: IsPlayableOnTurn_WhenCurrentTurnGreaterThanPurchased_ReturnsTrue** ( implemented )
+  - State of the system: `DevelopmentCard(KNIGHT)`, `turnPurchased = 1`, `currentTurn = 2`
+  - Expected output: `true`
+
+- **TC11: IsPlayableOnTurn_WhenCurrentTurnEqualsToPurchased_ReturnsFalse** ( implemented )
+  - State of the system: `DevelopmentCard(KNIGHT)`, `turnPurchased = 1`, `currentTurn = 1`
+  - Expected output: `false`
+
+- **TC12: IsPlayableOnTurn_WhenCardAlreadyPlayed_ReturnsFalse** ( implemented )
+  - State of the system: `DevelopmentCard(KNIGHT)`, `turnPurchased = 1`, `currentTurn = 2`, `markAsPlayed()` called
+  - Expected output: `false`
+
+- **TC13: IsPlayableOnTurn_WhenVictoryPointCard_ReturnsFalse** ( implemented )
+  - State of the system: `DevelopmentCard(VICTORY_POINT)`, `turnPurchased = 1`, `currentTurn = 2`
+  - Expected output: `false`
