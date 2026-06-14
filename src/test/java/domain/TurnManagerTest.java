@@ -70,13 +70,11 @@ public class TurnManagerTest {
         this.turnManager = new TurnManager(game, bank, dice);
     }
 
-    /** Advances {@code turn} from PRODUCTION all the way to the BUILD phase. */
     private void advanceToBuild(Turn turn) {
         turn.rollDice();
         turn.advanceToBuild();
     }
 
-    /** Gives {@code player} exactly 10 VP via 4 settlements and 3 cities. */
     private void giveTenVictoryPoints(Player player) {
         for (int i = 0; i < 4; i++) {
             board.getVertex(i).setOwner(player);
