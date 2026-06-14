@@ -387,9 +387,20 @@ public class Turn {
         return game.getRemainingDevelopmentCardCount();
     }
 
-    public void playKnightCard(Player player, DevelopmentCard card) {
+    private void validateDevCardPlay(Player player, DevelopmentCard card) {
         if (card == null) {
             throw new IllegalArgumentException("Development card cannot be null");
         }
+        if (player != activePlayer) {
+            throw new IllegalArgumentException("Only the active player can play a development card");
+        }
+    }
+
+    public void playKnightCard(Player player, DevelopmentCard card) {
+        validateDevCardPlay(player, card);
+    }
+
+    public void playRoadBuildingCard(Player player, DevelopmentCard card, int edgeId1, int edgeId2) {
+        validateDevCardPlay(player, card);
     }
 }

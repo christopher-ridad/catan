@@ -1604,7 +1604,22 @@ public class TurnTest {
         Turn turn = new Turn(game, p1, fixedDice, bank);
         turn.rollDice();
 
-        assertThrows(IllegalArgumentException.class, () -> turn.playKnightCard(p1, null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> turn.playKnightCard(p1, null));
+        assertEquals("Development card cannot be null", exception.getMessage());
+    }
+
+    @Test
+    void playRoadBuildingCard_WrongPlayer_ThrowsIllegalArgumentException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.ROAD_BUILDING);
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> turn.playRoadBuildingCard(p2, card, 0, 1));
+        assertEquals("Only the active player can play a development card", exception.getMessage());
     }
 }
 
