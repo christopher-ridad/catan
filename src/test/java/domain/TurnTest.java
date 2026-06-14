@@ -1799,6 +1799,18 @@ public class TurnTest {
                 () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p1, new DevelopmentCard(DevelopmentCardType.KNIGHT)))
         );
     }
+
+    @Test
+    void playMonopoly_OtherPlayersHaveNone_NoChange() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
+        game.addDevelopmentCardToHand(p1, card);
+
+        assertDoesNotThrow(() -> turn.playMonopoly(p1, card, ResourceType.BRICK));
+        assertEquals(0, p1.getResourceCount(ResourceType.BRICK));
+    }
 }
 
 
