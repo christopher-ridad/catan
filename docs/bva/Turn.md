@@ -1,6 +1,6 @@
 # BVA Analysis: Turn
 
-## Method under test: `Turn(Game game, Player activePlayer, Dice dice, Bank bank)`
+## Method under test: `Turn(Game game, Player activePlayer, DiceRoll dice, Bank bank)`
 
 - **TC1: Constructor_WithNullGame_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: `game = null`
@@ -440,55 +440,94 @@
   - State of the system: turn is in BUILD phase, active player has exactly 1 Ore + 1 Wool + 1 Grain, exactly 1 card remains in the deck (boundary)
   - Expected output: player's Ore/Wool/Grain counts become `0`, `getRemainingDeckSize()` becomes `0`, and `getPlayerHand(activePlayer)` grows by one card
 
-## Method under test: `playDevelopmentCard(Player player, DevelopmentCard card)`
-
-- **TC98: PlayDevelopmentCard_OutsideTradeOrBuildPhase_ThrowsIllegalStateException** ( :white_check_mark: )
-  - State of the system: turn still in PRODUCTION phase (`rollDice()` not yet called, boundary: one phase before TRADE)
-  - Expected output: `IllegalStateException`
-
-- **TC99: PlayDevelopmentCard_DevCardAlreadyPlayedThisTurn_ThrowsIllegalStateException** ( :white_check_mark: )
-  - State of the system: a (different) development card was already played earlier this turn
-  - Expected output: `IllegalStateException`
-
-- **TC100: PlayDevelopmentCard_NonVictoryPointCardPurchasedThisTurn_ThrowsIllegalStateException** ( :white_check_mark: )
-  - State of the system: card is a non-`VICTORY_POINT` card bought via `buyDevelopmentCard()` earlier in this same turn (boundary)
-  - Expected output: `IllegalStateException`
-
-- **TC101: PlayDevelopmentCard_CardAlreadyPlayed_ThrowsIllegalStateException** ( :white_check_mark: )
-  - State of the system: `card.isPlayed()` is already `true` (acquired and played in a previous turn)
-  - Expected output: `IllegalStateException`
-
-- **TC110: PlayDevelopmentCard_VictoryPointCard_ThrowsIllegalStateException** ( :white_check_mark: )
-  - State of the system: `card` is a `VICTORY_POINT` card in the active player's hand (boundary: the one card type that can never be played through this method — per the rules it is instead privately revealed to declare victory, which requires whole-game VP tracking that is out of scope for a single turn)
-  - Expected output: `IllegalStateException`
-
-- **TC102: PlayDevelopmentCard_UnplayedCardFromPriorTurn_MarksCardAsPlayed** ( :white_check_mark: )
-  - State of the system: turn is in TRADE or BUILD phase, `card` is an unplayed non-`VICTORY_POINT` card the player acquired in a previous turn (boundary: minimal valid preconditions)
-  - Expected output: `card.isPlayed()` becomes `true`
-
 ## Method under test: `getPlayerHand(Player player)`
 
-- **TC103: GetPlayerHand_PlayerWithNoCards_ReturnsEmptyList** ( :white_check_mark: )
+- **TC98: GetPlayerHand_PlayerWithNoCards_ReturnsEmptyList** ( :white_check_mark: )
   - State of the system: `player` has not purchased any development cards (boundary)
   - Expected output: empty list
 
-- **TC104: GetPlayerHand_AfterBuyingOneCard_ReturnsListContainingPurchasedCard** ( :white_check_mark: )
+- **TC99: GetPlayerHand_AfterBuyingOneCard_ReturnsListContainingPurchasedCard** ( :white_check_mark: )
   - State of the system: `player` purchased exactly one development card via `buyDevelopmentCard()` (boundary)
   - Expected output: list of size `1` containing that card
 
-- **TC105: GetPlayerHand_ReturnedList_IsUnmodifiable** ( :white_check_mark: )
+- **TC100: GetPlayerHand_ReturnedList_IsUnmodifiable** ( :white_check_mark: )
   - State of the system: a hand list obtained via `getPlayerHand()`
   - Expected output: `UnsupportedOperationException` on attempted mutation
 
 ## Method under test: `getRemainingDeckSize()`
 
-- **TC106: GetRemainingDeckSize_NewTurn_Returns25** ( :white_check_mark: )
+- **TC101: GetRemainingDeckSize_NewTurn_Returns25** ( :white_check_mark: )
   - State of the system: no cards have been purchased yet this game (boundary: full 14 KNIGHT + 6 Progress + 5 VICTORY_POINT deck)
   - Expected output: `25`
 
-- **TC107: GetRemainingDeckSize_AfterBuyingOneCard_DecreasesByOne** ( :white_check_mark: )
+- **TC102: GetRemainingDeckSize_AfterBuyingOneCard_DecreasesByOne** ( :white_check_mark: )
   - State of the system: exactly one card has been purchased via `buyDevelopmentCard()` (boundary)
   - Expected output: `24`
 
+## Shared validation for dev card play methods
+
+- **TC103: playKnightCard_NullCard_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, `card = null`
+  - Expected output: `IllegalArgumentException`
+
+- **TC104: playRoadBuildingCard_WrongPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, `player != activePlayer`
+  - Expected output: `IllegalArgumentException`
+
+- **TC105: playYearOfPlenty_WrongPhase_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: turn in PRODUCTION phase, valid card
+  - Expected output: `IllegalStateException`
+
+- **TC106: playMonopoly_AlreadyPlayedDevCard_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, `playedDevCardThisTurn = true`
+  - Expected output: `IllegalStateException`
+
+- **TC107: playKnightCard_PlayerDoesNotOwnCard_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, card not in player's hand
+  - Expected output: `IllegalArgumentException`
+
+- **TC108: playRoadBuildingCard_CardPurchasedThisTurn_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, card was purchased this turn
+  - Expected output: `IllegalStateException`
+
+- **TC109: playYearOfPlenty_CardAlreadyPlayed_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, card already played
+  - Expected output: `IllegalStateException`
+
+- **TC110: playMonopoly_VictoryPointCard_ThrowsIllegalStateException** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, card is VICTORY_POINT
+  - Expected output: `IllegalStateException`
+
+## Method under test: `playKnightCard(Player, DevelopmentCard)`
+
+- **TC111: playKnightCard_ValidCard_SetsRobberPendingMove** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, valid KNIGHT card in player's hand
+  - Expected output: robber pending move is set, `moveRobber()` can be called, `card.isPlayed()` returns `true`, second card cannot be played this turn
+
+## Method under test: `playRoadBuildingCard(Player, DevelopmentCard, int, int)`
+
+- **TC112: playRoadBuildingCard_ValidCard_PlacesTwoFreeRoads** ( :white_check_mark: )
+  - State of the system: valid turn in BUILD phase, valid ROAD_BUILDING card in player's hand, two valid edge IDs
+  - Expected output: two roads placed, player resources unchanged, `card.isPlayed()` returns `true`, second card cannot be played this turn
+
+## Method under test: `playYearOfPlenty(Player, DevelopmentCard, ResourceType, ResourceType)`
+
+- **TC113: playYearOfPlenty_ValidCard_GivesTwoResources** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, valid YEAR_OF_PLENTY card in player's hand, bank has resources
+  - Expected output: player receives 1 of r1 and 1 of r2, bank decremented accordingly, `card.isPlayed()` returns `true`, second card cannot be played this turn
+
+- **TC114: playYearOfPlenty_BankEmpty_ThrowsIllegalArgumentException** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, valid YEAR_OF_PLENTY card, bank has 0 of requested resource
+  - Expected output: `IllegalArgumentException`
+
+## Method under test: `playMonopoly(Player, DevelopmentCard, ResourceType)`
+
+- **TC115: playMonopoly_ValidCard_TakesAllResourceFromOtherPlayers** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, valid MONOPOLY card, other players have BRICK
+  - Expected output: active player receives all BRICK from other players, other players have 0 BRICK, `card.isPlayed()` returns `true`, second card cannot be played this turn
+
+- **TC116: playMonopoly_OtherPlayersHaveNone_NoChange** ( :white_check_mark: )
+  - State of the system: valid turn in TRADE phase, valid MONOPOLY card, other players have 0 of resource
+  - Expected output: no resources transferred, no exception thrown
 
 

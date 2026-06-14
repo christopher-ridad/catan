@@ -379,7 +379,15 @@ public class Turn {
         cardsPurchasedThisTurn.add(card);
     }
 
-    public void playDevelopmentCard(Player player, DevelopmentCard card) {
+    public List<DevelopmentCard> getPlayerHand(Player player) {
+        return game.getPlayerHand(player);
+    }
+
+    public int getRemainingDeckSize() {
+        return game.getRemainingDevelopmentCardCount();
+    }
+
+    private void validateDevCardPlay(Player player, DevelopmentCard card) {
         if (card == null) {
             throw new IllegalArgumentException("Development card cannot be null");
         }
@@ -388,10 +396,6 @@ public class Turn {
         }
         if (phase != TurnPhase.TRADE && phase != TurnPhase.BUILD) {
             throw new IllegalStateException("Development cards can only be played during the trade or build phase");
-        }
-        validateRobberResolved();
-        if (card.getType() == DevelopmentCardType.VICTORY_POINT) {
-            throw new IllegalStateException("Victory Point cards cannot be played");
         }
         if (playedDevCardThisTurn) {
             throw new IllegalStateException("Only one development card can be played per turn");
@@ -405,16 +409,47 @@ public class Turn {
         if (card.isPlayed()) {
             throw new IllegalStateException("This development card has already been played");
         }
+        if (card.getType() == DevelopmentCardType.VICTORY_POINT) {
+            throw new IllegalStateException("Victory Point cards cannot be played");
+        }
+    }
 
+    private void executeDevCardPlay(DevelopmentCard card) {
         card.markAsPlayed();
         playedDevCardThisTurn = true;
     }
 
-    public List<DevelopmentCard> getPlayerHand(Player player) {
-        return game.getPlayerHand(player);
+    public void playKnightCard(Player player, DevelopmentCard card) {
+        validateDevCardPlay(player, card);
+        executeDevCardPlay(card);
+        robberPendingMove = true;
     }
 
-    public int getRemainingDeckSize() {
-        return game.getRemainingDevelopmentCardCount();
+    public void playRoadBuildingCard(Player player, DevelopmentCard card, int edgeId1, int edgeId2) {
+        validateDevCardPlay(player, card);
+        executeDevCardPlay(card);
+        buildManager.buildFreeRoad(edgeId1);
+        buildManager.buildFreeRoad(edgeId2);
+    }
+
+    public void playYearOfPlenty(Player player, DevelopmentCard card, ResourceType r1, ResourceType r2) {
+        validateDevCardPlay(player, card);
+        executeDevCardPlay(card);
+        bank.deduct(r1, 1);
+        bank.deduct(r2, 1);
+        activePlayer.addResources(r1, 1);
+        activePlayer.addResources(r2, 1);
+    }
+
+    public void playMonopoly(Player player, DevelopmentCard card, ResourceType resource) {
+        validateDevCardPlay(player, card);
+        executeDevCardPlay(card);
+        for (Player p : game.getPlayers()) {
+            if (p != activePlayer) {
+                int amount = p.getResourceCount(resource);
+                p.removeResources(resource, amount);
+                activePlayer.addResources(resource, amount);
+            }
+        }
     }
 }
