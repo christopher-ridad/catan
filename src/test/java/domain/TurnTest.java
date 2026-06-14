@@ -1714,6 +1714,31 @@ public class TurnTest {
                 () -> assertDoesNotThrow(() -> turn.moveRobber(1))
         );
     }
+
+    @Test
+    void playRoadBuildingCard_ValidCard_PlacesTwoFreeRoads() {
+        Turn turn = newTurnInBuildPhase(p3);
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.ROAD_BUILDING);
+        game.addDevelopmentCardToHand(p3, card);
+
+        board.getEdge(4).getEndpoints().get(0).setOwner(p3);
+        int edge1Id = 4;
+        int edge2Id = 5;
+
+        int brickBefore = p3.getResourceCount(ResourceType.BRICK);
+        int lumberBefore = p3.getResourceCount(ResourceType.LUMBER);
+
+        turn.playRoadBuildingCard(p3, card, edge1Id, edge2Id);
+
+        assertAll(
+                () -> assertTrue(card.isPlayed()),
+                () -> assertTrue(board.getEdge(edge1Id).hasRoad()),
+                () -> assertTrue(board.getEdge(edge2Id).hasRoad()),
+                () -> assertEquals(brickBefore, p3.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(lumberBefore, p3.getResourceCount(ResourceType.LUMBER)),
+                () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p3, new DevelopmentCard(DevelopmentCardType.KNIGHT)))
+        );
+    }
 }
 
 

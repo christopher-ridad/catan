@@ -427,6 +427,9 @@ public class Turn {
 
     public void playRoadBuildingCard(Player player, DevelopmentCard card, int edgeId1, int edgeId2) {
         validateDevCardPlay(player, card);
+        executeDevCardPlay(card);
+        buildManager.buildFreeRoad(edgeId1);
+        buildManager.buildFreeRoad(edgeId2);
     }
 
     public void playYearOfPlenty(Player player, DevelopmentCard card, ResourceType r1, ResourceType r2) {
