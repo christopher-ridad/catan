@@ -1556,72 +1556,6 @@ public class TurnTest {
     }
 
     @Test
-    public void PlayDevelopmentCard_OutsideTradeOrBuildPhase_ThrowsIllegalStateException() {
-        Turn turn = new Turn(game, p1, dice, bank);
-        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_DevCardAlreadyPlayedThisTurn_ThrowsIllegalStateException() {
-        DiceRoll fixedDice = mockDiceRoll(4, 4);
-        Turn turn = new Turn(game, p1, fixedDice, bank);
-        turn.rollDice();
-        DevelopmentCard first = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-        DevelopmentCard second = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-        game.addDevelopmentCardToHand(p1, first);
-        game.addDevelopmentCardToHand(p1, second);
-        turn.playDevelopmentCard(p1, first);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, second));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_NonVictoryPointCardPurchasedThisTurn_ThrowsIllegalStateException() {
-        Turn turn = newTurnInBuildPhase(p1);
-        DevelopmentCard purchased = buyUntilNonVictoryPointCard(turn, p1);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, purchased));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_CardAlreadyPlayed_ThrowsIllegalStateException() {
-        DiceRoll fixedDice = mockDiceRoll(4, 4);
-        Turn turn = new Turn(game, p1, fixedDice, bank);
-        turn.rollDice();
-        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-        card.markAsPlayed();
-        game.addDevelopmentCardToHand(p1, card);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_VictoryPointCard_ThrowsIllegalStateException() {
-        DiceRoll fixedDice = mockDiceRoll(4, 4);
-        Turn turn = new Turn(game, p1, fixedDice, bank);
-        turn.rollDice();
-        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
-        game.addDevelopmentCardToHand(p1, card);
-
-        assertThrows(IllegalStateException.class, () -> turn.playDevelopmentCard(p1, card));
-    }
-
-    @Test
-    public void PlayDevelopmentCard_UnplayedCardFromPriorTurn_MarksCardAsPlayed() {
-        DiceRoll fixedDice = mockDiceRoll(4, 4);
-        Turn turn = new Turn(game, p1, fixedDice, bank);
-        turn.rollDice();
-        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
-        game.addDevelopmentCardToHand(p1, card);
-
-        turn.playDevelopmentCard(p1, card);
-
-        assertTrue(card.isPlayed());
-    }
-
-    @Test
     public void GetPlayerHand_PlayerWithNoCards_ReturnsEmptyList() {
         Turn turn = new Turn(game, p1, dice, bank);
 
@@ -1662,6 +1596,226 @@ public class TurnTest {
         turn.buyDevelopmentCard();
 
         assertEquals(24, turn.getRemainingDeckSize());
+    }
+
+    @Test
+    void playKnightCard_NullCard_ThrowsIllegalArgumentException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> turn.playKnightCard(p1, null));
+        assertEquals("Development card cannot be null", exception.getMessage());
+    }
+
+    @Test
+    void playRoadBuildingCard_WrongPlayer_ThrowsIllegalArgumentException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.ROAD_BUILDING);
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> turn.playRoadBuildingCard(p2, card, 0, 1));
+        assertEquals("Only the active player can play a development card", exception.getMessage());
+    }
+
+    @Test
+    void playYearOfPlenty_WrongPhase_ThrowsIllegalStateException() {
+        Turn turn = new Turn(game, p1, dice, bank);
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL));
+        assertEquals("Development cards can only be played during the trade or build phase", exception.getMessage());
+    }
+
+    @Test
+    void playMonopoly_AlreadyPlayedDevCard_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard first = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        DevelopmentCard second = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
+        game.addDevelopmentCardToHand(p1, first);
+        game.addDevelopmentCardToHand(p1, second);
+        turn.playKnightCard(p1, first);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playMonopoly(p1, second, ResourceType.BRICK));
+        assertEquals("Only one development card can be played per turn", exception.getMessage());
+    }
+
+    @Test
+    void playKnightCard_PlayerDoesNotOwnCard_ThrowsIllegalArgumentException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> turn.playKnightCard(p1, card));
+        assertEquals("Player does not own this development card", exception.getMessage());
+    }
+
+    @Test
+    void playRoadBuildingCard_CardPurchasedThisTurn_ThrowsIllegalStateException() {
+        Turn turn = newTurnInBuildPhase(p1);
+        DevelopmentCard purchased = buyUntilNonVictoryPointCard(turn, p1);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playRoadBuildingCard(p1, purchased, 0, 1));
+        assertEquals("A development card cannot be played the same turn it was purchased", exception.getMessage());
+    }
+
+    @Test
+    void playYearOfPlenty_CardAlreadyPlayed_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        card.markAsPlayed();
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL));
+        assertEquals("This development card has already been played", exception.getMessage());
+    }
+
+    @Test
+    void playMonopoly_VictoryPointCard_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playMonopoly(p1, card, ResourceType.BRICK));
+        assertEquals("Victory Point cards cannot be played", exception.getMessage());
+    }
+
+    @Test
+    void playKnightCard_ValidCard_SetsRobberPendingMove() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        game.addDevelopmentCardToHand(p1, card);
+
+        turn.playKnightCard(p1, card);
+
+        assertAll(
+                () -> assertTrue(card.isPlayed()),
+                () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p1, new DevelopmentCard(DevelopmentCardType.KNIGHT))),
+                () -> assertDoesNotThrow(() -> turn.moveRobber(1))
+        );
+    }
+
+    @Test
+    void playRoadBuildingCard_ValidCard_PlacesTwoFreeRoads() {
+        Turn turn = newTurnInBuildPhase(p3);
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.ROAD_BUILDING);
+        game.addDevelopmentCardToHand(p3, card);
+
+        board.getEdge(4).getEndpoints().get(0).setOwner(p3);
+        int edge1Id = 4;
+        int edge2Id = 5;
+
+        int brickBefore = p3.getResourceCount(ResourceType.BRICK);
+        int lumberBefore = p3.getResourceCount(ResourceType.LUMBER);
+
+        turn.playRoadBuildingCard(p3, card, edge1Id, edge2Id);
+
+        assertAll(
+                () -> assertTrue(card.isPlayed()),
+                () -> assertTrue(board.getEdge(edge1Id).hasRoad()),
+                () -> assertTrue(board.getEdge(edge2Id).hasRoad()),
+                () -> assertEquals(brickBefore, p3.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(lumberBefore, p3.getResourceCount(ResourceType.LUMBER)),
+                () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p3, new DevelopmentCard(DevelopmentCardType.KNIGHT)))
+        );
+    }
+
+    @Test
+    void playYearOfPlenty_ValidCard_GivesTwoResources() {
+        Bank freshBank = new Bank();
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, freshBank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        game.addDevelopmentCardToHand(p1, card);
+
+        int brickBefore = p1.getResourceCount(ResourceType.BRICK);
+        int woolBefore = p1.getResourceCount(ResourceType.WOOL);
+        int bankBrickBefore = freshBank.getResourceCount(ResourceType.BRICK);
+        int bankWoolBefore = freshBank.getResourceCount(ResourceType.WOOL);
+
+        turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL);
+
+        assertAll(
+                () -> assertTrue(card.isPlayed()),
+                () -> assertEquals(brickBefore + 1, p1.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(woolBefore + 1, p1.getResourceCount(ResourceType.WOOL)),
+                () -> assertEquals(bankBrickBefore - 1, freshBank.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(bankWoolBefore - 1, freshBank.getResourceCount(ResourceType.WOOL)),
+                () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p1, new DevelopmentCard(DevelopmentCardType.KNIGHT)))
+        );
+    }
+
+    @Test
+    void playYearOfPlenty_BankEmpty_ThrowsIllegalArgumentException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL));
+        assertEquals("Insufficient resources in bank", exception.getMessage());
+    }
+
+    @Test
+    void playMonopoly_ValidCard_TakesAllResourceFromOtherPlayers() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
+        game.addDevelopmentCardToHand(p1, card);
+        p2.addResources(ResourceType.BRICK, 3);
+        p3.addResources(ResourceType.BRICK, 2);
+
+        turn.playMonopoly(p1, card, ResourceType.BRICK);
+
+        assertAll(
+                () -> assertTrue(card.isPlayed()),
+                () -> assertEquals(5, p1.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p2.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.BRICK)),
+                () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p1, new DevelopmentCard(DevelopmentCardType.KNIGHT)))
+        );
+    }
+
+    @Test
+    void playMonopoly_OtherPlayersHaveNone_NoChange() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
+        game.addDevelopmentCardToHand(p1, card);
+
+        turn.playMonopoly(p1, card, ResourceType.BRICK);
+
+        assertAll(
+                () -> assertEquals(0, p1.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p2.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p4.getResourceCount(ResourceType.BRICK))
+        );
     }
 }
 

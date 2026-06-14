@@ -181,4 +181,13 @@ public class BuildManager {
         }
         return cityCount;
     }
+
+    public void buildFreeRoad(int edgeId) {
+        Board board = game.getBoard();
+        Edge edge = board.getEdge(edgeId);
+        Vertex endpoint1 = edge.getEndpoints().get(0);
+        Vertex endpoint2 = edge.getEndpoints().get(1);
+        validateRoadConditions(edge, endpoint1, endpoint2, board);
+        edge.setOwner(activePlayer);
+    }
 }
