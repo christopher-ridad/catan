@@ -1,11 +1,6 @@
 package ui;
 
-import domain.Board;
-import domain.Game;
-import domain.Hex;
-import domain.Player;
-import domain.PlayerColor;
-import domain.TerrainType;
+import domain.*;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -320,7 +315,8 @@ public class PlayerSetupPanel extends JPanel {
     private void launchGame() {
         Board board = buildFixedBoard();
         Game game = new Game(configuredPlayers, board);
-        mainWindow.showSetupPhase(game);
+        Bank bank = new Bank();
+        mainWindow.showSetupPhase(game, bank);
     }
 
     // -------------------------------------------------------------------------

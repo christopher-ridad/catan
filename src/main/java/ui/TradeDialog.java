@@ -247,6 +247,7 @@ public class TradeDialog extends JDialog {
                 DeviceHandoffDialog.show(parent, activePlayer.getName());
                 showStatus(Messages.get("trade_offer_accepted"), COLOR_SUCCESS);
             } catch (IllegalStateException e) {
+                turn.rejectTrade(offer);
                 DeviceHandoffDialog.show(parent, activePlayer.getName());
                 showStatus(e.getMessage(), COLOR_ERROR);
             }

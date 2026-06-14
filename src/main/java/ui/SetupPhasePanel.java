@@ -57,6 +57,7 @@ public class SetupPhasePanel extends JPanel {
 
     private final SetupPhase setupPhase;
     private final Game game;
+    private final Bank bank;
 
     // -------------------------------------------------------------------------
     // UI
@@ -80,10 +81,11 @@ public class SetupPhasePanel extends JPanel {
     // Constructor
     // -------------------------------------------------------------------------
 
-    public SetupPhasePanel(Main mainWindow, Game game) {
+    public SetupPhasePanel(Main mainWindow, Game game, Bank bank) {
         this.mainWindow = mainWindow;
         this.game = game;
-        this.setupPhase = new SetupPhase(game, new Bank());
+        this.bank = bank;
+        this.setupPhase = new SetupPhase(game, bank);
         this.boardPanel = new BoardPanel(game.getBoard(), this::onVertexClicked, this::onEdgeClicked, null);
 
         setLayout(new BorderLayout());
@@ -155,7 +157,7 @@ public class SetupPhasePanel extends JPanel {
             currentStep = PlacementStep.SETTLEMENT;
 
             if (setupPhase.isComplete()) {
-                mainWindow.showTurnPhase(game);
+                mainWindow.showTurnPhase(game, bank);
             } else {
                 showStatus(Messages.get("build_road_placed"), COLOR_SUCCESS);
                 DeviceHandoffDialog.show(mainWindow, setupPhase.getCurrentPlayer().getName());

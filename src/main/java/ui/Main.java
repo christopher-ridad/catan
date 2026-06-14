@@ -1,5 +1,6 @@
 package ui;
 
+import domain.Bank;
 import domain.Game;
 import domain.Player;
 
@@ -95,15 +96,15 @@ public class Main extends JFrame {
         cardLayout.show(cardContainer, CARD_PLAYER_SETUP);
     }
 
-    public void showSetupPhase(Game game) {
+    public void showSetupPhase(Game game, Bank bank) {
         setTitle(Messages.get("setup_phase_title"));
-        cardContainer.add(new SetupPhasePanel(this, game), CARD_SETUP);
+        cardContainer.add(new SetupPhasePanel(this, game, bank), CARD_SETUP);
         cardLayout.show(cardContainer, CARD_SETUP);
     }
 
-    public void showTurnPhase(Game game) {
+    public void showTurnPhase(Game game, Bank bank) {
         setTitle(Messages.get("turn_phase_title"));
-        cardContainer.add(new TurnPhasePanel(this, game), CARD_TURN);
+        cardContainer.add(new TurnPhasePanel(this, game, bank), CARD_TURN);
         cardLayout.show(cardContainer, CARD_TURN);
     }
 

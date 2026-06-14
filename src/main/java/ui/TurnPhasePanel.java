@@ -102,10 +102,10 @@ public class TurnPhasePanel extends JPanel {
     // Constructor
     // -------------------------------------------------------------------------
 
-    public TurnPhasePanel(Main mainWindow, Game game) {
+    public TurnPhasePanel(Main mainWindow, Game game, Bank bank) {
         this.mainWindow = mainWindow;
         this.game = game;
-        this.turnManager = new TurnManager(game, new Bank(), new DiceRoll(new Random()));
+        this.turnManager = new TurnManager(game, bank, new DiceRoll(new Random()));
         this.vpCalc = new VictoryPointCalculator();
         this.specialCardTracker = new SpecialCardTracker();
         this.handView = new PlayerHandView();
@@ -450,15 +450,33 @@ public class TurnPhasePanel extends JPanel {
 
     private void updateButtonStates() {
         TurnPhase phase = currentTurn.getPhase();
+        Player player = turnManager.getCurrentPlayer();
 
         rollButton.setEnabled(phase == TurnPhase.PRODUCTION);
         advanceButton.setEnabled(phase == TurnPhase.TRADE);
         tradeButton.setEnabled(phase == TurnPhase.TRADE);
         maritimeTradeButton.setEnabled(phase == TurnPhase.TRADE);
-        buildSettlementButton.setEnabled(phase == TurnPhase.BUILD);
-        buildCityButton.setEnabled(phase == TurnPhase.BUILD);
-        buildRoadButton.setEnabled(phase == TurnPhase.BUILD);
+        buildSettlementButton.setEnabled(phase == TurnPhase.BUILD && canAffordSettlement(player));
+        buildCityButton.setEnabled(phase == TurnPhase.BUILD && canAffordCity(player));
+        buildRoadButton.setEnabled(phase == TurnPhase.BUILD && canAffordRoad(player));
         endTurnButton.setEnabled(phase == TurnPhase.BUILD);
+    }
+
+    private boolean canAffordRoad(Player player) {
+        return player.getResourceCount(ResourceType.BRICK) >= 1
+                && player.getResourceCount(ResourceType.LUMBER) >= 1;
+    }
+
+    private boolean canAffordSettlement(Player player) {
+        return player.getResourceCount(ResourceType.BRICK)  >= 1
+                && player.getResourceCount(ResourceType.LUMBER) >= 1
+                && player.getResourceCount(ResourceType.WOOL)   >= 1
+                && player.getResourceCount(ResourceType.GRAIN)  >= 1;
+    }
+
+    private boolean canAffordCity(Player player) {
+        return player.getResourceCount(ResourceType.ORE)   >= 3
+                && player.getResourceCount(ResourceType.GRAIN) >= 2;
     }
 
     // -------------------------------------------------------------------------
