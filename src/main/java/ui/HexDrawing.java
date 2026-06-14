@@ -225,4 +225,26 @@ public final class HexDrawing {
         }
         return -1;
     }
+
+    /**
+     * Returns the index of the hex that contains the given pixel point,
+     * or -1 if none of the 19 hexes contain it.
+     * Uses point-in-polygon testing on each hex's polygon.
+     *
+     * @param px         clicked x pixel
+     * @param py         clicked y pixel
+     * @param hexCenters the 19 hex centers from computeHexCenters()
+     * @return hex index 0–18, or -1 if none
+     */
+    public static int findHexAt(int px, int py, Point[] hexCenters) {
+        for (int i = 0; i < hexCenters.length; i++) {
+            if (hexCenters[i] != null) {
+                Polygon poly = buildHexPolygon(hexCenters[i]);
+                if (poly.contains(px, py)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
 }

@@ -84,6 +84,7 @@ public class BoardPanel extends JPanel {
     private final Board board;
     private final IntConsumer onVertexClicked;
     private final IntConsumer onEdgeClicked;
+    private final IntConsumer onHexClicked;
     private final int[][] edgeEndpoints;
 
     private Point[] hexCenters;
@@ -100,10 +101,12 @@ public class BoardPanel extends JPanel {
      * @param onEdgeClicked   called with the edge index when an edge is clicked;
      *                        pass null for a static/read-only board
      */
-    public BoardPanel(Board board, IntConsumer onVertexClicked, IntConsumer onEdgeClicked) {
+    public BoardPanel(Board board, IntConsumer onVertexClicked,
+                      IntConsumer onEdgeClicked, IntConsumer onHexClicked) {
         this.board = board;
         this.onVertexClicked = onVertexClicked;
         this.onEdgeClicked = onEdgeClicked;
+        this.onHexClicked = onHexClicked;
         this.edgeEndpoints = BoardInitialization.getEdgeEndpoints();
         setBackground(COLOR_OCEAN);
         addMouseListener(new BoardClickListener());
@@ -123,6 +126,7 @@ public class BoardPanel extends JPanel {
         recomputeGeometry();
 
         drawHexes(g2);
+        drawRobber(g2);
         drawHarbors(g2);
         drawEdges(g2);
         drawVertices(g2);
@@ -193,6 +197,24 @@ public class BoardPanel extends JPanel {
         for (int i = 0; i < dots; i++) {
             g2.fillOval(startX + i * spacing, dotY, dotSize, dotSize);
         }
+    }
+
+    private void drawRobber(Graphics2D g2) {
+        Hex robberHex = board.getRobberHex();
+        List<Hex> hexes = board.getHexes();
+        int robberIndex = hexes.indexOf(robberHex);
+        if (robberIndex < 0 || hexCenters[robberIndex] == null) {
+            return;
+        }
+        Point center = hexCenters[robberIndex];
+        int r = 14;
+        g2.setColor(new Color(30, 30, 30, 200));
+        g2.fillOval(center.x - r, center.y + 10, r * 2, r * 2);
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("SansSerif", Font.BOLD, 14));
+        FontMetrics fm = g2.getFontMetrics();
+        String label = "R";
+        g2.drawString(label, center.x - fm.stringWidth(label) / 2, center.y + 10 + r + fm.getAscent() / 2 - 2);
     }
 
     // -------------------------------------------------------------------------
@@ -412,6 +434,14 @@ public class BoardPanel extends JPanel {
             if (edgeIndex != -1) {
                 if (onEdgeClicked != null) {
                     onEdgeClicked.accept(edgeIndex);
+                }
+                return;
+            }
+
+            int hexIndex = HexDrawing.findHexAt(e.getX(), e.getY(), hexCenters);
+            if (hexIndex != -1) {
+                if (onHexClicked != null) {
+                    onHexClicked.accept(hexIndex);
                 }
             }
         }

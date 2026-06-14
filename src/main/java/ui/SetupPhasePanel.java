@@ -38,12 +38,12 @@ public class SetupPhasePanel extends JPanel {
     // Constants
     // -------------------------------------------------------------------------
 
-    private static final int SIDE_PANEL_WIDTH  = 240;
-    private static final int PROMPT_FONT_SIZE  = 15;
-    private static final int PLAYER_FONT_SIZE  = 18;
-    private static final int STATUS_FONT_SIZE  = 13;
-    private static final int BUTTON_FONT_SIZE  = 13;
-    private static final int BUTTON_HEIGHT     = 38;
+    private static final int SIDE_PANEL_WIDTH  = 420;
+    private static final int PROMPT_FONT_SIZE  = 17;
+    private static final int PLAYER_FONT_SIZE  = 22;
+    private static final int STATUS_FONT_SIZE  = 15;
+    private static final int BUTTON_FONT_SIZE  = 15;
+    private static final int BUTTON_HEIGHT     = 44;
     private static final int GAP_SMALL         = 8;
     private static final int GAP_MEDIUM        = 16;
 
@@ -84,7 +84,7 @@ public class SetupPhasePanel extends JPanel {
         this.mainWindow = mainWindow;
         this.game = game;
         this.setupPhase = new SetupPhase(game, new Bank());
-        this.boardPanel = new BoardPanel(game.getBoard(), this::onVertexClicked, this::onEdgeClicked);
+        this.boardPanel = new BoardPanel(game.getBoard(), this::onVertexClicked, this::onEdgeClicked, null);
 
         setLayout(new BorderLayout());
         add(boardPanel, BorderLayout.CENTER);

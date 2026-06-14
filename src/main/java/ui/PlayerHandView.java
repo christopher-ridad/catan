@@ -28,13 +28,13 @@ public class PlayerHandView extends JPanel {
     // Constants
     // -------------------------------------------------------------------------
 
-    private static final int CARD_WIDTH       = 80;
-    private static final int CARD_HEIGHT      = 90;
+    private static final int CARD_WIDTH       = 68;
+    private static final int CARD_HEIGHT      = 110;
     private static final int CARD_GAP         = 8;
     private static final int CARD_ARC         = 10;
-    private static final int RESOURCE_FONT_SIZE = 11;
-    private static final int COUNT_FONT_SIZE    = 28;
-    private static final int LABEL_FONT_SIZE    = 13;
+    private static final int RESOURCE_FONT_SIZE = 12;
+    private static final int COUNT_FONT_SIZE    = 34;
+    private static final int LABEL_FONT_SIZE    = 15;
     private static final int GAP_SMALL          = 6;
     private static final int GAP_MEDIUM         = 12;
 

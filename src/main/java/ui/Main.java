@@ -1,6 +1,7 @@
 package ui;
 
 import domain.Game;
+import domain.Player;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,8 +16,8 @@ import java.awt.Dimension;
  * Owns a CardLayout that switches between all game phases:
  *   1. Language selection
  *   2. Player setup (name + color, one player at a time)
- *   3. Setup phase (board: settlement + road placement)
- *   4. Turn phase
+ *   3. Setup phase (settlement + road placement)
+ *   4. Turn phase (dice, build, trade)
  *   5. Win screen
  *
  * Phase panels are responsible for their own logic.
@@ -88,6 +89,8 @@ public class Main extends JFrame {
     }
 
     public void showPlayerSetup() {
+        cardContainer.remove(getCardByName(CARD_PLAYER_SETUP));
+        cardContainer.add(new PlayerSetupPanel(this), CARD_PLAYER_SETUP);
         setTitle(Messages.get("setup_phase_title"));
         cardLayout.show(cardContainer, CARD_PLAYER_SETUP);
     }
@@ -100,11 +103,13 @@ public class Main extends JFrame {
 
     public void showTurnPhase(Game game) {
         setTitle(Messages.get("turn_phase_title"));
+        cardContainer.add(new TurnPhasePanel(this, game), CARD_TURN);
         cardLayout.show(cardContainer, CARD_TURN);
     }
 
-    public void showWinScreen(Game game) {
+    public void showWinScreen(Player winner) {
         setTitle(Messages.get("win_title"));
+        cardContainer.add(new WinPanel(this, winner), CARD_WIN);
         cardLayout.show(cardContainer, CARD_WIN);
     }
 
@@ -116,6 +121,15 @@ public class Main extends JFrame {
         JPanel stub = new JPanel();
         stub.add(new JLabel(Messages.get(titleKey) + " — coming soon"));
         return stub;
+    }
+
+    private java.awt.Component getCardByName(String name) {
+        for (java.awt.Component c : cardContainer.getComponents()) {
+            if (name.equals(c.getName())) {
+                return c;
+            }
+        }
+        return buildStubPanel(name);
     }
 
     // -------------------------------------------------------------------------
