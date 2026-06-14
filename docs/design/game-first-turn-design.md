@@ -151,21 +151,25 @@ Represents a validated trade between the active player and the bank. Encapsulate
 ### `DevelopmentCard`
 Represents a single development card. Tracks its type and whether it has been played.
 
-| Field        | Type                  | Description                                      |
-|--------------|-----------------------|--------------------------------------------------|
-| `type`       | `DevelopmentCardType` | The type of this card                            |
-| `played`     | `boolean`             | True if this card has already been played        |
+| Field           | Type                  | Description                                                                |
+|-----------------|-----------------------|----------------------------------------------------------------------------|
+| `type`          | `DevelopmentCardType` | The type of this card                                                      |
+| `played`        | `boolean`             | True if this card has already been played                                  |
+| `turnPurchased` | `int`                 | The turn number on which this card was drawn; 0 as placeholder until drawn |
 
-| Method                          | Return Type           | Description                                                                                       |
-|---------------------------------|-----------------------|---------------------------------------------------------------------------------------------------|
-| `DevelopmentCard(DevelopmentCardType type)` | —       | Constructor; throws `IllegalArgumentException` if type is null                                    |
-| `getType()`                     | `DevelopmentCardType` | Returns the card type                                                                             |
-| `isPlayed()`                    | `boolean`             | Returns true if the card has been played                                                          |
-| `markAsPlayed()`                | `void`                | Marks the card as played; throws `IllegalStateException` if already played                        |
+| Method                                      | Return Type           | Description                                                                                   |
+|---------------------------------------------|-----------------------|-----------------------------------------------------------------------------------------------|
+| `DevelopmentCard(DevelopmentCardType type)` | —                     | Constructor; throws `IllegalArgumentException` if type is null                                |
+| `getType()`                                 | `DevelopmentCardType` | Returns the card type                                                                         |
+| `isPlayed()`                                | `boolean`             | Returns true if the card has been played                                                      |
+| `markAsPlayed()`                            | `void`                | Marks the card as played; throws `IllegalStateException` if already played                    |
+| `getTurnPurchased()`                        | `int`                 | Returns the turn on which this card was purchased                                             |
+| `isPlayableOnTurn(int currentTurn)`         | `boolean`             | Returns true if `currentTurn > turnPurchased` and the card has not been played                |
 
 **Invariants:**
 - Once `markAsPlayed()` is called, `isPlayed()` always returns true
 - Victory Point cards are never marked as played until the player declares victory
+- A card may only be played on a turn strictly after the one it was purchased on
 
 ---
 
