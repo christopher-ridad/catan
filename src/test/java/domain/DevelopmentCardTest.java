@@ -59,4 +59,39 @@ public class DevelopmentCardTest {
                 card::markAsPlayed);
         assertEquals("Victory Point cards cannot be marked as played", exception.getMessage());
     }
+
+    @Test
+    void GetTurnPurchased_OnNewCard_ReturnsZero() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        assertEquals(0, card.getTurnPurchased());
+    }
+
+    @Test
+    void IsPlayableOnTurn_WhenCurrentTurnGreaterThanPurchased_ReturnsTrue() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        card.setTurnPurchased(1);
+        assertTrue(card.isPlayableOnTurn(2));
+    }
+
+    @Test
+    void IsPlayableOnTurn_WhenCurrentTurnEqualsToPurchased_ReturnsFalse() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        card.setTurnPurchased(1);
+        assertFalse(card.isPlayableOnTurn(1));
+    }
+
+    @Test
+    void IsPlayableOnTurn_WhenCardAlreadyPlayed_ReturnsFalse() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        card.setTurnPurchased(1);
+        card.markAsPlayed();
+        assertFalse(card.isPlayableOnTurn(2));
+    }
+
+    @Test
+    void IsPlayableOnTurn_WhenVictoryPointCard_ReturnsFalse() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
+        card.setTurnPurchased(1);
+        assertFalse(card.isPlayableOnTurn(2));
+    }
 }
