@@ -397,10 +397,14 @@ public class Turn {
         if (phase != TurnPhase.TRADE && phase != TurnPhase.BUILD) {
             throw new IllegalStateException("Development cards can only be played during the trade or build phase");
         }
+        if (playedDevCardThisTurn) {
+            throw new IllegalStateException("Only one development card can be played per turn");
+        }
     }
 
     public void playKnightCard(Player player, DevelopmentCard card) {
         validateDevCardPlay(player, card);
+        playedDevCardThisTurn = true;
     }
 
     public void playRoadBuildingCard(Player player, DevelopmentCard card, int edgeId1, int edgeId2) {
@@ -408,6 +412,10 @@ public class Turn {
     }
 
     public void playYearOfPlenty(Player player, DevelopmentCard card, ResourceType r1, ResourceType r2) {
+        validateDevCardPlay(player, card);
+    }
+
+    public void playMonopoly(Player player, DevelopmentCard card, ResourceType resource) {
         validateDevCardPlay(player, card);
     }
 }

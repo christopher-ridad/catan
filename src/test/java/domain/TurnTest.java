@@ -1632,6 +1632,22 @@ public class TurnTest {
                 () -> turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL));
         assertEquals("Development cards can only be played during the trade or build phase", exception.getMessage());
     }
+
+    @Test
+    void playMonopoly_AlreadyPlayedDevCard_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard first = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        DevelopmentCard second = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
+        game.addDevelopmentCardToHand(p1, first);
+        game.addDevelopmentCardToHand(p1, second);
+        turn.playKnightCard(p1, first);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playMonopoly(p1, second, ResourceType.BRICK));
+        assertEquals("Only one development card can be played per turn", exception.getMessage());
+    }
 }
 
 
