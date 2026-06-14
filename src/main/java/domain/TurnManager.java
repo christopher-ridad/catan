@@ -22,7 +22,8 @@ public class TurnManager {
     private final Game game;
     private final Bank bank;
     private final DiceRoll dice;
-    //private final VictoryPointCalculator victoryPointCalculator;
+    private final VictoryPointCalculator victoryPointCalculator;
+    private final SpecialCardTracker specialCardTracker;
     private final Map<Player, Integer> playerTurnCounts;
 
     private int currentTurnNumber;
@@ -47,8 +48,8 @@ public class TurnManager {
         this.game = game;
         this.bank = bank;
         this.dice = dice;
-        //this.victoryPointCalculator = new VictoryPointCalculator();
-        //this.specialCardTracker = new SpecialCardTracker();
+        this.victoryPointCalculator = new VictoryPointCalculator();
+        this.specialCardTracker = new SpecialCardTracker();
         this.playerTurnCounts = initializeTurnCounts(game);
 
         this.currentTurnNumber = 0;
@@ -182,8 +183,9 @@ public class TurnManager {
 
     private void checkForWinner() {
         Board board = game.getBoard();
-//        victoryPointCalculator.updateSpecialCards(game, board, specialCardTracker);
-//        winner = victoryPointCalculator.getWinner(game, board, specialCardTracker);
+        Player activePlayer = getCurrentPlayer();
+        victoryPointCalculator.updateSpecialCards(game, board, specialCardTracker);
+        winner = victoryPointCalculator.getWinner(game, board, specialCardTracker, activePlayer).orElse(null);
     }
 
     private Map<Player, Integer> initializeTurnCounts(Game game) {

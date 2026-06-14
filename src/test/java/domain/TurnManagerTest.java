@@ -177,17 +177,14 @@ public class TurnManagerTest {
 
     @Test
     public void StartNextTurn_AfterWinnerFound_ThrowsIllegalStateException() {
-        return;
-//        **Cannot be implemented until VictoryPointCalculator is merged**
-//
-//        giveTenVictoryPoints(p1);
-//
-//        Turn turn = turnManager.startNextTurn();
-//        advanceToBuild(turn);
-//        turnManager.endCurrentTurn();
-//
-//        assertTrue(turnManager.isGameOver());
-//        assertThrows(IllegalStateException.class, turnManager::startNextTurn);
+        giveTenVictoryPoints(p1);
+
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.isGameOver());
+        assertThrows(IllegalStateException.class, turnManager::startNextTurn);
     }
 
     // ------------------------------------------------------------------
