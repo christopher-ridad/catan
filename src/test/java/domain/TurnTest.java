@@ -1684,6 +1684,19 @@ public class TurnTest {
                 () -> turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL));
         assertEquals("This development card has already been played", exception.getMessage());
     }
+
+    @Test
+    void playMonopoly_VictoryPointCard_ThrowsIllegalStateException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.VICTORY_POINT);
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playMonopoly(p1, card, ResourceType.BRICK));
+        assertEquals("Victory Point cards cannot be played", exception.getMessage());
+    }
 }
 
 

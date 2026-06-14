@@ -409,6 +409,9 @@ public class Turn {
         if (card.isPlayed()) {
             throw new IllegalStateException("This development card has already been played");
         }
+        if (card.getType() == DevelopmentCardType.VICTORY_POINT) {
+            throw new IllegalStateException("Victory Point cards cannot be played");
+        }
     }
 
     public void playKnightCard(Player player, DevelopmentCard card) {
