@@ -1,0 +1,348 @@
+package domain;
+
+import org.easymock.EasyMock;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TurnManagerTest {
+    private Board board;
+    private Game game;
+    private List<Player> playerList;
+    private Player p1, p2, p3, p4;
+    private DiceRoll dice;
+    private Bank bank;
+    private Random mockRandom;
+    private TurnManager turnManager;
+
+    private Board createBoard() {
+        List<Hex> hexes = new ArrayList<>();
+
+        hexes.add(new Hex(TerrainType.PASTURE, 2));
+        hexes.add(new Hex(TerrainType.PASTURE, 4));
+        hexes.add(new Hex(TerrainType.PASTURE, 5));
+        hexes.add(new Hex(TerrainType.PASTURE, 11));
+        hexes.add(new Hex(TerrainType.FOREST, 3));
+        hexes.add(new Hex(TerrainType.FOREST, 8));
+        hexes.add(new Hex(TerrainType.FOREST, 9));
+        hexes.add(new Hex(TerrainType.FOREST, 11));
+        hexes.add(new Hex(TerrainType.DESERT, 0));
+        hexes.add(new Hex(TerrainType.FIELDS, 4));
+        hexes.add(new Hex(TerrainType.FIELDS, 6));
+        hexes.add(new Hex(TerrainType.FIELDS, 9));
+        hexes.add(new Hex(TerrainType.FIELDS, 12));
+        hexes.add(new Hex(TerrainType.MOUNTAINS, 3));
+        hexes.add(new Hex(TerrainType.MOUNTAINS, 8));
+        hexes.add(new Hex(TerrainType.MOUNTAINS, 10));
+        hexes.add(new Hex(TerrainType.HILLS, 5));
+        hexes.add(new Hex(TerrainType.HILLS, 6));
+        hexes.add(new Hex(TerrainType.HILLS, 10));
+
+        return new Board(hexes);
+    }
+
+    @BeforeEach
+    void setUp() {
+        this.board = createBoard();
+
+        p1 = new Player("first", PlayerColor.RED);
+        p2 = new Player("second", PlayerColor.BLUE);
+        p3 = new Player("third", PlayerColor.WHITE);
+        p4 = new Player("fourth", PlayerColor.ORANGE);
+
+        playerList = Arrays.asList(p1, p2, p3, p4);
+
+        this.game = new Game(playerList, board);
+        this.bank = new Bank();
+
+        mockRandom = EasyMock.createMock(Random.class);
+
+        EasyMock.expect(mockRandom.nextInt(6)).andReturn(2).anyTimes();
+        EasyMock.replay(mockRandom);
+        this.dice = new DiceRoll(mockRandom);
+
+        this.turnManager = new TurnManager(game, bank, dice);
+    }
+
+    private void advanceToBuild(Turn turn) {
+        turn.rollDice();
+        turn.advanceToBuild();
+    }
+
+    private void giveTenVictoryPoints(Player player) {
+        for (int i = 0; i < 4; i++) {
+            board.getVertex(i).setOwner(player);
+        }
+        for (int i = 4; i < 7; i++) {
+            Vertex vertex = board.getVertex(i);
+            vertex.setOwner(player);
+            vertex.upgradeToCity();
+        }
+    }
+
+    @Test
+    public void Constructor_WithNullGame_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new TurnManager(null, bank, dice));
+    }
+
+    @Test
+    public void Constructor_WithNullBank_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new TurnManager(game, null, dice));
+    }
+
+    @Test
+    public void Constructor_WithNullDice_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new TurnManager(game, bank, null));
+    }
+
+    @Test
+    public void Constructor_InitializesCurrentPlayerToFirstPlayer() {
+        assertEquals(p1, turnManager.getCurrentPlayer());
+    }
+
+    @Test
+    public void Constructor_InitializesTurnNumberToZero() {
+        assertEquals(0, turnManager.getCurrentTurnNumber());
+    }
+
+    @Test
+    public void Constructor_DoesNotStartFirstTurnAutomatically() {
+        assertTrue(turnManager.getCurrentTurn().isEmpty());
+    }
+
+    @Test
+    public void Constructor_GameIsNotOverInitially() {
+        assertFalse(turnManager.isGameOver());
+        assertTrue(turnManager.getWinner().isEmpty());
+    }
+
+    @Test
+    public void Constructor_InitializesPlayerTurnCountsToZero() {
+        for (Player player : playerList) {
+            assertEquals(0, turnManager.getPlayerTurnCount(player));
+        }
+    }
+
+    @Test
+    public void StartNextTurn_ReturnsTurnForCurrentPlayer() {
+        Turn turn = turnManager.startNextTurn();
+
+        assertNotNull(turn);
+        assertEquals(TurnPhase.PRODUCTION, turn.getPhase());
+    }
+
+    @Test
+    public void StartNextTurn_StoresTurnAsCurrentTurn() {
+        Turn turn = turnManager.startNextTurn();
+
+        assertTrue(turnManager.getCurrentTurn().isPresent());
+        assertSame(turn, turnManager.getCurrentTurn().get());
+    }
+
+    @Test
+    public void StartNextTurn_WhilePreviousTurnIncomplete_ThrowsIllegalStateException() {
+        turnManager.startNextTurn();
+
+        assertThrows(IllegalStateException.class, turnManager::startNextTurn);
+    }
+
+    @Test
+    public void StartNextTurn_AfterPreviousTurnCompleted_Succeeds() {
+        Turn first = turnManager.startNextTurn();
+        advanceToBuild(first);
+        turnManager.endCurrentTurn();
+
+        Turn second = turnManager.startNextTurn();
+
+        assertNotNull(second);
+        assertNotSame(first, second);
+    }
+
+    @Test
+    public void StartNextTurn_AfterWinnerFound_ThrowsIllegalStateException() {
+        giveTenVictoryPoints(p1);
+
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.isGameOver());
+        assertThrows(IllegalStateException.class, turnManager::startNextTurn);
+    }
+
+    @Test
+    public void EndCurrentTurn_WithNoTurnInProgress_ThrowsIllegalStateException() {
+        assertThrows(IllegalStateException.class, turnManager::endCurrentTurn);
+    }
+
+    @Test
+    public void EndCurrentTurn_DuringProductionPhase_ThrowsIllegalStateException() {
+        turnManager.startNextTurn();
+
+        assertThrows(IllegalStateException.class, turnManager::endCurrentTurn);
+    }
+
+    @Test
+    public void EndCurrentTurn_DuringTradePhase_ThrowsIllegalStateException() {
+        Turn turn = turnManager.startNextTurn();
+        turn.rollDice();
+
+        assertThrows(IllegalStateException.class, turnManager::endCurrentTurn);
+    }
+
+    @Test
+    public void EndCurrentTurn_DuringBuildPhase_CompletesTheTurn() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertEquals(TurnPhase.DONE, turn.getPhase());
+    }
+
+    @Test
+    public void EndCurrentTurn_WhenTurnAlreadyDone_DoesNotThrow() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+        turn.endTurn();
+
+        assertDoesNotThrow(turnManager::endCurrentTurn);
+    }
+
+    @Test
+    public void EndCurrentTurn_AdvancesToNextPlayer() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertEquals(p2, turnManager.getCurrentPlayer());
+    }
+
+    @Test
+    public void EndCurrentTurn_WrapsAroundToFirstPlayerAfterLastPlayer() {
+        for (int i = 0; i < playerList.size(); i++) {
+            Turn turn = turnManager.startNextTurn();
+            advanceToBuild(turn);
+            turnManager.endCurrentTurn();
+        }
+
+        assertEquals(p1, turnManager.getCurrentPlayer());
+    }
+
+    @Test
+    public void EndCurrentTurn_IncrementsCurrentTurnNumber() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertEquals(1, turnManager.getCurrentTurnNumber());
+    }
+
+    @Test
+    public void EndCurrentTurn_IncrementsActivePlayersTurnCount() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertEquals(1, turnManager.getPlayerTurnCount(p1));
+        assertEquals(0, turnManager.getPlayerTurnCount(p2));
+    }
+
+    @Test
+    public void EndCurrentTurn_ClearsCurrentTurn() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.getCurrentTurn().isEmpty());
+    }
+
+    @Test
+    public void EndCurrentTurn_WithNoWinner_GameRemainsOngoing() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertFalse(turnManager.isGameOver());
+        assertTrue(turnManager.getWinner().isEmpty());
+    }
+
+    @Test
+    public void EndCurrentTurn_WhenActivePlayerReachesTenVP_DeclaresThemWinner() {
+        giveTenVictoryPoints(p1);
+
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.isGameOver());
+        assertEquals(p1, turnManager.getWinner().orElse(null));
+    }
+
+    @Test
+    public void EndCurrentTurn_WhenAnotherPlayerReachesTenVP_DeclaresThemWinner() {
+        giveTenVictoryPoints(p2);
+
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.isGameOver());
+        assertEquals(p2, turnManager.getWinner().orElse(null));
+    }
+
+    @Test
+    public void GetCurrentPlayer_BetweenTurns_ReturnsNextPlayerToAct() {
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.getCurrentTurn().isEmpty());
+        assertEquals(p2, turnManager.getCurrentPlayer());
+    }
+
+    @Test
+    public void GetPlayerTurnCount_ForPlayerNotInGame_ThrowsIllegalArgumentException() {
+        Player outsider = new Player("outsider", PlayerColor.RED);
+
+        assertThrows(IllegalArgumentException.class, () -> turnManager.getPlayerTurnCount(outsider));
+    }
+
+    @Test
+    public void GetPlayerTurnCount_AfterFullRoundOfTurns_IsOneForEveryPlayer() {
+        for (int i = 0; i < playerList.size(); i++) {
+            Turn turn = turnManager.startNextTurn();
+            advanceToBuild(turn);
+            turnManager.endCurrentTurn();
+        }
+
+        for (Player player : playerList) {
+            assertEquals(1, turnManager.getPlayerTurnCount(player));
+        }
+    }
+
+    @Test
+    public void GetPlayerTurnCount_AfterMultipleRoundsForSamePlayer_AccumulatesCorrectly() {
+        for (int i = 0; i < playerList.size() * 2; i++) {
+            Turn turn = turnManager.startNextTurn();
+            advanceToBuild(turn);
+            turnManager.endCurrentTurn();
+        }
+
+        assertEquals(2, turnManager.getPlayerTurnCount(p1));
+        assertEquals(2, turnManager.getPlayerTurnCount(p3));
+    }
+}
