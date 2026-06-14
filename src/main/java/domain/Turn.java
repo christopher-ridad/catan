@@ -400,6 +400,9 @@ public class Turn {
         if (playedDevCardThisTurn) {
             throw new IllegalStateException("Only one development card can be played per turn");
         }
+        if (!game.getPlayerHand(player).contains(card)) {
+            throw new IllegalArgumentException("Player does not own this development card");
+        }
     }
 
     public void playKnightCard(Player player, DevelopmentCard card) {

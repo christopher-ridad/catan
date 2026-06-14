@@ -1648,6 +1648,18 @@ public class TurnTest {
                 () -> turn.playMonopoly(p1, second, ResourceType.BRICK));
         assertEquals("Only one development card can be played per turn", exception.getMessage());
     }
+
+    @Test
+    void playKnightCard_PlayerDoesNotOwnCard_ThrowsIllegalArgumentException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> turn.playKnightCard(p1, card));
+        assertEquals("Player does not own this development card", exception.getMessage());
+    }
 }
 
 
