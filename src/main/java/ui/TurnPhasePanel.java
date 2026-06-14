@@ -10,6 +10,7 @@ import domain.TurnManager;
 import domain.TurnPhase;
 import domain.VictoryPointCalculator;
 import domain.SpecialCardTracker;
+import domain.DevelopmentCardType;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -89,7 +90,11 @@ public class TurnPhasePanel extends JPanel {
     private JButton buildSettlementButton;
     private JButton buildCityButton;
     private JButton buildRoadButton;
+    private JButton buyDevCardButton;
     private JButton endTurnButton;
+
+    private final DevCardHandView devCardHandView = new DevCardHandView();
+    private final SpecialCardsView specialCardsView = new SpecialCardsView();
 
     // -------------------------------------------------------------------------
     // State
@@ -132,18 +137,29 @@ public class TurnPhasePanel extends JPanel {
         side.setBackground(COLOR_SIDE_BG);
         side.setBorder(BorderFactory.createEmptyBorder(GAP_MEDIUM, GAP_MEDIUM, GAP_MEDIUM, GAP_MEDIUM));
         side.setPreferredSize(new Dimension(SIDE_PANEL_WIDTH, 0));
+        initSideLabels();
+        addSideComponents(side);
+        return side;
+    }
 
+    private void initSideLabels() {
         playerNameLabel = buildLabel("", PLAYER_FONT_SIZE, Font.BOLD);
         vpLabel         = buildLabel("", LABEL_FONT_SIZE, Font.PLAIN);
         phaseLabel      = buildLabel("", LABEL_FONT_SIZE, Font.BOLD);
         phaseLabel.setForeground(COLOR_PHASE);
         statusArea      = buildStatusArea();
+    }
 
+    private void addSideComponents(JPanel side) {
         side.add(Box.createVerticalStrut(GAP_SMALL));
         side.add(playerNameLabel);
         side.add(vpLabel);
         side.add(Box.createVerticalStrut(GAP_MEDIUM));
         side.add(handView);
+        side.add(Box.createVerticalStrut(GAP_SMALL));
+        side.add(devCardHandView);
+        side.add(Box.createVerticalStrut(GAP_SMALL));
+        side.add(specialCardsView);
         side.add(Box.createVerticalStrut(GAP_MEDIUM));
         side.add(phaseLabel);
         side.add(Box.createVerticalStrut(GAP_SMALL));
@@ -151,8 +167,6 @@ public class TurnPhasePanel extends JPanel {
         side.add(Box.createVerticalStrut(GAP_MEDIUM));
         side.add(buildActionButtons());
         side.add(Box.createVerticalGlue());
-
-        return side;
     }
 
     private JPanel buildActionButtons() {
@@ -173,6 +187,7 @@ public class TurnPhasePanel extends JPanel {
         buildSettlementButton = buildButton(Messages.get("turn_build_settlement"));
         buildCityButton       = buildButton(Messages.get("turn_build_city"));
         buildRoadButton       = buildButton(Messages.get("turn_build_road"));
+        buyDevCardButton      = buildButton(Messages.get("dev_card_buy"));
         endTurnButton         = buildButton(Messages.get("turn_end_turn"));
     }
 
@@ -184,6 +199,7 @@ public class TurnPhasePanel extends JPanel {
         buildSettlementButton.addActionListener(e -> onBuildSettlement());
         buildCityButton.addActionListener(e -> onBuildCity());
         buildRoadButton.addActionListener(e -> onBuildRoad());
+        buyDevCardButton.addActionListener(e -> onBuyDevCard());
         endTurnButton.addActionListener(e -> onEndTurn());
     }
 
@@ -201,6 +217,8 @@ public class TurnPhasePanel extends JPanel {
         panel.add(buildCityButton);
         panel.add(Box.createVerticalStrut(GAP_SMALL));
         panel.add(buildRoadButton);
+        panel.add(Box.createVerticalStrut(GAP_SMALL));
+        panel.add(buyDevCardButton);
         panel.add(Box.createVerticalStrut(GAP_SMALL));
         panel.add(endTurnButton);
     }
@@ -281,6 +299,16 @@ public class TurnPhasePanel extends JPanel {
                 mainWindow, currentTurn, activePlayer, game.getBoard());
         dialog.setVisible(true);
         refreshUI();
+    }
+
+    private void onBuyDevCard() {
+        try {
+            currentTurn.buyDevelopmentCard();
+            showStatus(Messages.get("dev_card_buy"), COLOR_SUCCESS);
+            refreshUI();
+        } catch (IllegalStateException e) {
+            showStatus(e.getMessage(), COLOR_ERROR);
+        }
     }
 
     private void onEndTurn() {
@@ -423,6 +451,8 @@ public class TurnPhasePanel extends JPanel {
         vpLabel.setText(Messages.get("turn_vp_count", vp));
 
         handView.refresh(player);
+        devCardHandView.refresh(player);
+        specialCardsView.refresh(player, specialCardTracker);
         updatePhaseLabel();
         updateButtonStates();
         boardPanel.repaint();
@@ -459,6 +489,9 @@ public class TurnPhasePanel extends JPanel {
         buildSettlementButton.setEnabled(phase == TurnPhase.BUILD && canAffordSettlement(player));
         buildCityButton.setEnabled(phase == TurnPhase.BUILD && canAffordCity(player));
         buildRoadButton.setEnabled(phase == TurnPhase.BUILD && canAffordRoad(player));
+        buyDevCardButton.setEnabled(phase == TurnPhase.BUILD
+                && canAffordDevCard(player)
+                && currentTurn.getRemainingDeckSize() > 0);
         endTurnButton.setEnabled(phase == TurnPhase.BUILD);
     }
 
@@ -477,6 +510,12 @@ public class TurnPhasePanel extends JPanel {
     private boolean canAffordCity(Player player) {
         return player.getResourceCount(ResourceType.ORE)   >= 3
                 && player.getResourceCount(ResourceType.GRAIN) >= 2;
+    }
+
+    private boolean canAffordDevCard(Player player) {
+        return player.getResourceCount(ResourceType.ORE)   >= 1
+                && player.getResourceCount(ResourceType.GRAIN) >= 1
+                && player.getResourceCount(ResourceType.WOOL)  >= 1;
     }
 
     // -------------------------------------------------------------------------
