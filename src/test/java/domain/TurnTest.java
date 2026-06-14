@@ -1808,8 +1808,14 @@ public class TurnTest {
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
         game.addDevelopmentCardToHand(p1, card);
 
-        assertDoesNotThrow(() -> turn.playMonopoly(p1, card, ResourceType.BRICK));
-        assertEquals(0, p1.getResourceCount(ResourceType.BRICK));
+        turn.playMonopoly(p1, card, ResourceType.BRICK);
+
+        assertAll(
+                () -> assertEquals(0, p1.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p2.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p4.getResourceCount(ResourceType.BRICK))
+        );
     }
 }
 

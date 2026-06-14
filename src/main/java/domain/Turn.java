@@ -447,10 +447,8 @@ public class Turn {
         for (Player p : game.getPlayers()) {
             if (p != activePlayer) {
                 int amount = p.getResourceCount(resource);
-                if (amount > 0) {
-                    p.removeResources(resource, amount);
-                    activePlayer.addResources(resource, amount);
-                }
+                p.removeResources(resource, amount);
+                activePlayer.addResources(resource, amount);
             }
         }
     }
