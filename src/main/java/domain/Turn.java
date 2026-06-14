@@ -394,6 +394,9 @@ public class Turn {
         if (player != activePlayer) {
             throw new IllegalArgumentException("Only the active player can play a development card");
         }
+        if (phase != TurnPhase.TRADE && phase != TurnPhase.BUILD) {
+            throw new IllegalStateException("Development cards can only be played during the trade or build phase");
+        }
     }
 
     public void playKnightCard(Player player, DevelopmentCard card) {
@@ -401,6 +404,10 @@ public class Turn {
     }
 
     public void playRoadBuildingCard(Player player, DevelopmentCard card, int edgeId1, int edgeId2) {
+        validateDevCardPlay(player, card);
+    }
+
+    public void playYearOfPlenty(Player player, DevelopmentCard card, ResourceType r1, ResourceType r2) {
         validateDevCardPlay(player, card);
     }
 }

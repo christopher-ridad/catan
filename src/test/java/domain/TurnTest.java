@@ -1621,6 +1621,17 @@ public class TurnTest {
                 () -> turn.playRoadBuildingCard(p2, card, 0, 1));
         assertEquals("Only the active player can play a development card", exception.getMessage());
     }
+
+    @Test
+    void playYearOfPlenty_WrongPhase_ThrowsIllegalStateException() {
+        Turn turn = new Turn(game, p1, dice, bank);
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL));
+        assertEquals("Development cards can only be played during the trade or build phase", exception.getMessage());
+    }
 }
 
 
