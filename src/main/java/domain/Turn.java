@@ -443,5 +443,15 @@ public class Turn {
 
     public void playMonopoly(Player player, DevelopmentCard card, ResourceType resource) {
         validateDevCardPlay(player, card);
+        executeDevCardPlay(card);
+        for (Player p : game.getPlayers()) {
+            if (p != activePlayer) {
+                int amount = p.getResourceCount(resource);
+                if (amount > 0) {
+                    p.removeResources(resource, amount);
+                    activePlayer.addResources(resource, amount);
+                }
+            }
+        }
     }
 }

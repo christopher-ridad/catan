@@ -1778,6 +1778,27 @@ public class TurnTest {
                 () -> turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL));
         assertEquals("Insufficient resources in bank", exception.getMessage());
     }
+
+    @Test
+    void playMonopoly_ValidCard_TakesAllResourceFromOtherPlayers() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.MONOPOLY);
+        game.addDevelopmentCardToHand(p1, card);
+        p2.addResources(ResourceType.BRICK, 3);
+        p3.addResources(ResourceType.BRICK, 2);
+
+        turn.playMonopoly(p1, card, ResourceType.BRICK);
+
+        assertAll(
+                () -> assertTrue(card.isPlayed()),
+                () -> assertEquals(5, p1.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p2.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(0, p3.getResourceCount(ResourceType.BRICK)),
+                () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p1, new DevelopmentCard(DevelopmentCardType.KNIGHT)))
+        );
+    }
 }
 
 
