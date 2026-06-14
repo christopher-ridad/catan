@@ -295,18 +295,15 @@ public class TurnManagerTest {
 
     @Test
     public void EndCurrentTurn_WhenActivePlayerReachesTenVP_DeclaresThemWinner() {
-        return;
-//        **Cannot be implemented until VictoryPointCalculator is merged**
-//
-//        giveTenVictoryPoints(p1);
-//
-//        Turn turn = turnManager.startNextTurn();
-//        advanceToBuild(turn);
-//
-//        turnManager.endCurrentTurn();
-//
-//        assertTrue(turnManager.isGameOver());
-//        assertEquals(p1, turnManager.getWinner().orElse(null));
+        giveTenVictoryPoints(p1);
+
+        Turn turn = turnManager.startNextTurn();
+        advanceToBuild(turn);
+
+        turnManager.endCurrentTurn();
+
+        assertTrue(turnManager.isGameOver());
+        assertEquals(p1, turnManager.getWinner().orElse(null));
     }
 
     @Test
