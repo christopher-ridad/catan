@@ -71,6 +71,7 @@ public final class Game {
             throw new IllegalArgumentException("Player is not part of this game");
         }
         hand.add(card);
+        player.addDevelopmentCard(card);
     }
 
     private List<DevelopmentCard> createShuffledDevelopmentDeck() {
