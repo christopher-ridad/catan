@@ -4,19 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * Orchestrates the full turn sequence across all players for the duration
- * of the game.
- *
- * <p>Mirrors the structure of {@link SetupPhase}: it owns the
- * current-player cursor, creates and completes {@link Turn} objects, and
- * exposes clean state-query methods. It does not make game decisions —
- * that responsibility belongs to callers.</p>
- *
- * <p>{@code TurnManager} checks for a winner at the end of every turn by
- * delegating to {@link VictoryPointCalculator}. If a winner is found,
- * {@code TurnManager} stops advancing and exposes the winner.</p>
- */
 public class TurnManager {
 
     private final Game game;
@@ -31,15 +18,6 @@ public class TurnManager {
     private Turn currentTurn;
     private Player winner;
 
-    /**
-     * Creates a new {@code TurnManager} for the given game.
-     *
-     * <p>Sets the current player to the first player in
-     * {@code game.getPlayers()} and the completed-turn count to 0. Does not
-     * start the first turn automatically; call {@link #startNextTurn()}.</p>
-     *
-     * @throws IllegalArgumentException if any argument is null
-     */
     public TurnManager(Game game, Bank bank, DiceRoll dice) {
         validateGame(game);
         validateBank(bank);
@@ -58,16 +36,6 @@ public class TurnManager {
         this.winner = null;
     }
 
-    /**
-     * Creates a new {@link Turn} for the current player, stores it, and
-     * returns it.
-     *
-     * @return the newly created turn
-     * @throws IllegalStateException if the previous turn has not yet
-     *                                completed (its phase is not
-     *                                {@link TurnPhase#DONE}), or if a
-     *                                winner has already been found
-     */
     public Turn startNextTurn() {
         if (winner != null) {
             throw new IllegalStateException("Cannot start a new turn: the game is already over");
@@ -81,22 +49,6 @@ public class TurnManager {
         return currentTurn;
     }
 
-    /**
-     * Completes the current turn, advances to the next player, and checks
-     * for a winner.
-     *
-     * <p>If the current turn is still in the {@link TurnPhase#BUILD} phase,
-     * this calls {@code currentTurn.endTurn()} to transition it to
-     * {@link TurnPhase#DONE}. The completed-turn count is incremented, the
-     * current-player cursor advances modulo the player count, and
-     * {@link VictoryPointCalculator} is used to recompute special cards and
-     * check for a winner.</p>
-     *
-     * @throws IllegalStateException if no turn is in progress, or if the
-     *                                current turn's phase is not
-     *                                {@link TurnPhase#BUILD} or
-     *                                {@link TurnPhase#DONE}
-     */
     public void endCurrentTurn() {
         if (currentTurn == null) {
             throw new IllegalStateException("No turn is currently in progress");
@@ -119,50 +71,26 @@ public class TurnManager {
         currentTurn = null;
     }
 
-    /**
-     * Returns the player whose turn it currently is, or whose turn is next
-     * if called between turns.
-     */
     public Player getCurrentPlayer() {
         return game.getPlayers().get(currentPlayerIndex);
     }
 
-    /**
-     * Returns how many turns have been completed so far.
-     */
     public int getCurrentTurnNumber() {
         return currentTurnNumber;
     }
 
-    /**
-     * Returns the active {@link Turn}, or {@link Optional#empty()} if
-     * between turns.
-     */
     public Optional<Turn> getCurrentTurn() {
         return Optional.ofNullable(currentTurn);
     }
 
-    /**
-     * Returns true if a winner has been found.
-     */
     public boolean isGameOver() {
         return winner != null;
     }
 
-    /**
-     * Returns the winning player, or {@link Optional#empty()} if the game
-     * is still ongoing.
-     */
     public Optional<Player> getWinner() {
         return Optional.ofNullable(winner);
     }
 
-    /**
-     * Returns how many turns the given player has completed.
-     *
-     * @throws IllegalArgumentException if {@code player} is not part of
-     *                                   this game
-     */
     public int getPlayerTurnCount(Player player) {
         Integer count = playerTurnCounts.get(player);
         if (count == null) {

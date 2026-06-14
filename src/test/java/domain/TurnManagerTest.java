@@ -62,8 +62,7 @@ public class TurnManagerTest {
         this.bank = new Bank();
 
         mockRandom = EasyMock.createMock(Random.class);
-        // Always return a die value of 2 (1-indexed: 3), so every roll is
-        // 3 + 3 = 6 and never triggers the robber (a roll of 7).
+
         EasyMock.expect(mockRandom.nextInt(6)).andReturn(2).anyTimes();
         EasyMock.replay(mockRandom);
         this.dice = new DiceRoll(mockRandom);
@@ -88,10 +87,6 @@ public class TurnManagerTest {
             vertex.upgradeToCity();
         }
     }
-
-    // ------------------------------------------------------------------
-    // Constructor
-    // ------------------------------------------------------------------
 
     @Test
     public void Constructor_WithNullGame_ThrowsIllegalArgumentException() {
@@ -135,10 +130,6 @@ public class TurnManagerTest {
             assertEquals(0, turnManager.getPlayerTurnCount(player));
         }
     }
-
-    // ------------------------------------------------------------------
-    // startNextTurn
-    // ------------------------------------------------------------------
 
     @Test
     public void StartNextTurn_ReturnsTurnForCurrentPlayer() {
@@ -186,10 +177,6 @@ public class TurnManagerTest {
         assertTrue(turnManager.isGameOver());
         assertThrows(IllegalStateException.class, turnManager::startNextTurn);
     }
-
-    // ------------------------------------------------------------------
-    // endCurrentTurn
-    // ------------------------------------------------------------------
 
     @Test
     public void EndCurrentTurn_WithNoTurnInProgress_ThrowsIllegalStateException() {
@@ -319,10 +306,6 @@ public class TurnManagerTest {
         assertEquals(p2, turnManager.getWinner().orElse(null));
     }
 
-    // ------------------------------------------------------------------
-    // getCurrentPlayer
-    // ------------------------------------------------------------------
-
     @Test
     public void GetCurrentPlayer_BetweenTurns_ReturnsNextPlayerToAct() {
         Turn turn = turnManager.startNextTurn();
@@ -332,10 +315,6 @@ public class TurnManagerTest {
         assertTrue(turnManager.getCurrentTurn().isEmpty());
         assertEquals(p2, turnManager.getCurrentPlayer());
     }
-
-    // ------------------------------------------------------------------
-    // getPlayerTurnCount
-    // ------------------------------------------------------------------
 
     @Test
     public void GetPlayerTurnCount_ForPlayerNotInGame_ThrowsIllegalArgumentException() {
