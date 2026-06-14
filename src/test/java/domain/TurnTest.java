@@ -1660,6 +1660,16 @@ public class TurnTest {
                 () -> turn.playKnightCard(p1, card));
         assertEquals("Player does not own this development card", exception.getMessage());
     }
+
+    @Test
+    void playRoadBuildingCard_CardPurchasedThisTurn_ThrowsIllegalStateException() {
+        Turn turn = newTurnInBuildPhase(p1);
+        DevelopmentCard purchased = buyUntilNonVictoryPointCard(turn, p1);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.playRoadBuildingCard(p1, purchased, 0, 1));
+        assertEquals("A development card cannot be played the same turn it was purchased", exception.getMessage());
+    }
 }
 
 
