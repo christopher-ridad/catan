@@ -199,38 +199,38 @@ public class BoardPanel extends JPanel {
     // Harbor Drawing
     // -------------------------------------------------------------------------
 
+    private static final int[][] HARBOR_PAIRS = {
+            { 0,  3},  // GENERIC
+            { 1,  5},  // GRAIN
+            {10, 15},  // ORE
+            {26, 32},  // GENERIC
+            {42, 46},  // WOOL
+            {49, 52},  // GENERIC
+            {47, 51},  // GENERIC
+            {33, 38},  // BRICK
+            {11, 16},  // LUMBER
+    };
+
     private void drawHarbors(Graphics2D g2) {
         Map<Integer, HarborType> harborMap = BoardInitialization.getHarborVertices();
-
-        int[][] harborPairs = {
-                { 0,  3},  // GENERIC
-                { 1,  5},  // GRAIN
-                {10, 15},  // ORE
-                {26, 32},  // GENERIC
-                {42, 46},  // WOOL
-                {49, 52},  // GENERIC
-                {47, 51},  // GENERIC
-                {33, 38},  // BRICK
-                {11, 16},  // LUMBER
-        };
-
-        for (int[] pair : harborPairs) {
-            int v1Id = pair[0];
-            int v2Id = pair[1];
-            HarborType type = harborMap.get(v1Id);
-            if (type == null) {
-                continue;
-            }
-
-            Point p1 = vertexPositions[v1Id];
-            Point p2 = vertexPositions[v2Id];
-            if (p1 == null || p2 == null) {
-                continue;
-            }
-
-            drawHarborLine(g2, p1, p2);
-            drawHarborBadge(g2, p1, p2, type);
+        for (int[] pair : HARBOR_PAIRS) {
+            drawHarborPair(g2, harborMap, pair[0], pair[1]);
         }
+    }
+
+    private void drawHarborPair(Graphics2D g2, Map<Integer, HarborType> harborMap,
+                                int v1Id, int v2Id) {
+        HarborType type = harborMap.get(v1Id);
+        if (type == null) {
+            return;
+        }
+        Point p1 = vertexPositions[v1Id];
+        Point p2 = vertexPositions[v2Id];
+        if (p1 == null || p2 == null) {
+            return;
+        }
+        drawHarborLine(g2, p1, p2);
+        drawHarborBadge(g2, p1, p2, type);
     }
 
     private void drawHarborLine(Graphics2D g2, Point p1, Point p2) {
@@ -240,36 +240,41 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawHarborBadge(Graphics2D g2, Point p1, Point p2, HarborType type) {
+        Point badgeCenter = computeBadgeCenter(p1, p2);
+        int badgeX = badgeCenter.x - HARBOR_BADGE_W / 2;
+        int badgeY = badgeCenter.y - HARBOR_BADGE_H / 2;
+        drawBadgeBackground(g2, badgeX, badgeY);
+        drawBadgeLabel(g2, badgeCenter, type);
+    }
+
+    private Point computeBadgeCenter(Point p1, Point p2) {
         int midX = (p1.x + p2.x) / 2;
         int midY = (p1.y + p2.y) / 2;
-
         Point boardCenter = boardCenter();
         double dx = midX - boardCenter.x;
         double dy = midY - boardCenter.y;
         double length = Math.sqrt(dx * dx + dy * dy);
         double unitX = (length > 0) ? dx / length : 0;
         double unitY = (length > 0) ? dy / length : 0;
-
         int offsetPixels = 24;
-        int badgeCenterX = midX + (int) (unitX * offsetPixels);
-        int badgeCenterY = midY + (int) (unitY * offsetPixels);
+        return new Point(midX + (int) (unitX * offsetPixels), midY + (int) (unitY * offsetPixels));
+    }
 
-        int badgeX = badgeCenterX - HARBOR_BADGE_W / 2;
-        int badgeY = badgeCenterY - HARBOR_BADGE_H / 2;
-
+    private void drawBadgeBackground(Graphics2D g2, int badgeX, int badgeY) {
         g2.setColor(COLOR_HARBOR_BG);
         g2.fillRoundRect(badgeX, badgeY, HARBOR_BADGE_W, HARBOR_BADGE_H, 6, 6);
-
         g2.setColor(COLOR_HARBOR_BORDER);
         g2.setStroke(new BasicStroke(1.5f));
         g2.drawRoundRect(badgeX, badgeY, HARBOR_BADGE_W, HARBOR_BADGE_H, 6, 6);
+    }
 
+    private void drawBadgeLabel(Graphics2D g2, Point badgeCenter, HarborType type) {
         g2.setColor(COLOR_HARBOR_TEXT);
         g2.setFont(new Font("SansSerif", Font.BOLD, HARBOR_FONT_SIZE));
         String label = harborLabel(type);
         FontMetrics fm = g2.getFontMetrics();
-        int labelX = badgeCenterX - fm.stringWidth(label) / 2;
-        int labelY = badgeCenterY + fm.getAscent() / 2 - 1;
+        int labelX = badgeCenter.x - fm.stringWidth(label) / 2;
+        int labelY = badgeCenter.y + fm.getAscent() / 2 - 1;
         g2.drawString(label, labelX, labelY);
     }
 

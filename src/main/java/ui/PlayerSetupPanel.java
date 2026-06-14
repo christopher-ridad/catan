@@ -152,37 +152,48 @@ public class PlayerSetupPanel extends JPanel {
         colorButtons.clear();
         selectedColor = null;
 
-        int humanNumber = currentPlayerIndex + 1;
+        JTextField nameField = buildNameField();
 
         add(Box.createVerticalGlue());
-        add(buildCenteredLabel(
-                Messages.get("player_setup_player_title", humanNumber, totalPlayers),
-                TITLE_FONT_SIZE, Font.BOLD));
+        add(buildPlayerTitleLabel());
         add(Box.createVerticalStrut(GAP_MEDIUM));
+        addNameSection(nameField);
+        addColorSection();
+        addErrorAndNextSection(nameField);
+        add(Box.createVerticalGlue());
 
+        refresh();
+    }
+
+    private JLabel buildPlayerTitleLabel() {
+        int humanNumber = currentPlayerIndex + 1;
+        return buildCenteredLabel(
+                Messages.get("player_setup_player_title", humanNumber, totalPlayers),
+                TITLE_FONT_SIZE, Font.BOLD);
+    }
+
+    private void addNameSection(JTextField nameField) {
         add(buildCenteredLabel(Messages.get("player_setup_name_label"), LABEL_FONT_SIZE, Font.PLAIN));
         add(Box.createVerticalStrut(GAP_SMALL));
-
-        JTextField nameField = buildNameField();
         add(nameField);
         add(Box.createVerticalStrut(GAP_MEDIUM));
+    }
 
+    private void addColorSection() {
         add(buildCenteredLabel(Messages.get("player_setup_color_label"), LABEL_FONT_SIZE, Font.PLAIN));
         add(Box.createVerticalStrut(GAP_SMALL));
         add(buildColorButtons());
         add(Box.createVerticalStrut(GAP_SMALL));
         add(buildSelectedColorLabel());
         add(Box.createVerticalStrut(GAP_MEDIUM));
+    }
 
+    private void addErrorAndNextSection(JTextField nameField) {
         errorLabel = buildCenteredLabel("", LABEL_FONT_SIZE, Font.PLAIN);
         errorLabel.setForeground(COLOR_ERROR);
         add(errorLabel);
         add(Box.createVerticalStrut(GAP_SMALL));
-
         add(buildNextButton(nameField));
-        add(Box.createVerticalGlue());
-
-        refresh();
     }
 
     private JTextField buildNameField() {
