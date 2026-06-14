@@ -466,83 +466,67 @@
 
 ## Shared validation for dev card play methods
 
-- **TC103: playKnightCard_NullCard_ThrowsIllegalArgumentException** ( not implemented )
+- **TC103: playKnightCard_NullCard_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, `card = null`
   - Expected output: `IllegalArgumentException`
 
-- **TC104: playRoadBuildingCard_WrongPlayer_ThrowsIllegalArgumentException** ( not implemented )
+- **TC104: playRoadBuildingCard_WrongPlayer_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, `player != activePlayer`
   - Expected output: `IllegalArgumentException`
 
-- **TC105: playYearOfPlenty_WrongPhase_ThrowsIllegalStateException** ( not implemented )
+- **TC105: playYearOfPlenty_WrongPhase_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: turn in PRODUCTION phase, valid card
   - Expected output: `IllegalStateException`
 
-- **TC106: playMonopoly_AlreadyPlayedDevCard_ThrowsIllegalStateException** ( not implemented )
+- **TC106: playMonopoly_AlreadyPlayedDevCard_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, `playedDevCardThisTurn = true`
   - Expected output: `IllegalStateException`
 
-- **TC107: playKnightCard_PlayerDoesNotOwnCard_ThrowsIllegalArgumentException** ( not implemented )
+- **TC107: playKnightCard_PlayerDoesNotOwnCard_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, card not in player's hand
   - Expected output: `IllegalArgumentException`
 
-- **TC108: playRoadBuildingCard_CardPurchasedThisTurn_ThrowsIllegalStateException** ( not implemented )
+- **TC108: playRoadBuildingCard_CardPurchasedThisTurn_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, card was purchased this turn
   - Expected output: `IllegalStateException`
 
-- **TC109: playYearOfPlenty_CardAlreadyPlayed_ThrowsIllegalStateException** ( not implemented )
+- **TC109: playYearOfPlenty_CardAlreadyPlayed_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, card already played
   - Expected output: `IllegalStateException`
 
-- **TC110: playMonopoly_VictoryPointCard_ThrowsIllegalStateException** ( not implemented )
+- **TC110: playMonopoly_VictoryPointCard_ThrowsIllegalStateException** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, card is VICTORY_POINT
   - Expected output: `IllegalStateException`
 
 ## Method under test: `playKnightCard(Player, DevelopmentCard)`
 
-- **TC110: playKnightCard_NullCard_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: valid turn in TRADE phase, `card = null`
-  - Expected output: `IllegalArgumentException`
-
-- **TC111: playKnightCard_ValidCard_SetsRobberPendingMove** ( not implemented )
+- **TC111: playKnightCard_ValidCard_SetsRobberPendingMove** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, valid KNIGHT card in player's hand
   - Expected output: robber pending move is set, `moveRobber()` can be called, `card.isPlayed()` returns `true`, second card cannot be played this turn
 
 ## Method under test: `playRoadBuildingCard(Player, DevelopmentCard, int, int)`
 
-- **TC112: playRoadBuildingCard_NullCard_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: valid turn in TRADE phase, `card = null`
-  - Expected output: `IllegalArgumentException`
-
-- **TC113: playRoadBuildingCard_ValidCard_PlacesTwoFreeRoads** ( not implemented )
+- **TC112: playRoadBuildingCard_ValidCard_PlacesTwoFreeRoads** ( :white_check_mark: )
   - State of the system: valid turn in BUILD phase, valid ROAD_BUILDING card in player's hand, two valid edge IDs
   - Expected output: two roads placed, player resources unchanged, `card.isPlayed()` returns `true`, second card cannot be played this turn
 
 ## Method under test: `playYearOfPlenty(Player, DevelopmentCard, ResourceType, ResourceType)`
 
-- **TC114: playYearOfPlenty_NullCard_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: valid turn in TRADE phase, `card = null`
-  - Expected output: `IllegalArgumentException`
-
-- **TC115: playYearOfPlenty_ValidCard_GivesTwoResources** ( not implemented )
+- **TC113: playYearOfPlenty_ValidCard_GivesTwoResources** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, valid YEAR_OF_PLENTY card in player's hand, bank has resources
   - Expected output: player receives 1 of r1 and 1 of r2, bank decremented accordingly, `card.isPlayed()` returns `true`, second card cannot be played this turn
 
-- **TC116: playYearOfPlenty_BankEmpty_ThrowsIllegalArgumentException** ( not implemented )
+- **TC114: playYearOfPlenty_BankEmpty_ThrowsIllegalArgumentException** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, valid YEAR_OF_PLENTY card, bank has 0 of requested resource
   - Expected output: `IllegalArgumentException`
 
 ## Method under test: `playMonopoly(Player, DevelopmentCard, ResourceType)`
 
-- **TC117: playMonopoly_NullCard_ThrowsIllegalArgumentException** ( not implemented )
-  - State of the system: valid turn in TRADE phase, `card = null`
-  - Expected output: `IllegalArgumentException`
-
-- **TC118: playMonopoly_ValidCard_TakesAllResourceFromOtherPlayers** ( not implemented )
+- **TC115: playMonopoly_ValidCard_TakesAllResourceFromOtherPlayers** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, valid MONOPOLY card, other players have BRICK
   - Expected output: active player receives all BRICK from other players, other players have 0 BRICK, `card.isPlayed()` returns `true`, second card cannot be played this turn
 
-- **TC119: playMonopoly_OtherPlayersHaveNone_NoChange** ( not implemented )
+- **TC116: playMonopoly_OtherPlayersHaveNone_NoChange** ( :white_check_mark: )
   - State of the system: valid turn in TRADE phase, valid MONOPOLY card, other players have 0 of resource
   - Expected output: no resources transferred, no exception thrown
 
