@@ -528,9 +528,9 @@
   - State of the system: valid turn in TRADE phase, valid YEAR_OF_PLENTY card in player's hand, bank has resources
   - Expected output: player receives 1 of r1 and 1 of r2, bank decremented accordingly, `card.isPlayed()` returns `true`, second card cannot be played this turn
 
-- **TC116: playYearOfPlenty_BankEmpty_ThrowsIllegalStateException** ( not implemented )
+- **TC116: playYearOfPlenty_BankEmpty_ThrowsIllegalArgumentException** ( not implemented )
   - State of the system: valid turn in TRADE phase, valid YEAR_OF_PLENTY card, bank has 0 of requested resource
-  - Expected output: `IllegalStateException`
+  - Expected output: `IllegalArgumentException`
 
 ## Method under test: `playMonopoly(Player, DevelopmentCard, ResourceType)`
 

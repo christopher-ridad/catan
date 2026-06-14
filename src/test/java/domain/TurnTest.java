@@ -1765,6 +1765,19 @@ public class TurnTest {
                 () -> assertThrows(IllegalStateException.class, () -> turn.playKnightCard(p1, new DevelopmentCard(DevelopmentCardType.KNIGHT)))
         );
     }
+
+    @Test
+    void playYearOfPlenty_BankEmpty_ThrowsIllegalArgumentException() {
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.YEAR_OF_PLENTY);
+        game.addDevelopmentCardToHand(p1, card);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> turn.playYearOfPlenty(p1, card, ResourceType.BRICK, ResourceType.WOOL));
+        assertEquals("Insufficient resources in bank", exception.getMessage());
+    }
 }
 
 
