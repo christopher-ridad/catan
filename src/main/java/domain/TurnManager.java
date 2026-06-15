@@ -103,6 +103,10 @@ public final class TurnManager {
         return count;
     }
 
+    public SpecialCardTracker getSpecialCardTracker() {
+        return specialCardTracker;
+    }
+
     private void recordCompletedTurn() {
         Player activePlayer = getCurrentPlayer();
         playerTurnCounts.merge(activePlayer, 1, Integer::sum);
