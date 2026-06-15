@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class SetupPhaseTest {
     private Board board;
@@ -461,6 +463,53 @@ public class SetupPhaseTest {
 
         phase4.placeRoad(p1, findAdjacentEdge(board.getVertex(0)).getId());
         assertEquals(0, p1.getTotalResourceCount());
+    }
+
+    @Test
+    void getCurrentPlayer_afterSetupComplete_throwsIllegalStateException() {
+        completeRound1();
+        completeRound2Except(null);
+
+        assertThrows(IllegalStateException.class, phase4::getCurrentPlayer);
+    }
+
+    @Test
+    void placeSettlement_negativeVertexId_throwsIllegalArgument() {
+        assertThrows(IllegalArgumentException.class,
+                () -> phase4.placeSettlement(p1, -1));
+    }
+
+    @Test
+    void distributeStartingResources_noSettlementPlacedYet_doesNothing() {
+        assertDoesNotThrow(() -> phase4.distributeStartingResources(p1));
+
+        assertEquals(0, p1.getTotalResourceCount());
+    }
+
+    @Test
+    void distributeStartingResources_pastureAdjacent_grantsWool() {
+        phase4.placeSettlement(p1, 10);
+
+        phase4.distributeStartingResources(p1);
+
+        assertEquals(1, p1.getResourceCount(ResourceType.WOOL));
+    }
+
+    @Test
+    void distributeStartingResources_bankHasNoneOfResource_playerReceivesNone() {
+        Map<ResourceType, Integer> amounts = new EnumMap<>(ResourceType.class);
+        for (ResourceType type : ResourceType.values()) {
+            amounts.put(type, 19);
+        }
+        amounts.put(ResourceType.WOOL, 0);
+        Bank emptyWoolBank = new Bank(amounts);
+        SetupPhase phase = new SetupPhase(game4Players, emptyWoolBank);
+
+        phase.placeSettlement(p1, 10);
+        phase.distributeStartingResources(p1);
+
+        assertEquals(0, p1.getResourceCount(ResourceType.WOOL));
+        assertEquals(0, emptyWoolBank.getResourceCount(ResourceType.WOOL));
     }
 
     private Edge findAdjacentEdge(Vertex vertex) {

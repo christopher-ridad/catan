@@ -3,6 +3,7 @@ package domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -80,6 +81,24 @@ public class TradeOfferTest {
     void tradeOfferConstructor_allValuesMinimumValid_objectCreatedWithPendingStatus() {
         TradeOffer offer = new TradeOffer(offerer, recipient, validOffering, validRequesting);
         assertEquals(TradeOffer.TradeStatus.PENDING, offer.getStatus());
+    }
+
+    @Test
+    void tradeOfferConstructor_offeringContainsNullKey_throwsIllegalArgument() {
+        Map<ResourceType, Integer> offeringWithNullKey = new HashMap<>();
+        offeringWithNullKey.put(null, 1);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new TradeOffer(offerer, recipient, offeringWithNullKey, validRequesting));
+    }
+
+    @Test
+    void tradeOfferConstructor_requestingContainsNullKey_throwsIllegalArgument() {
+        Map<ResourceType, Integer> requestingWithNullKey = new HashMap<>();
+        requestingWithNullKey.put(null, 1);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new TradeOffer(offerer, recipient, validOffering, requestingWithNullKey));
     }
 
     @Test
