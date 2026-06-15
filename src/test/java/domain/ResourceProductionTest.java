@@ -225,6 +225,18 @@ public class ResourceProductionTest {
     }
 
     @Test
+    void DistributeResources_DesertHexMatchesRoll_NoResourceDistributed() {
+        Player player = new Player("Alice", PlayerColor.RED);
+        Hex desertHex = new Hex(TerrainType.DESERT, 0);
+        Vertex vertex = settledVertex(0, player, List.of(desertHex));
+        Bank bank = new Bank();
+
+        new ResourceProduction().distributeResources(0, List.of(vertex), bank);
+
+        assertEquals(0, player.getResourceCount(ResourceType.BRICK));
+    }
+
+    @Test
     void DistributeResources_TwoPlayersNeedingDifferentResources_BankShortForOne_AffectedPlayerReceivesWhatRemains() {
         Hex hillsHex = new Hex(TerrainType.HILLS, 6);
         Hex mountainsHex = new Hex(TerrainType.MOUNTAINS, 6);

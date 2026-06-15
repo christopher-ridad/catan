@@ -2,13 +2,17 @@ package domain;
 
 import java.util.List;
 
-public class MaritimeTrade {
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+public final class MaritimeTrade {
     private final Player player;
     private final ResourceType giving;
     private final int amount;
     private final ResourceType receiving;
     private final int rate;
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "Player is a shared mutable entity intentionally referenced by the trade.")
     public MaritimeTrade(Player player, ResourceType giving, int amount,
                          ResourceType receiving, Board board) {
 
@@ -27,6 +31,8 @@ public class MaritimeTrade {
         this.receiving = receiving;
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+            justification = "Player is a shared mutable entity intentionally referenced by the trade.")
     public Player getPlayer() {
           return player;
     }

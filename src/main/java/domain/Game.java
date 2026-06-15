@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Represents a Game of Catan
  *
@@ -29,6 +31,8 @@ public final class Game {
     // Throws IllegalArgumentException if the player count is outside [2, 4]
     // Throws IllegalArgumentException if any two players share the same color
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "Board is a shared mutable entity intentionally referenced by Game and its collaborators.")
     public Game(List<Player> players, Board board) {
         Objects.requireNonNull(players, "Player list must not be null");
         Objects.requireNonNull(board, "Board must not be null");
@@ -103,6 +107,8 @@ public final class Game {
         return players.size();
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+            justification = "Board is a shared mutable entity intentionally referenced by Game and its collaborators.")
     public Board getBoard() {
         return board;
     }

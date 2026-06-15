@@ -2,11 +2,15 @@ package domain;
 
 import java.util.List;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class BuildManager {
     private final Game game;
     private final Player activePlayer;
     private final Bank bank;
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "Game and Player are shared mutable entities intentionally referenced by the build manager.")
     public BuildManager(Game game, Player activePlayer, Bank bank) {
         this.game = game;
         this.activePlayer = activePlayer;

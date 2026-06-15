@@ -1,9 +1,13 @@
 package domain;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class Hex {
     private final TerrainType terrainType;
     private final int numToken;
 
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "Class cannot be final because tests mock it with EasyMock; validation must fail fast on invalid arguments.")
     public Hex(TerrainType terrainType, int numToken) {
         validateTerrainType(terrainType, numToken);
         validateNumToken(terrainType, numToken);

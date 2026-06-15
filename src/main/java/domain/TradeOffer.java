@@ -4,7 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TradeOffer {
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+public final class TradeOffer {
     public enum TradeStatus {
         PENDING, ACCEPTED, REJECTED
     }
@@ -15,6 +17,8 @@ public class TradeOffer {
     private final Map<ResourceType, Integer> requesting;
     private TradeStatus status;
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "Player is a shared mutable entity intentionally referenced by the trade offer.")
     public TradeOffer(Player offerer, Player recipient,
                       Map<ResourceType, Integer> offering,
                       Map<ResourceType, Integer> requesting) {
@@ -30,10 +34,14 @@ public class TradeOffer {
         this.status = TradeStatus.PENDING;
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+            justification = "Player is a shared mutable entity intentionally referenced by the trade offer.")
     public Player getOfferer() {
         return offerer;
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+            justification = "Player is a shared mutable entity intentionally referenced by the trade offer.")
     public Player getRecipient() {
         return recipient;
     }

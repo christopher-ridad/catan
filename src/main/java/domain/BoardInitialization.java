@@ -222,7 +222,11 @@ public class BoardInitialization {
     }
 
     public static int[][] getEdgeEndpoints() {
-        return EDGE_ENDPOINTS;
+        int[][] copy = new int[EDGE_ENDPOINTS.length][];
+        for (int i = 0; i < EDGE_ENDPOINTS.length; i++) {
+            copy[i] = EDGE_ENDPOINTS[i].clone();
+        }
+        return copy;
     }
 
     private static final Map<Integer, HarborType> HARBOR_VERTICES;

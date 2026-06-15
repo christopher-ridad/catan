@@ -3,6 +3,8 @@ package domain;
 import java.util.Objects;
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class SpecialCardTracker {
 
     private Player longestRoadHolder;
@@ -33,6 +35,8 @@ public class SpecialCardTracker {
         return this.largestArmySize;
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "Player is a shared mutable entity intentionally tracked by reference.")
     public void updateLongestRoad(Player candidate, int roadLength) {
         Objects.requireNonNull(candidate, "Candidate cannot be null");
         if (roadLength < 0) {
@@ -60,6 +64,8 @@ public class SpecialCardTracker {
         return this.longestRoadHolder != null && this.longestRoadHolder.equals(player);
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "Player is a shared mutable entity intentionally tracked by reference.")
     public void updateLargestArmy(Player candidate, int knightCount) {
         Objects.requireNonNull(candidate, "Candidate cannot be null");
         if (knightCount < 0) {

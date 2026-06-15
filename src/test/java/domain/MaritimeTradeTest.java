@@ -349,6 +349,126 @@ public class MaritimeTradeTest {
     }
 
 
+    @Test
+    void maritimeTradeConstructor_OtherPlayerOwnsVertex_NotConsideredForRate_returnsFour() {
+        Player opponent = new Player("Bob", PlayerColor.BLUE);
+        board.getVertex(1).setOwner(opponent);
+
+        Player player = playerWithSettlementAt(4, Map.of(
+                ResourceType.BRICK, 4,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.BRICK, 4, ResourceType.LUMBER, board);
+        assertEquals(4, trade.getRate());
+    }
+
+    @Test
+    void getRate_lumberHarborMatchesGivingResource_returnsTwo() {
+        Player player = playerWithSettlementAt(11, Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, 2,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.LUMBER, 2, ResourceType.BRICK, board);
+        assertEquals(2, trade.getRate());
+    }
+
+    @Test
+    void getRate_oreHarborMatchesGivingResource_returnsTwo() {
+        Player player = playerWithSettlementAt(10, Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 2,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.ORE, 2, ResourceType.BRICK, board);
+        assertEquals(2, trade.getRate());
+    }
+
+    @Test
+    void getRate_oreHarborDoesNotMatchGrainGiving_returnsFour() {
+        Player player = playerWithSettlementAt(10, Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 4,
+                ResourceType.WOOL, 0
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.GRAIN, 4, ResourceType.BRICK, board);
+        assertEquals(4, trade.getRate());
+    }
+
+    @Test
+    void getRate_lumberHarborDoesNotMatchOreGiving_returnsFour() {
+        Player player = playerWithSettlementAt(11, Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 4,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.ORE, 4, ResourceType.BRICK, board);
+        assertEquals(4, trade.getRate());
+    }
+
+    @Test
+    void getRate_grainHarborMatchesGivingResource_returnsTwo() {
+        Player player = playerWithSettlementAt(1, Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 2,
+                ResourceType.WOOL, 0
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.GRAIN, 2, ResourceType.BRICK, board);
+        assertEquals(2, trade.getRate());
+    }
+
+    @Test
+    void getRate_grainHarborDoesNotMatchBrickGiving_returnsFour() {
+        Player player = playerWithSettlementAt(1, Map.of(
+                ResourceType.BRICK, 4,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 0
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.BRICK, 4, ResourceType.LUMBER, board);
+        assertEquals(4, trade.getRate());
+    }
+
+    @Test
+    void getRate_woolHarborMatchesGivingResource_returnsTwo() {
+        Player player = playerWithSettlementAt(42, Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 2
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.WOOL, 2, ResourceType.BRICK, board);
+        assertEquals(2, trade.getRate());
+    }
+
+    @Test
+    void getRate_lumberHarborDoesNotMatchWoolGiving_returnsFour() {
+        Player player = playerWithSettlementAt(11, Map.of(
+                ResourceType.BRICK, 0,
+                ResourceType.LUMBER, 0,
+                ResourceType.ORE, 0,
+                ResourceType.GRAIN, 0,
+                ResourceType.WOOL, 4
+        ));
+        MaritimeTrade trade = new MaritimeTrade(player, ResourceType.WOOL, 4, ResourceType.BRICK, board);
+        assertEquals(4, trade.getRate());
+    }
+
     private Player playerWithSettlementAt(int vertexId, Map<ResourceType, Integer> resources) {
         Player player = new Player("Alice", PlayerColor.RED, resources);
         board.getVertex(vertexId).setOwner(player);
