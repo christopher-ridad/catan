@@ -38,9 +38,8 @@ public final class Edge {
         return owner != null;
     }
 
-    // Player is intentionally mutable (resources change during gameplay).
-    // Defensive copying would break object identity. Suppressing EI2 by design.
-    @SuppressFBWarnings("EI_EXPOSE_REP2")
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "Player is intentionally mutable; defensive copying would break object identity")
     public void setOwner(Player player) {
         this.owner = player;
     }
