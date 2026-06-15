@@ -11,38 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * TDD tests for Game class (written before implementation)
- *
- * Adresses issue #9: Implement Game setup with player count validation.
- *
- * Board is constructed via its private constructor
- * to bypass validation (no need to instantiate 19 hexes).
- *
- * Player is stubbed below — remove the stub once PR #17 is merged.
- */
-
 public class GameTest {
-
-//    // Stub — remove once PR #17 (wip/player-class) is merged
-//    static class Player {
-//        private final String name;
-//        private final PlayerColor color;
-//
-//        Player(String name, PlayerColor color) {
-//            this.name = name;
-//            this.color = color;
-//        }
-//
-//        public String getName()       {
-//            return name;
-//        }
-//
-//        public PlayerColor getColor() {
-//            return color;
-//        }
-//    }
-//    // End stub
 
     private Board board;
     private Player alice;
@@ -59,10 +28,6 @@ public class GameTest {
         diana   = new Player("Diana",   PlayerColor.WHITE);
     }
 
-    //
-    // Valid construction - boundary values: 2 (min) and 4 (max)
-    //
-
     @Test
     void gameConstructor_withTwoPlayers_doesNotThrow() {
         assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob), board));
@@ -78,10 +43,6 @@ public class GameTest {
         assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob, charlie, diana), board));
     }
 
-    //
-    // Invalid player count - below min players (2)
-    //
-
     @Test
     void gameConstructor_withNoPlayers_throwsIllegalArgument() {
         assertThrows(IllegalArgumentException.class,
@@ -94,20 +55,12 @@ public class GameTest {
                 () -> new Game(Collections.singletonList(alice), board));
     }
 
-    //
-    // Invalid player count — above max players (4)
-    //
-
     @Test
     void gameConstructor_withFivePlayers_throwsIllegalArgument() {
         Player eve = new Player("Eve", PlayerColor.RED);
         assertThrows(IllegalArgumentException.class,
                 () -> new Game(Arrays.asList(alice, bob, charlie, diana, eve), board));
     }
-
-    //
-    // Null inputs
-    //
 
     @Test
     void gameConstructor_withNullList_throwsNullPointer() {
@@ -125,10 +78,6 @@ public class GameTest {
         assertThrows(NullPointerException.class,
                 () -> new Game(Arrays.asList(alice, bob), null));
     }
-
-    //
-    // Fetching player list
-    //
 
     @Test
     void getPlayers_returnsPlayersInOriginalOrder() {
@@ -148,10 +97,6 @@ public class GameTest {
                 () -> game.getPlayers().add(charlie));
     }
 
-    //
-    // Player count
-    //
-
     @Test
     void getPlayerCount_withTwoPlayers_returnsTwo() {
         assertEquals(2, new Game(Arrays.asList(alice, bob), board).getPlayerCount());
@@ -161,10 +106,6 @@ public class GameTest {
     void getPlayerCount_withFourPlayers_returnsFour() {
         assertEquals(4, new Game(Arrays.asList(alice, bob, charlie, diana), board).getPlayerCount());
     }
-
-    //
-    // getPlayer by index
-    //
 
     @Test
     void getPlayer_withIndexZero_returnsFirstPlayer() {
@@ -178,30 +119,22 @@ public class GameTest {
         assertSame(charlie, game.getPlayer(2));
     }
 
-    //
-    // Fetch board
-    //
-
     @Test
     void getBoard_returnsValidBoardObject() {
         Game game = new Game(Arrays.asList(alice, bob), board);
         assertSame(board, game.getBoard());
     }
 
-    //
-    // Duplicate color validation
-    //
-
     @Test
     void gameConstructor_withTwoPlayersOfSameColor_throwsIllegalArgument() {
-        Player aliceRed = new Player("Alice2", PlayerColor.RED); // RED same as alice
+        Player aliceRed = new Player("Alice2", PlayerColor.RED);
         assertThrows(IllegalArgumentException.class,
                 () -> new Game(Arrays.asList(alice, aliceRed), board));
     }
 
     @Test
     void gameConstructor_withDuplicateColorAmongFourPlayers_throwsIllegalArgument() {
-        Player charlie2 = new Player("Charlie2", PlayerColor.BLUE); // BLUE same as bob
+        Player charlie2 = new Player("Charlie2", PlayerColor.BLUE);
         assertThrows(IllegalArgumentException.class,
                 () -> new Game(Arrays.asList(alice, bob, charlie2, diana), board));
     }
@@ -210,10 +143,6 @@ public class GameTest {
     void gameConstructor_withAllUniqueColors_doesNotThrow() {
         assertDoesNotThrow(() -> new Game(Arrays.asList(alice, bob, charlie, diana), board));
     }
-
-    //
-    // Development card deck and player hands
-    //
 
     @Test
     void getRemainingDevelopmentCardCount_newGame_returnsTwentyFive() {
