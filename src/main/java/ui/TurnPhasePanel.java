@@ -119,7 +119,7 @@ public class TurnPhasePanel extends JPanel {
         this.game = game;
         this.turnManager = new TurnManager(game, bank, new DiceRoll(new Random()));
         this.vpCalc = new VictoryPointCalculator();
-        this.specialCardTracker = new SpecialCardTracker();
+        this.specialCardTracker = turnManager.getSpecialCardTracker();
         this.handView = new PlayerHandView();
         this.boardPanel = new BoardPanel(
                 game.getBoard(),
