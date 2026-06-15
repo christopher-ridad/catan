@@ -127,14 +127,14 @@ public class GameTest {
 
     @Test
     void gameConstructor_withTwoPlayersOfSameColor_throwsIllegalArgument() {
-        Player aliceRed = new Player("Alice2", PlayerColor.RED); // RED same as alice
+        Player aliceRed = new Player("Alice2", PlayerColor.RED);
         assertThrows(IllegalArgumentException.class,
                 () -> new Game(Arrays.asList(alice, aliceRed), board));
     }
 
     @Test
     void gameConstructor_withDuplicateColorAmongFourPlayers_throwsIllegalArgument() {
-        Player charlie2 = new Player("Charlie2", PlayerColor.BLUE); // BLUE same as bob
+        Player charlie2 = new Player("Charlie2", PlayerColor.BLUE);
         assertThrows(IllegalArgumentException.class,
                 () -> new Game(Arrays.asList(alice, bob, charlie2, diana), board));
     }
