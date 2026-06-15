@@ -5,7 +5,6 @@ import domain.Game;
 import domain.Player;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import java.awt.CardLayout;
@@ -21,8 +20,9 @@ import java.awt.Dimension;
  *   4. Turn phase (dice, build, trade)
  *   5. Win screen
  *
- * Phase panels are responsible for their own logic.
- * MainWindow only controls which panel is visible.
+ * Panel references are tracked directly to avoid CardLayout component leaks.
+ * When a phase transitions, the old panel is explicitly removed before the
+ * new one is added under the same card name.
  */
 public class Main extends JFrame {
 
@@ -45,6 +45,12 @@ public class Main extends JFrame {
 
     private final CardLayout cardLayout;
     private final JPanel cardContainer;
+
+    // Tracked panel references — avoids getCardByName() which never matched
+    private JPanel playerSetupPanel;
+    private JPanel setupPanel;
+    private JPanel turnPanel;
+    private JPanel winPanel;
 
     // -------------------------------------------------------------------------
     // Constructor
@@ -74,10 +80,18 @@ public class Main extends JFrame {
 
     private void initCards() {
         cardContainer.add(new LanguageSelectionPanel(this), CARD_LANGUAGE);
-        cardContainer.add(new PlayerSetupPanel(this),       CARD_PLAYER_SETUP);
-        cardContainer.add(buildStubPanel("setup_phase_title"), CARD_SETUP);
-        cardContainer.add(buildStubPanel("turn_phase_title"),  CARD_TURN);
-        cardContainer.add(buildStubPanel("win_title"),         CARD_WIN);
+
+        playerSetupPanel = new PlayerSetupPanel(this);
+        cardContainer.add(playerSetupPanel, CARD_PLAYER_SETUP);
+
+        setupPanel = buildStubPanel();
+        cardContainer.add(setupPanel, CARD_SETUP);
+
+        turnPanel = buildStubPanel();
+        cardContainer.add(turnPanel, CARD_TURN);
+
+        winPanel = buildStubPanel();
+        cardContainer.add(winPanel, CARD_WIN);
     }
 
     // -------------------------------------------------------------------------
@@ -90,27 +104,34 @@ public class Main extends JFrame {
     }
 
     public void showPlayerSetup() {
-        cardContainer.remove(getCardByName(CARD_PLAYER_SETUP));
-        cardContainer.add(new PlayerSetupPanel(this), CARD_PLAYER_SETUP);
         setTitle(Messages.get("setup_phase_title"));
+        cardContainer.remove(playerSetupPanel);
+        playerSetupPanel = new PlayerSetupPanel(this);
+        cardContainer.add(playerSetupPanel, CARD_PLAYER_SETUP);
         cardLayout.show(cardContainer, CARD_PLAYER_SETUP);
     }
 
     public void showSetupPhase(Game game, Bank bank) {
         setTitle(Messages.get("setup_phase_title"));
-        cardContainer.add(new SetupPhasePanel(this, game, bank), CARD_SETUP);
+        cardContainer.remove(setupPanel);
+        setupPanel = new SetupPhasePanel(this, game, bank);
+        cardContainer.add(setupPanel, CARD_SETUP);
         cardLayout.show(cardContainer, CARD_SETUP);
     }
 
     public void showTurnPhase(Game game, Bank bank) {
         setTitle(Messages.get("turn_phase_title"));
-        cardContainer.add(new TurnPhasePanel(this, game, bank), CARD_TURN);
+        cardContainer.remove(turnPanel);
+        turnPanel = new TurnPhasePanel(this, game, bank);
+        cardContainer.add(turnPanel, CARD_TURN);
         cardLayout.show(cardContainer, CARD_TURN);
     }
 
     public void showWinScreen(Player winner) {
         setTitle(Messages.get("win_title"));
-        cardContainer.add(new WinPanel(this, winner), CARD_WIN);
+        cardContainer.remove(winPanel);
+        winPanel = new WinPanel(this, winner);
+        cardContainer.add(winPanel, CARD_WIN);
         cardLayout.show(cardContainer, CARD_WIN);
     }
 
@@ -118,19 +139,8 @@ public class Main extends JFrame {
     // Helpers
     // -------------------------------------------------------------------------
 
-    private JPanel buildStubPanel(String titleKey) {
-        JPanel stub = new JPanel();
-        stub.add(new JLabel(Messages.get(titleKey) + " — coming soon"));
-        return stub;
-    }
-
-    private java.awt.Component getCardByName(String name) {
-        for (java.awt.Component c : cardContainer.getComponents()) {
-            if (name.equals(c.getName())) {
-                return c;
-            }
-        }
-        return buildStubPanel(name);
+    private JPanel buildStubPanel() {
+        return new JPanel();
     }
 
     // -------------------------------------------------------------------------

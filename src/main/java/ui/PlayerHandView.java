@@ -177,7 +177,7 @@ public class PlayerHandView extends JPanel {
         }
 
         private JLabel buildNameLabel(ResourceType type) {
-            JLabel label = new JLabel(resourceName(type));
+            JLabel label = new JLabel(UIStrings.resourceName(type));
             label.setFont(new Font("SansSerif", Font.BOLD, RESOURCE_FONT_SIZE));
             label.setForeground(COLOR_CARD_TEXT);
             label.setAlignmentX(CENTER_ALIGNMENT);
@@ -204,17 +204,6 @@ public class PlayerHandView extends JPanel {
                 case GRAIN:  return COLOR_GRAIN;
                 case WOOL:   return COLOR_WOOL;
                 default:     return Color.GRAY;
-            }
-        }
-
-        private static String resourceName(ResourceType type) {
-            switch (type) {
-                case BRICK:  return Messages.get("resource_brick");
-                case LUMBER: return Messages.get("resource_wood");
-                case ORE:    return Messages.get("resource_ore");
-                case GRAIN:  return Messages.get("resource_wheat");
-                case WOOL:   return Messages.get("resource_sheep");
-                default:     return "?";
             }
         }
     }

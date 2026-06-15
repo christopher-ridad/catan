@@ -147,7 +147,7 @@ public class PlayCardDialog extends JDialog {
     private void addCardRadioButtons(JPanel panel) {
         ButtonGroup group = new ButtonGroup();
         for (DevelopmentCard card : playableCards) {
-            JRadioButton btn = new JRadioButton(cardName(card.getType()));
+            JRadioButton btn = new JRadioButton(UIStrings.cardName(card.getType()));
             btn.setFont(new Font("SansSerif", Font.PLAIN, LABEL_FONT));
             group.add(btn);
             cardButtons.add(btn);
@@ -230,12 +230,12 @@ public class PlayCardDialog extends JDialog {
     }
 
     private void playRoadBuilding(DevelopmentCard card) {
-        try {
-            turn.playRoadBuildingCard(player, card, -1, -1);
-        } catch (IllegalArgumentException ignored) {
-            // -1 edges are invalid — card is marked played, edges handled by UI
-        } catch (IllegalStateException e) {
-            showStatus(e.getMessage(), COLOR_ERROR);
+        // Validation only — do NOT call turn.playRoadBuildingCard() here.
+        // The domain call happens in TurnPhasePanel once both edge IDs are known.
+        // Calling with sentinel -1,-1 marks the card played before throwing,
+        // making the real follow-up call fail with "already been played".
+        if (card.isPlayed()) {
+            showStatus(Messages.get("error_card_already_played"), COLOR_ERROR);
             return;
         }
         playedCard = card;
@@ -255,7 +255,7 @@ public class PlayCardDialog extends JDialog {
             resultType = ResultType.YEAR_OF_PLENTY;
             showStatus(Messages.get("play_card_success"), COLOR_SUCCESS);
         } catch (IllegalStateException e) {
-            showStatus(e.getMessage(), COLOR_ERROR);
+            showStatus(Messages.get("error_unexpected"), COLOR_ERROR);
         }
     }
 
@@ -271,7 +271,7 @@ public class PlayCardDialog extends JDialog {
             resultType = ResultType.MONOPOLY;
             showStatus(Messages.get("play_card_success"), COLOR_SUCCESS);
         } catch (IllegalStateException e) {
-            showStatus(e.getMessage(), COLOR_ERROR);
+            showStatus(Messages.get("error_unexpected"), COLOR_ERROR);
         }
     }
 
@@ -333,7 +333,7 @@ public class PlayCardDialog extends JDialog {
         String[] names = new String[ResourceType.values().length];
         ResourceType[] types = ResourceType.values();
         for (int i = 0; i < types.length; i++) {
-            names[i] = resourceName(types[i]);
+            names[i] = UIStrings.resourceName(types[i]);
         }
         return new JComboBox<>(names);
     }
@@ -390,24 +390,5 @@ public class PlayCardDialog extends JDialog {
         return ResourceType.values()[index];
     }
 
-    private static String cardName(DevelopmentCardType type) {
-        switch (type) {
-            case KNIGHT:         return Messages.get("dev_card_knight");
-            case ROAD_BUILDING:  return Messages.get("dev_card_road_building");
-            case YEAR_OF_PLENTY: return Messages.get("dev_card_year_of_plenty");
-            case MONOPOLY:       return Messages.get("dev_card_monopoly");
-            default:             return "?";
-        }
-    }
-
-    private static String resourceName(ResourceType type) {
-        switch (type) {
-            case BRICK:  return Messages.get("resource_brick");
-            case LUMBER: return Messages.get("resource_wood");
-            case ORE:    return Messages.get("resource_ore");
-            case GRAIN:  return Messages.get("resource_wheat");
-            case WOOL:   return Messages.get("resource_sheep");
-            default:     return "?";
-        }
-    }
+    // cardName() and resourceName() replaced by UIStrings
 }

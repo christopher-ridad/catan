@@ -257,8 +257,7 @@ public class TurnPhasePanel extends JPanel {
                 clickMode = BoardClickMode.MOVE_ROBBER;
                 showStatus(Messages.get("turn_move_robber"), COLOR_ERROR);
             } else {
-                showStatus(Messages.get("turn_rolled",
-                        "", "", roll), COLOR_SUCCESS);
+                showStatus(Messages.get("turn_rolled", roll), COLOR_SUCCESS);
             }
             refreshUI();
         } catch (IllegalStateException e) {
@@ -397,19 +396,16 @@ public class TurnPhasePanel extends JPanel {
 
     private void placeFreeRoad2(int edgeId) {
         try {
-            turn_playRoadBuilding(freeRoadEdge1, edgeId);
+            currentTurn.playRoadBuildingCard(
+                    turnManager.getCurrentPlayer(), selectedCard, freeRoadEdge1, edgeId);
             clickMode = BoardClickMode.NONE;
+            selectedCard = null;
             showStatus(Messages.get("play_card_success"), COLOR_SUCCESS);
             boardPanel.repaint();
             refreshUI();
         } catch (IllegalStateException | IllegalArgumentException e) {
             showStatus(Messages.get("build_invalid_location"), COLOR_ERROR);
         }
-    }
-
-    private void turn_playRoadBuilding(int edgeId1, int edgeId2) {
-        currentTurn.playRoadBuildingCard(
-                turnManager.getCurrentPlayer(), selectedCard, edgeId1, edgeId2);
     }
 
     private void onHexClicked(int hexId) {

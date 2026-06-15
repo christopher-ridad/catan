@@ -141,7 +141,7 @@ public class MaritimeTradeDialog extends JDialog {
         ButtonGroup group = new ButtonGroup();
         for (ResourceType type : affordableResources) {
             int rate = computeBestRate(type);
-            String label = resourceName(type) + " (" + rate + ":1)"
+            String label = UIStrings.resourceName(type) + " (" + rate + ":1)"
                     + " [" + player.getResourceCount(type) + "]";
             JRadioButton btn = new JRadioButton(label);
             btn.setFont(new Font("SansSerif", Font.PLAIN, LABEL_FONT));
@@ -164,7 +164,7 @@ public class MaritimeTradeDialog extends JDialog {
 
         ButtonGroup group = new ButtonGroup();
         for (ResourceType type : ResourceType.values()) {
-            JRadioButton btn = new JRadioButton(resourceName(type));
+            JRadioButton btn = new JRadioButton(UIStrings.resourceName(type));
             btn.setFont(new Font("SansSerif", Font.PLAIN, LABEL_FONT));
             group.add(btn);
             receiveButtons.add(btn);
@@ -261,7 +261,7 @@ public class MaritimeTradeDialog extends JDialog {
             turn.submitMaritimeTrade(trade);
             showStatus(Messages.get("trade_maritime_success"), COLOR_SUCCESS);
         } catch (IllegalArgumentException | IllegalStateException e) {
-            showStatus(e.getMessage(), COLOR_ERROR);
+            showStatus(Messages.get("error_maritime_bank_empty"), COLOR_ERROR);
         }
     }
 
@@ -276,7 +276,12 @@ public class MaritimeTradeDialog extends JDialog {
 
     /**
      * Computes the player's best trade rate for a given resource
-     * by checking their harbor vertices — mirrors MaritimeTrade.computeBestRate().
+     * by checking their harbor vertices.
+     *
+     * NOTE: This mirrors the private MaritimeTrade.computeBestRate() logic.
+     * If harbor trade rules change in the domain, this method must be updated
+     * to match. The duplication exists because MaritimeTrade does not expose
+     * its rate calculation publicly.
      */
     private int computeBestRate(ResourceType giving) {
         int best = 4;
@@ -331,16 +336,5 @@ public class MaritimeTradeDialog extends JDialog {
     private void showStatus(String message, Color color) {
         statusLabel.setText(message);
         statusLabel.setForeground(color);
-    }
-
-    private static String resourceName(ResourceType type) {
-        switch (type) {
-            case BRICK:  return Messages.get("resource_brick");
-            case LUMBER: return Messages.get("resource_wood");
-            case ORE:    return Messages.get("resource_ore");
-            case GRAIN:  return Messages.get("resource_wheat");
-            case WOOL:   return Messages.get("resource_sheep");
-            default:     return "?";
-        }
     }
 }

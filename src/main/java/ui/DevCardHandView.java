@@ -16,6 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ui.UIStrings.cardName;
+
 /**
  * Displays the current player's development card hand.
  *
@@ -153,16 +155,5 @@ public class DevCardHandView extends JPanel {
         label.setForeground(color);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
-    }
-
-    private static String cardName(DevelopmentCardType type) {
-        switch (type) {
-            case KNIGHT:          return Messages.get("dev_card_knight");
-            case ROAD_BUILDING:   return Messages.get("dev_card_road_building");
-            case YEAR_OF_PLENTY:  return Messages.get("dev_card_year_of_plenty");
-            case MONOPOLY:        return Messages.get("dev_card_monopoly");
-            case VICTORY_POINT:   return Messages.get("dev_card_victory_point");
-            default:              return "?";
-        }
     }
 }

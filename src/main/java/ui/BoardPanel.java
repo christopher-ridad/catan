@@ -323,15 +323,10 @@ public class BoardPanel extends JPanel {
             }
 
             if (edge.hasRoad()) {
-                // Draw road in player color — thicker and on top
                 Player owner = edge.getOwner().get();
                 g2.setColor(playerColor(owner.getColor()));
                 g2.setStroke(new BasicStroke(6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
                 g2.drawLine(v1.x, v1.y, v2.x, v2.y);
-
-                // Dark outline for contrast
-                g2.setColor(playerColor(owner.getColor()).darker());
-                g2.setStroke(new BasicStroke(6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             } else {
                 g2.setColor(COLOR_EDGE);
                 g2.setStroke(new BasicStroke(3f));
@@ -419,30 +414,37 @@ public class BoardPanel extends JPanel {
             if (vertexPositions == null) {
                 return;
             }
-
-            int vertexIndex = HexDrawing.findVertexAt(
-                    e.getX(), e.getY(), vertexPositions, VERTEX_CLICK_TOLERANCE);
-            if (vertexIndex != -1) {
-                if (onVertexClicked != null) {
-                    onVertexClicked.accept(vertexIndex);
-                }
+            if (dispatchVertexClick(e.getX(), e.getY())) {
                 return;
             }
-
-            int edgeIndex = HexDrawing.findEdgeAt(
-                    e.getX(), e.getY(), vertexPositions, edgeEndpoints, EDGE_CLICK_TOLERANCE);
-            if (edgeIndex != -1) {
-                if (onEdgeClicked != null) {
-                    onEdgeClicked.accept(edgeIndex);
-                }
+            if (dispatchEdgeClick(e.getX(), e.getY())) {
                 return;
             }
+            dispatchHexClick(e.getX(), e.getY());
+        }
 
-            int hexIndex = HexDrawing.findHexAt(e.getX(), e.getY(), hexCenters);
-            if (hexIndex != -1) {
-                if (onHexClicked != null) {
-                    onHexClicked.accept(hexIndex);
-                }
+        private boolean dispatchVertexClick(int x, int y) {
+            int idx = HexDrawing.findVertexAt(x, y, vertexPositions, VERTEX_CLICK_TOLERANCE);
+            if (idx != -1 && onVertexClicked != null) {
+                onVertexClicked.accept(idx);
+                return true;
+            }
+            return false;
+        }
+
+        private boolean dispatchEdgeClick(int x, int y) {
+            int idx = HexDrawing.findEdgeAt(x, y, vertexPositions, edgeEndpoints, EDGE_CLICK_TOLERANCE);
+            if (idx != -1 && onEdgeClicked != null) {
+                onEdgeClicked.accept(idx);
+                return true;
+            }
+            return false;
+        }
+
+        private void dispatchHexClick(int x, int y) {
+            int idx = HexDrawing.findHexAt(x, y, hexCenters);
+            if (idx != -1 && onHexClicked != null) {
+                onHexClicked.accept(idx);
             }
         }
     }

@@ -141,7 +141,7 @@ public class TradeDialog extends JDialog {
     private JPanel buildSpinnerRow(ResourceType type, JSpinner spinner) {
         JPanel row = new JPanel(new BorderLayout(GAP_SMALL, 0));
         row.setAlignmentX(Component.LEFT_ALIGNMENT);
-        JLabel label = new JLabel(resourceName(type));
+        JLabel label = new JLabel(UIStrings.resourceName(type));
         label.setFont(new Font("SansSerif", Font.PLAIN, LABEL_FONT));
         row.add(label,   BorderLayout.CENTER);
         row.add(spinner, BorderLayout.EAST);
@@ -232,7 +232,7 @@ public class TradeDialog extends JDialog {
             showStatus(Messages.get("trade_offer_sent", recipient.getName()), COLOR_SUCCESS);
             runRecipientFlow(offer, recipient);
         } catch (IllegalArgumentException | IllegalStateException e) {
-            showStatus(e.getMessage(), COLOR_ERROR);
+            showStatus(Messages.get("error_trade_cannot_afford"), COLOR_ERROR);
         }
     }
 
@@ -249,7 +249,7 @@ public class TradeDialog extends JDialog {
             } catch (IllegalStateException e) {
                 turn.rejectTrade(offer);
                 DeviceHandoffDialog.show(parent, activePlayer.getName());
-                showStatus(e.getMessage(), COLOR_ERROR);
+                showStatus(Messages.get("error_trade_cannot_afford"), COLOR_ERROR);
             }
         } else {
             turn.rejectTrade(offer);
@@ -303,7 +303,7 @@ public class TradeDialog extends JDialog {
     private void addResourceSummary(JPanel panel, Map<ResourceType, Integer> resources) {
         for (Map.Entry<ResourceType, Integer> entry : resources.entrySet()) {
             if (entry.getValue() > 0) {
-                JLabel line = new JLabel("  " + resourceName(entry.getKey())
+                JLabel line = new JLabel("  " + UIStrings.resourceName(entry.getKey())
                         + ": " + entry.getValue());
                 line.setFont(new Font("SansSerif", Font.PLAIN, LABEL_FONT));
                 panel.add(line);
@@ -319,7 +319,7 @@ public class TradeDialog extends JDialog {
                 if (sb.length() > 0) {
                     sb.append(", ");
                 }
-                sb.append(resourceName(type)).append(": ").append(count);
+                sb.append(UIStrings.resourceName(type)).append(": ").append(count);
             }
         }
         return sb.length() > 0 ? sb.toString() : "-";
@@ -347,16 +347,5 @@ public class TradeDialog extends JDialog {
     private void showStatus(String message, Color color) {
         statusLabel.setText(message);
         statusLabel.setForeground(color);
-    }
-
-    private static String resourceName(ResourceType type) {
-        switch (type) {
-            case BRICK:  return Messages.get("resource_brick");
-            case LUMBER: return Messages.get("resource_wood");
-            case ORE:    return Messages.get("resource_ore");
-            case GRAIN:  return Messages.get("resource_wheat");
-            case WOOL:   return Messages.get("resource_sheep");
-            default:     return "?";
-        }
     }
 }
