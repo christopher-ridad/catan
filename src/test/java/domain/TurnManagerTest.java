@@ -165,6 +165,18 @@ public class TurnManagerTest {
     }
 
     @Test
+    public void StartNextTurn_PreviousTurnEndedDirectlyWithoutManager_Succeeds() {
+        Turn first = turnManager.startNextTurn();
+        advanceToBuild(first);
+        first.endTurn();
+
+        Turn second = turnManager.startNextTurn();
+
+        assertNotNull(second);
+        assertNotSame(first, second);
+    }
+
+    @Test
     public void StartNextTurn_AfterWinnerFound_ThrowsIllegalStateException() {
         giveTenVictoryPoints(p1);
 

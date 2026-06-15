@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class Player {
 
     private final PlayerColor color;
@@ -12,6 +14,8 @@ public class Player {
     private Map<ResourceType, Integer> resources;
     private final List<DevelopmentCard> developmentCards;
 
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "Class cannot be final because tests mock it with EasyMock; validation must fail fast on invalid arguments.")
     public Player(String name, PlayerColor color) {
         validateName(name);
         validateColor(color);
@@ -46,6 +50,8 @@ public class Player {
     }
 
     // package private constructor for testing
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+            justification = "Class cannot be final because tests mock it with EasyMock; validation must fail fast on invalid arguments.")
     Player(String name, PlayerColor color, Map<ResourceType, Integer> customResources) {
         this(name, color);
         this.resources = new HashMap<>(customResources);
@@ -67,7 +73,7 @@ public class Player {
     }
 
     public void addResources(ResourceType resourceType, int amount) {
-        ValidateResourceAndAmount(resourceType, amount);
+        validateResourceAndAmount(resourceType, amount);
         this.resources.merge(resourceType, amount, Integer::sum);
     }
 
@@ -76,14 +82,14 @@ public class Player {
     }
 
     public void removeResources(ResourceType resourceType, int amount) {
-        ValidateResourceAndAmount(resourceType, amount);
+        validateResourceAndAmount(resourceType, amount);
         if (getResourceCount(resourceType) < amount) {
             throw new IllegalStateException("Amount cannot be greater than current resource count");
         }
         this.resources.put(resourceType, getResourceCount(resourceType) - amount);
     }
 
-    private void ValidateResourceAndAmount(ResourceType resourceType, int amount) {
+    private void validateResourceAndAmount(ResourceType resourceType, int amount) {
         if (resourceType == null) {
             throw new IllegalArgumentException("Resource type cannot be null");
         }

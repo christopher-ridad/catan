@@ -67,6 +67,13 @@ public class DevelopmentCardTest {
     }
 
     @Test
+    void GetTurnPurchased_AfterSetTurnPurchased_ReturnsSetValue() {
+        DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
+        card.setTurnPurchased(3);
+        assertEquals(3, card.getTurnPurchased());
+    }
+
+    @Test
     void IsPlayableOnTurn_WhenCurrentTurnGreaterThanPurchased_ReturnsTrue() {
         DevelopmentCard card = new DevelopmentCard(DevelopmentCardType.KNIGHT);
         card.setTurnPurchased(1);

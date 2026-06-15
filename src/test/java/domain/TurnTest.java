@@ -96,6 +96,13 @@ public class TurnTest {
     }
 
     @Test
+    public void Constructor_WithNullRandom_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Turn turn = new Turn(game, p1, dice, bank, null);
+        });
+    }
+
+    @Test
     public void Constructor_WithValidArgs_SetsPhaseToProduction() {
         Turn turn = new Turn(game, p1, dice, bank);
         TurnPhase expected = TurnPhase.PRODUCTION;
@@ -281,6 +288,30 @@ public class TurnTest {
         assertEquals(5, p2.getTotalResourceCount());
     }
 
+    private static class AlwaysZeroRandom extends Random {
+        @Override
+        public int nextInt(int bound) {
+            return 0;
+        }
+    }
+
+    @Test
+    public void RollDice_RollOfSeven_DiscardShufflesCardsAndReturnsThemToBank() {
+        p2.addResources(ResourceType.BRICK, 4);
+        p2.addResources(ResourceType.LUMBER, 4);
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank, new AlwaysZeroRandom());
+
+        turn.rollDice();
+
+        assertAll(
+                () -> assertEquals(1, p2.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(3, p2.getResourceCount(ResourceType.LUMBER)),
+                () -> assertEquals(3, bank.getResourceCount(ResourceType.BRICK)),
+                () -> assertEquals(1, bank.getResourceCount(ResourceType.LUMBER))
+        );
+    }
+
     @Test
     public void RollDice_RollOfSeven_PlayerWithSevenCards_NoDiscard() {
         p2.addResources(ResourceType.BRICK, 7);
@@ -345,6 +376,15 @@ public class TurnTest {
     }
 
     @Test
+    public void MoveRobber_HexIdEqualsHexCount_ThrowsIllegalArgumentException() {
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+
+        assertThrows(IllegalArgumentException.class, () -> turn.moveRobber(board.getHexes().size()));
+    }
+
+    @Test
     public void MoveRobber_ToValidHex_UpdatesBoardRobberHex() {
         DiceRoll sevenDice = mockDiceRoll(3, 4);
         Turn turn = new Turn(game, p1, sevenDice, bank);
@@ -365,6 +405,51 @@ public class TurnTest {
         turn.moveRobber(board.getHexes().indexOf(firstTarget));
 
         assertThrows(IllegalStateException.class, () -> turn.moveRobber(99));
+    }
+
+    @Test
+    public void MoveRobber_NegativeHexId_ThrowsIllegalArgumentException() {
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+
+        assertThrows(IllegalArgumentException.class, () -> turn.moveRobber(-1));
+    }
+
+    @Test
+    public void GetRobbingCandidates_OpponentSettlementNotAdjacentToRobberHex_ExcludesOpponent() {
+        Hex robberHex = board.getRobberHex();
+        Vertex vertex = null;
+        for (Vertex v : board.getVertices()) {
+            if (!v.getAdjacentHexes().contains(robberHex)) {
+                vertex = v;
+                break;
+            }
+        }
+        vertex.setOwner(p2);
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        assertFalse(turn.getRobbingCandidates().contains(p2));
+    }
+
+    @Test
+    public void GetRobbingCandidates_OpponentOwnsTwoSettlementsAdjacentToRobberHex_IncludesOpponentOnce() {
+        Hex robberHex = board.getRobberHex();
+        List<Vertex> adjacent = new ArrayList<>();
+        for (Vertex v : board.getVertices()) {
+            if (v.getAdjacentHexes().contains(robberHex)) {
+                adjacent.add(v);
+            }
+            if (adjacent.size() == 2) {
+                break;
+            }
+        }
+        adjacent.get(0).setOwner(p2);
+        adjacent.get(1).setOwner(p2);
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        List<Player> candidates = turn.getRobbingCandidates();
+        assertEquals(1, candidates.stream().filter(p -> p == p2).count());
     }
 
     @Test
@@ -717,6 +802,59 @@ public class TurnTest {
     }
 
     @Test
+    public void BuildRoad_FirstEndpointIsOwnSettlement_NoExceptionThrown() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = newTurnInBuildPhase(p3);
+
+        int edgeId = 11;
+
+        game.getBoard().getEdge(edgeId).getEndpoints().get(0).setOwner(p3);
+
+        assertDoesNotThrow(() -> {
+            turn.buildRoad(edgeId);
+        });
+
+        assertEquals(p3, game.getBoard().getEdge(edgeId).getOwner().orElse(null));
+    }
+
+    @Test
+    public void BuildRoad_FirstEndpointConnectedButOccupiedByEnemy_ThrowsIllegalStateException() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = newTurnInBuildPhase(p3);
+
+        int existingEdgeId = 10;
+        int newEdgeId = 11;
+
+        game.getBoard().getEdge(existingEdgeId).setOwner(p3);
+        game.getBoard().getEdge(newEdgeId).getEndpoints().get(0).setOwner(p4);
+
+        assertThrows(IllegalStateException.class, () -> {
+            turn.buildRoad(newEdgeId);
+        });
+    }
+
+    @Test
+    public void BuildRoad_RoadConnectedViaFirstEndpoint_NoExceptionThrown() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        Turn turn = newTurnInBuildPhase(p3);
+
+        int existingEdgeId = 10;
+        int newEdgeId = 11;
+
+        game.getBoard().getEdge(existingEdgeId).setOwner(p3);
+        game.getBoard().getEdge(20).setOwner(p4);
+
+        assertDoesNotThrow(() -> {
+            turn.buildRoad(newEdgeId);
+        });
+
+        assertEquals(p3, game.getBoard().getEdge(newEdgeId).getOwner().orElse(null));
+    }
+
+    @Test
     public void BuildRoad_RoadIsConnectedToSettlement_NoExceptionThrown() {
         p3.addResources(ResourceType.BRICK, 1);
         p3.addResources(ResourceType.LUMBER, 1);
@@ -1045,6 +1183,32 @@ public class TurnTest {
     }
 
     @Test
+    public void BuildSettlement_PlayerOwnsACity_CityNotCountedTowardSettlementLimit_NoExceptionThrown() {
+        p3.addResources(ResourceType.BRICK, 1);
+        p3.addResources(ResourceType.LUMBER, 1);
+        p3.addResources(ResourceType.WOOL, 1);
+        p3.addResources(ResourceType.GRAIN, 1);
+        Turn turn = newTurnInBuildPhase(p3);
+
+        for (int i = 10; i < 14; i++) {
+            game.getBoard().getVertex(i).setOwner(p3);
+        }
+        Vertex city = game.getBoard().getVertex(30);
+        city.setOwner(p3);
+        city.upgradeToCity();
+
+        int vertexId = 2;
+        int edgeId = 4;
+        game.getBoard().getEdge(edgeId).setOwner(p3);
+
+        assertDoesNotThrow(() -> {
+            turn.buildSettlement(vertexId);
+        });
+
+        assertEquals(p3, game.getBoard().getVertex(vertexId).getOwner().orElse(null));
+    }
+
+    @Test
     public void BuildCity_OutsideBuildPhase_ThrowsIllegalStateException() {
         p3.addResources(ResourceType.ORE, 3);
         p3.addResources(ResourceType.GRAIN, 2);
@@ -1229,6 +1393,7 @@ public class TurnTest {
     @Test
     public void ProposeTrade_RecipientNotInGame_ThrowsIllegalArgumentException() {
         Player outsider = new Player("outsider", PlayerColor.RED);
+        p1.addResources(ResourceType.BRICK, 1);
         DiceRoll fixedDice = mockDiceRoll(4, 4);
         Turn turn = new Turn(game, p1, fixedDice, bank);
         turn.rollDice();
@@ -1237,6 +1402,34 @@ public class TurnTest {
         Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
 
         assertThrows(IllegalArgumentException.class, () -> turn.proposeTrade(outsider, offering, requesting));
+    }
+
+    @Test
+    public void ProposeTrade_NullRecipient_ThrowsIllegalArgumentException() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+
+        assertThrows(IllegalArgumentException.class, () -> turn.proposeTrade(null, offering, requesting));
+    }
+
+    @Test
+    public void ProposeTrade_WithRobberPendingMove_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll sevenDice = mockDiceRoll(3, 4);
+        Turn turn = new Turn(game, p1, sevenDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> turn.proposeTrade(p2, offering, requesting));
+        assertEquals("Robber must be resolved before performing this action", exception.getMessage());
     }
 
     @Test
@@ -1307,6 +1500,18 @@ public class TurnTest {
     }
 
     @Test
+    public void AcceptTrade_OutsideTradePhase_ThrowsIllegalStateException() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer offer = new TradeOffer(p1, p2, offering, requesting);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> turn.acceptTrade(offer));
+        assertEquals("Trades can only be accepted during the trade phase", exception.getMessage());
+    }
+
+    @Test
     public void AcceptTrade_NoMatchingPendingTrade_ThrowsIllegalStateException() {
         p1.addResources(ResourceType.BRICK, 1);
         DiceRoll fixedDice = mockDiceRoll(4, 4);
@@ -1317,7 +1522,25 @@ public class TurnTest {
         Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
         TradeOffer foreignOffer = new TradeOffer(p1, p2, offering, requesting);
 
-        assertThrows(IllegalStateException.class, () -> turn.acceptTrade(foreignOffer));
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> turn.acceptTrade(foreignOffer));
+        assertEquals("There is no matching pending trade offer", exception.getMessage());
+    }
+
+    @Test
+    public void AcceptTrade_OfferDoesNotMatchPendingTrade_ThrowsIllegalStateException() {
+        p1.addResources(ResourceType.BRICK, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        turn.proposeTrade(p2, offering, requesting);
+
+        TradeOffer otherOffer = new TradeOffer(p1, p2, offering, requesting);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> turn.acceptTrade(otherOffer));
+        assertEquals("There is no matching pending trade offer", exception.getMessage());
     }
 
     @Test
@@ -1334,7 +1557,8 @@ public class TurnTest {
 
         p1.removeResources(ResourceType.BRICK, 1);
 
-        assertThrows(IllegalStateException.class, () -> turn.acceptTrade(offer));
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> turn.acceptTrade(offer));
+        assertEquals("Player cannot afford this trade", exception.getMessage());
     }
 
     @Test
@@ -1348,7 +1572,8 @@ public class TurnTest {
         Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
         TradeOffer offer = turn.proposeTrade(p2, offering, requesting);
 
-        assertThrows(IllegalStateException.class, () -> turn.acceptTrade(offer));
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> turn.acceptTrade(offer));
+        assertEquals("Player cannot afford this trade", exception.getMessage());
     }
 
     @Test
@@ -1373,6 +1598,18 @@ public class TurnTest {
                 () -> assertEquals(TradeOffer.TradeStatus.ACCEPTED, offer.getStatus()),
                 () -> assertEquals(Optional.empty(), turn.getPendingTrade())
         );
+    }
+
+    @Test
+    public void RejectTrade_OutsideTradePhase_ThrowsIllegalStateException() {
+        Turn turn = new Turn(game, p1, dice, bank);
+
+        Map<ResourceType, Integer> offering = Map.of(ResourceType.BRICK, 1);
+        Map<ResourceType, Integer> requesting = Map.of(ResourceType.WOOL, 1);
+        TradeOffer offer = new TradeOffer(p1, p2, offering, requesting);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> turn.rejectTrade(offer));
+        assertEquals("Trades can only be rejected during the trade phase", exception.getMessage());
     }
 
     @Test
@@ -1435,7 +1672,20 @@ public class TurnTest {
         Turn turn = newTurnInBuildPhase(p1);
         MaritimeTrade trade = new MaritimeTrade(p1, ResourceType.BRICK, 4, ResourceType.WOOL, board);
 
-        assertThrows(IllegalStateException.class, () -> turn.submitMaritimeTrade(trade));
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> turn.submitMaritimeTrade(trade));
+        assertEquals("Maritime trades can only be submitted during the trade phase", exception.getMessage());
+    }
+
+    @Test
+    public void SubmitMaritimeTrade_TradeForNonActivePlayer_ThrowsIllegalArgumentException() {
+        p2.addResources(ResourceType.BRICK, 4);
+        bank.collect(ResourceType.WOOL, 1);
+        DiceRoll fixedDice = mockDiceRoll(4, 4);
+        Turn turn = new Turn(game, p1, fixedDice, bank);
+        turn.rollDice();
+        MaritimeTrade trade = new MaritimeTrade(p2, ResourceType.BRICK, 4, ResourceType.WOOL, board);
+
+        assertThrows(IllegalArgumentException.class, () -> turn.submitMaritimeTrade(trade));
     }
 
     @Test
@@ -1501,7 +1751,8 @@ public class TurnTest {
         Turn turn = new Turn(game, p1, fixedDice, bank);
         turn.rollDice();
 
-        assertThrows(IllegalStateException.class, turn::buyDevelopmentCard);
+        IllegalStateException exception = assertThrows(IllegalStateException.class, turn::buyDevelopmentCard);
+        assertEquals("Build actions are only allowed during the build phase", exception.getMessage());
     }
 
     @Test
@@ -1527,6 +1778,25 @@ public class TurnTest {
 
         assertEquals(0, turn.getRemainingDeckSize());
         assertThrows(IllegalStateException.class, turn::buyDevelopmentCard);
+    }
+
+    @Test
+    public void BuyDevelopmentCard_PlayerCanAffordButDeckIsEmpty_ThrowsIllegalStateException() {
+        Bank freshBank = new Bank();
+        Turn turn = new Turn(game, p1, mockDiceRoll(4, 4), freshBank);
+        turn.rollDice();
+        turn.advanceToBuild();
+        int deckSize = turn.getRemainingDeckSize();
+        for (int i = 0; i < deckSize; i++) {
+            cycleDevelopmentCardCostThroughBank(p1, freshBank);
+            turn.buyDevelopmentCard();
+        }
+        assertEquals(0, turn.getRemainingDeckSize());
+
+        cycleDevelopmentCardCostThroughBank(p1, freshBank);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, turn::buyDevelopmentCard);
+        assertEquals("No development cards remain in the deck", exception.getMessage());
     }
 
     @Test

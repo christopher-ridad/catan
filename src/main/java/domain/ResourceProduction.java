@@ -52,8 +52,9 @@ public class ResourceProduction {
             Map<ResourceType, Integer> totalNeeded,
             Map<Player, Map<ResourceType, Integer>> playerGains,
             Bank bank) {
-        for (ResourceType resource : totalNeeded.keySet()) {
-            int needed = totalNeeded.get(resource);
+        for (Map.Entry<ResourceType, Integer> totalNeededEntry : totalNeeded.entrySet()) {
+            ResourceType resource = totalNeededEntry.getKey();
+            int needed = totalNeededEntry.getValue();
             int available = bank.getResourceCount(resource);
             if (available < needed) {
                 long affectedCount = playerGains.values().stream()

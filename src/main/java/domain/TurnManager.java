@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class TurnManager {
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+public final class TurnManager {
 
     private final Game game;
     private final Bank bank;
@@ -18,6 +20,8 @@ public class TurnManager {
     private Turn currentTurn;
     private Player winner;
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "Game is a shared mutable entity intentionally referenced by the turn manager.")
     public TurnManager(Game game, Bank bank, DiceRoll dice) {
         validateGame(game);
         validateBank(bank);

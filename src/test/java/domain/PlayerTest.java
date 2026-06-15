@@ -293,4 +293,15 @@ public class PlayerTest {
 
         assertEquals(2, playerOne.getResourceCount(ResourceType.LUMBER));
     }
+
+    @Test
+    public void addDevelopmentCard_NullCard_ThrowsIllegalArgumentException() {
+        String playerOneName = "Bob";
+        PlayerColor playerOneColor = PlayerColor.ORANGE;
+
+        Player playerOne = new Player(playerOneName, playerOneColor);
+        assertThrows(IllegalArgumentException.class, () -> {
+            playerOne.addDevelopmentCard(null);
+        });
+    }
 }
