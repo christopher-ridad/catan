@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
-public class Turn {
+public final class Turn {
 
     private static final Map<ResourceType, Integer> DEVELOPMENT_CARD_COST = Map.of(
             ResourceType.ORE, 1, ResourceType.WOOL, 1, ResourceType.GRAIN, 1);

@@ -2,7 +2,9 @@ package domain;
 
 import java.util.*;
 
-public class SetupPhase {
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+public final class SetupPhase {
     private final Game game;
     private final Bank bank;
     private final List<Player> placementOrder;
@@ -10,6 +12,8 @@ public class SetupPhase {
     private Vertex lastPlacedSettlement;
     private final Map<Player, List<Vertex>> placedSettlements;
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "Game is a shared mutable entity intentionally referenced by the setup phase.")
     public SetupPhase(Game game, Bank bank) {
         validateGame(game);
         validateBank(bank);
