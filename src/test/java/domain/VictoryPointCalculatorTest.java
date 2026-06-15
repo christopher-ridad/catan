@@ -270,11 +270,9 @@ public class VictoryPointCalculatorTest {
 
     @Test
     public void GetSettlementVP_PlayerHasCities_CitiesAreNotCounted() {
-        // Settlements
         board.getVertex(0).setOwner(p1);
         board.getVertex(2).setOwner(p1);
 
-        // Cities
         board.getVertex(11).setOwner(p1);
         board.getVertex(11).upgradeToCity();
         board.getVertex(15).setOwner(p1);
@@ -361,13 +359,11 @@ public class VictoryPointCalculatorTest {
 
     @Test
     public void GetCityVP_PlayerHasSettlements_SettlementsAreNotCounted() {
-        // Cities
         board.getVertex(0).setOwner(p1);
         board.getVertex(0).upgradeToCity();
         board.getVertex(2).setOwner(p1);
         board.getVertex(2).upgradeToCity();
 
-        // Settlements
         board.getVertex(11).setOwner(p1);
         board.getVertex(15).setOwner(p1);
         board.getVertex(21).setOwner(p1);
