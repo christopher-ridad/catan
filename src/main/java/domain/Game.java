@@ -9,27 +9,15 @@ import java.util.Objects;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-/**
- * Represents a Game of Catan
- *
- * Adresses issue #9: Implement Game setup with player count validation.
- *
- */
-
 public final class Game {
 
     private static final int MIN_PLAYERS = 2;
     private static final int MAX_PLAYERS = 4;
 
-    private final List<Player> players; // Change type to <Player> once PR #17 gets merged
+    private final List<Player> players;
     private final Board board;
     private final List<DevelopmentCard> developmentDeck;
     private final Map<Player, List<DevelopmentCard>> playerHands;
-
-    // Creates a new Game with the given ordered list of players.
-    // Throws NullPointerException if {@code players} is null or contains a null entry
-    // Throws IllegalArgumentException if the player count is outside [2, 4]
-    // Throws IllegalArgumentException if any two players share the same color
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
             justification = "Board is a shared mutable entity intentionally referenced by Game and its collaborators.")
@@ -116,8 +104,6 @@ public final class Game {
     public Player getPlayer(int index) {
         return players.get(index);
     }
-
-    // Private helpers (following the Clean Code style used in Board/Vertex/Edge)
 
     private void validatePlayerCount(int count) {
         if (count < MIN_PLAYERS || count > MAX_PLAYERS) {

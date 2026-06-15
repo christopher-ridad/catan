@@ -49,7 +49,6 @@ public class Player {
         }
     }
 
-    // package private constructor for testing
     @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
             justification = "Class cannot be final because tests mock it with EasyMock; validation must fail fast on invalid arguments.")
     Player(String name, PlayerColor color, Map<ResourceType, Integer> customResources) {
